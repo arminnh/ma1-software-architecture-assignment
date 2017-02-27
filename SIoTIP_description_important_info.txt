@@ -1,0 +1,78 @@
+development of a shared Cyber Physical System (CPS) infrastructure
+Building automation
+
+Availability and reliability of the shared platform offered to applications
+is of paramount importance.
+
+Our goal is to sell SIoTIP gateways and additional hardware devices,
+such as sensors, enabling the deployment of a (shared) IoT infrastructure.
+Furthermore, third-party developers can build applications on top of the
+available infrastructure.
+On the one hand, companies want to increase their business value
+by automating or simplifying building management using IoT devices.
+On the other hand, application providers want to be able to develop and sell
+applications leveraging the available infrastructure to these companies.
+
+Over time our platform will collect significant amounts of data:
+raw data from sensors as well as application (usage) information.
+
+In this model, sensors and actuators connect to a gateway,
+and all gateways connect to the Online Service to synchronise data.
+actuators | * ----- 1 | mote
+sensors   | * ----- 1 | mote
+mote      | * ----- 1 | gateway
+Online service = system that comminuticates with gateways
+storage/database ?
+
+synchronisation activities are initiated by the gateway
+the Online Service must also be able to push application commands
+
+SIoTIP Online Service is an online system which collects data collected by the
+sensors at each gateway, runs applications, manages gateway and application
+configurations, and provides a web portal to which users can connect.
+
+===============================================================================
+
+Customer organisations:
+    subscribe to applications
+    unsubscribe from applications
+Infrastructure owner:
+    buy new hardware,
+    install new hardware,
+    monitor (subscribe) connected hardware,
+    maintain topology of infastructure,
+    allocate installed hardware to specific customers
+End-users:
+    interact via mobile app, web browser, PC
+MicroPnP mote manufacturer:
+    sell motes
+Sensor and actuator manufacturer:
+    sell sensors/actuators
+Application providers:
+    sell (subscriptions to) applications
+    equire a development environment providing access to APIs provided by SIoTIP
+SIoTIP system administrators:
+    monitor/maintain system (performance/scalability)
+    assist other parties
+The SIoTIP Corporation:
+    want a large number of infrastructure owners
+    attract many application providers
+Telecom operators:
+    provide means for the gateways to communicate with
+    the Online Service and vice versa
+Server providers:
+    provides physical or virtual servers
+
+===============================================================================
+
+
+
+===============================================================================
+
+
+
+===============================================================================
+
+ACTORS                | USE CASES
+=================================================
+                      |
