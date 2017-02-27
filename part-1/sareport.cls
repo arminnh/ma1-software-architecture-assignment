@@ -26,7 +26,7 @@
 
 \newcommand{\authorone}[1]{\def\@authorone{#1}}
 \newcommand{\authortwo}[1]{\def\@authortwo{#1}}
-\newcommand{\authorthree}[1]{\def\@authorthree{#1}}
+% \newcommand{\authorthree}[1]{\def\@authorthree{#1}}
 \newcommand{\academicyear}[1]{\def\@academicyear{#1}}
 \newcommand{\casename}[1]{\def\@casename{#1}}
 \newcommand{\phasename}[1]{\def\@phasename{#1}}
@@ -35,7 +35,7 @@
 
 \authorone{{\color{red}Student A (r123456)}}
 \authortwo{{\color{red}Student B (r890123)}}
-\authorthree{{\color{red}Student C (r456789)}}
+% \authorthree{{\color{red}Student C (r456789)}}
 \academicyear{{\color{red}year1-year2}}
 \casename{{\color{red}SA Case Name}}
 \phasename{{\color{red}Phase Name}}
@@ -121,7 +121,7 @@
 			}{%
 				{\rm \textbf{\@authorone}}\\
 				{\rm \textbf{\@authortwo}}\\
-				{\rm \textbf{\@authorthree}}\\[2mm]
+				% {\rm \textbf{\@authorthree}}\\[2mm]
 				{\rm Academic year \@academicyear}
 			}
 		}
