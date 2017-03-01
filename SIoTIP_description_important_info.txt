@@ -83,7 +83,8 @@ automatically updated to the new version (e.g. a minor bug fix update) or to
 require customer organisations to explicitly update to the new version 
 (e.g. a major feature update which requires a new subscription).
 
-when uploaded, each application is automatically tested in a sandbox environment
+when uploaded, each application is automatically tested in a sandbox
+environment
 
 Each device is initialised with a functional, default configuration, which can
 then be adjusted by the platform, application, or user
@@ -168,3 +169,81 @@ The SIoTIP organisation offers a Service Level Agreement (SLA) enclosed as a
 part of the provided support towards our customer organisations. This
 agreement stipulates certain quality requirements. A number of contracts will
 have to be negotiated with other stakeholders.
+
+===============================================================================
+
+4. Example scenarios
+
+Enrol as application provider:
+application provider dashboard accounts for the individual developers employed
+by ACMEapps are set up.
+
+Develop application:
+migrate the existing application
+possibility to emulate a realistic deployment environment to debug the
+application
+
+Add new application:
+uploads the new application
+Once uploaded, SIoTIP initiates a number of automated tests
+can follow the progress and results of these tests via her application
+provider dashboard
+successfully passes all tests and is automatically made available to customer
+organisations for subscription. 
+A notification is sent to Alice informing her of this event.
+
+Update existing application:
+system administrator on duty reviews the error report
+
+
+Register to SIoTIP:
+find application to suit needs
+contact the SIoTIP corporation to start a contract negotiation
+infrastructure dashboard owner account for Tracy is also set up, i.e. her user
+name and password is registered with SIoTIP
+In the registration process, each renting company provides billing and 
+contact information. and SIoTIP contacts them for registration
+
+Purchase SIoTIP hardware:
+subsribe customer organisation to applications
+hardware must be purchased, Based on this information, SIoTIP adds sufficient
+hardware
+*** ASK professor: buy hardware inside of system?
+request integration with existing hardware
+
+Install new hardware:
+
+Configure end-users:
+*** ASK is this the same? Assign user rights/roles - Assign access rights to customer organisations
+
+Through this mobile
+app they can indicate, in case of fire, when the evacuation of their floor is complete.
+
+Hardware failure:
+
+Subscribe to application:
+
+Data transmission:
+
+===============================================================================
+
+POSSIBLE CLASSES:
+    Calculator for amount of hardware to allocate to company
+    Notification system
+    Upload handler / Testing for errors
+    SearchControllers
+    Logging
+    Company abstract class (<- CustomerOriganisation)
+    User <- sysadmin, infrastr. owner, ...
+    ShoppingBasket
+    File (maybe)
+    Report
+    UserRole
+    EmailSender, SMSSender,
+    Something to resolve hardware problems. If hardware for one task breaks -> 
+        use other available hardware for the same task (maybe use case?)
+        
+
+===============================================================================
+
+*** ASK assistants if 5 most important use cases are ok
