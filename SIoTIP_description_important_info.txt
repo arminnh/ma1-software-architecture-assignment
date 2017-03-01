@@ -65,14 +65,106 @@ Server providers:
 
 ===============================================================================
 
+SIoTIP must provide services or APIs to accommodate such a distributed
+application, and deal with all encompassing communication between different
+parts of an application.
 
+provide APIs both for code running on the gateway and on the Online Service.
+
+For customer organisations, applications are the primary way to interact with
+the system, and thus to leverage the installed sensors and actuators.
+
+some people can be allowed to issue commands to the application via a provided
+front-end, e.g. a mobile app or web browser. These people are thus assigned 
+the role of end-user from the point of view of SIoTIP
+
+choose for updates where all existing instances of the applications are
+automatically updated to the new version (e.g. a minor bug fix update) or to
+require customer organisations to explicitly update to the new version 
+(e.g. a major feature update which requires a new subscription).
+
+when uploaded, each application is automatically tested in a sandbox environment
+
+Each device is initialised with a functional, default configuration, which can
+then be adjusted by the platform, application, or user
+
+*** each mote periodically sends a heartbeat message to its gateway listing
+the sensors and actuators plugged in to it along with a timestamp. In case of
+unavailability, applications and infrastructure owners can be notified.
+
+Data from sensors and actuators needs to be stored on both the gateway and
+Online Service side.
+
+In case of events that are interesting to customer organisations or specific
+end-users, applications can trigger notifications and alarms.
+
+Gateway installation involves connecting it to the internet via a secondary
+network interface (i.e., a wired or wifi network). The Gateway will then
+register itself with the Online Service. The Gateway identifies itself, and
+the Gateway identifier is used by the system to link it to the infrastructure
+owner that has originally purchased it (information which was registered on
+purchase). Afterwards, communication in both directions is possible, as
+described below.
+
+A gateway should periodically synchronise data. Besides periodic
+synchronisations, important data such as alarms and notifications must be
+communicated to the Online Service as soon as possible. The Online Service
+also has to communicate with the gateway to, for example, update sensor 
+config urations or activate actuators.
+
+unavoidable hardware failures should, where possible, be dealt with by
+leveraging redundancies in the deployed infrastructure
+
+Since the infrastructure is shared among multiple users, it is important to
+authenticate them
+
+motes can use other motes as intermediaries in order for the data to reach the
+destination. For resource access, the devices use interfaces compliant with
+the Constrained Application Protocol (CoAP), which is a RESTful protocol
+
+The motes can emit the following types of messages:
+1. Data, 2. Mote heartbeat, 3. Device connected /disconnected
+Relaying information to the motes by the gateway is done by GET and PUT
+requests.
+
+it is very likely that over time new (types of) sensors and actuators have to
+be added
+
+
+Example apps:
+Fire control application
+Building access control application
+Burglary detection application
+Smart heating application
+Light management application
 
 ===============================================================================
 
+3.4 Services offered to stakeholders
 
+Customer organisation dashboard: 
+This dashboard allows customer organisations
+to (un)subscribe to and configure applications (and other tasks such as
+consulting their invoices). Furthermore, customer organisations can manage
+the roles of the end-users of their application.
 
-===============================================================================
+Infrastructure owner dashboard:
+assign (parts of) the installed gateways, sensors and actuators to customer
+organisations, add new customer organisations or remove an existing one.
+order hardware, configure topology, consult any received 
+notifications and alarms
 
-ACTORS                | USE CASES
-=================================================
-                      |
+System administrator dashboard:
+monitor and manage the entire platform. showing information about running 
+applications, offering the ability to shut applications down, receiving and
+viewing notifications about SIoTIP system components as well as external
+component failures.
+
+Application provider dashboard:
+get an overview of their applications and provides the ability to upload new
+and update existing applications.
+
+The SIoTIP organisation offers a Service Level Agreement (SLA) enclosed as a
+part of the provided support towards our customer organisations. This
+agreement stipulates certain quality requirements. A number of contracts will
+have to be negotiated with other stakeholders.
