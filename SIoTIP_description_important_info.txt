@@ -208,26 +208,46 @@ Purchase SIoTIP hardware:
 subsribe customer organisation to applications
 hardware must be purchased, Based on this information, SIoTIP adds sufficient
 hardware
-*** ASK professor: buy hardware inside of system?
+*** ASK professor: buy hardware = inside of system?
 request integration with existing hardware
 
 Install new hardware:
+install gateways, gateways automatically connect to the 
+Online Service to register
+motes paired to gateways up front, motes send heartbeats/data
+infrastructure owner sets up / configures topology
+assign access rights to customer organisations
 
 Configure end-users:
-*** ASK is this the same? Assign user rights/roles - Assign access rights to customer organisations
-
-Through this mobile
-app they can indicate, in case of fire, when the evacuation of their floor is complete.
+assign/change user roles
+Through this mobile app they can indicate, in case of fire, when the evacuation 
+of their floor is complete.
+*** ASK is this the same? Assign user rights/roles - Assign access 
+    rights to customer organisations
 
 Hardware failure:
+SMS notification
+order new hardware
 
 Subscribe to application:
+app will be activated once (optionally) extra hardware is installed/allocated
+*** Ronny is notified of this subscription via the infrastructure owner 
+    dashboard and he approves the purchase.
+new application activated -> e-mail of this event to customer organisation
+customer organisation representative can configure applications
 
 Data transmission:
+sensors send data to gateway
+applicatoin sends commands to gateway/sensors/actuators
+gateway can store history of sensor data and actuator commands
+stored data is sent to application at sychronisation points
+application can then work with this data
 
 ===============================================================================
 
 POSSIBLE CLASSES:
+    Sensor, Actuator, Mote, Gateway
+    Application subscriptions
     Calculator for amount of hardware to allocate to company
     Notification system
     Upload handler / Testing for errors
@@ -247,3 +267,4 @@ POSSIBLE CLASSES:
 ===============================================================================
 
 *** ASK assistants if 5 most important use cases are ok
+
