@@ -113,7 +113,57 @@ form of \emph{quality attribute scenarios}. We provide for each type
 (availability, performance and modifiability) one requirement.
 
 \section{Availability}
-\subsection{\emph{Av1}: Name of the quality attribute scenario}
+\subsection{\emph{Av1}: Database is down and a replica is used} % TODO: ask if this is too generic
+A database in our system does not send any data.
+
+\begin{itemize}
+    \item \textbf{Source:} External: Database server
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item The database crashed / does not send any response.
+            \item The database returns invalid data or response.
+            \item ... % TODO: ask if it matters why this is broken
+        \end{itemize}
+
+    \item \textbf{Artifact:} Persistent storage
+    \item \textbf{Environment:} Normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item Use a working replica until the server can be used again.
+            \item If the server cannot fix the by itself, send a technician to fix the problem with the database.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item A working replica should be used within a range of 1s to 5s.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{Av2}: Sensor breaks}
+A sensor breaks. Another sensor is used for the responsibility of the broken one.
+
+\begin{itemize}
+    \item \textbf{Source:} External: sensor
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item No data received anymore from sensor
+        \end{itemize}
+
+    \item \textbf{Artifact:} Communication channel between sensor and gateway
+    \item \textbf{Environment:} Any state of operation, At run-time, ...
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item The gateway uses another sensor to be used for the same responsibility as the broken one.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item A new sensor should be chosen within the range of 1ms to 10s % TODO: ask
+        \end{itemize}
+\end{itemize}
+
+\section{Performance}
+\subsection{\emph{P1}: Name of the quality attribute scenario}
 Shortly describe the context of the scenario.
 
 \begin{itemize}
@@ -137,8 +187,7 @@ Shortly describe the context of the scenario.
         \end{itemize}
 \end{itemize}
 
-\section{Performance}
-\subsection{\emph{P1}: Name of the quality attribute scenario}
+\subsection{\emph{P2}: Name of the quality attribute scenario}
 Shortly describe the context of the scenario.
 
 \begin{itemize}
@@ -187,8 +236,56 @@ Shortly describe the context of the scenario.
         \end{itemize}
 \end{itemize}
 
+\subsection{\emph{M2}: Name of the quality attribute scenario}
+Shortly describe the context of the scenario.
+
+\begin{itemize}
+    \item \textbf{Source:} source
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item Description of a first stimulus.
+            \item Description of a second stimulus.
+        \end{itemize}
+
+    \item \textbf{Artifact:} the stimulated artifact
+    \item \textbf{Environment:} the condition under which the stimulus occurs
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item Describe how the system should respond to the stimulus.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item Describe how the satisfaction of a response is measured.
+        \end{itemize}
+\end{itemize}
+
 \section{Usability}
 \subsection{\emph{U1}: Name of the quality attribute scenario}
+Shortly describe the context of the scenario.
+
+\begin{itemize}
+    \item \textbf{Source:} source
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item Description of a first stimulus.
+            \item Description of a second stimulus.
+        \end{itemize}
+
+    \item \textbf{Artifact:} the stimulated artifact
+    \item \textbf{Environment:} the condition under which the stimulus occurs
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item Describe how the system should respond to the stimulus.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item Describe how the satisfaction of a response is measured.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{U2}: Name of the quality attribute scenario}
 Shortly describe the context of the scenario.
 
 \begin{itemize}
