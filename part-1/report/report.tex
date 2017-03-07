@@ -136,12 +136,12 @@ A database in the system does not send any data.
     \item \textbf{Response measure:}
         \begin{itemize}
             \item If database is down because of System Crash or User Error,
-                  the database should restart within 1s to 5s.
+                  the database should restart within 5s.
             \item If database is down because of corrupted disks, a technician
                   should replace the disk within 30 min.
             \item If restarting the database cannot fix the problem
                   (e.g. Network Failure or Natural Physical Disaster),
-                  a working replica should be used within a range of 1s to 5s.
+                  a working replica should be used within 5s.
         \end{itemize}
 \end{itemize}
 
@@ -160,13 +160,14 @@ A sensor breaks. Another sensor is used for the responsibility of the broken one
     \item \textbf{Environment:} Any state of operation, At run-time, ...
     \item \textbf{Response:}
         \begin{itemize}
-            \item The gateway uses another sensor to be used for the same responsibility as the broken one.
+            \item The gateway uses another sensor to be used for 
+                  the same responsibility as the broken one.
             \item Report the failure to the infrastructure owner.
         \end{itemize}
 
     \item \textbf{Response measure:}
         \begin{itemize}
-            \item A new sensor should be chosen within the range of 1ms to 10s % TODO: ask
+            \item A new sensor should be chosen within 10s.
         \end{itemize}
 \end{itemize}
 
@@ -184,7 +185,7 @@ These requests should be processed in a timely manner.
         \end{itemize}
 
     \item \textbf{Artifact:} The whole system
-    \item \textbf{Environment:} Under load
+    \item \textbf{Environment:} Under high load
     \item \textbf{Response:}
         \begin{itemize}
             \item Load balancing should be used to divide the requests over
@@ -195,48 +196,57 @@ These requests should be processed in a timely manner.
 
     \item \textbf{Response measure:}
         \begin{itemize}
-            \item Applications get a response within [50ms, 5s].
+            \item Applications get a response within 5s.
         \end{itemize}
 \end{itemize}
 
-\subsection{\emph{P2}: Name of the quality attribute scenario}
-Shortly describe the context of the scenario.
+\subsection{\emph{P2}: Mote data to application delay}
+When a mote sends data an application, that data reaches its 
+destination in a bounded time. This bound is determined by the priority
+of the data. The possible priorities are low, medium, and high. 
+These priorities can be set by an infrastructure owner.
 
 \begin{itemize}
-    \item \textbf{Source:} source
-    \item \textbf{Stimulus:}
+    \item \textbf{Source:} Mote
+    \item \textbf{Stimulus:} 
         \begin{itemize}
-            \item Description of a first stimulus.
-            \item Description of a second stimulus.
+            \item Data was sent from a mote to an application. For example, 
+                  this could be data from a sensor/a confirmation from an actuator.
         \end{itemize}
 
-    \item \textbf{Artifact:} the stimulated artifact
-    \item \textbf{Environment:} the condition under which the stimulus occurs
+    \item \textbf{Artifact:} The whole system
+    \item \textbf{Environment:} At runtime under normal operation
     \item \textbf{Response:}
         \begin{itemize}
-            \item Describe how the system should respond to the stimulus.
+            \item The data is always sent to the next node before other extra 
+                  work is done. For example, this other work could be logging
+                  or sending notifications.
         \end{itemize}
 
     \item \textbf{Response measure:}
         \begin{itemize}
-            \item Describe how the satisfaction of a response is measured.
+            \item If the data priority is low, the data reaches the application 
+            within 60s.
+            \item If the data priority is medium, the data reaches the application 
+            within 10s.
+            \item If the data priority is high, the data reaches the application 
+            within 1s.
         \end{itemize}
 \end{itemize}
 
 \section{Modifiability}
-\subsection{\emph{M1}: Name of the quality attribute scenario}
-Shortly describe the context of the scenario.
+\subsection{\emph{M1}: Add a new type of sensor}
+We wish to provide a new type of sensor to customers.
 
 \begin{itemize}
-    \item \textbf{Source:} source
-    \item \textbf{Stimulus:}
+    \item \textbf{Source:} SIOTIP developers
+    \item \textbf{Stimulus:} 
         \begin{itemize}
-            \item Description of a first stimulus.
-            \item Description of a second stimulus.
+            \item Developers add a new type of sensor to the system
         \end{itemize}
 
-    \item \textbf{Artifact:} the stimulated artifact
-    \item \textbf{Environment:} the condition under which the stimulus occurs
+    \item \textbf{Artifact:} System codebase and database.
+    \item \textbf{Environment:} During a development iteration
     \item \textbf{Response:}
         \begin{itemize}
             \item Describe how the system should respond to the stimulus.
@@ -248,22 +258,23 @@ Shortly describe the context of the scenario.
         \end{itemize}
 \end{itemize}
 
-\subsection{\emph{M2}: Name of the quality attribute scenario}
-Shortly describe the context of the scenario.
+\subsection{\emph{M2}: Developers changes UI components}
+Developer wants to change add or edit components that make up the UI.
+For example, those components can reused in dashboards.
 
 \begin{itemize}
-    \item \textbf{Source:} source
-    \item \textbf{Stimulus:}
+    \item \textbf{Source:} SIOTIP developers
+    \item \textbf{Stimulus:} 
         \begin{itemize}
-            \item Description of a first stimulus.
-            \item Description of a second stimulus.
+            \item Developers add a UI component.
+            \item Developers edit a UI component.
         \end{itemize}
 
-    \item \textbf{Artifact:} the stimulated artifact
-    \item \textbf{Environment:} the condition under which the stimulus occurs
+    \item \textbf{Artifact:} User interface and platform.
+    \item \textbf{Environment:} During a development iteration
     \item \textbf{Response:}
         \begin{itemize}
-            \item Describe how the system should respond to the stimulus.
+            \item 
         \end{itemize}
 
     \item \textbf{Response measure:}
@@ -273,30 +284,36 @@ Shortly describe the context of the scenario.
 \end{itemize}
 
 \section{Usability}
-\subsection{\emph{U1}: Application devs upload their app}
-Application developers have built an application and wish to upload it to
-the Online Service. This should go smoothly.
+\subsection{\emph{U1}: System administrator reviews application}
+Before an application can be published or when its automated tests 
+fail, it needs to be reviewed by an SIoTIP system administrator.  
 
 \begin{itemize}
-    \item \textbf{Source:} Application developers
+    \item \textbf{Source:} SIoTIP system administrator
     \item \textbf{Stimulus:}
         \begin{itemize}
-            \item Application developers want to use the Application provider
-                  dashboard efficiently.
+            \item The system administrator wants to review the application 
+                  and/or test logs quickly.
+            \item The system administrator wants to contact the application
         \end{itemize}
-
-    \item \textbf{Artifact:} Application provider dashboard
+    \item \textbf{Artifact:} System administrator dashboard
     \item \textbf{Environment:} At normal operation
     \item \textbf{Response:}
         \begin{itemize}
-            \item Applications and their statuses should be displayed in a clear table.
-            \item The UPLOAD APP button should be pretty!
+            \item The dashboard contains a component that describes the application's 
+                  functionality. There are clear buttons to accept or decline 
+                  the application. There is a button to open the application.
+            \item Optionally, this component displays images
+                  of the application from a infrastructure owner's point of view.
+            \item There is a component which displays the log history of the application.
+            \item There is a component for communication with the application developers.      
         \end{itemize}
 
     \item \textbf{Response measure:}
         \begin{itemize}
-            \item The application can be uploaded with a minimal amount of clicks needed
-
+            \item All actions for reviewing the application, accepting or
+                  declining the application, reading the application's log history,
+                  and contacting developers are possible within 3 clicks.
         \end{itemize}
 \end{itemize}
 
