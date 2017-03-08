@@ -89,7 +89,7 @@ environment
 Each device is initialised with a functional, default configuration, which can
 then be adjusted by the platform, application, or user
 
-*** each mote periodically sends a heartbeat message to its gateway listing
+each mote periodically sends a heartbeat message to its gateway listing
 the sensors and actuators plugged in to it along with a timestamp. In case of
 unavailability, applications and infrastructure owners can be notified.
 
@@ -111,7 +111,7 @@ A gateway should periodically synchronise data. Besides periodic
 synchronisations, important data such as alarms and notifications must be
 communicated to the Online Service as soon as possible. The Online Service
 also has to communicate with the gateway to, for example, update sensor
-config urations or activate actuators.
+configurations or activate actuators.
 
 unavoidable hardware failures should, where possible, be dealt with by
 leveraging redundancies in the deployed infrastructure
@@ -130,7 +130,6 @@ requests.
 
 it is very likely that over time new (types of) sensors and actuators have to
 be added
-
 
 Example apps:
 Fire control application
@@ -228,14 +227,14 @@ order new hardware
 
 Subscribe to application:
 app will be activated once (optionally) extra hardware is installed/allocated
-*** Ronny is notified of this subscription via the infrastructure owner
-    dashboard and he approves the purchase.
+Ronny is notified of this subscription via the infrastructure owner dashboard
+and he approves the purchase.
 new application activated -> e-mail of this event to customer organisation
 customer organisation representative can configure applications
 
 Data transmission:
 sensors send data to gateway
-applicatoin sends commands to gateway/sensors/actuators
+application sends commands to gateway/sensors/actuators
 gateway can store history of sensor data and actuator commands
 stored data is sent to application at sychronisation points
 application can then work with this data
@@ -263,6 +262,5 @@ POSSIBLE CLASSES:
     EmailSender, SMSSender,
     Something to resolve hardware problems. If hardware for one task breaks ->
         use other available hardware for the same task (maybe use case?)
-
 
 ===============================================================================

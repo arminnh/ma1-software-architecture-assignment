@@ -7,8 +7,8 @@
 
 % Set all authors, if your group counts 2, set third author empty \authorthree{}
 % Set the groupname as well
-\authorone{Monika Filipcikova (r)}
-\authortwo{Armin Halilovic(r)}
+\authorone{Monika Filipcikova (r0683254)}
+\authortwo{Armin Halilovic(r0679689)}
 \groupname{Filipcikova-Halilovic}
 
 \academicyear{2016--2017}
@@ -38,8 +38,14 @@ This section shows the domain model(s).
 In this section we provide additional domain constraints.
 
 \begin{itemize}
-    \item This is a first constraint.
-    \item This is a second constraint.
+    \item Gateways can to only run light-weight programs that are not too
+          demanding in resources.
+    \item The SIoTIP Online Service must be almost permamently available and sensor
+          data is never lost or inconsistent.
+    \item Core running inside SIoTIP must be able to interact with
+          external applications and systems.
+    \item Relaying information to the motes by the gateway is done by GET and PUT
+          requests.
 \end{itemize}
 
 \section{Glossary}
@@ -47,8 +53,51 @@ In this section, we provide a glossary of the most important terminology used
 in this analysis.
 
 \begin{itemize}
-    \item \textbf{Notification}: definition
+    \item \textbf{Application}: An application in the system is a program that
+    uses sensors for a specific goal (e.g. fire detection). Customer organisations
+    can subsribe to applications.
+    \item \textbf{Application providers}: Application providers develop, upload,
+    and maintain applications for the SIoTIP system.
+    \item \textbf{Customer organisations}: Organisations that want to subscribe
+    to applications. These organisations can subscribe to or unsubscribe from
+    applications and get an overview of the invoices for their subscriptions.
+    \item \textbf{Dashboard}: A dashboard is a collection of information which is
+    available to a user. There are different dashboard for different type of users.
+    \item \textbf{End-user}: End-users are the users that interact with deployed
+    applications. They can issue commands to the application via a plethora of
+    devices. For all end-users, the use of applications should simplify or
+    automate their daily tasks.
+    \item \textbf{Gateway}: A device which is connected to the Online Service
+    and that has access to sensors and actuators. It can run some application
+    logic and transmit data between the Online Service and the sensors/actuators.
+    \item \textbf{Infrastructure owner}: This is someone who owns building(s),
+    gateways, motes, sensors, and actuators. Owners are responsible for buying,
+    installing, and maintaining hardware and the topology of their infrastructure.
+    Owners can allocate installed hardware to specific customer organisations.
+    \item \textbf{Mote}: A device that can host sensors and actuators. It connects
+    these to the network and is used for communication between sensors/actuators
+    and a gateway.
+    \item \textbf{Notification}: A message that contains information about some
+    event that occured in the system. Notifications have some priority. This
+    influences how some notifications will be handled compared to others.
+    \item \textbf{Online Service}: The online back-end which provides those
+    services that are expected to generate the main revenue. Those services
+    include the selling of hardware required for IoT infrastructures, and a
+    platform where application providers and potential buyers can meet for a low price.
     \item \textbf{Replica}: definition
+    \item \textbf{Sensor data}: Data about some sensor reading(s). Sensor
+    data has some priority. This influences how some data will be handled
+    compared to other data.
+    \item \textbf{System}: "The system" is used to refer to the collection
+    of entities that will be used by the SIoTIP corporation to render services.
+    This includes the Online Service, gateways, motes, applications, etc.
+    \item \textbf{System administrator}: System administrators monitor and
+    manage the entire platform. They can view information about performance,
+    running applications and sensors, shut applications down. These users are
+    notified if alarming events threaten the platform.
+    \item \textbf{User}: Someone who can log in and use parts of the system.
+    Possibilities are system administrators, infrastructure owners, customer
+    organisations, application providers, end-users.
 \end{itemize}
 
 \chapter{Functional requirements}\label{sec:functional}
