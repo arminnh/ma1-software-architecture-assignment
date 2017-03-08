@@ -14,44 +14,51 @@ A SIoTIP system administrator reviews and approves or declines it.
 
 \section{Detailed use cases}
 
-\subsection{\emph{UCXXX}: Send data to gateway}
+\subsection{\emph{UCXXX}: Send sensor data}
 \begin{itemize}
-    \item \textbf{Name:} Send data to gateway
+    \item \textbf{Name:} Send sensor data
     \item \textbf{Primary actor:} Mote
-    \item \textbf{Secondary actor(s)}: secondary actor(s)
+    \item \textbf{Secondary actors:} Sensor, Gateway
     \item \textbf{Interested parties:}
         \begin{itemize}
-            \item \textit{Name of interested party:} reason why party is interested
+            \item \textit{Customer organisation:} pays for an application that uses this sensor.
+            \item \textit{Infrastructure owner:} needs the sensor data for an application they set up.
+            \item \textit{End-users:} use the sensor data in an application.
         \end{itemize}
 
     \item \textbf{Preconditions:}
         \begin{itemize}
-            \item First precondition.
-            \item Second precondition.
+            \item The mote has received data from a sensor connected to it.
+            \item The mote is connected to a gateway.
         \end{itemize}
 
     \item \textbf{Postconditions:}
         \begin{itemize}
-            \item First postcondition.
-            \item Second postcondition.
+            \item The gateway has received and processed the sensor data.
+            \item The Online Service has received the data and can process it.
         \end{itemize}
 
     \item \textbf{Main scenario:}
-    \begin{enumerate}
-       \item Step 1
-       \item Step 2
-       \item Step 3
-       \item \ldots
-    \end{enumerate}
+        \begin{enumerate}
+           \item The mote sends the sensor data to the connected gateway.
+           \item The gateway receives the data and if applicable, runs some application logic.
+           \item The gateway collects data until a synchronisation point is reached.
+                 At that point, the gateway sends the data to the Online Service.
+        \end{enumerate}
 
     \item \textbf{Alternative scenarios:}
-    \begin{enumerate}
-        \item [3b.] Alternative at step 3
-    \end{enumerate}
+        \begin{enumerate}
+            \item [3b.] The gateway determined that the data was important
+                  (e.g. cause for alarm, notification, etc.) and sent the data
+                  to the Online Service immediately instead of waiting for the
+                  sycnhronisation point.
+        \end{enumerate}
 
     \item \textbf{Remarks:}
         \begin{itemize}
-            \item First remark
+            \item It is essential that the synchronisation protocol works
+                  correctly in the presence of non-reliable network communication
+                  so that there is no loss of data.
         \end{itemize}
 \end{itemize}
 
@@ -182,39 +189,54 @@ A SIoTIP system administrator reviews and approves or declines it.
 \begin{itemize}
     \item \textbf{Name:} Review application
     \item \textbf{Primary actor:} SIoTIP System Administrator
-    \item \textbf{Secondary actor(s)}: secondary actor(s)
+    \item \textbf{Secondary actor(s)}:
     \item \textbf{Interested parties:}
         \begin{itemize}
-            \item \textit{Name of interested party:} reason why party is interested
+            \item \textit{Application developers:} want to add their application to the system
         \end{itemize}
 
     \item \textbf{Preconditions:}
         \begin{itemize}
-            \item First precondition.
-            \item Second precondition.
+            \item The system administrator is authenticated.
+            \item The application needs to be reviewed by a system administrator.
         \end{itemize}
 
     \item \textbf{Postconditions:}
         \begin{itemize}
-            \item First postcondition.
-            \item Second postcondition.
+            \item The system adminstrator accepts or declines the application.
+            \item The application developers have been notified of this event.
         \end{itemize}
 
     \item \textbf{Main scenario:}
-    \begin{enumerate}
-       \item Step 1
-       \item Step 2
-       \item Step 3
-       \item \ldots
-    \end{enumerate}
+        \begin{enumerate}
+            \item The system administrator navigates to the applications component on their
+                  dashboard and selects the application that needs to be reviewed.
+            \item The system administrator reviews the application's functionality and
+                  log history, and the message history with the developers.
+            \item The system administrator indicates he wants to accept the application.
+            \item The system logs this event and makes the application available to
+                  customer ogranisations.
+            \item The system notifies the application developers.
+        \end{enumerate}
 
     \item \textbf{Alternative scenarios:}
-    \begin{enumerate}
-        \item [3b.] Alternative at step 3
-    \end{enumerate}
+        \begin{enumerate}
+            \item [3b.] The system administrator indicates he wants decline to the application
+                  and is prompted by the system to fill in the reason for this. The
+                  application will thus not become available to customer organisations.
+            \item [3c.] The system administrator indicates he wants communicate
+                  with the developers before making a decision. Afterwards, return to
+                  step 2.
+        \end{enumerate}
 
     \item \textbf{Remarks:}
         \begin{itemize}
-            \item First remark
+            \item When an application first gets uploaded to the system, it needs to be
+                  reviewed and accepted by a system administrator. This will prevent
+                  the available apps to be flooded with apps of very poor quality
+                  or apps that are copies of other apps.
+            \item If at some point in the future, automated testing for an app fails,
+                  the app will need to be reviewed again before it can be made
+                  available again.
         \end{itemize}
 \end{itemize}
