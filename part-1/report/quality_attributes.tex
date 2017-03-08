@@ -1,0 +1,296 @@
+\chapter{Non-functional requirements}\label{sec:non-functional}
+In this section, we model the non-functional requirements for the system in the
+form of \emph{quality attribute scenarios}. We provide for each type
+(availability, performance and modifiability) one requirement.
+
+\section{Availability}
+\subsection{\emph{Av1}: Unusable database}
+A database in the system cannot be used anymore. This could happen because of
+corrupted disks, power outages, too many requests coming into the database
+server, network failures, natural physical disasters, etc. A different database
+will be used while this one is unusable.
+
+\begin{itemize}
+    \item \textbf{Source:} Database server
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item The database crashed.
+            \item The database does not respond to requests.
+            \item The database does not respond to requests within reasonable time.
+            \item The database returns invalid data or responses.
+        \end{itemize}
+
+    \item \textbf{Artifact:} Persistent storage
+    \item \textbf{Environment:} Normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item Use a working replica until the database can be used again.
+            \item Log the fault.
+            \item If the problem with the database cannot be fixed automatically
+                  (e.g. by an automatic restart and resynchronisation), send
+                  a technician if it is possible for them to fix the problem
+                  (e.g. replace corrupted disks). Otherwise (e.g. power outages,
+                  natural physical disasters), send a notification
+                  of high priority to SIoTIP system administrators.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item If a database becomes unusable, this should be detected
+                  within 3s of the system trying to use the database.
+            \item When the system detects that a database is unusable,
+                  a working replica should be used within 5s.
+            \item If a database is unusable because of a system crash or user error,
+                  the database should restart and start its boot procedure within 5s.
+            \item If a database is unusable because of corrupted disks, a technician
+                  should replace the disk within 30 min.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{Av2}: Broken sensor}
+A sensor breaks. The infrastructure owner is notified and if possible, another
+sensor is used for the responsibility that the broken one was fulfilling.
+
+\begin{itemize}
+    \item \textbf{Source:} Sensor
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item No data can be received anymore from the sensor.
+            \item The sensor stopped sending regular updates.
+            \item The sensor sends invalid/corrupted data.
+            \item The sensor disappeared from the heartbeats of the mote it
+                  is connected to.
+        \end{itemize}
+
+    \item \textbf{Artifact:} Communication channel between sensor and gateway
+    \item \textbf{Environment:} Normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item The gateway uses another sensor to be used for
+                  the same responsibility as the broken one.
+            \item Log the fault and notify the infrastructure owner.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item When a sensor breaks, this is detected within 2s.
+            \item If there is another sensor that can fulfill the same responsibility
+                  as the broken one, it should be chosen within 2s.
+        \end{itemize}
+\end{itemize}
+
+\section{Performance}
+\subsection{\emph{P1}: Application requests under peak load}
+An application sends requests to the Online Service while the system is under
+peak load. These requests could be for getting data from a specific
+sensor, for configuring application settings, etc.
+These request should be processed in a timely manner.
+
+\begin{itemize}
+    \item \textbf{Source:} Application
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item An application sends a request to the Online Service.
+        \end{itemize}
+
+    \item \textbf{Artifact:} The whole system
+    \item \textbf{Environment:} Under peak load
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item When a request comes into the system, core work necessary
+                  to generate a reply is done first. Other work of less importance
+                  (e.g. sending emails, generating low-priority notifications, etc.)
+                  is scheduled to be done later.
+            \item Load balancing is used to divide the requests over
+                  available servers.
+            \item Servers that are closest to source of the request are chosen
+                  over servers that are farther away to minimize network delay.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item Applications get a response within 3s.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{P2}: Mote data to application delay}
+When a mote sends data to an application, that data reaches its
+destination in a bounded time. This bound is determined by the priority
+of the data. The possible priorities are low, medium, and high.
+These priorities can be set by an infrastructure owner.
+
+\begin{itemize}
+    \item \textbf{Source:} Mote
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item A mote sends data to an application.
+        \end{itemize}
+
+    \item \textbf{Artifact:} The whole system
+    \item \textbf{Environment:} Normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item The data is always sent to the next node before other extra
+                  work is done. For example, other work could be logging
+                  or sending notifications.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item If the data priority is low, the data reaches the application
+                  within 60s.
+            \item If the data priority is medium, the data reaches the application
+                  within 10s.
+            \item If the data priority is high, the data reaches the application
+                  within 1s.
+        \end{itemize}
+\end{itemize}
+
+\section{Modifiability}
+\subsection{\emph{M1}: Add a new type of sensor}
+The SIoTIP corporation wishes to provide a new type of sensor to customers.
+
+\begin{itemize}
+    \item \textbf{Source:} SIoTIP developer
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item Developers add a new type of sensor to the system
+        \end{itemize}
+
+    \item \textbf{Artifact:} System codebase and database.
+    \item \textbf{Environment:} Normal operation, during a development iteration
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item The software on motes and gateways must be updated so that
+                  the new sensor can be read, calibrated and configured.
+            \item Components in the system responsible for storage of sensor readings
+                  must be updated to save the readings of the new sensor correctly.
+            \item UI components must be updated so that the readings of the
+                  new sensor can be displayed correctly.
+            \item This modification does not affect the way data is communicated
+                  whithin components of the system.
+            \item Infrastructure owners can choose when the update will happen.
+                  The motes and gateways must be updated before the new
+                  typ of sensor can be ordered.
+            \item The updates to the UI components and storage components can
+                  be deployed at run time.
+                  There is no need to destroy any login sessions for this, since the
+                  sensor will not be in use at that time yet.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item This modification is finished within 5 man months of development time.
+            \item The deployment of the modifications to the UI components and storage
+                  components is finished within 10 minutes.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{M2}: Changes to UI components or new UI components}
+Developers want to add or edit components that make up the UI.
+For example, they want to improve components that are reused in dashboards.
+
+\begin{itemize}
+    \item \textbf{Source:} SIoTIP developers
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item Developers add a UI component.
+            \item Developers edit a UI component.
+        \end{itemize}
+
+    \item \textbf{Artifact:} User interface and platform.
+    \item \textbf{Environment:} Normal operation, during a development iteration
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item Users are not able to use the system during the deployment
+                  of the changes. All users that are logged in at the time
+                  the deployment starts will be logged out first.
+            \item All users are notified in advance of incoming downtime.
+            \item The update does not affect currently ongoing activity in
+                  the system.
+            \item The update only affects the subsystem responsible for the UI.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item The deployment of the new UI components is finished within 30 minutes.
+                  Users can log in again immediately after the deployment is finished.
+        \end{itemize}
+\end{itemize}
+
+\section{Usability}
+\subsection{\emph{U1}: System administrator reviews application}
+Before an application can be published or when its automated tests
+fail, it needs to be reviewed by a SIoTIP system administrator.
+
+\begin{itemize}
+    \item \textbf{Source:} SIoTIP system administrator
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item The system administrator wants to review the application
+                  and/or test logs quickly.
+            \item The system administrator wants to contact the application
+                  developers.
+        \end{itemize}
+    \item \textbf{Artifact:} System administrator dashboard
+    \item \textbf{Environment:} At normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item The system administrator dashboard is built up using clear
+                  components which contain informations about different
+                  elements of the system. One such component displays applications
+                  that are waiting for a review.
+            \item The application review page contains a component that
+                  describes the application's functionality. There are clear
+                  buttons to accept or decline the application. There is a
+                  button to open the application.
+            \item Optionally, the application review contains a component which
+                  displays images  of the application from an infrastructure
+                  owner's point of view.
+            \item There is a component which displays the log history of the application.
+            \item There is a component for communication with the application developers.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item All actions for reviewing the application, accepting or
+                  declining the application, reading the application's log history,
+                  and contacting the developers are possible within 5 clicks.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{U2}: Infrastructure owner manages application}
+An infrastructure owner wants to manage an application. For example, they
+might want to edit the topology of some hardware, subscribe customer
+organisations to applications, order new hardware, etc.
+
+\begin{itemize}
+    \item \textbf{Source:} Infrastructure owner
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item The infrastructure owner wants to use the infrastructure owner
+                  dashboard efficiently
+            \item The infrastructure owner wants to feel comfortable with the
+                  infrastructure owner dashboard
+        \end{itemize}
+
+    \item \textbf{Artifact:} Infrastructure owner dashboard
+    \item \textbf{Environment:} At normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item The infrastructure owner dashboard consists of clear UI
+                  components that provide information about different elements of the system.
+            \item Topologies of hardware are displayed clearly in diagrams.
+            \item There is a help system the user can use to learn about the functionality
+                  of their dashboard. When this help system is used, it displays
+                  key information about the page the user is currently
+                  on. It also contains a search form so the user can learn about
+                  anything they want that is relevant to their dashboard.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item All actions an infrastructure owner can take in the system can be
+                  done within 5 clicks.
+        \end{itemize}
+\end{itemize}
