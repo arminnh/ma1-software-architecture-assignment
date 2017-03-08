@@ -113,35 +113,44 @@ form of \emph{quality attribute scenarios}. We provide for each type
 (availability, performance and modifiability) one requirement.
 
 \section{Availability}
-\subsection{\emph{Av1}: Database is down}
-A database in the system does not send any data.
+\subsection{\emph{Av1}: Database is unusable}
+A database in the system cannot be used anymore. This could happen because of
+corrupted disks, power outages, too many requests coming into the database
+server, network failures, natural physical disaster, etc.
 
 \begin{itemize}
     \item \textbf{Source:} External: Database server
     \item \textbf{Stimulus:}
         \begin{itemize}
-            \item The database crashed / does not send any response.
-            \item The database returns invalid data or response.
+            \item The database crashed.
+            \item The database does not respond to requests.
+            \item The database does not respond to requests within reasonable time.
+            \item The database returns invalid data or responses.
         \end{itemize}
 
     \item \textbf{Artifact:} Persistent storage
     \item \textbf{Environment:} Normal operation
     \item \textbf{Response:}
         \begin{itemize}
-            \item Use a working replica until the server can be used again.
-            \item If the server cannot fix the by itself, send a technician to
-                  fix the problem with the database.
+            \item Use a working replica until the database can be used again.
+            \item If the problem with the database cannot be fixed automatically
+                  (e.g. by an automatic restart and resynchronisation), send
+                  a technician if it is possible for them to fix the problem
+                  (e.g. replace corrupted disks). Otherwise (e.g. power outages,
+                  natural physical disasters), send a notification
+                  of high priority to SIoTIP system administrators.
         \end{itemize}
 
     \item \textbf{Response measure:}
         \begin{itemize}
-            \item If database is down because of System Crash or User Error,
-                  the database should restart within 5s.
-            \item If database is down because of corrupted disks, a technician
-                  should replace the disk within 30 min.
-            \item If restarting the database cannot fix the problem
-                  (e.g. Network Failure or Natural Physical Disaster),
+            \item If a database becomes unusable, this should be detected
+                  within 3s of the system trying to use the database.
+            \item When the system detects that a database is unusable,
                   a working replica should be used within 5s.
+            \item If a database is unusable because of a system crash or user error,
+                  the database should restart and start its boot procedure within 5s.
+            \item If a database is unusable because of corrupted disks, a technician
+                  should replace the disk within 30 min.
         \end{itemize}
 \end{itemize}
 
@@ -160,7 +169,7 @@ A sensor breaks. Another sensor is used for the responsibility of the broken one
     \item \textbf{Environment:} Any state of operation, At run-time, ...
     \item \textbf{Response:}
         \begin{itemize}
-            \item The gateway uses another sensor to be used for 
+            \item The gateway uses another sensor to be used for
                   the same responsibility as the broken one.
             \item Report the failure to the infrastructure owner.
         \end{itemize}
@@ -201,16 +210,16 @@ These requests should be processed in a timely manner.
 \end{itemize}
 
 \subsection{\emph{P2}: Mote data to application delay}
-When a mote sends data an application, that data reaches its 
+When a mote sends data an application, that data reaches its
 destination in a bounded time. This bound is determined by the priority
-of the data. The possible priorities are low, medium, and high. 
+of the data. The possible priorities are low, medium, and high.
 These priorities can be set by an infrastructure owner.
 
 \begin{itemize}
     \item \textbf{Source:} Mote
-    \item \textbf{Stimulus:} 
+    \item \textbf{Stimulus:}
         \begin{itemize}
-            \item Data was sent from a mote to an application. For example, 
+            \item Data was sent from a mote to an application. For example,
                   this could be data from a sensor/a confirmation from an actuator.
         \end{itemize}
 
@@ -218,18 +227,18 @@ These priorities can be set by an infrastructure owner.
     \item \textbf{Environment:} At runtime under normal operation
     \item \textbf{Response:}
         \begin{itemize}
-            \item The data is always sent to the next node before other extra 
+            \item The data is always sent to the next node before other extra
                   work is done. For example, this other work could be logging
                   or sending notifications.
         \end{itemize}
 
     \item \textbf{Response measure:}
         \begin{itemize}
-            \item If the data priority is low, the data reaches the application 
+            \item If the data priority is low, the data reaches the application
             within 60s.
-            \item If the data priority is medium, the data reaches the application 
+            \item If the data priority is medium, the data reaches the application
             within 10s.
-            \item If the data priority is high, the data reaches the application 
+            \item If the data priority is high, the data reaches the application
             within 1s.
         \end{itemize}
 \end{itemize}
@@ -240,7 +249,7 @@ We wish to provide a new type of sensor to customers.
 
 \begin{itemize}
     \item \textbf{Source:} SIOTIP developers
-    \item \textbf{Stimulus:} 
+    \item \textbf{Stimulus:}
         \begin{itemize}
             \item Developers add a new type of sensor to the system
         \end{itemize}
@@ -264,7 +273,7 @@ For example, those components can reused in dashboards.
 
 \begin{itemize}
     \item \textbf{Source:} SIOTIP developers
-    \item \textbf{Stimulus:} 
+    \item \textbf{Stimulus:}
         \begin{itemize}
             \item Developers add a UI component.
             \item Developers edit a UI component.
@@ -274,7 +283,7 @@ For example, those components can reused in dashboards.
     \item \textbf{Environment:} During a development iteration
     \item \textbf{Response:}
         \begin{itemize}
-            \item 
+            \item
         \end{itemize}
 
     \item \textbf{Response measure:}
@@ -285,14 +294,14 @@ For example, those components can reused in dashboards.
 
 \section{Usability}
 \subsection{\emph{U1}: System administrator reviews application}
-Before an application can be published or when its automated tests 
-fail, it needs to be reviewed by an SIoTIP system administrator.  
+Before an application can be published or when its automated tests
+fail, it needs to be reviewed by an SIoTIP system administrator.
 
 \begin{itemize}
     \item \textbf{Source:} SIoTIP system administrator
     \item \textbf{Stimulus:}
         \begin{itemize}
-            \item The system administrator wants to review the application 
+            \item The system administrator wants to review the application
                   and/or test logs quickly.
             \item The system administrator wants to contact the application
         \end{itemize}
@@ -300,13 +309,13 @@ fail, it needs to be reviewed by an SIoTIP system administrator.
     \item \textbf{Environment:} At normal operation
     \item \textbf{Response:}
         \begin{itemize}
-            \item The dashboard contains a component that describes the application's 
-                  functionality. There are clear buttons to accept or decline 
+            \item The dashboard contains a component that describes the application's
+                  functionality. There are clear buttons to accept or decline
                   the application. There is a button to open the application.
             \item Optionally, this component displays images
                   of the application from a infrastructure owner's point of view.
             \item There is a component which displays the log history of the application.
-            \item There is a component for communication with the application developers.      
+            \item There is a component for communication with the application developers.
         \end{itemize}
 
     \item \textbf{Response measure:}
