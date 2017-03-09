@@ -3,6 +3,8 @@
 % E.g., \documentclass[english,peerreview]{sareport}
 
 \usepackage[colorlinks, linkcolor=black, citecolor=black, urlcolor=black]{hyperref}
+\usepackage{graphicx}
+\usepackage{rotating}
 
 
 % Set all authors, if your group counts 2, set third author empty \authorthree{}
@@ -25,14 +27,13 @@
 
 \chapter{Domain analysis}\label{sec:domain}
 \section{Domain models}
-This section shows the domain model(s).
+The domain model is shown in figure \ref{fig:domain_model}.
 
-\begin{figure}[!htp]
+\begin{sidewaysfigure}[htp]
     \centering
-    %\includegraphics[width=0.8\textwidth]{}
-    \missingfigure[figwidth=0.8\textwidth]{Domain model}
+    \includegraphics[width=1.05\textwidth]{Class_Diagram1.jpg}
     \caption{The domain model for the system.}\label{fig:domain_model}
-\end{figure}
+\end{sidewaysfigure}
 
 \section{Domain constraints}
 In this section we provide additional domain constraints.
@@ -48,6 +49,7 @@ In this section we provide additional domain constraints.
           requests.
 \end{itemize}
 
+\newpage
 \section{Glossary}
 In this section, we provide a glossary of the most important terminology used
 in this analysis.
@@ -101,12 +103,11 @@ in this analysis.
 \end{itemize}
 
 \chapter{Functional requirements}\label{sec:functional}
-\section*{Use case model}
+\section{Use case model}
 
 \begin{figure}[!htp]
     \centering
-    %\includegraphics[width=0.8\textwidth]{}
-    \missingfigure[figwidth=0.8\textwidth]{Use case model}
+    \includegraphics[width=1\textwidth]{Use_Case_Diagram1.jpg}
     \caption{Use case diagram for the system.}\label{fig:use_case_model}
 \end{figure}
 
