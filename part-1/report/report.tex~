@@ -1,0 +1,352 @@
+\documentclass[english]{sareport}
+% use the option peerreview for creating an anonymized version of your report
+% E.g., \documentclass[english,peerreview]{sareport}
+
+\usepackage[colorlinks, linkcolor=black, citecolor=black, urlcolor=black]{hyperref}
+
+
+% Set all authors, if your group counts 2, set third author empty \authorthree{}
+% Set the groupname as well
+\authorone{Monika Filipcikova (r)}
+\authortwo{Armin Halilovic(r)}
+\groupname{Filipcikova-Halilovic}
+
+\academicyear{2016--2017}
+
+\casename{Shared Internet Of Things Infrastructure Platform}
+\phasenumber{1}
+\phasename{Domain Analysis}
+
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\chapter{Domain analysis}\label{sec:domain}
+\section{Domain models}
+This section shows the domain model(s).
+
+\begin{figure}[!htp]
+    \centering
+    %\includegraphics[width=0.8\textwidth]{}
+    \missingfigure[figwidth=0.8\textwidth]{Domain model}
+    \caption{The domain model for the system.}\label{fig:domain_model}
+\end{figure}
+
+\section{Domain constraints}
+In this section we provide additional domain constraints.
+
+\begin{itemize}
+    \item This is a first constraint.
+    \item This is a second constraint.
+\end{itemize}
+
+\section{Glossary}
+In this section, we provide a glossary of the most important terminology used
+in this analysis.
+
+\begin{itemize}
+    \item \textbf{Term1}: definition
+    \item \textbf{Term2}: definition
+\end{itemize}
+
+\chapter{Functional requirements}\label{sec:functional}
+\section*{Use case model}
+
+\begin{figure}[!htp]
+    \centering
+    %\includegraphics[width=0.8\textwidth]{}
+    \missingfigure[figwidth=0.8\textwidth]{Use case model}
+    \caption{Use case diagram for the system.}\label{fig:use_case_model}
+\end{figure}
+
+\section{Use case overview}\label{sec:uc_overview}
+\paragraph{UC1: Name}
+Short summary of this use case scenario
+
+\section{Detailed use cases}
+\subsection{\emph{UC1}: Name}
+\begin{itemize}
+    \item \textbf{Name:} Name of use case 1
+    \item \textbf{Primary actor:} primary actor
+    \item \textbf{Secondary actor(s)}: secondary actor(s)
+    \item \textbf{Interested parties:}
+        \begin{itemize}
+            \item \textit{Name of interested party:} reason why party is interested
+        \end{itemize}
+
+    \item \textbf{Preconditions:}
+        \begin{itemize}
+            \item First precondition.
+            \item Second precondition.
+        \end{itemize}
+
+    \item \textbf{Postconditions:}
+        \begin{itemize}
+            \item First postcondition.
+            \item Second postcondition.
+        \end{itemize}
+
+    \item \textbf{Main scenario:}
+    \begin{enumerate}
+       \item Step 1
+       \item Step 2
+       \item Step 3
+       \item \ldots
+    \end{enumerate}
+
+    \item \textbf{Alternative scenarios:}
+    \begin{enumerate}
+        \item [3b.] Alternative at step 3
+    \end{enumerate}
+
+    \item \textbf{Remarks:}
+        \begin{itemize}
+            \item First remark
+        \end{itemize}
+\end{itemize}
+
+\chapter{Non-functional requirements}\label{sec:non-functional}
+In this section, we model the non-functional requirements for the system in the
+form of \emph{quality attribute scenarios}. We provide for each type
+(availability, performance and modifiability) one requirement.
+
+\section{Availability}
+\subsection{\emph{Av1}: Database is down}
+A database in the system does not send any data.
+
+\begin{itemize}
+    \item \textbf{Source:} External: Database server
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item The database crashed / does not send any response.
+            \item The database returns invalid data or response.
+        \end{itemize}
+
+    \item \textbf{Artifact:} Persistent storage
+    \item \textbf{Environment:} Normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item Use a working replica until the server can be used again.
+            \item If the server cannot fix the by itself, send a technician to
+                  fix the problem with the database.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item If database is down because of System Crash or User Error,
+                  the database should restart within 5s.
+            \item If database is down because of corrupted disks, a technician
+                  should replace the disk within 30 min.
+            \item If restarting the database cannot fix the problem
+                  (e.g. Network Failure or Natural Physical Disaster),
+                  a working replica should be used within 5s.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{Av2}: Sensor breaks}
+A sensor breaks. Another sensor is used for the responsibility of the broken one.
+
+\begin{itemize}
+    \item \textbf{Source:} External: sensor
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item No data received anymore from sensor
+            \item Sensor is missing in heartbeat of mote
+        \end{itemize}
+
+    \item \textbf{Artifact:} Communication channel between sensor and gateway
+    \item \textbf{Environment:} Any state of operation, At run-time, ...
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item The gateway uses another sensor to be used for 
+                  the same responsibility as the broken one.
+            \item Report the failure to the infrastructure owner.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item A new sensor should be chosen within 10s.
+        \end{itemize}
+\end{itemize}
+
+\section{Performance}
+\subsection{\emph{P1}: Many applications make many requests}
+Many applications make many requests simultaneously to the Online Service.
+These requests should be processed in a timely manner.
+
+\begin{itemize}
+    \item \textbf{Source:} Applications
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item Many applications generate requests at approximately the same time.
+                  This causes the system to be under load.
+        \end{itemize}
+
+    \item \textbf{Artifact:} The whole system
+    \item \textbf{Environment:} Under high load
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item Load balancing should be used to divide the requests over
+                  available servers.
+            \item The servers that are closest to applications should be preferred
+                  over servers that are farther away to minimize network delay.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item Applications get a response within 5s.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{P2}: Mote data to application delay}
+When a mote sends data an application, that data reaches its 
+destination in a bounded time. This bound is determined by the priority
+of the data. The possible priorities are low, medium, and high. 
+These priorities can be set by an infrastructure owner.
+
+\begin{itemize}
+    \item \textbf{Source:} Mote
+    \item \textbf{Stimulus:} 
+        \begin{itemize}
+            \item Data was sent from a mote to an application. For example, 
+                  this could be data from a sensor/a confirmation from an actuator.
+        \end{itemize}
+
+    \item \textbf{Artifact:} The whole system
+    \item \textbf{Environment:} At runtime under normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item The data is always sent to the next node before other extra 
+                  work is done. For example, this other work could be logging
+                  or sending notifications.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item If the data priority is low, the data reaches the application 
+            within 60s.
+            \item If the data priority is medium, the data reaches the application 
+            within 10s.
+            \item If the data priority is high, the data reaches the application 
+            within 1s.
+        \end{itemize}
+\end{itemize}
+
+\section{Modifiability}
+\subsection{\emph{M1}: Add a new type of sensor}
+We wish to provide a new type of sensor to customers.
+
+\begin{itemize}
+    \item \textbf{Source:} SIOTIP developers
+    \item \textbf{Stimulus:} 
+        \begin{itemize}
+            \item Developers add a new type of sensor to the system
+        \end{itemize}
+
+    \item \textbf{Artifact:} System codebase and database.
+    \item \textbf{Environment:} During a development iteration
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item Describe how the system should respond to the stimulus.
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item Describe how the satisfaction of a response is measured.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{M2}: Developers changes UI components}
+Developer wants to change add or edit components that make up the UI.
+For example, those components can reused in dashboards.
+
+\begin{itemize}
+    \item \textbf{Source:} SIOTIP developers
+    \item \textbf{Stimulus:} 
+        \begin{itemize}
+            \item Developers add a UI component.
+            \item Developers edit a UI component.
+        \end{itemize}
+
+    \item \textbf{Artifact:} User interface and platform.
+    \item \textbf{Environment:} During a development iteration
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item 
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item Describe how the satisfaction of a response is measured.
+        \end{itemize}
+\end{itemize}
+
+\section{Usability}
+\subsection{\emph{U1}: System administrator reviews application}
+Before an application can be published or when its automated tests 
+fail, it needs to be reviewed by an SIoTIP system administrator.  
+
+\begin{itemize}
+    \item \textbf{Source:} SIoTIP system administrator
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item The system administrator wants to review the application 
+                  and/or test logs quickly.
+            \item The system administrator wants to contact the application
+        \end{itemize}
+    \item \textbf{Artifact:} System administrator dashboard
+    \item \textbf{Environment:} At normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item The dashboard contains a component that describes the application's 
+                  functionality. There are clear buttons to accept or decline 
+                  the application. There is a button to open the application.
+            \item Optionally, this component displays images
+                  of the application from a infrastructure owner's point of view.
+            \item There is a component which displays the log history of the application.
+            \item There is a component for communication with the application developers.      
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item All actions for reviewing the application, accepting or
+                  declining the application, reading the application's log history,
+                  and contacting developers are possible within 3 clicks.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{U2}: Infrastructure owner changes topology}
+The infrastructure owner wants to change the topology of sensors or actuators
+in the system.
+
+\begin{itemize}
+    \item \textbf{Source:} Infrastructure owner
+    \item \textbf{Stimulus:}
+        \begin{itemize}
+            \item Infrastructure owner wants to use the infrastructure owner
+                  dashboard efficiently
+            \item Infrastructure owner wants to feel comfortable with the
+                  infrastructure owner dashboard
+        \end{itemize}
+
+    \item \textbf{Artifact:} Infrastructure owner dashboard
+    \item \textbf{Environment:} At normal operation
+    \item \textbf{Response:}
+        \begin{itemize}
+            \item Text is aggregated into consistent paragraphs.
+            \item Links and buttons have a distinct styling to make them stand out.
+            \item The topology is displayed clearly in a diagram.
+            \item There is a help system the infrastructure owner can use to learn
+        \end{itemize}
+
+    \item \textbf{Response measure:}
+        \begin{itemize}
+            \item The topology can be changed with a minimal amount of text/diagrams
+                  displayed and clicks needed to do the changes. In other words,
+                  the time do to this is bounded by X minutes.
+        \end{itemize}
+\end{itemize}
+
+\end{document}
