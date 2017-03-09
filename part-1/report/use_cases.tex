@@ -66,35 +66,44 @@ A SIoTIP system administrator reviews and approves or declines it.
 \begin{itemize}
     \item \textbf{Name:} Upload application
     \item \textbf{Primary actor:} Application Developer
-    \item \textbf{Secondary actor(s)}: secondary actor(s)
+    \item \textbf{Secondary actor(s)}: SIotIP system
     \item \textbf{Interested parties:}
         \begin{itemize}
-            \item \textit{Name of interested party:} reason why party is interested
+            \item \textit{Customers organisations:} want to subscribe the applications.
         \end{itemize}
 
     \item \textbf{Preconditions:}
         \begin{itemize}
-            \item First precondition.
-            \item Second precondition.
+            \item The application developer has access to his dashboard.
         \end{itemize}
 
     \item \textbf{Postconditions:}
         \begin{itemize}
-            \item First postcondition.
-            \item Second postcondition.
+            \item The application is uploaded into the Online Service.
+            \item The application is available to customer organisations for subscription.
         \end{itemize}
 
     \item \textbf{Main scenario:}
     \begin{enumerate}
-       \item Step 1
-       \item Step 2
-       \item Step 3
-       \item \ldots
+       \item The application developer logs in and opens his dashboard.
+       \item The system provides the ability to upload new application.
+       \item The application developer uploads application.
+       \item The system check application and  initiates a number of automated tests.
+       \item The application developer follows  the  progress  and  results  
+             of these tests via application provider dashboard.
+       \item The application successfully passes all tests.
+       \item The system makes the application available for the customers organisations.
+       \item The system send a notification to the application developer.
     \end{enumerate}
 
     \item \textbf{Alternative scenarios:}
     \begin{enumerate}
-        \item [3b.] Alternative at step 3
+        \item [4b.] The system can not load application and send error 
+                    to the application developer.
+        \item [7b.] The system interrupt loading of the application, 
+                    because of potential memory leak.
+        \item [8b.] The SIoTIP administrator performs a secondary review and decides whether to accept
+                    or reject the application.
     \end{enumerate}
 
     \item \textbf{Remarks:}
@@ -107,35 +116,36 @@ A SIoTIP system administrator reviews and approves or declines it.
 \begin{itemize}
     \item \textbf{Name:} Get data from sensor
     \item \textbf{Primary actor:} Application
-    \item \textbf{Secondary actor(s)}: secondary actor(s)
+    \item \textbf{Secondary actor(s)}: Online Service, Gateway, Mote
     \item \textbf{Interested parties:}
         \begin{itemize}
-            \item \textit{Name of interested party:} reason why party is interested
+            \item \textit{End-user:} wants to get information from sensors
         \end{itemize}
 
     \item \textbf{Preconditions:}
         \begin{itemize}
-            \item First precondition.
-            \item Second precondition.
+            \item The application is uploaded in Online Service.
+            \item A connection between Online Service and Getway is established.
         \end{itemize}
 
     \item \textbf{Postconditions:}
         \begin{itemize}
-            \item First postcondition.
-            \item Second postcondition.
+            \item The application received data from sensor.
         \end{itemize}
 
     \item \textbf{Main scenario:}
     \begin{enumerate}
-       \item Step 1
-       \item Step 2
-       \item Step 3
-       \item \ldots
+       \item The application send request to Online Service.
+       \item The Online service communicate with the Gateway.
+       \item The Gateway relay information to the mote by sending request.
+       \item The mote send data to Online Service (include:send sensor data (UCXX))
+       \item The Online Service send data to the application.
     \end{enumerate}
 
     \item \textbf{Alternative scenarios:}
     \begin{enumerate}
-        \item [3b.] Alternative at step 3
+        \item [5b.] 5b. The application does not receive any data within 2s. 
+                    It will retry the request 2 more times.
     \end{enumerate}
 
     \item \textbf{Remarks:}
@@ -156,8 +166,8 @@ A SIoTIP system administrator reviews and approves or declines it.
 
     \item \textbf{Preconditions:}
         \begin{itemize}
-            \item First precondition.
-            \item Second precondition.
+            \item The primary actor is authenticated.
+            \item The customer organisation wants to install new application.
         \end{itemize}
 
     \item \textbf{Postconditions:}
