@@ -1,10 +1,6 @@
 Domain model:
-    everything
+    finish diagram
 
 Use cases:
-    Write 5 use cases
-    use case diagram: better titles and add diagram box
-
-Quality attributes:
-    check M1 and M2
-    is U2 good? it's pretty much the same as U1
+    finish use case diagram
+    write use description for every use case
