@@ -3,7 +3,7 @@
 \paragraph{UCXXX: send data to gateway}
 A mote sends data to a gateway.
 \paragraph{UCXXX: upload application}
-An appplication developers uploads an application to the Online Service.
+An appplication provider uploads an application to the Online Service.
 \paragraph{UCXXX: get data from sensor}
 An application requests to get data from a specific sensor.
 \paragraph{UCXXX: search for applications}
@@ -53,8 +53,9 @@ A SIoTIP system administrator reviews and approves or declines it.
     \item \textbf{Interested parties:}
         \begin{itemize}
             \item \textit{Customer organisation:} pays for an application that uses this sensor.
-            \item \textit{Infrastructure owner:} needs the sensor data for an application they set up.
             \item \textit{End-users:} use the sensor data in an application.
+            \item \textit{Gateway:} stores this data.
+            \item \textit{Online Service:} stores this data.
         \end{itemize}
 
     \item \textbf{Preconditions:}
@@ -96,134 +97,134 @@ A SIoTIP system administrator reviews and approves or declines it.
 \subsection{\emph{UC6}: Upload application}
 \begin{itemize}
     \item \textbf{Name:} Upload application
-    \item \textbf{Primary actor:} Application Developer
-    \item \textbf{Secondary actor(s)}: SIotIP system
+    \item \textbf{Primary actor:} application provider
     \item \textbf{Interested parties:}
         \begin{itemize}
-            \item \textit{Customers organisations:} want to subscribe the applications.
+            \item \textit{Customers organisations:} want to subscribe to the applications.
         \end{itemize}
 
     \item \textbf{Preconditions:}
         \begin{itemize}
-            \item The application developer has access to his dashboard.
+            \item The application provider is authenticated.
+            \item The application provider has an application to upload.
         \end{itemize}
 
     \item \textbf{Postconditions:}
         \begin{itemize}
-            \item The application is uploaded into the Online Service.
-            \item The application is available to customer organisations for subscription.
+            \item The application is uploaded into the system.
+            \item The application passed the system's automated tests.
+            \item The application is made available to customer organisations for subscription.
         \end{itemize}
 
     \item \textbf{Main scenario:}
     \begin{enumerate}
-       \item The application developer logs in and opens his dashboard.
-       \item The system provides the ability to upload new application.
-       \item The application developer uploads application.
-       \item The system check application and  initiates a number of automated tests.
-       \item The application developer follows  the  progress  and  results
-             of these tests via application provider dashboard.
-       \item The application successfully passes all tests.
+       \item The application provider navigates to his dashboard.
+       \item The application provider indicates he wants to upload an application.
+       \item The application provider selects the application to be uploaded and
+             uploads it.
+       \item The system receives the application and stores it.
+       \item The application undergoes a number of automated tests.
+       \item The application provider follows the progress and results
+             of these tests via the application provider dashboard.
+       \item The application passes all tests.
        \item The system makes the application available for the customers organisations.
-       \item The system send a notification to the application developer.
+       \item The system sends a notification to the application provider.
     \end{enumerate}
 
     \item \textbf{Alternative scenarios:}
     \begin{enumerate}
-        \item [4b.] The system can not load application and send error
-                    to the application developer.
-        \item [7b.] The system interrupt loading of the application,
-                    because of potential memory leak.
-        \item [8b.] The SIoTIP administrator performs a secondary review and decides whether to accept
-                    or reject the application.
+        \item [4b.] The system did not receive the application and sends an error
+                    to the application provider. Return to step 2.
+        \item [7c.] The application did not pass all tests.
+        \item [8c.] The application will will need to be approved by a SIoTIP
+                    system administrator before it can be made available to
+                    customer organisations. (cf. review application (UCX))
     \end{enumerate}
-
-    \item \textbf{Remarks:}
-        \begin{itemize}
-            \item First remark
-        \end{itemize}
 \end{itemize}
 
 \subsection{\emph{UC4}: Get data from sensors/actuators}
 \begin{itemize}
-    \item \textbf{Name:} Get data from sensor
+    \item \textbf{Name:} Get data from sensors/actuators
     \item \textbf{Primary actor:} Application
     \item \textbf{Secondary actor(s)}: Online Service, Gateway, Mote
     \item \textbf{Interested parties:}
         \begin{itemize}
-            \item \textit{End-user:} wants to get information from sensors
+            \item \textit{End-user:} wants to get information from sensors.
         \end{itemize}
 
     \item \textbf{Preconditions:}
         \begin{itemize}
-            \item The application is uploaded in Online Service.
-            \item A connection between Online Service and Getway is established.
+            \item The application is enabled.
+            \item The hardware that the application tries to get data from
+                  is connected to the system and can be used.
+            \item The application has access rights to the hardware it tries to
+                  get data from.
         \end{itemize}
 
     \item \textbf{Postconditions:}
         \begin{itemize}
-            \item The application received data from sensor.
+            \item The application received the data it requested.
         \end{itemize}
 
     \item \textbf{Main scenario:}
     \begin{enumerate}
-       \item The application send request to Online Service.
-       \item The Online service communicate with the Gateway.
-       \item The Gateway relay information to the mote by sending request.
-       \item The mote send data to Online Service (include:send sensor data (UCXX))
-       \item The Online Service send data to the application.
+       \item The application sends a request to the Online Service, specifying
+             which hardware it wants data from.
+       \item The Online Service communicates this data to the relevant gateways.
+       \item The gateways send requests for data to motes.
+       \item The motes send data to the Online Service (cf. send sensor data (UCXX))
+       \item The Online Service collects all the data and sends it to the application.
     \end{enumerate}
 
     \item \textbf{Alternative scenarios:}
     \begin{enumerate}
-        \item [5b.] 5b. The application does not receive any data within 2s.
-                    It will retry the request 2 more times.
+        \item [5b.] The application recognizes it did not receive any reply within 1s.
+                    Return to step 1.
     \end{enumerate}
-
-    \item \textbf{Remarks:}
-        \begin{itemize}
-            \item First remark
-        \end{itemize}
 \end{itemize}
 
 \subsection{\emph{UC31}: Subscribe to application}
 \begin{itemize}
     \item \textbf{Name:} Subscribe to application
-    \item \textbf{Primary actor:} Customer orgranisation
-    \item \textbf{Secondary actor(s)}: secondary actor(s)
+    \item \textbf{Primary actor:} Customer orgranisation representative
     \item \textbf{Interested parties:}
         \begin{itemize}
-            \item \textit{Name of interested party:} reason why party is interested
+            \item \textit{Infrastructure owner:} provides hardware that the application can use.
         \end{itemize}
 
     \item \textbf{Preconditions:}
         \begin{itemize}
-            \item The primary actor is authenticated.
-            \item The customer organisation wants to install new application.
+            \item The customer organisation is authenticated.
+            \item The application is available to be subscribed to.
         \end{itemize}
 
     \item \textbf{Postconditions:}
         \begin{itemize}
-            \item First postcondition.
-            \item Second postcondition.
+            \item The customer organisation is subscribed to the application.
+            \item The customer organisation can use/configure the application.
         \end{itemize}
 
     \item \textbf{Main scenario:}
     \begin{enumerate}
-       \item The manager of customer organisation open his dashboard.
-       \item The system display him new applications.
-       \item The manager choose one of the application and subbscribe for it.
-       \item
+       \item The representative indicates that he wants to subsribe to an
+             application.
+       \item The representative is notified that the application will be activated
+             once the required hardware is installed.
+       \item The infrastructure owner is notified of the subscription.
+       \item The infrastructure owner updates the access rights to the hardware
+             that is neccessary for the application.
+       \item The application is activated.
+       \item The customer organisation representative is notified.
     \end{enumerate}
 
     \item \textbf{Alternative scenarios:}
     \begin{enumerate}
-        \item [3b.] Alternative at step 3
+        \item [2b.] Extra hardware is required for the application to work.
+        \item [3b.] The infrastructure owner is notified of the subscription and
+                    approves the purchase.
+        \item [4b.] The infrastructure owner installs the new hardware and updates
+                    the topology and access rights.
     \end{enumerate}
-
-    \item \textbf{Remarks:}
-        \begin{itemize}
-            \item First remark
-        \end{itemize}
 \end{itemize}
 
 \subsection{\emph{UC02}: Review application}
@@ -233,7 +234,7 @@ A SIoTIP system administrator reviews and approves or declines it.
     \item \textbf{Secondary actor(s)}:
     \item \textbf{Interested parties:}
         \begin{itemize}
-            \item \textit{Application developers:} want to add their application to the system
+            \item \textit{application providers:} want to add their application to the system
         \end{itemize}
 
     \item \textbf{Preconditions:}
@@ -245,7 +246,7 @@ A SIoTIP system administrator reviews and approves or declines it.
     \item \textbf{Postconditions:}
         \begin{itemize}
             \item The system adminstrator accepts or declines the application.
-            \item The application developers have been notified of this event.
+            \item The application providers have been notified of this event.
         \end{itemize}
 
     \item \textbf{Main scenario:}
@@ -253,11 +254,11 @@ A SIoTIP system administrator reviews and approves or declines it.
             \item The system administrator navigates to the applications component on their
                   dashboard and selects the application that needs to be reviewed.
             \item The system administrator reviews the application's functionality and
-                  log history, and the message history with the developers.
+                  log history, and the message history with the application provider.
             \item The system administrator indicates he wants to accept the application.
             \item The system logs this event and makes the application available to
                   customer ogranisations.
-            \item The system notifies the application developers.
+            \item The system notifies the application providers.
         \end{enumerate}
 
     \item \textbf{Alternative scenarios:}
@@ -266,7 +267,7 @@ A SIoTIP system administrator reviews and approves or declines it.
                   and is prompted by the system to fill in the reason for this. The
                   application will thus not become available to customer organisations.
             \item [3c.] The system administrator indicates he wants communicate
-                  with the developers before making a decision. Afterwards, return to
+                  with the provider before making a decision. Afterwards, return to
                   step 2.
         \end{enumerate}
 
