@@ -1,261 +1,77 @@
 \section{Use case overview}\label{sec:uc_overview}
 
-\paragraph{UC01: Manage application}
-SIotIP system administrator can ma
+\paragraph{UC01: manage application}
+A SIotIP system administrator manages an application.
 \paragraph{UC02: review application}
-A SIoTIP system administrator reviews and approves or declines it.
-\paragraph{UC03: Create account}
+A SIoTIP system administrator reviews an application and approves or declines it.
+\paragraph{UC03: create account}
+A SIotIP system administrator creates a user account (e.g. an Infrastructure
+Owner account).
 \paragraph{UC04: upload application}
 An appplication provider uploads an application to the Online Service.
-An application is automatically tested. When the application passes all tests, then the application is available in system.
-SIotIP system administrator is responsible for creating an user accounts, then
-the users have acces to a dashboard.
-\paragraph{UC05: Update application}
-An application provider can make changes in the system and update the application.
+The application is automatically tested. If the application passes all tests,
+the application becomes available to customer organisations.
+\paragraph{UC05: update application}
+An application provider updates one of his applications.
 For example, the application provider wants deploy a new functionality or fix
 some bug.
-\paragraph{UC06: Debug application}
-The Online Service provides a debugging environment for the application provider.
-He can debbug uploaded applications easily, when an error occurs.
-\paragraph{UC07: Allocate hardware to customer organisation}
-The infrastructure owner allocate installed sensors and actuators to specific customer organisations. He also assign access rights to the customer organisation on each floor.
+\paragraph{UC06: debug application}
+An application provider debugs one of his applications using the debugging
+environment provided by the system.
+\paragraph{UC07: allocate hardware to customer organisation}
+An infrastructure owner allocates installed hardware to specific customer
+organisations. This hardware can then be used by applications the customer
+organisations subscribe to.
 \paragraph{UC08: get upload progress}
-The application provider can follow the progress and results of the tests, that
-are running after loading an application to the system.
-\paragraph{UC09: Browse applications}
-The customer organisation has in customer organisation dashboard a list of available
-application. He can browse those applications.
+An application provider follows the progress of the upload process of an
+application.
+\paragraph{UC09: browse applications}
+A customer organisation representative browses the available applications
+through his dashboard.
 \paragraph{UC10: subscribe to applications}
 The customer organisation representative wants to add a new application. He has
 to send a request to the infrastructure owner.
-\paragraph{UC11: Unsuscrite from application}
-The customer organisation unsuscribe from application, when he does not need application.
-\paragraph{UC12: Get invoices for applications }
-The customer organisation can use many application. The customer organisation can get an overview of the invoices for their application subscriptions.
-\paragraph{UC13: Configure application}
+\paragraph{UC11: unsubscribe from application}
+A customer organisation unsubscribes from an application.
+\paragraph{UC12: get invoices for applications}
+The customer organisation gets an overview of the invoices for
+all of their application subscriptions.
+\paragraph{UC13: configure application}
 A customer organisation representative configures an application.
-\paragraph{UC14: Manage user roles}
-The customer organisation representative can manage the roles of the end-user of the applications.He can set up a responsibility and rights of users.
-\paragraph{UC15: Notify}
-The users of the SIoTIP can receive notification of an action or when something get
-wrong.
+\paragraph{UC14: manage user roles}
+A customer organisation representative manages the roles of users of applications
+the organisation is subscribed to.
+\paragraph{UC15: notify}
+A notification is sent to a user in the system. This notification contains
+data about an event that occured.
 \paragraph{UC16: send heartbeat}
-The mote  periodically sends a heartbeats to its gateway.
-\paragraph{UC17: Send sensor data}
-The mote send data from the connected sensors to the Gateway.
+A mote sends a heartbeat to its gateway. This happens periodically.
+\paragraph{UC17: send sensor data}
+A mote sends data from a connected sensor to the gateway the mote is connected to.
 \paragraph{UC18: get data from sensor}
-An application requests to get data from a specific sensor.
+An application requests to get data from sensors/actuators.
 \paragraph{UC19: set data}
-The end-user that uses application can interact with devices. For example, the user
-can turn off the lights. The application send an user input to Online service.
-\paragraph{UC20: Log in}
-The user has to logs in in the system.
-\paragraph{UC21: Log out}
-The user log out the system, when he wants to finish his activity.
-\paragraph{UC22: View notification}
+An application sends a command to set data at some hardware (gateways, sensors, or actuators).
+\paragraph{UC20: log in}
+A user authenticates himself in the system.
+\paragraph{UC21: log out}
+A user logs out of the system.
+\paragraph{UC22: view notification}
 A user views a list of his notifications.
-\paragraph{UC23: Buy new hardware }
-The infrastructure owner needs to buy a hardware. The infrastructure
-owner adds the new hardware to the shopping basket. The infrastracture owner accepts
-the basket and specifying the payment information and delivery address.
-\paragraph{UC24: Contact hardware manufacturer}
-I AM NOT SURE ABOUT THIS DESC. The infrastructure owner contacts the hardware
-manufacturer to request integration the application with sensor devices.
-\paragraph{UC25: Manage topology of hardware}
-The infrastrucutre owner can add, edit or remove an information about topology
+\paragraph{UC23: buy new hardware}
+An infrastructure owner orders new hardware through his dashboard. He adds new hardware
+to his shopping basket and confirms his purchase.
+\paragraph{UC24: contact hardware manufacturer}
+An infrastructure owner contacts a hardware manufacturer. For example, this
+could be to request integration of new hardware with already existing hardware.
+\paragraph{UC25: manage topology of hardware}
+An infrastrucutre owner adds, edits or removes information about the topology
 of sensors and actuators.
-\paragraph{UC26: Provide customer organisation data for registration}
-The infrastructure owner write an customer organisation data to the SIoTIP system.
-The SIoTIP use this data in proccess of registration.
-
-
-
-\paragraph{UC30: }
-\paragraph{UC31: }
+\paragraph{UC26: provide customer organisation data for registration}
+An infrastructure owner adds customer organisation data (that is neccessary
+for registration) into the system.
 
 \section{Detailed use cases}
-
-\subsection{\emph{UC17}: Send sensor data}
-\begin{itemize}
-    \item \textbf{Name:} Send sensor data
-    \item \textbf{Primary actor:} Mote
-    \item \textbf{Secondary actors:} Sensor, Gateway
-    \item \textbf{Interested parties:}
-        \begin{itemize}
-            \item \textit{Customer organisation:} pays for an application that uses this sensor.
-            \item \textit{End-users:} use the sensor data in an application.
-            \item \textit{Gateway:} stores this data.
-            \item \textit{Online Service:} stores this data.
-        \end{itemize}
-
-    \item \textbf{Preconditions:}
-        \begin{itemize}
-            \item The mote has received data from a sensor connected to it.
-            \item The mote is connected to a gateway.
-        \end{itemize}
-
-    \item \textbf{Postconditions:}
-        \begin{itemize}
-            \item The gateway has received and processed the sensor data.
-            \item The Online Service has received the data and can process it.
-        \end{itemize}
-
-    \item \textbf{Main scenario:}
-        \begin{enumerate}
-           \item The mote sends the sensor data to the connected gateway.
-           \item The gateway receives the data and if applicable, runs some application logic.
-           \item The gateway collects data until a synchronisation point is reached.
-                 At that point, the gateway sends the data to the Online Service.
-        \end{enumerate}
-
-    \item \textbf{Alternative scenarios:}
-        \begin{enumerate}
-            \item [3b.] The gateway determined that the data was important
-                  (e.g. cause for alarm, notification, etc.) and sent the data
-                  to the Online Service immediately instead of waiting for the
-                  sycnhronisation point.
-        \end{enumerate}
-
-    \item \textbf{Remarks:}
-        \begin{itemize}
-            \item It is essential that the synchronisation protocol works
-                  correctly in the presence of non-reliable network communication
-                  so that there is no loss of data.
-        \end{itemize}
-\end{itemize}
-
-\subsection{\emph{UC6}: Upload application}
-\begin{itemize}
-    \item \textbf{Name:} Upload application
-    \item \textbf{Primary actor:} application provider
-    \item \textbf{Interested parties:}
-        \begin{itemize}
-            \item \textit{Customers organisations:} want to subscribe to the applications.
-        \end{itemize}
-
-    \item \textbf{Preconditions:}
-        \begin{itemize}
-            \item The application provider is authenticated.
-            \item The application provider has an application to upload.
-        \end{itemize}
-
-    \item \textbf{Postconditions:}
-        \begin{itemize}
-            \item The application is uploaded into the system.
-            \item The application passed the system's automated tests.
-            \item The application is made available to customer organisations for subscription.
-        \end{itemize}
-
-    \item \textbf{Main scenario:}
-    \begin{enumerate}
-       \item The application provider navigates to his dashboard.
-       \item The application provider indicates he wants to upload an application.
-       \item The application provider selects the application to be uploaded and
-             uploads it.
-       \item The system receives the application and stores it.
-       \item The application undergoes a number of automated tests.
-       \item The application provider follows the progress and results
-             of these tests via the application provider dashboard.
-       \item The application passes all tests.
-       \item The system makes the application available for the customers organisations.
-       \item The system sends a notification to the application provider.
-    \end{enumerate}
-
-    \item \textbf{Alternative scenarios:}
-    \begin{enumerate}
-        \item [4b.] The system did not receive the application and sends an error
-                    to the application provider. Return to step 2.
-        \item [7c.] The application did not pass all tests.
-        \item [8c.] The application will will need to be approved by a SIoTIP
-                    system administrator before it can be made available to
-                    customer organisations. (cf. review application (UCX))
-    \end{enumerate}
-\end{itemize}
-
-\subsection{\emph{UC18}: Get data from sensors/actuators}
-\begin{itemize}
-    \item \textbf{Name:} Get data from sensors/actuators
-    \item \textbf{Primary actor:} Application
-    \item \textbf{Secondary actor(s)}: Online Service, Gateway, Mote
-    \item \textbf{Interested parties:}
-        \begin{itemize}
-            \item \textit{End-user:} wants to get information from sensors.
-        \end{itemize}
-
-    \item \textbf{Preconditions:}
-        \begin{itemize}
-            \item The application is enabled.
-            \item The hardware that the application tries to get data from
-                  is connected to the system and can be used.
-            \item The application has access rights to the hardware it tries to
-                  get data from.
-        \end{itemize}
-
-    \item \textbf{Postconditions:}
-        \begin{itemize}
-            \item The application received the data it requested.
-        \end{itemize}
-
-    \item \textbf{Main scenario:}
-    \begin{enumerate}
-       \item The application sends a request to the Online Service, specifying
-             which hardware it wants data from.
-       \item The Online Service communicates this data to the relevant gateways.
-       \item The gateways send requests for data to motes.
-       \item The motes send data to the Online Service (cf. send sensor data (UCXX))
-       \item The Online Service collects all the data and sends it to the application.
-    \end{enumerate}
-
-    \item \textbf{Alternative scenarios:}
-    \begin{enumerate}
-        \item [5b.] The application recognizes it did not receive any reply within 1s.
-                    Return to step 1.
-    \end{enumerate}
-\end{itemize}
-
-\subsection{\emph{UC31}: Subscribe to application}
-\begin{itemize}
-    \item \textbf{Name:} Subscribe to application
-    \item \textbf{Primary actor:} Customer orgranisation representative
-    \item \textbf{Interested parties:}
-        \begin{itemize}
-            \item \textit{Infrastructure owner:} provides hardware that the application can use.
-        \end{itemize}
-
-    \item \textbf{Preconditions:}
-        \begin{itemize}
-            \item The customer organisation is authenticated.
-            \item The application is available to be subscribed to.
-        \end{itemize}
-
-    \item \textbf{Postconditions:}
-        \begin{itemize}
-            \item The customer organisation is subscribed to the application.
-            \item The customer organisation can use/configure the application.
-        \end{itemize}
-
-    \item \textbf{Main scenario:}
-    \begin{enumerate}
-       \item The representative indicates that he wants to subsribe to an
-             application.
-       \item The representative is notified that the application will be activated
-             once the required hardware is installed.
-       \item The infrastructure owner is notified of the subscription.
-       \item The infrastructure owner updates the access rights to the hardware
-             that is neccessary for the application.
-       \item The application is activated.
-       \item The customer organisation representative is notified.
-    \end{enumerate}
-
-    \item \textbf{Alternative scenarios:}
-    \begin{enumerate}
-        \item [2b.] Extra hardware is required for the application to work.
-        \item [3b.] The infrastructure owner is notified of the subscription and
-                    approves the purchase.
-        \item [4b.] The infrastructure owner installs the new hardware and updates
-                    the topology and access rights.
-    \end{enumerate}
-\end{itemize}
 
 \subsection{\emph{UC02}: Review application}
 \begin{itemize}
@@ -311,4 +127,186 @@ The SIoTIP use this data in proccess of registration.
                   the app will need to be reviewed again before it can be made
                   available again.
         \end{itemize}
+\end{itemize}
+
+\subsection{\emph{UC06}: Upload application}
+\begin{itemize}
+    \item \textbf{Name:} Upload application
+    \item \textbf{Primary actor:} application provider
+    \item \textbf{Interested parties:}
+        \begin{itemize}
+            \item \textit{Customers organisations:} want to subscribe to the applications.
+        \end{itemize}
+
+    \item \textbf{Preconditions:}
+        \begin{itemize}
+            \item The application provider is authenticated.
+            \item The application provider has an application to upload.
+        \end{itemize}
+
+    \item \textbf{Postconditions:}
+        \begin{itemize}
+            \item The application is uploaded into the system.
+            \item The application passed the system's automated tests.
+            \item The application is made available to customer organisations for subscription.
+        \end{itemize}
+
+    \item \textbf{Main scenario:}
+    \begin{enumerate}
+       \item The application provider navigates to his dashboard.
+       \item The application provider indicates he wants to upload an application.
+       \item The application provider selects the application to be uploaded and
+             uploads it.
+       \item The system receives the application and stores it.
+       \item The application undergoes a number of automated tests.
+       \item The application provider follows the progress and results
+             of these tests via the application provider dashboard.
+       \item The application passes all tests.
+       \item The system makes the application available for the customers organisations.
+       \item The system sends a notification to the application provider.
+    \end{enumerate}
+
+    \item \textbf{Alternative scenarios:}
+    \begin{enumerate}
+        \item [4b.] The system did not receive the application and sends an error
+                    to the application provider. Return to step 2.
+        \item [7c.] The application did not pass all tests.
+        \item [8c.] The application will will need to be approved by a SIoTIP
+                    system administrator before it can be made available to
+                    customer organisations. (cf. review application (UCX))
+    \end{enumerate}
+\end{itemize}
+
+\subsection{\emph{UC10}: Subscribe to application}
+\begin{itemize}
+    \item \textbf{Name:} Subscribe to application
+    \item \textbf{Primary actor:} Customer orgranisation representative
+    \item \textbf{Interested parties:}
+        \begin{itemize}
+            \item \textit{Infrastructure owner:} provides hardware that the application can use.
+        \end{itemize}
+
+    \item \textbf{Preconditions:}
+        \begin{itemize}
+            \item The customer organisation is authenticated.
+            \item The application is available to be subscribed to.
+        \end{itemize}
+
+    \item \textbf{Postconditions:}
+        \begin{itemize}
+            \item The customer organisation is subscribed to the application.
+            \item The customer organisation can use/configure the application.
+        \end{itemize}
+
+    \item \textbf{Main scenario:}
+    \begin{enumerate}
+       \item The representative indicates that he wants to subsribe to an
+             application.
+       \item The representative is notified that the application will be activated
+             once the required hardware is installed.
+       \item The infrastructure owner is notified of the subscription.
+       \item The infrastructure owner updates the access rights to the hardware
+             that is neccessary for the application.
+       \item The application is activated.
+       \item The customer organisation representative is notified.
+    \end{enumerate}
+
+    \item \textbf{Alternative scenarios:}
+    \begin{enumerate}
+        \item [2b.] Extra hardware is required for the application to work.
+        \item [3b.] The infrastructure owner is notified of the subscription and
+                    approves the purchase.
+        \item [4b.] The infrastructure owner installs the new hardware and updates
+                    the topology and access rights.
+    \end{enumerate}
+\end{itemize}
+
+\subsection{\emph{UC17}: Send sensor data}
+\begin{itemize}
+    \item \textbf{Name:} Send sensor data
+    \item \textbf{Primary actor:} Mote
+    \item \textbf{Secondary actors:} Sensor, Gateway
+    \item \textbf{Interested parties:}
+        \begin{itemize}
+            \item \textit{Customer organisation:} pays for an application that uses this sensor.
+            \item \textit{End-users:} use the sensor data in an application.
+            \item \textit{Gateway:} stores this data.
+            \item \textit{Online Service:} stores this data.
+        \end{itemize}
+
+    \item \textbf{Preconditions:}
+        \begin{itemize}
+            \item The mote has received data from a sensor connected to it.
+            \item The mote is connected to a gateway.
+        \end{itemize}
+
+    \item \textbf{Postconditions:}
+        \begin{itemize}
+            \item The gateway has received and processed the sensor data.
+            \item The Online Service has received the data and can process it.
+        \end{itemize}
+
+    \item \textbf{Main scenario:}
+        \begin{enumerate}
+           \item The mote sends the sensor data to the connected gateway.
+           \item The gateway receives the data and if applicable, runs some application logic.
+           \item The gateway collects data until a synchronisation point is reached.
+                 At that point, the gateway sends the data to the Online Service.
+        \end{enumerate}
+
+    \item \textbf{Alternative scenarios:}
+        \begin{enumerate}
+            \item [3b.] The gateway determined that the data was important
+                  (e.g. cause for alarm, notification, etc.) and sent the data
+                  to the Online Service immediately instead of waiting for the
+                  sycnhronisation point.
+        \end{enumerate}
+
+    \item \textbf{Remarks:}
+        \begin{itemize}
+            \item It is essential that the synchronisation protocol works
+                  correctly in the presence of non-reliable network communication
+                  so that there is no loss of data.
+        \end{itemize}
+\end{itemize}
+
+\subsection{\emph{UC18}: Get data from sensors/actuators}
+\begin{itemize}
+    \item \textbf{Name:} Get data from sensors/actuators
+    \item \textbf{Primary actor:} Application
+    \item \textbf{Secondary actor(s)}: Online Service, Gateway, Mote
+    \item \textbf{Interested parties:}
+        \begin{itemize}
+            \item \textit{End-user:} wants to get information from sensors.
+        \end{itemize}
+
+    \item \textbf{Preconditions:}
+        \begin{itemize}
+            \item The application is enabled.
+            \item The hardware that the application tries to get data from
+                  is connected to the system and can be used.
+            \item The application has access rights to the hardware it tries to
+                  get data from.
+        \end{itemize}
+
+    \item \textbf{Postconditions:}
+        \begin{itemize}
+            \item The application received the data it requested.
+        \end{itemize}
+
+    \item \textbf{Main scenario:}
+    \begin{enumerate}
+       \item The application sends a request to the Online Service, specifying
+             which hardware it wants data from.
+       \item The Online Service communicates this data to the relevant gateways.
+       \item The gateways send requests for data to motes.
+       \item The motes send data to the Online Service (cf. send sensor data (UCXX))
+       \item The Online Service collects all the data and sends it to the application.
+    \end{enumerate}
+
+    \item \textbf{Alternative scenarios:}
+    \begin{enumerate}
+        \item [5b.] The application recognizes it did not receive any reply within 1s.
+                    Return to step 1.
+    \end{enumerate}
 \end{itemize}
