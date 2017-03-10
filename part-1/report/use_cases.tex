@@ -1,80 +1,75 @@
 \section{Use case overview}\label{sec:uc_overview}
 
-\paragraph{UC18: send data to gateway}
-A mote sends data to a gateway.
-\paragraph{UC05: upload application}
-An appplication provider uploads an application to the Online Service.
-An application is automatically tested. When the application passes all tests, then the application
-is available in system.
-\paragraph{UCXXX: get data from sensor}
-An application requests to get data from a specific sensor.
-\paragraph{UCXXX: search for applications}
-The customer organisation representative wants to add a new application. He has
-to send a request to the infrastructure owner.
-\paragraph{UCXXX: review application}
-A SIoTIP system administrator reviews and approves or declines it.
 \paragraph{UC01: Manage application}
 SIotIP system administrator can ma
+\paragraph{UC02: review application}
+A SIoTIP system administrator reviews and approves or declines it.
 \paragraph{UC03: Create account}
+\paragraph{UC04: upload application}
+An appplication provider uploads an application to the Online Service.
+An application is automatically tested. When the application passes all tests, then the application is available in system.
 SIotIP system administrator is responsible for creating an user accounts, then
 the users have acces to a dashboard.
-\paragraph{UC05: set data}
-The end-user that uses application can interact with devices. For example, the user
-can turn off the lights. The application send an user input to Online service.
-\paragraph{UC07: Update application}
+\paragraph{UC05: Update application}
 An application provider can make changes in the system and update the application.
 For example, the application provider wants deploy a new functionality or fix
 some bug.
-\paragraph{UC08: Debug application}
+\paragraph{UC06: Debug application}
 The Online Service provides a debugging environment for the application provider.
 He can debbug uploaded applications easily, when an error occurs.
-\paragraph{UC09: get upload progress}
+\paragraph{UC07: Allocate hardware to customer organisation}
+The infrastructure owner allocate installed sensors and actuators to specific customer organisations. He also assign access rights to the customer organisation on each floor.
+\paragraph{UC08: get upload progress}
 The application provider can follow the progress and results of the tests, that
 are running after loading an application to the system.
-\paragraph{UC10: Browse applications}
+\paragraph{UC09: Browse applications}
 The customer organisation has in customer organisation dashboard a list of available
 application. He can browse those applications.
+\paragraph{UC10: subscribe to applications}
+The customer organisation representative wants to add a new application. He has
+to send a request to the infrastructure owner.
+\paragraph{UC11: Unsuscrite from application}
+The customer organisation unsuscribe from application, when he does not need application.
 \paragraph{UC12: Get invoices for applications }
-The customer organisation can use many application. The customer organisation can get an
-overview of the invoices for their application subscriptions.
-\paragraph{UC13: Send sensor data}
+The customer organisation can use many application. The customer organisation can get an overview of the invoices for their application subscriptions.
+\paragraph{UC13: Configure application}
+A customer organisation representative configures an application.
+\paragraph{UC14: Manage user roles}
+The customer organisation representative can manage the roles of the end-user of the applications.He can set up a responsibility and rights of users.
+\paragraph{UC15: Notify}
+The users of the SIoTIP can receive notification of an action or when something get
+wrong.
+\paragraph{UC16: send heartbeat}
+The mote  periodically sends a heartbeats to its gateway.
+\paragraph{UC17: Send sensor data}
 The mote send data from the connected sensors to the Gateway.
-\paragraph{UC14: Log in/out }
-When the users want to use their dashboard they have to be authorized.
-\paragraph{UC15: Edit account settings}
-The user can
-\paragraph{UC16: Buy new hardware }
+\paragraph{UC18: get data from sensor}
+An application requests to get data from a specific sensor.
+\paragraph{UC19: set data}
+The end-user that uses application can interact with devices. For example, the user
+can turn off the lights. The application send an user input to Online service.
+\paragraph{UC20: Log in}
+The user has to logs in in the system.
+\paragraph{UC21: Log out}
+The user log out the system, when he wants to finish his activity.
+\paragraph{UC22: View notification}
+A user views a list of his notifications.
+\paragraph{UC23: Buy new hardware }
 The infrastructure owner needs to buy a hardware. The infrastructure
 owner adds the new hardware to the shopping basket. The infrastracture owner accepts
 the basket and specifying the payment information and delivery address.
-\paragraph{UC17: Contact hardware manufacturer}
+\paragraph{UC24: Contact hardware manufacturer}
 I AM NOT SURE ABOUT THIS DESC. The infrastructure owner contacts the hardware
 manufacturer to request integration the application with sensor devices.
-\paragraph{UC18: Manage topology of hardware}
+\paragraph{UC25: Manage topology of hardware}
 The infrastrucutre owner can add, edit or remove an information about topology
 of sensors and actuators.
-\paragraph{UC19: Provide customer organisation data for registration}
+\paragraph{UC26: Provide customer organisation data for registration}
 The infrastructure owner write an customer organisation data to the SIoTIP system.
 The SIoTIP use this data in proccess of registration.
-\paragraph{UC20: Allocate hardware to customer organisation}
-The infrastructure owner allocate installed sensors and actuators to specific customer
-organisations.He also assign access rights to the customer organisation on each floor.
-\paragraph{UC22: Manage user roles}
-The customer organisation representative can manage the roles of the end-user of the applications.
-He can set up a responsibility and rights of users.
-\paragraph{UC23: Notify}
-The users of the SIoTIP can receive notification of an action or when something get
-wrong.
-\paragraph{UC24: Log in}
-The user has to logs in in the system.
-\paragraph{UC25: Log out}
-The user log out the system, when he wants to finish his activity.
-\paragraph{UC26: Unsuscrite from application}
-The customer organisation unsuscribe from application, when he does not need application.
-\paragraph{UC27: send heartbeat}
-The mote  periodically sends a heartbeats to its gateway.
-\paragraph{UC28: }
-\paragraph{UC29: }
+
+
+
 \paragraph{UC30: }
 \paragraph{UC31: }
 
@@ -177,7 +172,7 @@ The mote  periodically sends a heartbeats to its gateway.
     \end{enumerate}
 \end{itemize}
 
-\subsection{\emph{UC4}: Get data from sensors/actuators}
+\subsection{\emph{UC18}: Get data from sensors/actuators}
 \begin{itemize}
     \item \textbf{Name:} Get data from sensors/actuators
     \item \textbf{Primary actor:} Application
