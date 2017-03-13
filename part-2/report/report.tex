@@ -1,0 +1,212 @@
+\documentclass[english]{sareport}
+% use the option peerreview for creating an anonymized version of your report
+% E.g., \documentclass[english,peerreview]{sareport}
+
+\usepackage[colorlinks, linkcolor=black, citecolor=black, urlcolor=black]{hyperref}
+
+% Set all authors, if your group counts 2, set third author empty \authorthree{}
+% Set the groupname as well
+\authorone{Monika Filipcikova (r0683254)}
+\authortwo{Armin Halilovic(r0679689)}
+\authorthree{}
+\groupname{Filipcikova-Halilovic}
+
+\academicyear{2016--2017}
+
+\casename{Shared Internet Of Things Infrastructure Platform}
+\phasenumber{2a}
+\phasename{ADD Application}
+
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\chapter{Introduction}\label{sec:introduction}
+\todoinline{An introduction is not required, but if you include it, it should not be empty.}
+
+\chapter{Attribute-driven design documentation}\label{sec:add}
+\section{Decomposition 1: ModuleA (X1, Y3, UCa, UCb, UCc)}
+\subsection{Module to decompose}
+In this run we decompose \texttt{ModuleA}.
+
+\subsection{Selected architectural drivers}
+The non-functional drivers for this decomposition are:
+
+\begin{itemize}
+	\item \emph{X1}: name
+	\item \emph{Y3}: name
+\end{itemize}
+
+The related functional drivers are:
+
+\begin{itemize}
+	\item \emph{UCa}: name
+	\item \emph{UCb}: name
+	\item \emph{UCc}: name
+\end{itemize}
+
+\paragraph{Rationale}
+A short discussion of why these drivers were selected for this decomposition.
+
+\subsection{Architectural design}
+\paragraph{Topic}
+Discussion of the solution selected for (a part of) one of the architectural
+drivers.
+
+\subsubsection*{Alternatives considered}
+\paragraph{Alternatives for solution}
+A discussion of the alternative solutions and why that were not selected.
+
+\subsection{Instantiation and allocation of functionality}
+\paragraph{Decomposition}
+Main aspects of the resulting decomposition.
+
+\subparagraph{ModuleB}
+Per introduced component a paragraph describing its responsibilities.
+
+\subparagraph{ModuleC}
+Per introduced component a paragraph describing its responsibilities.
+
+\begin{figure}[!htp]
+	\centering
+	%\includegraphics[width=0.8\textwidth]{}
+	\missingfigure[figwidth=0.8\textwidth]{Component-and-connector diagram}
+	\caption{Component-and-connector diagram of this decomposition.
+	}\label{fig:it1-cc_main}
+\end{figure}
+
+\paragraph{Behaviour}
+If needed and explanation of the behaviour of certain aspects of the design so
+far.
+
+\begin{figure}[!htp]
+	\centering
+	%\includegraphics[width=0.8\textwidth]{}
+	\missingfigure[figwidth=0.8\textwidth]{Sequence diagram}
+	\caption{Sequence diagram illustrating a key behavioural aspect.
+	}\label{fig:it1-seq_aspect1}
+\end{figure}
+
+\paragraph{Deployment}
+Rationale of the allocation of components to physical nodes.
+
+\begin{figure}[!htp]
+	\centering
+	%\includegraphics[width=0.8\textwidth]{}
+	\missingfigure[figwidth=0.8\textwidth]{Deployment diagram}
+	\caption{Deployment diagram of this decomposition.
+	}\label{fig:it1-depl_main}
+\end{figure}
+
+\subsection{Interfaces for child modules}
+\subsubsection*{ModuleB}
+\begin{itemize}
+	\item InterfaceA
+	\begin{itemize}
+		\item \texttt{returnType operation1(ParamType param1)} throws TypeOfException
+		\begin{itemize}
+			\item Effect: Describe the effect of calling this operation.
+			\item Exceptions:
+			\begin{itemize}
+				\item TypeOfException: Describe when this exception is thrown.
+			\end{itemize}
+		\end{itemize}
+
+		\item \texttt{returnType operation2()}
+		\begin{itemize}
+			\item Effect: Describe the effect of calling this operation.
+			\item Exceptions: None
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\subsection{Data type definitions}
+Describe per complex data type used in the interfaces what it represents.
+
+\paragraph{returnType} This data element represents X.
+
+\paragraph{ParamType} This data element represents Y.
+
+\subsection{Verify and refine}
+This section describes per component which (parts of) the remaining
+requirements it is responsible for.
+
+\paragraph{ModuleB}
+\begin{itemize}
+	\item \emph{Z1}: name
+	\item \emph{UCd}: name
+\end{itemize}
+
+\paragraph{ModuleC}
+\begin{itemize}
+	\item \emph{UCba}: name\\Description which part of the original use case is
+	the responsibility of this component.
+\end{itemize}
+
+\section{Decomposition 2: Module (drivers)}
+\subsection{Module to decompose}
+\subsection{Selected architectural drivers}
+\subsection{Architectural design}
+\subsection{Instantiation and allocation of functionality}
+\subsection{Interfaces for child modules}
+\subsection{Data type definitions}
+\subsection{Verify and refine}
+
+\chapter{Resulting partial architecture}\label{sec:architecture}
+This section provides an over of the architecture constructed through ADD\@.
+
+\section{Context diagram}
+This subsection discusses the context diagram.
+
+\begin{figure}[!htp]
+	\centering
+	%\includegraphics[width=0.8\textwidth]{}
+	\missingfigure[figwidth=0.8\textwidth]{Context diagram for component-and-
+		connector view.}
+	\caption{Context diagram for the component-and-connector view.
+	}\label{fig:cc_context}
+\end{figure}
+
+\section{Component-and-connector view}
+A short discussion of the component-and-connector view with the key
+decompositions if any.
+
+\begin{figure}[!htp]
+	\centering
+	%\includegraphics[width=0.8\textwidth]{}
+	\missingfigure[figwidth=0.8\textwidth]{Component-and-connector diagram}
+	\caption{Primary diagram for the component-and-connector view.
+	}\label{fig:cc_main}
+\end{figure}
+
+\begin{figure}[!htp]
+	\centering
+	%\includegraphics[width=0.8\textwidth]{}
+	\missingfigure[figwidth=0.8\textwidth]{Key decomposition}
+	\caption{Decomposition of a component shown in Figure~\ref{fig:cc_main}
+	}\label{fig:decomp_decomp1}
+\end{figure}
+
+\section{Deployment view}
+A short discussion of the allocation of components to physical nodes based on a
+context diagram and a deployment diagram.
+
+\begin{figure}[!htp]
+	\centering
+	%\includegraphics[width=0.8\textwidth]{}
+	\missingfigure[figwidth=0.8\textwidth]{Context diagram for the allocation
+		view.}
+	\caption{Context diagram for the allocation view.}\label{fig:depl_context}
+\end{figure}
+
+\begin{figure}[!htp]
+	\centering
+	%\includegraphics[width=0.8\textwidth]{}
+	\missingfigure[figwidth=0.8\textwidth]{Deployment diagram}
+	\caption{Primary diagram for the allocation view.}\label{fig:depl_main}
+\end{figure}
+
+
+\end{document}

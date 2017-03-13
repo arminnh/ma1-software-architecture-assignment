@@ -1,7 +1,0 @@
-Domain model:
-    finish diagram
-
-Use cases:
-    finish use case diagram
-    write use description for every use case
-    Search for usecase - manage user role
