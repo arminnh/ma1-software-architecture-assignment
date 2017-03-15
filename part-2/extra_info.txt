@@ -1,0 +1,22 @@
+Av3: gateway detects failure
+Use cases: 14, 48
+Components for:
+    *) timers for heartbeats (failure detection)
+    *) applications need to deactivate automatically wen there is no more hardware available
+    *) notifications to infrastructure owner, customer organisation, application
+
+M1: integrate new sensor or actuator manufacturer
+Use cases: 8, 9, 10
+Components for:
+    *) data transmitting
+    *) data processing
+    *) data storage
+    *) other functionality: data is available to applications
+    *) initialisation, configuration, viewing data of available pluggable devices
+
+U2: easy installation
+Use cases: 4, 6, 9, 17, 19
+Components for:
+    *) topology management
+    *) detection (& registration) of pluggable devices
+    *) automatic updating of topology
