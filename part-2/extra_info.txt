@@ -1,9 +1,45 @@
-Av3: gateway detects failure
+Av1: communication between SIoTIP gateway and Online Service
+
+Av2: application failure
+
+Av3: pluggable device of mote failure
 Use cases: 14, 48
 Components for:
-    *) timers for heartbeats (failure detection)
-    *) applications need to deactivate automatically wen there is no more hardware available
-    *) notifications to infrastructure owner, customer organisation, application
+    prevention:
+        *) Maybe ???: ApplicationPreferences -> set amount of sensors/actuators
+    detection:
+        *) timers for heartbeats (failure detection)
+    resolution:
+        *) applications need to deactivate automatically when
+           there is no more hardware available
+        *) notifications to infrastructure owner, customer organisation, application
+Tactics:
+    Detection:
+        Ping/Echo
+        Monitor
+        Heartbeat
+        Timestamp
+    Resolution:
+        notifications to 3 stakeholders
+        degradation/removal from service -> turn off apps
+
+P1: large number of users
+
+P2: requests to the pluggable data database
+Use cases: 11
+Components for:
+    *) processing incoming requests differently depending on system load and data priority
+    *) detect normal or overload mode using response measure dealines
+    *) pluggable data has no impact on other data
+    *) starvation prevention
+Tactics:
+    Limit event response? reply within response measure deadlines
+    Prioritize events
+    Reduce overhead / Increase resource efficiency
+    Introduce concurrency
+    Schedule resources
+
+
 
 M1: integrate new sensor or actuator manufacturer
 Use cases: 8, 9, 10
@@ -13,6 +49,10 @@ Components for:
     *) data storage
     *) other functionality: data is available to applications
     *) initialisation, configuration, viewing data of available pluggable devices
+
+M2: big data analytics on pluggable data and/or application usage data
+
+U1: application updates
 
 U2: easy installation
 Use cases: 4, 6, 9, 17, 19

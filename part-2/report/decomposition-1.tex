@@ -1,4 +1,4 @@
-\section{Decomposition 1: SIoTIP System (X1, Y3, UCa, UCb, UCc)}
+\section{Decomposition 1: SIoTIP System (Av3, P2, UC11, UC14, UC15, UC18)}
 \subsection{Module to decompose}
 In this run we decompose the \texttt{SIoTIP System}.
 
@@ -7,20 +7,25 @@ The non-functional drivers for this decomposition are:
 
 \begin{itemize}
 	\item \emph{Av3}: Pluggable device or mote failure
-    \item \emph{M1}: Integrate new sensor or actuator manufacturer
-	\item \emph{U2}: Easy installation
+	\item \emph{P2}: Requests to the pluggable data database
 \end{itemize}
 
 The related functional drivers are:
 
 \begin{itemize}
+    \item \emph{UC11}: Send pluggable device data
 	\item \emph{UC14}: Send heartbeat
-	\item \emph{UCb}: name
-	\item \emph{UCc}: name
+	\item \emph{UC15}: Send notification
+	\item \emph{UC18}: Check and deactivate applications
 \end{itemize}
 
 \paragraph{Rationale}
-A short discussion of why these drivers were selected for this decomposition.
+We chose Av3 first since it had high priority and it was about the connectivity
+of sensors in the system more so than M1 and U2. We
+chose P2 along with Av3 as it was related to Av3 and would force us to think
+about the way sensor data, the core of the whole system, is handled.
+Handling Av3 and P2 would give a better starting point than M1 and U2
+for the whole system for later ADD iterations.
 
 \subsection{Architectural design}
 \paragraph{Topic}
