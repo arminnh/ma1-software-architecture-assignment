@@ -1,9 +1,5 @@
-Av1: communication between SIoTIP gateway and Online Service
-
-Av2: application failure
-
 Av3: pluggable device of mote failure
-Use cases: 14, 48
+Use cases: 14, 18
 Components for:
     prevention:
         *) Maybe ???: ApplicationPreferences -> set amount of sensors/actuators
@@ -23,8 +19,6 @@ Tactics:
         notifications to 3 stakeholders
         degradation/removal from service -> turn off apps
 
-P1: large number of users
-
 P2: requests to the pluggable data database
 Use cases: 11
 Components for:
@@ -39,7 +33,37 @@ Tactics:
     Introduce concurrency
     Schedule resources
 
+Use case 11: Send pluggable device data
+    *) pluggable device sends data
+    *) checks whether pluggable device has been initialized
+    *) store data and forward it to applications
 
+Use case 14: Send heartbeat
+    *) send/receive/process heartbeats
+    *) heartbeat timers
+    *) heartbeat device list
+    *) detection of missing pluggable devices -> disable applications for which
+       the affected pluggable devices were essential
+
+Use case 15: Send notification
+    *) trigger notifications by some "system component"
+    *) stored by system
+    *) lookup communication channel
+    *) sent to someone via their communication channel
+    *) third party stuff ??
+    *) users choose delivery method ?
+
+Use case 18:
+    *) not all mandatory roles assigned to end users or not all
+       essential devices available -> deactivate application
+    *) subscription updated accordingly, customer orgs notified
+
+============================================================================
+Av1: communication between SIoTIP gateway and Online Service
+
+Av2: application failure
+
+P1: large number of users
 
 M1: integrate new sensor or actuator manufacturer
 Use cases: 8, 9, 10
