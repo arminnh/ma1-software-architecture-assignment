@@ -3,6 +3,11 @@
 % E.g., \documentclass[english,peerreview]{sareport}
 
 \usepackage[colorlinks, linkcolor=black, citecolor=black, urlcolor=black]{hyperref}
+\usepackage[normalem]{ulem}
+
+\casename{Shared Internet Of Things Infrastructure Platform}
+\phasenumber{2a}
+\phasename{ADD Application}
 
 % Set all authors, if your group counts 2, set third author empty \authorthree{}
 % Set the groupname as well
@@ -10,89 +15,24 @@
 \authortwo{Armin Halilovic(r0679689)}
 \authorthree{}
 \groupname{Filipcikova-Halilovic}
-
 \academicyear{2016--2017}
-
-\casename{Shared Internet Of Things Infrastructure Platform}
-\phasenumber{2a}
-\phasename{ADD Application}
-
 
 \begin{document}
 \maketitle
 
 \tableofcontents
 
-% \chapter{Introduction}\label{sec:introduction}
-% \todoinline{An introduction is not required, but if you include it, it should not be empty.}
-
 \chapter{Attribute-driven design documentation}\label{sec:add}
-
-\include{decomposition-1}
-\include{decomposition-2}
-
-
-\subsection{Module to decompose}
-\subsection{Selected architectural drivers}
-\subsection{Architectural design}
-\subsection{Instantiation and allocation of functionality}
-\subsection{Interfaces for child modules}
-\subsection{Data type definitions}
-\subsection{Verify and refine}
+\input{decomposition-1}
+\newpage
+\input{decomposition-2}
 
 \chapter{Resulting partial architecture}\label{sec:architecture}
-This section provides an over of the architecture constructed through ADD\@.
-
-\section{Context diagram}
-This subsection discusses the context diagram.
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=0.8\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Context diagram for component-and-
-		connector view.}
-	\caption{Context diagram for the component-and-connector view.
-	}\label{fig:cc_context}
-\end{figure}
-
-\section{Component-and-connector view}
-A short discussion of the component-and-connector view with the key
-decompositions if any.
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=0.8\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Component-and-connector diagram}
-	\caption{Primary diagram for the component-and-connector view.
-	}\label{fig:cc_main}
-\end{figure}
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=0.8\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Key decomposition}
-	\caption{Decomposition of a component shown in Figure~\ref{fig:cc_main}
-	}\label{fig:decomp_decomp1}
-\end{figure}
-
-\section{Deployment view}
-A short discussion of the allocation of components to physical nodes based on a
-context diagram and a deployment diagram.
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=0.8\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Context diagram for the allocation
-		view.}
-	\caption{Context diagram for the allocation view.}\label{fig:depl_context}
-\end{figure}
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=0.8\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Deployment diagram}
-	\caption{Primary diagram for the allocation view.}\label{fig:depl_main}
-\end{figure}
-
+\sout{This section provides an overview of the architecture constructed through ADD.}\\
+\textit{"Since you are a two-student team, you can skip the final step of the
+assignment/report ("2. Resulting architecture This section should present
+the component diagram of the overall system (after two decompositions).
+At this point, you are not required to provide the deployment diagram
+of the overall system.")"}
 
 \end{document}

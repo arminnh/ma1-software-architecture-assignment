@@ -29,14 +29,8 @@ Components for:
 Tactics:
     Limit event response? reply within response measure deadlines
     Prioritize events
-    Reduce overhead / Increase resource efficiency
     Introduce concurrency
     Schedule resources
-
-Use case 11: Send pluggable device data
-    *) pluggable device sends data
-    *) checks whether pluggable device has been initialized
-    *) store data and forward it to applications
 
 Use case 14: Send heartbeat
     *) send/receive/process heartbeats
@@ -44,6 +38,11 @@ Use case 14: Send heartbeat
     *) heartbeat device list
     *) detection of missing pluggable devices -> disable applications for which
        the affected pluggable devices were essential
+
+Use case 18: Check and deactivate applications
+   *) not all mandatory roles assigned to end users or not all
+      essential devices available -> deactivate application
+   *) subscription updated accordingly, customer orgs notified
 
 Use case 15: Send notification
     *) trigger notifications by some "system component"
@@ -53,12 +52,13 @@ Use case 15: Send notification
     *) third party stuff ??
     *) users choose delivery method ?
 
-Use case 18:
-    *) not all mandatory roles assigned to end users or not all
-       essential devices available -> deactivate application
-    *) subscription updated accordingly, customer orgs notified
+Use case 11: Send pluggable device data
+    *) pluggable device sends data
+    *) checks whether pluggable device has been initialized
+    *) store data and forward it to applications
 
 ============================================================================
+
 Av1: communication between SIoTIP gateway and Online Service
 
 Av2: application failure
