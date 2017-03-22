@@ -1,0 +1,8 @@
+ADD1:
+    descriptions of "architectural design"
+    descriptions of components
+    alternatives: think of some random shit
+    verify and refine
+
+ADD2:
+    EVERYTHING

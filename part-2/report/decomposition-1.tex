@@ -34,6 +34,7 @@
     handling this combination would give a better starting point than M1+U2
     for later ADD iterations.
 
+
 \subsection{Architectural design}
     \paragraph{Application redundancy settings for Av3}
     Discussion of the solution selected for (a part of) one of the architectural
@@ -56,42 +57,22 @@
     dynamic priority scheduling \\
     tactics: schedule resource, prioritize events, also limit event response?\\
     starvation avoidance \\
-    \textit{TODO ASK: The  system  checks  whether  the  pluggable  device  
+    \textit{TODO ASK: The  system  checks  whether  the  pluggable  device
     has  been  initialised (cf. UC8: Initialise  a pluggable device)}
 
     \paragraph{Pluggable data separation for P2}
     "pluggable data has no impact on other data"
     two databases
 
+
 \subsubsection{Alternatives considered}
     \paragraph{Alternatives for X}
     A discussion of the alternative solutions and why that were not selected.
 
+
 \subsection{Instantiation and allocation of functionality}
     \paragraph{Decomposition}
     Main aspects of the resulting decomposition.
-
-    \subparagraph{PluggableDeviceFacade}
-    send heartbeats
-
-    \subparagraph{GatewayFacade}
-    receive heartbeats, send heartbeats/device lists, send application shutdown, send notification trigger (Av3)\\
-    forward data to applications
-
-    \subparagraph{HeartbeatProcessor}
-    process heartbeats: check timers (Av3)
-
-    \subparagraph{PluggableDeviceManager}
-    check list of devices and see if there are pluggable devices for applications
-    check redundancy in the available pluggable devices
-    contains application preferences (e.g. amount of sensors required)
-    can send command to deactivate application
-    If failure detected, notify inf owner (Av3).
-    reactivate application if new/needed hardware detected
-
-    \subparagraph{RequestHandler}
-    handles requests from gateways and sends them to other components
-    handles requests from other components and sends them to gateways
 
     \subparagraph{ApplicationManager}
     deactivate apps
@@ -101,84 +82,424 @@
     If application uses failed plugg device, notify application
     (Av3)
 
+    \subparagraph{Database}
+    General database for other data. Storage of notifications for now.
+
+    \subparagraph{GatewayFacade}
+    receive heartbeats, send heartbeats/device lists, send application shutdown, send notification trigger (Av3)\\
+    forward data to applications
+
+    \subparagraph{MoteFacade}
+    sends heartbeats
+
     \subparagraph{NotificationHandler}
     Send notifications. \\
     stored by system \(->\) contact DB? \\
     lookup communication channel \\
     users choose delivery method?
 
+    \subparagraph{OtherFunctionality1}
+    Responsible for delivery of notifications.
+
+    \subparagraph{PluggableDeviceDB}
+    store data related to pluggable devices
+
+    \subparagraph{PluggableDeviceFacade}
+    send heartbeats
+
+    \subparagraph{PluggableDeviceManager}
+    check list of devices and see if there are pluggable devices for applications
+    check redundancy in the available pluggable devices
+    contains application preferences (e.g. amount of sensors required)
+    can send command to deactivate application
+    If failure detected, notify inf owner (Av3).
+    reactivate application if new/needed hardware detected
+
+    \subparagraph{PluggableDeviceDataScheduler}
+    scheduling, detect overload mode, store data, forward data
+
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=0.8\textwidth]{component-diagram-1}
-    	% \missingfigure[figwidth=0.8\textwidth]{Component-and-connector diagram}
     	\caption{Component-and-connector diagram of this decomposition.}
         \label{fig:it1-cc_main}
     \end{figure}
 
-    \paragraph{Behaviour}
-    If needed and explanation of the behaviour of certain aspects of the design so
-    far.
+% A SEQUENCE DIAGRAM FOR UC11 WOULD BE ACTUALLY VERY USEFUL (shows how the gateway checks if devices are initialised), 14 too: shows how applications can get deactivated
+% REMOVE THIS PART BECAUSE MONEYKA IS LAAAAZZZZYYYYYY BAD STUDENT "IT IS NOT NECESSARY"
+    % \paragraph{Behaviour}
+    % If needed and explanation of the behaviour of certain aspects of the design so
+    % far.
 
-    \begin{figure}[!htp]
-    	\centering
-    	%\includegraphics[width=0.8\textwidth]{}
-    	\missingfigure[figwidth=0.8\textwidth]{Sequence diagram}
-    	\caption{Sequence diagram illustrating a key behavioural aspect.
-    	}\label{fig:it1-seq_aspect1}
-    \end{figure}
+    % \begin{figure}[!htp]
+    % 	\centering
+    % 	%\includegraphics[width=0.8\textwidth]{}
+    % 	\missingfigure[figwidth=0.8\textwidth]{Sequence diagram}
+    % 	\caption{Sequence diagram illustrating a key behavioural aspect.
+    % 	}\label{fig:it1-seq_aspect1}
+    % \end{figure}
 
     \paragraph{Deployment}
     Rationale of the allocation of components to physical nodes.
 
     \begin{figure}[!htp]
     	\centering
-    	%\includegraphics[width=0.8\textwidth]{}
-    	\missingfigure[figwidth=0.8\textwidth]{Deployment diagram}
+    	\includegraphics[width=0.8\textwidth]{deployment-diagram-1}
     	\caption{Deployment diagram of this decomposition.
     	}\label{fig:it1-depl_main}
     \end{figure}
 
-\subsection{Interfaces for child modules}
-    \subsubsection{ModuleB}
-    \begin{itemize}
-    	\item InterfaceA
-    	\begin{itemize}
-    		\item \texttt{returnType operation1(ParamType param1)} throws TypeOfException
-    		\begin{itemize}
-    			\item Effect: Describe the effect of calling this operation.
-    			\item Exceptions:
-    			\begin{itemize}
-    				\item TypeOfException: Describe when this exception is thrown.
-    			\end{itemize}
-    		\end{itemize}
 
-    		\item \texttt{returnType operation2()}
+\subsection{Interfaces for child modules}
+    \subsubsection{ApplicationManager}
+    \begin{itemize}
+        \item ForwardData
+        \begin{itemize}
+            \item \texttt{void sendData(PluggableDeviceData data)}
+            \begin{itemize}
+                \item Effect: Send pluggable device data to an application that wants to use it
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+        \item AppMgmt
+        \begin{itemize}
+            \item \texttt{void deactivateApplicationInstance(int applicationInstanceID)}
+            \begin{itemize}
+                \item Effect: Deactivates a running instance of an application.
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{void activateApplicationInstance(int applicationInstanceID)}
+            \begin{itemize}
+                \item Effect: Activates a new instance of an application.
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Database}
+    \begin{itemize}
+        \item NotificationMgmt
+        \begin{itemize}
+            \item \texttt{int storeNotification(NotificationData data)}
+            \begin{itemize}
+                \item Effect: Stores a new notification entry in the database. Returns the id of the new notification.
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{void updateNotification(NotificationData data)}
+            \begin{itemize}
+                \item Effect: Updates an existing notification (e.g. change status to "sent").
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{int lookupNotificationChannelForUser(int userID)}
+            \begin{itemize}
+                \item Effect: Returns the type of communication channel a user prefers.
+                              Different communication channels are mapped to integers.
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+        \item AppDataMgmt
+        \begin{itemize}
+            \item \texttt{void updateApplication(ApplicationData data)}
+            \begin{itemize}
+                \item Effect: Updates an application in the database (e.g. change state to 'inactive').
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{void updateSubscription(SubscriptionData data)}
+            \begin{itemize}
+                \item Effect: Updates a subscription in the database (e.g. change state to 'disabled').
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{GatewayFacade}
+    \begin{itemize}
+        \item MoteDataMgmt
+        \begin{itemize}
+            \item \texttt{void sendHeartbeat(int moteID, List<PluggableDeviceInfo> devices)}
+            \begin{itemize}
+                \item Effect: Sends a heartbeat to a certain gateway with information about operational devices.
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{void sendData(PluggableDeviceData data)}
+            \begin{itemize}
+                \item Effect: Sends pluggable device data to the connected mote.
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+        \item DeviceMgmt
+        \begin{itemize}
+            \item \texttt{void initialiseDevice(int deviceID, PluggableDeviceSettings settings)}
+            \begin{itemize}
+                \item Effect: Initialises a pluggable device for use with the system. TODO check QA's text
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{List<DeviceInfo> getConnectedDevices()}
+            \begin{itemize}
+                \item Effect: Describe the effect of calling this operation.
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{void timerExpired(int deviceID)}
+            \begin{itemize}
+                \item Effect: Lets the gateway know that a timer for pluggable device or mote has expired.
+                              This will generate a notification for an infrastructure owner.
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{void deactivateApplicationInstance(int applicationInstanceID)}
+            \begin{itemize}
+                \item Effect: Deactivates a certain application. This could happen when
+                              mandatory pluggable devices for the application are missing.
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{void reactivateApplicationInstance(int applicationInstanceID)}
+            \begin{itemize}
+                \item Effect: Reactivate an application instance. This could happen
+                              automatically after a broken sensor has been replaced.
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+        \item CheckDevices
+        \begin{itemize}
+            \item \texttt{bool areEssentialDevicesOperational(int applicationID)}
+            \begin{itemize}
+                \item Effect: Returns true if all essential devices for the application
+                              with id "applicationID" are operational.
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{MoteFacade}
+    \begin{itemize}
+        \item PluggableDeviceDataMgmt
+        \begin{itemize}
+            \item \texttt{void sendData(PluggableDeviceData data)}
+            \begin{itemize}
+                \item Effect: Sends pluggable device data to the connected mote.
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{List<DeviceInfo> getConnectedDevices()}
+            \begin{itemize}
+                \item Effect: Returns a list of information about devices that are connected to the mote.
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+
+        \item PluggableDeviceMgmt
+        \begin{itemize}
+            \item \texttt{void initialise(int deviceID, PluggableDeviceSettings settings)}
+            \begin{itemize}
+                \item Effect: TODO check this with QA's: Initialises a connected pluggable device according to some settings
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{NotificationHandler}
+    \begin{itemize}
+        \item Notify
+        \begin{itemize}
+            \item \texttt{void notify(int userID, String message)}
+            \begin{itemize}
+                \item Effect: Describe the effect of calling this operation.
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+        \item DeliveryMgmt
+        \begin{itemize}
+            \item \texttt{void sendAcknowledgement(int notificationID)}
+            \begin{itemize}
+                \item Effect: Sends an acknowledgement to the system for a certain notification.
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{OtherFunctionality1}
+    \begin{itemize}
+        \item NotificationDeliveryMgmt
+        \begin{itemize}
+            \item \texttt{void notify(JSONObject data)}
+            \begin{itemize}
+                \item Effect: Deliver a notification to an end user using a specific delivery service.
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{PluggableDeviceDB}
+    \begin{itemize}
+        \item PluggableDeviceDataMgmt
+        \begin{itemize}
+            \item \texttt{void sendData(PluggableDeviceData data)}
+            \begin{itemize}
+                \item Effect: Sends pluggable device data to the DB to be stored.
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{List<PluggableDeviceData> getData(int deviceID, DateTime from, DateTime to)}
+            \begin{itemize}
+                \item Effect: Returns data from a specific device in a certain time period.
+                \item Exceptions: None
+            \end{itemize}
+            \item \texttt{List<int> getApplicationsForDevice(int deviceID)}
+            \begin{itemize}
+                \item Effect: Returns a list of applications that can use the device with id "deviceID."
+                \item Exceptions: None
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{PluggableDeviceFacade}
+    \begin{itemize}
+    	\item PluggableDeviceMgmt
+    	\begin{itemize}
+            \item \texttt{void initialise(PluggableDeviceSettings settings)}
+            \begin{itemize}
+                \item Effect: TODO check this with QA's: Initialises the pluggable device according to some settings
+                \item Exceptions: None
+            \end{itemize}
+    	\end{itemize}
+    \end{itemize}
+
+    \subsubsection{PluggableDeviceManager}
+    \begin{itemize}
+    	\item DeviceListMgmt
+    	\begin{itemize}
+    		\item \texttt{void sendHeartbeat(int moteID, List<PluggableDeviceInfo> devices)}
     		\begin{itemize}
-    			\item Effect: Describe the effect of calling this operation.
+    			\item Effect: Send a heartbeat from a mote to check/update timers for operational devices.
+    			\item Exceptions: None
+    		\end{itemize}
+    		\item \texttt{bool isDeviceInitialised(int deviceID)}
+    		\begin{itemize}
+    			\item Effect: Returns true if the device with id "deviceID" has been initialized.
+    			\item Exceptions: None
+    		\end{itemize}
+    		\item \texttt{bool areEssentialDevicesOperational(int applicationID)}
+    		\begin{itemize}
+    			\item Effect: Returns true if all essential devices for the application
+                              with id "applicationID" are operational.
     			\item Exceptions: None
     		\end{itemize}
     	\end{itemize}
     \end{itemize}
 
+    \subsubsection{PluggableDeviceDataScheduler}
+    \begin{itemize}
+    	\item RequestData
+    	\begin{itemize}
+    		\item \texttt{List<PluggableDeviceData> requestData(int applicationID, int deviceID, DateTime from, DateTime to)}
+    		\begin{itemize}
+    			\item Effect: Request data from a specific device in a certain time period
+    			\item Exceptions: None
+    		\end{itemize}
+    	\end{itemize}
+    	\item PluggableDeviceDataMgmt
+    	\begin{itemize}
+    		\item \texttt{void sendData(PluggableDeviceData data)}
+    		\begin{itemize}
+    			\item Effect: Sends pluggable device data to the scheduler to be processed.
+    			\item Exceptions: None
+    		\end{itemize}
+    	\end{itemize}
+    \end{itemize}
+
+
 \subsection{Data type definitions}
-    Describe per complex data type used in the interfaces what it represents.
+    \paragraph{PluggableDeviceData} contains data from a pluggable device at a certain point in time
+                                    (e.g. a sensor reading, an actuator status)
+    \paragraph{PluggableDeviceSettings} contains settings for a pluggable device (power status,
+                                        data update rate, ...)
+    \paragraph{PluggableDeviceInfo} contains information about a pluggable device (device id,
+                                    power status, data update rate, ...)
+    \paragraph{DateTime} Represents an instant in time, typically expressed as a date and time of day.
 
-    \paragraph{returnType} This data element represents X.
+    \paragraph{NotificationData} contains data about a notification (message text, recipient,
+                                 communication channel, date, status, source, ...).
 
-    \paragraph{ParamType} This data element represents Y.
+    \paragraph{ApplicationData} contains data about an application instance (instance id, running status, ...)
+    \paragraph{SubscriptionData} contains data about a subscription (subscription id, subscription status,
+                                 subscription period, ...).
+
 
 \subsection{Verify and refine}
+    Completely handled: Av3, P2, UC11, UC14, UC15, UC18 \\
+
     This section describes per component which (parts of) the remaining
     requirements it is responsible for.
 
-    \paragraph{ModuleB}
-    \begin{itemize}
-    	\item \emph{Z1}: name
-    	\item \emph{UCd}: name
-    \end{itemize}
+    \paragraph{PluggableDeviceFacade}
+        \begin{itemize}
+        	\item \emph{Z1}: name
+        	\item \emph{UCd}: name
+        \end{itemize}
 
-    \paragraph{ModuleC}
-    \begin{itemize}
-    	\item \emph{UCba}: name\\Description which part of the original use case is
-    	the responsibility of this component.
-    \end{itemize}
+    \paragraph{GatewayFacade}
+        \begin{itemize}
+        	\item \emph{UCba}: name\\Description which part of the original use case is
+        	the responsibility of this component.
+        \end{itemize}
+
+    \paragraph{HeartbeatProcessor}
+        \begin{itemize}
+            \item: \emph{UCX or QAX}: which part of the original use case is
+                                      the responsibility of this component
+        \end{itemize}
+
+    \paragraph{PluggableDeviceManager}
+        \begin{itemize}
+            \item: \emph{UCX or QAX}: which part of the original use case is
+                                      the responsibility of this component
+        \end{itemize}
+
+    \paragraph{RequestHandler}
+        \begin{itemize}
+            \item: \emph{UCX or QAX}: which part of the original use case is
+                                      the responsibility of this component
+        \end{itemize}
+
+    \paragraph{ApplicationManager}
+        \begin{itemize}
+            \item: \emph{UCX or QAX}: which part of the original use case is
+                                      the responsibility of this component
+        \end{itemize}
+
+    \paragraph{NotificationHandler}
+        \begin{itemize}
+            \item: \emph{UCX or QAX}: which part of the original use case is
+                                      the responsibility of this component
+        \end{itemize}
+
+Av1: Communication between SIoTIP gateway and Online Service
+Av2: Application failure
+P1: Large number of users
+M1: Integrate new sensor or actuator manufacturer
+M2: Big data analytics on pluggable data and/or application usage data
+U1: Application updates
+U2: Easy installation
+
+UC1: Register a customer organisation
+UC2: Register an end-user
+UC3: Unregister an end-user
+UC4: Install mote
+UC5: Uninstall mote
+UC6: Insert a pluggable device into a mote
+UC7: Remove a pluggable device from its mote
+UC8: Initialise a pluggable device
+UC9: Configure pluggable device access rights
+UC10: Consult and configure the topology
+UC12: Perform actuation command
+UC13: Configure pluggable device
+UC16: Consult notification message
+UC17: Activate an application
+UC19: Subscribe to application
+UC20: Unsubscribe from application
+UC21: Send invoice
+UC22: Upload an application
+UC23: Consult application statistics
+UC24: Consult historical data
+UC25: Access topology and available devices
+UC26: Send application command or message to external front-end
+UC27: Receive application command or message from external front-end
+UC28: Log in
+UC29: Log out
