@@ -23,6 +23,12 @@
 
 
 \subsection{Architectural design}
+    % Tactics:
+    %     Limit event response? reply within response measure deadlines
+    %     Prioritize events
+    %     Introduce concurrency
+    %     Schedule resources
+
     \paragraph{Handling new types of pluggable devices for M1}
         The developers have to make changes to: component1, component2, datatype X.
         The new type of sensor needs to be able to be initialised so that it can send data.
@@ -50,9 +56,7 @@
     \paragraph{Scheduling for P2}
         dynamic priority scheduling \\
         tactics: schedule resource, prioritize events, also limit event response?\\
-        starvation avoidance \\
-        \textit{TODO ASK: The  system  checks  whether  the  pluggable  device
-        has  been  initialised (cf. UC8: Initialise  a pluggable device)}
+        starvation avoidance
 
     \paragraph{Pluggable data separation for P2}
         "pluggable data has no impact on other data"
@@ -89,7 +93,6 @@
 
     \paragraph{Deployment}
         Rationale of the allocation of components to physical nodes.
-        TODO
 
         \begin{figure}[!htp]
         	\centering
@@ -102,7 +105,7 @@
 \subsection{Interfaces for child modules}
 
     \subsubsection{GatewayFacade}
-        TODO: see GatewayFacade from ADD1, plus this new part.
+        See "\ref{ADD1-int-gatewayfacade}: GatewayFacade" for the rest of the interfaces provided by this component.
         \begin{itemize}
             \item MoteDataMgmt
             \begin{itemize}
@@ -113,11 +116,19 @@
                 \end{itemize}
             \end{itemize}
 
+            \item DeviceMgmt
+            \begin{itemize}
+                \item \texttt{void initialiseDevice(int deviceID, PluggableDeviceSettings settings)}
+                \begin{itemize}
+                    \item Effect: Initialises a pluggable device for use with the system.
+                    \item Exceptions: None
+                \end{itemize}
+            \end{itemize}
+
             \item AppDeviceMgmt
             \begin{itemize}
                 \item \texttt{void configurePluggableDevice(int deviceID, PluggableDeviceSettings settings)}
                 \begin{itemize}
-                    \item TODO: check if we do this now or later
                     \item For: Use case 11 step 3.b
                     \item Effect: Causes certain settings to be set on a pluggable
                           device that the gateway is connected to.
@@ -127,7 +138,7 @@
         \end{itemize}
 
     \subsubsection{MoteFacade}
-        TODO: see MoteFacade from ADD1, plus this new part.
+        See "\ref{add1-int-motefacade}: MoteFacade" for the rest of the interfaces provided by this component.
         \begin{itemize}
             \item PluggableDeviceDataMgmt
             \begin{itemize}
@@ -137,6 +148,39 @@
                     \item Exceptions: None
                 \end{itemize}
             \end{itemize}
+
+            \item PluggableDeviceMgmt
+            \begin{itemize}
+                \item \texttt{void initialise(int deviceID, PluggableDeviceSettings settings)}
+                \begin{itemize}
+                    \item Effect: Initialises a connected pluggable device according to some settings
+                    \item Exceptions: None
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+
+    \subsubsection{PluggableDeviceFacade}
+        \begin{itemize}
+        	\item PluggableDeviceMgmt
+        	\begin{itemize}
+                \item \texttt{void initialise(PluggableDeviceSettings settings)}
+                \begin{itemize}
+                    \item Effect: Initialises the pluggable device according to some settings
+                    \item Exceptions: None
+                \end{itemize}
+        	\end{itemize}
+        \end{itemize}
+
+    \subsubsection{PluggableDeviceManager}
+        \begin{itemize}
+        	\item DeviceListMgmt
+        	\begin{itemize}
+        		\item \texttt{bool isDeviceInitialised(int deviceID)}
+        		\begin{itemize}
+        			\item Effect: Returns true if the device with id "deviceID" has been initialized.
+        			\item Exceptions: None
+        		\end{itemize}
+        	\end{itemize}
         \end{itemize}
 
     \subsubsection{PluggableDeviceDataScheduler}

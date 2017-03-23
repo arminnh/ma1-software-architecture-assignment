@@ -2,13 +2,21 @@ update ADD1 to remove everything related to P2
 update ADD2 to add everything related to P2
 
 ADD1:
+    update rationale after p2 changes
     descriptions of "architectural design"
     descriptions of components
     alternatives: think of some random shit
     Verify and refine
 
 ADD2:
+    CHECK IF WE NEED "INITIALISE" FUNCTIONS AND UPDATE DIAGRAMS
+    CHECK IF WE NEED "configurePluggableDevice" FUNCTION NOW OR LATER
     Architectural design
         Alternatives considered
         Alternatives for solution
     Verify and refine
+
+ASK: In use case 11 step 2: The  system  checks  whether  the  pluggable
+     device has  been  initialised (cf. UC8: Initialise  a pluggable device)
+     IS THIS IN THE SYSTEM OR IN GATEWAYS? CAN WE CHOOSE?
+     We said we would do this in the PluggableDeviceManager

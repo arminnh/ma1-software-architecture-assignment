@@ -24,7 +24,6 @@
     \end{itemize}
 
     \paragraph{Rationale}
-        TODO: update after p2 changes \\
         We chose Av3 first since it had high priority and it was more relevant to
         the core of the system (pluggable device data) than attributes M1 and U2. We
         chose P2 along with Av3 as it would force us to think about the way
@@ -35,6 +34,16 @@
 
 
 \subsection{Architectural design}
+    % Tactics:
+    %     Detection:
+    %         Ping/Echo
+    %         Monitor
+    %         Heartbeat
+    %         Timestamp
+    %     Resolution:
+    %         notifications to 3 stakeholders
+    %         degradation/removal from service -> turn off apps
+
     \paragraph{Application redundancy settings for Av3}
         Discussion of the solution selected for (a part of) one of the architectural
         drivers.
@@ -191,7 +200,7 @@
             \end{itemize}
         \end{itemize}
 
-    \subsubsection{GatewayFacade}
+    \subsubsection{GatewayFacade}\label{add1-int-gatewayfacade}
         \begin{itemize}
             \item MoteDataMgmt
             \begin{itemize}
@@ -204,11 +213,6 @@
 
             \item DeviceMgmt
             \begin{itemize}
-                \item \texttt{void initialiseDevice(int deviceID, PluggableDeviceSettings settings)}
-                \begin{itemize}
-                    \item Effect: Initialises a pluggable device for use with the system. TODO check QA's text
-                    \item Exceptions: None
-                \end{itemize}
                 \item \texttt{List<DeviceInfo> getConnectedDevices()}
                 \begin{itemize}
                     \item Effect: Describe the effect of calling this operation.
@@ -245,22 +249,13 @@
             \end{itemize}
         \end{itemize}
 
-    \subsubsection{MoteFacade}
+    \subsubsection{MoteFacade}\label{add1-int-motefacade}
         \begin{itemize}
             \item PluggableDeviceDataMgmt
             \begin{itemize}
                 \item \texttt{List<DeviceInfo> getConnectedDevices()}
                 \begin{itemize}
                     \item Effect: Returns a list of information about devices that are connected to the mote.
-                    \item Exceptions: None
-                \end{itemize}
-            \end{itemize}
-
-            \item PluggableDeviceMgmt
-            \begin{itemize}
-                \item \texttt{void initialise(int deviceID, PluggableDeviceSettings settings)}
-                \begin{itemize}
-                    \item Effect: TODO check this with QA's: Initialises a connected pluggable device according to some settings
                     \item Exceptions: None
                 \end{itemize}
             \end{itemize}
@@ -299,18 +294,6 @@
             \end{itemize}
         \end{itemize}
 
-    \subsubsection{PluggableDeviceFacade}
-        \begin{itemize}
-        	\item PluggableDeviceMgmt
-        	\begin{itemize}
-                \item \texttt{void initialise(PluggableDeviceSettings settings)}
-                \begin{itemize}
-                    \item Effect: TODO check this with QA's: Initialises the pluggable device according to some settings
-                    \item Exceptions: None
-                \end{itemize}
-        	\end{itemize}
-        \end{itemize}
-
     \subsubsection{PluggableDeviceManager}
         \begin{itemize}
         	\item DeviceListMgmt
@@ -318,11 +301,6 @@
         		\item \texttt{void sendHeartbeat(int moteID, List<PluggableDeviceInfo> devices)}
         		\begin{itemize}
         			\item Effect: Send a heartbeat from a mote to check/update timers for operational devices.
-        			\item Exceptions: None
-        		\end{itemize}
-        		\item \texttt{bool isDeviceInitialised(int deviceID)}
-        		\begin{itemize}
-        			\item Effect: Returns true if the device with id "deviceID" has been initialized.
         			\item Exceptions: None
         		\end{itemize}
         		\item \texttt{bool areEssentialDevicesOperational(int applicationID)}
@@ -359,7 +337,6 @@
 
 \subsection{Verify and refine}
     Completely handled: Av3, UC14, UC15, UC18 \\
-    TODO: check P2, UC11
 
     \noindent This section describes per component which (parts of) the remaining
     requirements it is responsible for.
@@ -390,6 +367,7 @@
                                Resolution: b, c, d
             \item \emph{M1}: Integrate new sensor or actuator manufacturer: 1.a, 2.b
             \item \emph{U2}: Easy Installation: a, c, d
+            \item \emph{UC11}: Send pluggable device data: 1
         \end{itemize}
 
     \paragraph{MoteFacade}
@@ -400,6 +378,7 @@
             \item \emph{UC5}: Uninstall mote: 1
             \item \emph{UC6}: Insert a pluggable device into a mote: 2
             \item \emph{UC7}: Remove a pluggable device from its mote: 2
+            \item \emph{UC11}: Send pluggable device data: 1
         \end{itemize}
 
     \paragraph{NotificationHandler}
@@ -414,6 +393,7 @@
                                Detection: a, b, c, d
                                Resolution: a
            	\item \emph{P1}: Large number of users: a
+            \item \emph{P2}: Requests to the pluggable data database
             \item \emph{M1}: Integrate new sensor or actuator manufacturer: 1.d
             \item \emph{M2}: Big data analytics on pluggable data and/or application usage data: a
             \item \emph{U2}: Easy Installation: e
@@ -427,6 +407,7 @@
             \item \emph{UC8}: Initialise a pluggable device: 1, 2, 4
             \item \emph{UC9}: Configure pluggable device access rights
             \item \emph{UC10}: Consult and configure the topology
+            \item \emph{UC11}: Send pluggable device data: 3
             \item \emph{UC13}: Configure pluggable device
             \item \emph{UC16}: Consult notification message: 1, 2, 3, 4
             \item \emph{UC17}: Activate an application: 1, 2
@@ -461,7 +442,8 @@
             \item \emph{UC5}: Uninstall mote: 2
             \item \emph{UC6}: Insert a pluggable device into a mote: 3: uninitialised part; alternative 3a.1 3a.2 3a.4; 4
             \item \emph{UC7}: Remove a pluggable device from its mote: 3.a, 3.c
-            \item \emph{UC8}: Initialise a pluggable device: 3,
+            \item \emph{UC8}: Initialise a pluggable device: 3
+            \item \emph{UC11}: Send pluggable device data: 2, 3a
         \end{itemize}
 
     \paragraph{PluggableDeviceDataScheduler}
