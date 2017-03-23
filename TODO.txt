@@ -2,7 +2,16 @@ ADD1:
     descriptions of "architectural design"
     descriptions of components
     alternatives: think of some random shit
-    verify and refine
 
 ADD2:
-    EVERYTHING
+    Module to decompose
+    Selected architectural drivers
+    Architectural design
+        Alternatives considered
+        Alternatives for solution
+    Instantiation and allocation of functionality
+        Decomposition
+        Deployment
+    Interfaces for child modules
+    Data type definitions
+    Verify and refine
