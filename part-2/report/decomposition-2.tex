@@ -22,7 +22,7 @@ The related functional drivers are:
 Discussion of the solution selected for (a part of) one of the architectural
 drivers.
 
-\subsubsection*{Alternatives considered}
+\subsubsection{Alternatives considered}
 \paragraph{Alternatives for solution}
 A discussion of the alternative solutions and why that were not selected.
 
@@ -38,18 +38,6 @@ Main aspects of the resulting decomposition.
     \label{fig:it1-cc_main}
 \end{figure}
 
-\paragraph{Behaviour}
-If needed and explanation of the behaviour of certain aspects of the design so
-far.
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=0.8\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Sequence diagram}
-	\caption{Sequence diagram illustrating a key behavioural aspect.
-	}\label{fig:it1-seq_aspect1}
-\end{figure}
-
 \paragraph{Deployment}
 Rationale of the allocation of components to physical nodes.
 
@@ -62,20 +50,11 @@ Rationale of the allocation of components to physical nodes.
 \end{figure}
 
 \subsection{Interfaces for child modules}
-\subsubsection*{ModuleB}
+\subsubsection{ModuleB}
 \begin{itemize}
 	\item InterfaceA
 	\begin{itemize}
-		\item \texttt{returnType operation1(ParamType param1)} throws TypeOfException
-		\begin{itemize}
-			\item Effect: Describe the effect of calling this operation.
-			\item Exceptions:
-			\begin{itemize}
-				\item TypeOfException: Describe when this exception is thrown.
-			\end{itemize}
-		\end{itemize}
-
-		\item \texttt{returnType operation2()}
+		\item \texttt{returnType operation()}
 		\begin{itemize}
 			\item Effect: Describe the effect of calling this operation.
 			\item Exceptions: None

@@ -98,9 +98,6 @@
     lookup communication channel \\
     users choose delivery method?
 
-    \subparagraph{OtherFunctionality1}
-    Responsible for delivery of notifications.
-
     \subparagraph{PluggableDeviceDB}
     store data related to pluggable devices
 
@@ -315,7 +312,7 @@
         \end{itemize}
     \end{itemize}
 
-    \subsubsection{OtherFunctionality1}
+    \subsubsection{External notification delivery serivce}
     \begin{itemize}
         \item NotificationDeliveryMgmt
         \begin{itemize}
@@ -425,81 +422,112 @@
 \subsection{Verify and refine}
     Completely handled: Av3, P2, UC11, UC14, UC15, UC18 \\
 
-    This section describes per component which (parts of) the remaining
+    \noindent This section describes per component which (parts of) the remaining
     requirements it is responsible for.
 
-    \paragraph{PluggableDeviceFacade}
+    \paragraph{ApplicationManager}
         \begin{itemize}
-        	\item \emph{Z1}: name
-        	\item \emph{UCd}: name
+            \item  \emph{Av2}: Application failure \\
+                   Prevention: a, b \\
+                   Detection: a, b, c \\
+                   Resolution: a, b, c
+           \item \emph{P1}: Large number of users: c
+           \item \emph{M1}: Integrate new sensor or actuator manufacturer: 1.c, 2.a
+           \item \emph{M2}: Big data analytics on pluggable data and/or application usage data: d, e
+           \item \emph{U1}: Application updates: a, b, c, d
+           \item \emph{U2}: Easy Installation: e
+           \item \emph{U12}: Perform actuation command
+           \item \emph{UC17}: Activate an application: 3, 4
+        \end{itemize}
+
+    \paragraph{Database}
+        \begin{itemize}
+          	\item None
         \end{itemize}
 
     \paragraph{GatewayFacade}
         \begin{itemize}
-        	\item \emph{UCba}: name\\Description which part of the original use case is
-        	the responsibility of this component.
-        \end{itemize}
+            \item \emph{Av1}: Communication between SIoTIP gateway and Online Service \\
+                               Resolution: b, c, d
+            \item \emph{M1}: Integrate new sensor or actuator manufacturer: 1.a, 2.b
+            \item \emph{U2}: Easy Installation: a, c, d
+    \end{itemize}
 
-    \paragraph{HeartbeatProcessor}
+    \paragraph{MoteFacade}
         \begin{itemize}
-            \item: \emph{UCX or QAX}: which part of the original use case is
-                                      the responsibility of this component
-        \end{itemize}
-
-    \paragraph{PluggableDeviceManager}
-        \begin{itemize}
-            \item: \emph{UCX or QAX}: which part of the original use case is
-                                      the responsibility of this component
-        \end{itemize}
-
-    \paragraph{RequestHandler}
-        \begin{itemize}
-            \item: \emph{UCX or QAX}: which part of the original use case is
-                                      the responsibility of this component
-        \end{itemize}
-
-    \paragraph{ApplicationManager}
-        \begin{itemize}
-            \item: \emph{UCX or QAX}: which part of the original use case is
-                                      the responsibility of this component
+            \item \emph{M1}: Integrate new sensor or actuator manufacturer: 1.a, 2.b
+            \item \emph{U2}: Easy Installation: b, c, d
+            \item \emph{UC4}: Install mote: 1, 2
+            \item \emph{UC5}: Uninstall mote: 1
+            \item \emph{UC6}: Insert a pluggable device into a mote: 2
+            \item \emph{UC7}: Remove a pluggable device from its mote: 2
         \end{itemize}
 
     \paragraph{NotificationHandler}
         \begin{itemize}
-            \item: \emph{UCX or QAX}: which part of the original use case is
-                                      the responsibility of this component
+            \item \emph{UC16}: Consult notification message: 5
+            \item \emph{UC17}: Activate an application: 5, 6
         \end{itemize}
 
-Av1: Communication between SIoTIP gateway and Online Service
-Av2: Application failure
-P1: Large number of users
-M1: Integrate new sensor or actuator manufacturer
-M2: Big data analytics on pluggable data and/or application usage data
-U1: Application updates
-U2: Easy installation
+    \paragraph{OtherFunctionality}
+        \begin{itemize}
+            \item \emph{Av1}: Communication between SIoTIP gateway and Online Service \\
+                               Detection: a, b, c, d
+                               Resolution: a
+           	\item \emph{P1}: Large number of users: a
+            \item \emph{M1}: Integrate new sensor or actuator manufacturer: 1.d
+            \item \emph{M2}: Big data analytics on pluggable data and/or application usage data: a
+            \item \emph{U2}: Easy Installation: e
+            \item \emph{UC1}: Register a customer organisation
+            \item \emph{UC2}: Register an end-user
+            \item \emph{UC3}: Unregister an end user
+            \item \emph{UC4}: Install mote: 3
+            \item \emph{UC5}: Uninstall mote: 2.b
+            \item \emph{UC6}: Insert a pluggable device into a mote: 3: topology part; alternative 3a.1.b
+            \item \emph{UC7}: Remove a pluggable device from its mote: 3.b
+            \item \emph{UC8}: Initialise a pluggable device: 1, 2, 4
+            \item \emph{UC9}: Configure pluggable device access rights
+            \item \emph{UC10}: Consult and configure the topology
+            \item \emph{UC13}: Configure pluggable device
+            \item \emph{UC16}: Consult notification message: 1, 2, 3, 4
+            \item \emph{UC17}: Activate an application: 1, 2
+            \item \emph{UC19}: Subscribe to application
+            \item \emph{UC20}: Unsubscribe from application
+            \item \emph{UC21}: Send invoice
+            \item \emph{UC22}: Upload an application
+            \item \emph{UC23}: Consult application statistics
+            \item \emph{UC24}: Consult historical data
+            \item \emph{UC25}: Access topology and available devices
+            \item \emph{UC26}: Send application command or message to external front-end
+            \item \emph{UC27}: Receive application command or message to external front-end
+            \item \emph{UC28}: Log in
+            \item \emph{UC29}: Log out
+        \end{itemize}
 
-UC1: Register a customer organisation
-UC2: Register an end-user
-UC3: Unregister an end-user
-UC4: Install mote
-UC5: Uninstall mote
-UC6: Insert a pluggable device into a mote
-UC7: Remove a pluggable device from its mote
-UC8: Initialise a pluggable device
-UC9: Configure pluggable device access rights
-UC10: Consult and configure the topology
-UC12: Perform actuation command
-UC13: Configure pluggable device
-UC16: Consult notification message
-UC17: Activate an application
-UC19: Subscribe to application
-UC20: Unsubscribe from application
-UC21: Send invoice
-UC22: Upload an application
-UC23: Consult application statistics
-UC24: Consult historical data
-UC25: Access topology and available devices
-UC26: Send application command or message to external front-end
-UC27: Receive application command or message from external front-end
-UC28: Log in
-UC29: Log out
+    \paragraph{PluggableDeviceDB}
+        \begin{itemize}
+            \item \emph{M1}: Integrate new sensor or actuator manufacturer: 1.a, 1.b, 2.b
+            \item \emph{M2}: Big data analytics on pluggable data and/or application usage data: b
+        \end{itemize}
+
+    \paragraph{PluggableDeviceFacade}
+        \begin{itemize}
+        	\item \emph{U2}: Easy Installation: d
+        \end{itemize}
+
+    \paragraph{PluggableDeviceManager}
+        \begin{itemize}
+            \item \emph{U2}: Easy Installation: c, d
+            \item \emph{UC4}: Install mote: 4
+            \item \emph{UC5}: Uninstall mote: 2
+            \item \emph{UC6}: Insert a pluggable device into a mote: 3: uninitialised part; alternative 3a.1 3a.2 3a.4; 4
+            \item \emph{UC7}: Remove a pluggable device from its mote: 3.a, 3.c
+            \item \emph{UC8}: Initialise a pluggable device: 3,
+        \end{itemize}
+
+    \paragraph{PluggableDeviceDataScheduler}
+        \begin{itemize}
+            \item \emph{P1}: Large number of users: b
+            \item \emph{M1}: Integrate new sensor or actuator manufacturer: 1.a, 2.b
+            \item \emph{M2}: Big data analytics on pluggable data and/or application usage data: b, c
+        \end{itemize}
