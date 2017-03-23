@@ -1,17 +1,14 @@
+update ADD1 to remove everything related to P2
+update ADD2 to add everything related to P2
+
 ADD1:
     descriptions of "architectural design"
     descriptions of components
     alternatives: think of some random shit
+    Verify and refine
 
 ADD2:
-    Module to decompose
-    Selected architectural drivers
     Architectural design
         Alternatives considered
         Alternatives for solution
-    Instantiation and allocation of functionality
-        Decomposition
-        Deployment
-    Interfaces for child modules
-    Data type definitions
     Verify and refine
