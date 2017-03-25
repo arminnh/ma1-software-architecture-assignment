@@ -53,17 +53,32 @@
         heartbeat/timestamp tactic
 
     \paragraph{Application deactivation for Av3}
-        same as Application redundancy settings for Av3? \\
-        degradation/removal from service tactic
+        Applications need pluggable devices for the proper functioning. 
+        When the pluggable devices fail, \texttt{the PluggableDeviceManager} sends 
+        command and \texttt{the ApplicationManager} deactivate one or more applications 
+        using those devices. Availability and reliability of the shared platform offered to applications is 
+        important. To reduce the risk of frequent application downtime, 
+        an application provider can require a redundancy in the available 
+        pluggable devices. Multiple sensors or actuators for one application can be in one room.
+        If one of sensor or actuator failed application just start using 
+        the other available sensor or actuator in room. 
 
     \paragraph{Notifications for Av3}
-        from application manager to cust orgs and apps \\
-        from gateway to infr owners \\
-        notifications tactic
+        One of the important things for Av3 is notification. In the case 
+        of failure of sensor, it is mandatory to inform all involved parties
+         about the failure to resolve the problem as soon as possible. 
+        \texttt{The NotificationHandler} notify an infrastructure owner of 
+        any persistent pluggable device or mote failures. The infrastructure 
+        owner has to receive the notification in ten seconds in case mote failed or 
+        in thirty seconds if a pluggable device failed. Notification is also send 
+        to a customer organisation, when one or more of their application are 
+        susspended or re-activated. Applications using a failed  pluggable 
+        device should be also notified via \texttt{The NotificationHandler}.
 
     \subsubsection{Alternatives considered}
-        \paragraph{Alternatives for X}
-            A discussion of the alternative solutions and why that were not selected.
+        \paragraph{Alternatives for application deactivation for Av3}
+            As mentioned above, when some of pluggable devices fail the applation can operate
+            normally, because of using the next available sensor. ???? could be?
 
 
 \subsection{Instantiation and allocation of functionality}

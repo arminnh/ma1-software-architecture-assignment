@@ -19,7 +19,14 @@
     \end{itemize}
 
     \paragraph{Rationale}
-        Why we do dis???? One was high priority and P2 is related. THey are family and family belongs together.
+    We choose M1 because it belogs to the quality attributes with hight priority. M1 is about
+    integration of new sensor or actuator. And it is very important to easily add new devices, because market grows very fast
+    and new applications are developing. So we want to focus on this quality attribute
+    in the early stages and then based on that create other functionality and components.
+    And we also choose P2 because it is related to M1. M1 required minimal changes to data processing and storage,
+    so we have to deal with good solution for this topic.  
+        
+     %Why we do dis???? One was high priority and P2 is related. THey are family and family belongs together.
 
 
 \subsection{Architectural design}
@@ -38,7 +45,11 @@
         to the database that contains all different types of sensor data.
 
     \paragraph{Data conversions for M1}
-        PluggableDeviceDataConverter
+        \texttt{The PluggableDeviceDataConverter} is resposible for converting data 
+         in system, for instance converting temperature in degrees Fahrenheit 
+         to degrees Celsius. System has to work with relevant data, 
+         otherwise problem may arise. 
+         
 
     \paragraph{Usage of new data by applications for M1}
         This is possible through the RequestData interface provided by PluggableDeviceDataScheduler.
