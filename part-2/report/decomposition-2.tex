@@ -60,15 +60,14 @@
 
     \paragraph{M1: Data conversions}
         The pluggable data processing subsystem should be extended with relevant data conver-
-        sions, e.g. converting temperature in degrees Fahrenheit to degrees Celsius.\
+        sions, e.g. converting temperature in degrees Fahrenheit to degrees Celsius.
         \texttt{The PluggableDeviceDataConverter} is resposible for converting data
-         in system, for instance converting temperature in degrees Fahrenheit
-         to degrees Celsius. System has to work with relevant data,
-         otherwise problem may arise.
+        in system, for instance converting temperature in degrees Fahrenheit
+        to degrees Celsius. System has to work with relevant data,
+        otherwise problem may arise.
 
     \paragraph{M1: Usage of new data by applications}
         The available applications can be updated to use any new pluggable devices.
-
         This is possible through the RequestData interface provided by PluggableDeviceDataScheduler.
         The application manager can get device data from the PluggableDeviceDB and return this
         data to applications in the PluggableDeviceData datatype. This datatype can easily be
@@ -129,13 +128,24 @@
         \noindent The responsibilities of the components are as follows:
 
     \subparagraph{PluggableDeviceDB}
-        store data related to pluggable devices
+        stores data related to pluggable devices. In \texttt{the PluggableDeviceDB}
+        is stored basic information about devices.
 
     \subparagraph{PluggableDeviceDataScheduler}
-        scheduling, detect overload mode, store data, forward data
+        \texttt{the PluggableDeviceDB} receives a large amount of parallel request
+        and it is neccesary to handle with that.
+        \texttt{The PluggableDeviceDataScheduler} is resposnsible for scheduling jobs
+        that interact with database. Jobs are processed in a first-in-first-out order normaly.
+        In case te overload mode is detected, jobs are proccesed in  the  order
+        that  returns  the  system. In case the data has to be saved,
+        \texttt{The PluggableDeviceDataScheduler} call method for saving the data, that
+         \texttt{the PluggableDeviceDB} provides.
+
 
     \subparagraph{PluggableDeviceDataConverter}
-        M1: conversion of new type of data of new type of device
+       is component for conversions of new type of data of new type of device (M1).
+       For instance converting temperature is very useful in the system.
+
 
     % \paragraph{Behaviour}
         % A SEQUENCE DIAGRAM WOULD BE USEFUL FOR
