@@ -50,7 +50,6 @@
          to degrees Celsius. System has to work with relevant data, 
          otherwise problem may arise. 
          
-
     \paragraph{Usage of new data by applications for M1}
         This is possible through the RequestData interface provided by PluggableDeviceDataScheduler.
         The application manager can get device data from the PluggableDeviceDB and return this
@@ -90,13 +89,24 @@
         \end{figure}
 
     \subparagraph{PluggableDeviceDB}
-        store data related to pluggable devices
+        stores data related to pluggable devices. In \texttt{the PluggableDeviceDB}
+        is stored basic information about devices.
 
     \subparagraph{PluggableDeviceDataScheduler}
-        scheduling, detect overload mode, store data, forward data
+        \texttt{the PluggableDeviceDB} receives a large amount of parallel request
+        and it is neccesary to handle with that. 
+        \texttt{The PluggableDeviceDataScheduler} is resposnsible for scheduling jobs
+        that interact with database. Jobs are processed in a first-in-first-out order normaly.
+        In case te overload mode is detected, jobs are proccesed in  the  order  
+        that  returns  the  system. In case the data has to be saved,
+        \texttt{The PluggableDeviceDataScheduler} call method for saving the data, that
+         \texttt{the PluggableDeviceDB} provides.
+        
 
     \subparagraph{PluggableDeviceDataConverter}
-        M1: conversion of new type of data of new type of device
+       is component for conversions of new type of data of new type of device (M1).
+       For instance converting temperature is very useful in the system.
+       
 
     % \paragraph{Behaviour}
         % A SEQUENCE DIAGRAM FOR UC11 WOULD BE ACTUALLY VERY USEFUL (shows how the gateway checks if devices are initialised)
@@ -347,4 +357,4 @@
         \begin{itemize}
             \item \emph{P1}: Large number of users: b
             \item \emph{M2}: Big data analytics on pluggable data and/or application usage data: b, c
-        \end{itemize}
+        \end{itemize} 
