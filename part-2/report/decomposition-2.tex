@@ -74,11 +74,9 @@
         updated for new types of pluggable devices.
 
     \paragraph{M1: Configuration of new device by infrastructure owners}
-        Initialisation: IO triggers the initialise() method which has been
-        updated for the new pluggable device -> OK\\
-        Configure access rights: has absolutely fucking nothing to do with the
-        new sensor type -> OK \\
-        Consult and configure topology: same as configure access rights
+    The infrastructure owner send command to the system to initialize the new type 
+    of pluggable device (UC8: Initialise a pluggable device) and the initialise() method, which has been
+    updated for the new pluggable device, will be called.
 
     \paragraph{P2: Scheduling}
         - In normal mode, the database processes incoming requests in a first-in-first-out order.
@@ -101,12 +99,12 @@
         The processing of (large amounts of) requests concerning pluggable data has no impact on
         requests concerning other data, e.g. available applications.
 
-        "pluggable data has no impact on other data"
-        two databases
-
     \subsubsection{Alternatives considered}
-        \paragraph{Alternatives for solution}
-            A discussion of the alternative solutions and why that were not selected.
+        \paragraph{P2: Alternatives for Scheduling}
+        In overload mode, a high priority process will run before a low priority process. 
+        It can cuase that the low priority process will never be scheduled.
+        Our scheduling algorithms will contain code to guarantee that all processes will 
+        receive a minimum amount of each important resource (e.g. CPU time) in order to avoid starvation.
 
 
 \subsection{Instantiation and allocation of functionality}
