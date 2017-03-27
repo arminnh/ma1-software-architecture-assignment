@@ -42,14 +42,30 @@
     %     notifications to 3 stakeholders, degradation/removal from service -> turn off apps
 
     \paragraph{Av3: Failure detection}
-        A SIoTIP gateway can autonomously detect failure of one of its
-        connected motes and pluggable devices.
-        timers? \\
-        heartbeat/timestamp tactic
+        Gateway need to be able to autonomously detect failure of one of its
+        connected motes and pluggable devices. This is achieved by making motes
+        send heartbeats to their connected gateways. The gateways can
+        then monitor their connected devices. The heartbeats contain a list
+        of devices that are connected/operational at the moment the mote sends
+        the heartbeat. Each gateway makes use of a \texttt{PluggableDeviceManager}
+        component to monitor the devices. This component uses timers to keep track
+        of how long it has been since a device has sent a heartbeat or occured in
+        a list of connected devices. Once a timer expires, this is treated as
+        a failure. \\
+        A mote has failed when 3 consecutive heartbeats do not arrive within 1
+        second of their expected arrival time. \\
+        A pluggable device has failed when it does not occur in a heartbeat of the
+        mote in which it is expected to be in. This is is detected within 2
+        seconds after the arrival of the heartbeat.
 
     \paragraph{Av3: Application deactivation}
+
         Applications that can no longer operate due to failure of a pluggable
         device or mote should be automatically suspended and re-activated once the failure is resolved.
+
+            – Applications are suspended within 1 minute after detecting the failure of an essential pluggable
+            device.
+            – Application are reactivated withing 1 minute after the failure is resolved.
 
         Applications need pluggable devices for the proper functioning.
         When the pluggable devices fail, \texttt{the PluggableDeviceManager} sends
@@ -66,6 +82,11 @@
         failures. Customer organisations should be notified if one or more of their applications is suspended
         or re-activated. Applications using a failed pluggable device or any device on a failed mote should be
         notified.
+    – Infrastructure owners are notified within 1 minute after detecting a mote outage lasting at
+    least 10 seconds.
+    – Infrastructure owners are notified within 1 minute after the detection of the unavailability of
+    a pluggable device for 30 seconds.
+    – Applications are notified of the failure of relevant pluggable devices within 10 seconds.
         One of the important things for Av3 is notification. In the case
         of failure of sensor, it is mandatory to inform all involved parties
          about the failure to resolve the problem as soon as possible.
@@ -82,9 +103,23 @@
         require redundancy in the available pluggable devices.
 
     \subsubsection{Alternatives considered}
-        \paragraph{Av3: Alternatives for application deactivation}
-            As mentioned above, when some of pluggable devices fail the applation can operate
-            normally, because of using the next available sensor. ???? could be?
+        \paragraph{Av3: Failure detection}
+            An alternative would have been to move the \texttt{PluggableDeviceManager}
+            component from gateways to the Online Service. This solution would make the
+            gateways do less work, but would be very unscalable. The reason is
+            that as the customer base (and thus the amount of devices) increases,
+            the Online Service would need to keep track of huge amounts of devices.
+            This would also flood the network to the Online Service with heartbeats.
+
+        \paragraph{Av3: Failure detection}
+            Another alternative for failure detection could have been the use of
+            a Ping/Echo mechanism instead of Heartbeats. Pings could then be used
+            to check if a device is currently operational. However, as a device could
+            not be operational for a moment because of e.g. interference, timers
+            would still be necessary to keep track of operational devices. We opted
+            to use heartbeats, as this would reduce the amount of data sent over
+            the network used by the motes, and as motes would have to do slightly
+            more work to process each Ping request in order to generate a reply.
 
 
 \subsection{Instantiation and allocation of functionality}
