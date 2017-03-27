@@ -82,9 +82,19 @@
         require redundancy in the available pluggable devices.
 
     \subsubsection{Alternatives considered}
-        \paragraph{Av3: Alternatives for application deactivation}
-            As mentioned above, when some of pluggable devices fail the applation can operate
-            normally, because of using the next available sensor. ???? could be?
+        \paragraph{Av3: Alternatives for notifications}
+            The notifications are very important part of our system to faster
+            solve the problems, when something gets wrong. Our SIoTIP sytem 
+            is using external delivery service for sending notifications. 
+            Sometimes external services could not be available and it can cuase
+            problems. The more our system is dependend on external services the more 
+            is our system unreliable. Thus, when we want to offer more reliable 
+            platform to our clinets, it is useful to implement our own service
+            that can send notifications. This will require adding now enums and tables 
+            in \texttt{the Database} and we will implement \texttt{Factory pattern} for this purpose. 
+            Each message channel will have its own SendMessage 
+            implementation and we can easily add a new message channel with little effort
+            in the future.
 
 
 \subsection{Instantiation and allocation of functionality}
