@@ -121,6 +121,20 @@
             the network used by the motes, and as motes would have to do slightly
             more work to process each Ping request in order to generate a reply.
 
+        \paragraph{Av3: Notifications}
+            The notifications are very important part of our system to faster
+            solve the problems, when something gets wrong. Our SIoTIP sytem
+            is using external delivery service for sending notifications.
+            Sometimes external services could not be available and it can cuase
+            problems. The more our system is dependend on external services the more
+            is our system unreliable. Thus, when we want to offer more reliable
+            platform to our clinets, it is useful to implement our own service
+            that can send notifications. This will require adding now enums and tables
+            in \texttt{the Database} and we will implement \texttt{Factory pattern} for this purpose.
+            Each message channel will have its own SendMessage
+            implementation and we can easily add a new message channel with little effort
+            in the future.
+
 
 \subsection{Instantiation and allocation of functionality}
     This section describes the components which instantiate our solutions described
