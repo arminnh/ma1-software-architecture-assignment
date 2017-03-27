@@ -35,76 +35,80 @@
 \subsection{Architectural design}
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
-    % Tactics:
-    %     Limit event response? reply within response measure deadlines
-    %     Prioritize events
-    %     Introduce concurrency
-    %     Schedule resources
 
-    % Tactics M1:
-    %     reduce size of modules: split module
-
-    \paragraph{M1: Handling new types of pluggable devices}
-        The new types of sensor or actuator data should be transmitted, processed and stored,
-        and should be made available to applications. The infrastructure managers must be able to initialize the new type of pluggable device
-        (UC8 : Initialise a pluggable device), configure access rights for these devices (UC9 : Con-
-        figure pluggable device access rights), and view detailed information about the new type
-        of pluggable device (UC10 : Consult and configure the topology).
-
-        The developers have to make changes to: component1, component2, datatype X.
-        The new type of sensor needs to be able to be initialised so that it can send data.
-        Thus, the PluggableDeviceFacade code that initialises devices should be updated for
-        each new type of sensor. The PluggableDeviceData datatype should be updated to
-        represent the new type of data. In this case, the new type will have to be added
-        to the database that contains all different types of sensor data.
-
-    \paragraph{M1: Data conversions}
-        The pluggable data processing subsystem should be extended with relevant data conver-
-        sions, e.g. converting temperature in degrees Fahrenheit to degrees Celsius.
-        \texttt{The PluggableDeviceDataConverter} is resposible for converting data
-        in system, for instance converting temperature in degrees Fahrenheit
-        to degrees Celsius. System has to work with relevant data,
-        otherwise problem may arise.
+    \paragraph{M1: Data conversion}
+        With new types of devices, the pluggable data processing subsystem
+        should be extended with relevant data conversions,
+        e.g. converting temperature in degrees Fahrenheit to degrees Celsius. \\
+        The \texttt{PluggableDeviceDataConverter} is put in place to handle the
+        task of converting pluggable device data to data of a different type in the system.
+        This component can easily be modified for new types of data simply by
+        adding a new conversion method for the new.
 
     \paragraph{M1: Usage of new data by applications}
-        The available applications can be updated to use any new pluggable devices.
-        This is possible through the RequestData interface provided by PluggableDeviceDataScheduler.
-        The application manager can get device data from the PluggableDeviceDB and return this
-        data to applications in the PluggableDeviceData datatype. This datatype can easily be
+        The available applications in the system can be updated to use any
+        new pluggable devices. \\
+        This is made possible by the RequestData
+        interface provided by \texttt{PluggableDeviceDataScheduler}.
+        Data of the new type of device can be requested in the same way
+        as for older devices: by using the device's unique id.
+        The application manager can get pluggable device data from the
+        \texttt{PluggableDeviceDB} and return this data to applications in
+        the PluggableDeviceData datatype. This datatype can easily be
         updated for new types of pluggable devices.
 
-    \paragraph{M1: Configuration of new device by infrastructure owners}
-    The infrastructure owner send command to the system to initialize the new type 
-    of pluggable device (UC8: Initialise a pluggable device) and the initialise() method, which has been
-    updated for the new pluggable device, will be called.
-
     \paragraph{P2: Scheduling}
-        - In normal mode, the database processes incoming requests in a first-in-first-out order.
-        - If the system fails to comply to the deadlines specified below, it goes in overload mode: requests
-            are handled in the order that returns the system to normal mode the fastest, taking into
-            account:
-            ∗ the nature of the requests: storing new pluggable data (UC11 : Send pluggable device
-            data) has priority over specific lookup queries (e.g. retrieving most recent measurement
-            for a few sensors), which in turn have priority over broad queries (e.g. retrieving all sensor
-            data for the last month).
-            ∗ the priority of an application: requests from applications marked as critical by their sub-
-            scribers are processed before non-critical applications.
-        - Also a mechanism should be in place to avoid starvation of any type of request.
-
-        dynamic priority scheduling \\
-        tactics: schedule resource, prioritize events, also limit event response?\\
-        starvation avoidance
+        The pluggable data processing subsystem needs to be able to run in normal
+        or overload mode, depending on whether or not the system can process
+        requests within the deadlines given in the quality requirement. Also,
+        a mechanism should be in place to avoid starvation of any type of request. \\
+        The \texttt{PluggableDeviceDataScheduler} is used to deal with this problem.
+        It is responsible for scheduling requests that wish to interact with
+        the \texttt{PluggableDeviceDB}. In normal mode, the system processes
+        incoming requests in a FIFO order. In overload mode, the requests are
+        given a priority based on what the request is for and what the source
+        of the request is. The requests are then not simply processed in an
+        order based on their priorities, but an aging technique is to be used
+        such that starvation will be avoided. Thus, in overload mode,
+        requests are processed in an order based on a combination of the
+        priorities of the requests and the age of the requests.
 
     \paragraph{P2: Pluggable data separation}
-        The processing of (large amounts of) requests concerning pluggable data has no impact on
-        requests concerning other data, e.g. available applications.
+        The processing of (large amounts of) requests concerning pluggable
+        data has no impact on requests concerning other data, e.g. available applications. \\
+        In order to statisfy this constraint, all data directly related to
+        pluggable data has been separated into the \texttt{PluggableDeviceDB}.
+        All requests concerning pluggable data will be handled by this new
+        component. \texttt{PluggableDeviceDB} will run on a node different
+        from the node that the \texttt{Datbase} component runs on. This way
+        requests concerning pluggable will have no impact on
+        requests concerning other data.
 
-    \subsubsection{Alternatives considered}
-        \paragraph{P2: Alternatives for Scheduling}
-        In overload mode, a high priority process will run before a low priority process. 
-        It can cuase that the low priority process will never be scheduled.
-        Our scheduling algorithms will contain code to guarantee that all processes will 
-        receive a minimum amount of each important resource (e.g. CPU time) in order to avoid starvation.
+    \paragraph{M1: Handling new types of pluggable devices}
+        The new types of sensor or actuator data should be transmitted,
+        processed and stored, and should be made available to applications.
+        The infrastructure managers must be able to initialize the new type
+        of pluggable device, configure access rights for these devices, and
+        view detailed information about the new type of pluggable device. \\
+        The components created thus far have been created with high cohesion in
+        mind so that updating them for new devices would be relatively straightforward.
+        In order for this constraint to be satisfied, changes have to be made to
+        the following elements:
+        \begin{itemize}
+            \item \emph{PluggableDeviceFacade}: This component needs to be updated
+                  so that the new type of device can be initialised and configured,
+                  and thus so that the device's data can be sent to the system.
+            \item \emph{PluggableDeviceData}: Depending on how this data type
+                  is implemented, it might need an update in order for it
+                  to represent possible new data types (for example
+                  Temperature Filipcikova) and for the new data types to be
+                  serialized.
+            \item \emph{PluggableDeviceDB}: The database needs to be updated
+                  so that information can be retrieved about the new types
+                  of sensors and the new types of data. Data related to the
+                  displaying of sensor data will also need to be updated.
+            \item \emph{PluggableDeviceConverter}: see above.
+        \end{itemize}
 
 
 \subsection{Instantiation and allocation of functionality}
@@ -125,28 +129,26 @@
 
         \noindent The responsibilities of the components are as follows:
 
-    \subparagraph{PluggableDeviceDB}
-        stores data related to pluggable devices. In \texttt{the PluggableDeviceDB}
-        is stored basic information about devices.
+    \subparagraph{PluggableDeviceDataConverter}
+        The \texttt{PluggableDeviceDataConverter} is resposible for converting
+        pluggable device data in the data processing subsystem. (M1)
 
     \subparagraph{PluggableDeviceDataScheduler}
-        \texttt{the PluggableDeviceDB} receives a large amount of parallel request
-        and it is neccesary to handle with that.
-        \texttt{The PluggableDeviceDataScheduler} is resposnsible for scheduling jobs
-        that interact with database. Jobs are processed in a first-in-first-out order normaly.
-        In case te overload mode is detected, jobs are proccesed in  the  order
-        that  returns  the  system. In case the data has to be saved,
-        \texttt{The PluggableDeviceDataScheduler} call method for saving the data, that
-         \texttt{the PluggableDeviceDB} provides.
+        Responsible for scheduling incoming read and write requests for
+        pluggable device data. Monitors throughput of requests and switches
+        between normal and overload mode when appropriate. Avoids starvation
+        of any type of request. (P2)
 
-    \subparagraph{PluggableDeviceDataConverter}
-       is component for conversions of new type of data of new type of device (M1).
-       For instance converting temperature is very useful in the system.
+    \subparagraph{PluggableDeviceDB}
+        Database dedicated to pluggable device data. (P2)
+
+    \subparagraph{PluggableDeviceFacade}
+        Responsible for sending pluggable device data to \texttt{MoteFacade}.
+        Needs to be initialised in order for the data to be used/stored. (UC11)
 
     % \paragraph{Behaviour}
         % A SEQUENCE DIAGRAM WOULD BE USEFUL FOR
         % UC11: shows how the gateway checks if devices are initialised
-        % UC14: shows how applications can get deactivated
 
     \paragraph{Deployment}
         Figure \ref{fig:it2-depl_main} shows the allocation of components
@@ -154,7 +156,7 @@
 
         \begin{figure}[!h]
         	\centering
-        	\includegraphics[width=1\textwidth]{deployment-diagram-2}
+        	\includegraphics[width=0.8\textwidth]{deployment-diagram-2}
         	\caption{Deployment diagram of this decomposition.
         	}\label{fig:it2-depl_main}
         \end{figure}
@@ -181,7 +183,7 @@
                 \item \texttt{void sendData(PluggableDeviceData data)}
                 \begin{itemize}
                     \item Effect: Send pluggable device data to an application that wants to use it
-                    %\item Created for:
+                    \item Created for: UC11: system relays data to applications \\
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -193,7 +195,8 @@
                 \item \texttt{void sendData(PluggableDeviceData data)}
                 \begin{itemize}
                     \item Effect: Sends pluggable device data to the connected mote.
-                    %\item Created for:
+                    \item Created for: UC11 \\
+                          P2: storing new pluggable data
                 \end{itemize}
             \end{itemize}
 
@@ -202,39 +205,31 @@
                 \item \texttt{void initialiseDevice(int deviceID, PluggableDeviceSettings settings)}
                 \begin{itemize}
                     \item Effect: Initialises a pluggable device for use with the system.
-                    %\item Created for:
-                \end{itemize}
-            \end{itemize}
-
-            \item AppDeviceMgmt, last defined in section \ref{add1-interfaces}
-            \begin{itemize}
-                \item \texttt{void configurePluggableDevice(int deviceID, PluggableDeviceSettings settings)}
-                \begin{itemize}
-                    \item For: Use case 11 step 3.b
-                    \item Effect: Causes certain settings to be set on a pluggable
-                          device that the gateway is connected to.
-                    %\item Created for:
+                    \item Created for: UC11: pluggable device needs to be initialised \\
+                          M1: pluggable device must be able to be initialised
                 \end{itemize}
             \end{itemize}
         \end{itemize}
 
     \subsubsection{MoteFacade}
         \begin{itemize}
-            \item PluggableDeviceDataMgmt, last defined in section \ref{add1-interfaces}
+            \item PluggableDeviceDataMgmt
             \begin{itemize}
                 \item \texttt{void sendData(PluggableDeviceData data)}
                 \begin{itemize}
                     \item Effect: Sends pluggable device data to the connected mote.
-                    %\item Created for:
+                    \item Created for: UC11 \\
+                          P2: storing new pluggable data
                 \end{itemize}
             \end{itemize}
 
-            \item PluggableDeviceMgmt
+            \item PluggableDeviceMgmt, last defined in section \ref{add1-interfaces}
             \begin{itemize}
                 \item \texttt{void initialise(int deviceID, PluggableDeviceSettings settings)}
                 \begin{itemize}
                     \item Effect: Initialises a connected pluggable device according to some settings
-                    %\item Created for:
+                    \item Created for: UC11: pluggable device needs to be initialised \\
+                          M1: pluggable device must be able to be initialised
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -246,7 +241,8 @@
                 \item \texttt{void initialise(PluggableDeviceSettings settings)}
                 \begin{itemize}
                     \item Effect: Initialises the pluggable device according to some settings
-                    %\item Created for:
+                    \item Created for: UC11: pluggable device needs to be initialised \\
+                          M1: pluggable device must be able to be initialised
                 \end{itemize}
         	\end{itemize}
         \end{itemize}
@@ -258,10 +254,26 @@
         		\item \texttt{bool isDeviceInitialised(int deviceID)}
         		\begin{itemize}
         			\item Effect: Returns true if the device with id "deviceID" has been initialized.
-        			%\item Created for:
+                    \item Created for: UC11: pluggable device needs to be initialised \\
+                          M1: pluggable device must be able to be initialised
         		\end{itemize}
         	\end{itemize}
         \end{itemize}
+
+
+    \subsubsection{PluggableDeviceDataConverter}
+    \begin{itemize}
+        \item DataConversion
+        \begin{itemize}
+            \item \texttt{PluggableDeviceData convert(int deviceID, PluggableDeviceData data, string type)}
+            \begin{itemize}
+                \item Effect: Converts pluggable device data into other pluggable device
+                      data that contains the same information in a different type
+                \item Created for: M1: data processing subsystem should be
+                      extended with relevant data conversions
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
 
     \subsubsection{PluggableDeviceDataScheduler}
         \begin{itemize}
@@ -270,7 +282,7 @@
                 \item \texttt{List<PluggableDeviceData> requestData(int applicationID, int deviceID, DateTime from, DateTime to)}
                 \begin{itemize}
                     \item Effect: Request data from a specific device in a certain time period
-                    %\item Created for:
+                    \item Created for: P2: requests from applications
                 \end{itemize}
             \end{itemize}
 
@@ -279,7 +291,8 @@
                 \item \texttt{void sendData(PluggableDeviceData data)}
                 \begin{itemize}
                     \item Effect: Sends pluggable device data to the scheduler to be processed.
-                    %\item Created for:
+                    \item Created for: UC11 \\
+                          P2: storing new pluggable data
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -291,17 +304,18 @@
                 \item \texttt{void sendData(PluggableDeviceData data)}
                 \begin{itemize}
                     \item Effect: Sends pluggable device data to the DB to be stored.
-                    %\item Created for:
+                    \item Created for: UC11 \\
+                          P2: storing new pluggable data
                 \end{itemize}
                 \item \texttt{List<PluggableDeviceData> getData(int deviceID, DateTime from, DateTime to)}
                 \begin{itemize}
                     \item Effect: Returns data from a specific device in a certain time period.
-                    %\item Created for:
+                    \item Created for: P2: lookup queries
                 \end{itemize}
                 \item \texttt{List<int> getApplicationsForDevice(int deviceID)}
                 \begin{itemize}
                     \item Effect: Returns a list of applications that can use the device with id "deviceID."
-                    %\item Created for:
+                    \item Created for: UC11: looks up the list of applications that use the pluggable device
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -310,7 +324,14 @@
 \subsection{Data type definitions}
     This section defines new data types that are used in the interface descriptions above.
 
-    \paragraph{DateTime} Represents an instant in time, typically expressed as a date and time of day.
+    \paragraph{PluggableDeviceData}
+               contains data from a pluggable device at a certain point in time
+               (value, type, date) (e.g. a sensor reading, an actuator status)
+   \paragraph{PluggableDeviceSettings}
+              contains settings for a pluggable device (power status,
+              data update rate, ...)
+    \paragraph{DateTime}
+               Represents an instant in time, typically expressed as a date and time of day.
 
 
 \subsection{Verify and refine}

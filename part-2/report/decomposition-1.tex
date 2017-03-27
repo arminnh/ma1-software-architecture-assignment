@@ -156,7 +156,7 @@
         to customer organisations. (Av3)
 
     \subparagraph{Database}
-        General database for data. For example, the Database stores the data
+        General database for data. For example, storage of data
         about notifications.
 
     \subparagraph{GatewayFacade}
@@ -189,7 +189,7 @@
 
         \begin{figure}[!htp]
         	\centering
-        	\includegraphics[width=1.00\textwidth]{deployment-diagram-1}
+        	\includegraphics[width=0.55\textwidth]{deployment-diagram-1}
         	\caption{Deployment diagram of this decomposition.}\label{fig:it1-depl_main}
         \end{figure}
 
@@ -285,23 +285,20 @@
                 \begin{itemize}
                     \item Effect: Lets the gateway know that a timer for pluggable device or mote has expired.
                                   This will generate a notification for an infrastructure owner.
-                    \item Created for: \\
-                          Av3: The infrastructure owner should be notified of
+                    \item Created for: Av3: The infrastructure owner should be notified of
                           any persistent pluggable device or mote failures.
                 \end{itemize}
                 \item \texttt{void deactivateApplicationInstance(int applicationInstanceID)}
                 \begin{itemize}
                     \item Effect: Deactivates a certain application. This could happen when
                                   mandatory pluggable devices for the application are missing.
-                    \item Created for:\\
-                          Av3: automatic suspension/reactivation of applications.
+                    \item Created for: Av3: automatic suspension/reactivation of applications.
                 \end{itemize}
                 \item \texttt{void reactivateApplicationInstance(int applicationInstanceID)}
                 \begin{itemize}
                     \item Effect: Reactivate an application instance. This could happen
                                   automatically after a broken sensor has been replaced.
-                    \item Created for:\\
-                          Av3: automatic suspension/reactivation of applications.
+                    \item Created for: Av3: automatic suspension/reactivation of applications.
                 \end{itemize}
             \end{itemize}
 
@@ -310,8 +307,7 @@
                 \item \texttt{void setPluggableDevicesRequirements(int applicationID, List<PluggableDeviceInfo> devices)}
                 \begin{itemize}
                     \item Effect: Sets an application's requirements for pluggable devices.
-                    \item Created for: \\
-                          Av3: Application providers can design their applications
+                    \item Created for: Av3: Application providers can design their applications
                           such that they explicitly require redundancy in
                           the available pluggable devices.
                 \end{itemize}
@@ -343,7 +339,7 @@
                 \item \texttt{void notify(int userID, String message)}
                 \begin{itemize}
                     \item Effect: Describe the effect of calling this operation.
-                    \item Created for: UV14 \\
+                    \item Created for: UC14 \\
                           Av3: notifications
                 \end{itemize}
             \end{itemize}
@@ -383,7 +379,7 @@
                 \item \texttt{void setPluggableDevicesRequirements(int applicationID, List<PluggableDeviceInfo> devices)}
                 \begin{itemize}
                     \item Effect: Sets an application's requirements for pluggable devices.
-                          Av3: Application providers can design their applications
+                    \item Created for: Av3: Application providers can design their applications
                           such that they explicitly require redundancy in
                           the available pluggable devices.
                 \end{itemize}
@@ -400,23 +396,17 @@
 \subsection{Data type definitions}
     This section defines the data types used in the interface descriptions above.
 
-    \paragraph{PluggableDeviceData}
-              contains data from a pluggable device at a certain point in time
-              (value, type, date) (e.g. a sensor reading, an actuator status)
-    \paragraph{PluggableDeviceSettings}
-              contains settings for a pluggable device (power status,
-              data update rate, ...)
     \paragraph{PluggableDeviceInfo}
-              contains information about a pluggable device (device id,
-              power status, data update rate, ...)
+               contains information about a pluggable device (device id,
+               power status, data update rate, ...)
     \paragraph{NotificationData}
-              contains data about a notification (message text, recipient,
-              communication channel, date, status, source, ...).
+               contains data about a notification (message text, recipient,
+               communication channel, date, status, source, ...).
     \paragraph{ApplicationData}
-              contains data about an application instance (instance id, running status, ...)
+               contains data about an application instance (instance id, running status, ...)
     \paragraph{SubscriptionData}
-              contains data about a subscription (subscription id, subscription status,
-              subscription period, ...).
+               contains data about a subscription (subscription id, subscription status,
+               subscription period, ...).
 
 
 \subsection{Verify and refine}
