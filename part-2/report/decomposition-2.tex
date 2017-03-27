@@ -74,11 +74,9 @@
         updated for new types of pluggable devices.
 
     \paragraph{M1: Configuration of new device by infrastructure owners}
-        Initialisation: IO triggers the initialise() method which has been
-        updated for the new pluggable device -> OK\\
-        Configure access rights: has absolutely fucking nothing to do with the
-        new sensor type -> OK \\
-        Consult and configure topology: same as configure access rights
+    The infrastructure owner send command to the system to initialize the new type 
+    of pluggable device (UC8: Initialise a pluggable device) and the initialise() method, which has been
+    updated for the new pluggable device, will be called.
 
     \paragraph{P2: Scheduling}
         - In normal mode, the database processes incoming requests in a first-in-first-out order.
@@ -100,9 +98,6 @@
     \paragraph{P2: Pluggable data separation}
         The processing of (large amounts of) requests concerning pluggable data has no impact on
         requests concerning other data, e.g. available applications.
-
-        "pluggable data has no impact on other data"
-        two databases
 
     \subsubsection{Alternatives considered}
         \paragraph{P2: Alternatives for Scheduling}
