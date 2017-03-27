@@ -9,11 +9,6 @@ ASK: In use case 11 step 2: The  system  checks  whether  the  pluggable
 
 
 alternatives for:
-    Av3: Failure detection: ping / echo
-    Av3: Application deactivation: no idea or N/A  ::((((
-    Av3: Notifications: no external service?
-    Av3: Application redundancy settings: no idea or N/A  ::((((
-
     M1: Handling new types of pluggable devices: no idea or N/A  ::((((
     M1: Data conversions: no idea or N/A  ::((((
     M1: Usage of new data by applications: no idea or N/A  ::((((

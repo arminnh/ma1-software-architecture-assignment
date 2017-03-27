@@ -36,10 +36,6 @@
 \subsection{Architectural design}\label{sec:architectural-design}
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
-    % Detection:
-    %     Ping/Echo, Monitor, Heartbeat, Timestamp
-    % Resolution:
-    %     notifications to 3 stakeholders, degradation/removal from service -> turn off apps
 
     \paragraph{Av3: Failure detection}
         Gateway need to be able to autonomously detect failure of one of its
@@ -52,55 +48,55 @@
         of how long it has been since a device has sent a heartbeat or occured in
         a list of connected devices. Once a timer expires, this is treated as
         a failure. \\
+
         A mote has failed when 3 consecutive heartbeats do not arrive within 1
         second of their expected arrival time. \\
         A pluggable device has failed when it does not occur in a heartbeat of the
         mote in which it is expected to be in. This is is detected within 2
         seconds after the arrival of the heartbeat.
 
-    \paragraph{Av3: Application deactivation}
+    \paragraph{Av3: Automatic application deactivation and redundancy settings}
+        Applications should be automatically suspended when they can no longer
+        operate due to failure of a pluggable device or mote and reactivated
+        once the failure is resolved. Application providers can design their
+        applications such that they explicitly require redundancy in
+        the available pluggable devices. \\
+        This problem is tackled by the \texttt{PluggableDeviceManager}. It
+        stores the requirements for pluggable devices set by applications for all
+        applications that use the gateway that the the \texttt{PluggableDeviceManager}
+        runs on. When it detects that an application can no longer operate
+        due to failures, it will send a command to the \texttt{ApplicationManager}
+        (via the \texttt{GatewayFacade})
+        to suspend that application. When the required devices are operational
+        again, the \texttt{PluggableDeviceManager} detects this and sends a
+        command to reactivate the application. \\
 
-        Applications that can no longer operate due to failure of a pluggable
-        device or mote should be automatically suspended and re-activated once the failure is resolved.
-
-            – Applications are suspended within 1 minute after detecting the failure of an essential pluggable
-            device.
-            – Application are reactivated withing 1 minute after the failure is resolved.
-
-        Applications need pluggable devices for the proper functioning.
-        When the pluggable devices fail, \texttt{the PluggableDeviceManager} sends
-        command and \texttt{the ApplicationManager} deactivate one or more applications
-        using those devices. Availability and reliability of the shared platform offered to applications is
-        important. To reduce the risk of frequent application downtime,
-        an application provider can require a redundancy in the available
-        pluggable devices. Multiple sensors or actuators for one application can be in one room.
-        If one of sensor or actuator failed application just start using
-        the other available sensor or actuator in room.
+        Applications are suspended within 1 minute after detecting
+        the failure of an essential pluggable device. \\
+        Application are reactivated within 1 minute after the failure is resolved.
 
     \paragraph{Av3: Notifications}
-        The infrastructure owner should be notified of any persistent pluggable device or mote
-        failures. Customer organisations should be notified if one or more of their applications is suspended
-        or re-activated. Applications using a failed pluggable device or any device on a failed mote should be
-        notified.
-    – Infrastructure owners are notified within 1 minute after detecting a mote outage lasting at
-    least 10 seconds.
-    – Infrastructure owners are notified within 1 minute after the detection of the unavailability of
-    a pluggable device for 30 seconds.
-    – Applications are notified of the failure of relevant pluggable devices within 10 seconds.
-        One of the important things for Av3 is notification. In the case
-        of failure of sensor, it is mandatory to inform all involved parties
-         about the failure to resolve the problem as soon as possible.
-        \texttt{The NotificationHandler} notify an infrastructure owner of
-        any persistent pluggable device or mote failures. The infrastructure
-        owner has to receive the notification in ten seconds in case mote failed or
-        in thirty seconds if a pluggable device failed. Notification is also send
-        to a customer organisation, when one or more of their application are
-        susspended or re-activated. Applications using a failed  pluggable
-        device should be also notified via \texttt{The NotificationHandler}.
+        The infrastructure owner should be notified of any persistent
+        pluggable device or mote failures. Customer organisations should be
+        notified if one or more of their applications is suspended or
+        reactivated. Applications using a failed pluggable device or any device
+        on a failed mote should be notified. \\
+        The \texttt{NotificationHandler} was put in place to deal with
+        notifications. Other components can use it to generate notifications for
+        certain users in the system. The \texttt{NotificationHandler} will then
+        insert information relevant to the notification in the database (message,
+        status, date and time, source, ...), and use an external delivery
+        service to deliver the notification to users. The used delivery medium
+        is based on the user's preferences. \\
+        Since they are stored in the database, users can always view
+        their notifications via their dashboard. However, this funcionality is not
+        expanded on in this decomposition yet. \\
 
-    \paragraph{Av3: Application redundancy settings}
-        Application providers can design their applications such that they explicitly
-        require redundancy in the available pluggable devices.
+        Infrastructure owners are notified within 1 minute after detecting a mote outage lasting at
+        least 10 seconds. \\
+        Infrastructure owners are notified within 1 minute after the detection of the unavailability of
+        a pluggable device for 30 seconds. \\
+        Applications are notified of the failure of relevant pluggable devices within 10 seconds.
 
     \subsubsection{Alternatives considered}
         \paragraph{Av3: Failure detection}
@@ -122,18 +118,17 @@
             more work to process each Ping request in order to generate a reply.
 
         \paragraph{Av3: Notifications}
-            The notifications are very important part of our system to faster
-            solve the problems, when something gets wrong. Our SIoTIP sytem
-            is using external delivery service for sending notifications.
-            Sometimes external services could not be available and it can cuase
-            problems. The more our system is dependend on external services the more
-            is our system unreliable. Thus, when we want to offer more reliable
-            platform to our clinets, it is useful to implement our own service
-            that can send notifications. This will require adding now enums and tables
-            in \texttt{the Database} and we will implement \texttt{Factory pattern} for this purpose.
-            Each message channel will have its own SendMessage
-            implementation and we can easily add a new message channel with little effort
-            in the future.
+            Reliable and quick delivery of notifications is crucial to the
+            system in order to solve problems should things go wrong. Currently,
+            the solution is to use a third party service for delivery of
+            notifications. In the case that no external services are found
+            satisfactory, or if this dependency on an external service is
+            unwanted, it is possible to build an internal solution for this.
+            For example, a \texttt{NotificationSender} component could make use
+            of the \texttt{Factory pattern} for different message channels for
+            different delivery methods (each with their own sendNotification method).
+            This solution allows us to easily add new message channels in the
+            future with little effort.
 
 
 \subsection{Instantiation and allocation of functionality}
@@ -154,46 +149,33 @@
         \noindent The responsibilities of the components are as follows:
 
     \subparagraph{ApplicationManager}
-        Responsible for deactivating applications and after this action calls method of
-        \texttt{the NotificationHandler} to send notification to a customer organisation.
-        When \texttt{the ApplicationManager} detects that application uses failed pluggable devices,
-        then the notification is sent to an application.
-
-        set redundancy in the available pluggable devices??
-        (Av3) ???? check mandatory user roles
+        Responsible for activating/deactivating applications, setting
+        pluggable device redundancy requirements on \texttt{PluggableDeviceManager}
+        components, and using \texttt{the NotificationHandler} to send notifications
+        to customer organisations. (Av3)
 
     \subparagraph{Database}
-        General database for other data. For instance the Database storages the data
-        of notifications (Av3).
+        General database for data. For example, the Database stores the data
+        about notifications.
 
     \subparagraph{GatewayFacade}
-        Receives heartbeats from pluggable devices and sends heartbeats/device lists.
-        \texttt{The GatewayFacade} sends commands to \texttt{the ApplicationManager}
-        to shutdown applications, if is it needed. \\
-
-        send notification trigger ???(Av3)\\
-        forward data to applications
+        Main component on the gateway that allows different components to work
+        with each other. E.g. transmits heartbeats from motes to
+        \texttt{PluggableDeviceManager}, transmits commands to shut down applications,
+        triggers notifications to be generated, ...
 
     \subparagraph{MoteFacade}
-        Sends heartbeats from pluggable devices to\texttt{the PluggableDeviceFacade}.
+        Sends heartbeats to the \texttt{GatewayFacade}. Includes a list
+        of connected pluggable devices in the heartbeats. (UC14)
 
     \subparagraph{NotificationHandler}
-        Responsible for send notifications to infrastructure owner, customer organisation
-        and applications (Av3). \\
-        stored by system \(->\) contact DB? \\
-        lookup communication channel \\
-        users choose delivery method?
-
-    \subparagraph{PluggableDeviceFacade}
-        Sends heartbeats to \texttt{the MoteFacade}.
+        Responsible for generation, storage, and delivery of notifications
+        based on users' preferred communication channel. (UC15)
 
     \subparagraph{PluggableDeviceManager}
-        Checks list of devices and see if there are pluggable devices for applications.
-        \texttt{the PluggableDeviceManager} contains application preferences (e.g. amount of sensors required) and
-        can send command to deactivate application.
-        Send information about new/needed hardware is detected to \texttt{the GatewayFacade}, that sends command to
-        reactivate application.
-        check redundancy in the available pluggable devices??? is not the same like first sentence???
+        Monitors connected/operational devices on a gateway. Sends notifications
+        in case of hardware failure. Can send a command to disable or reactivate
+        applications when necessary. (Av3)
 
     % \paragraph{Behaviour}
     % A SEQUENCE DIAGRAM WOULD BE USEFUL FOR
@@ -218,31 +200,24 @@
 
     \noindent Each method shows which (part of a) quality attribute or use case caused
     a need for the method. However, this does not mean that a method is
-    only to be used to satisfy that quality  attribute or use case, it could
+    only to be used to satisfy that quality attribute or use case, it could
     be used for other causes not yet mentioned here.
 
     \subsubsection{ApplicationManager}
         \begin{itemize}
-            \item ForwardData
-            \begin{itemize}
-                \item \texttt{void sendData(PluggableDeviceData data)}
-                \begin{itemize}
-                    \item Effect: Send pluggable device data to an application that wants to use it
-                    \item Created for:
-                \end{itemize}
-            \end{itemize}
-
             \item AppMgmt
             \begin{itemize}
                 \item \texttt{void deactivateApplicationInstance(int applicationInstanceID)}
                 \begin{itemize}
                     \item Effect: Deactivates a running instance of an application.
-                    \item Created for:
+                    \item Created for: UC18 \\
+                          Av3: automatic suspension/reactivation of applications.
                 \end{itemize}
                 \item \texttt{void activateApplicationInstance(int applicationInstanceID)}
                 \begin{itemize}
                     \item Effect: Activates a new instance of an application.
-                    \item Created for:
+                    \item Created for: UC18 \\
+                          Av3: automatic suspension/reactivation of applications.
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -254,18 +229,19 @@
                 \item \texttt{int storeNotification(NotificationData data)}
                 \begin{itemize}
                     \item Effect: Stores a new notification entry in the database. Returns the id of the new notification.
-                    \item Created for:
+                    \item Created for: UC15 \\
+                          Av3: notifications
                 \end{itemize}
                 \item \texttt{void updateNotification(NotificationData data)}
                 \begin{itemize}
                     \item Effect: Updates an existing notification (e.g. change status to "sent").
-                    \item Created for:
+                    \item Created for: UC15
                 \end{itemize}
                 \item \texttt{int lookupNotificationChannelForUser(int userID)}
                 \begin{itemize}
                     \item Effect: Returns the type of communication channel a user prefers.
                                   Different communication channels are mapped to integers.
-                    \item Created for:
+                    \item Created for: UC15
                 \end{itemize}
             \end{itemize}
 
@@ -274,12 +250,13 @@
                 \item \texttt{void updateApplication(ApplicationData data)}
                 \begin{itemize}
                     \item Effect: Updates an application in the database (e.g. change state to 'inactive').
-                    \item Created for:
+                    \item Created for: UC18 \\
+                          Av3: automatic suspension/reactivation of applications.
                 \end{itemize}
                 \item \texttt{void updateSubscription(SubscriptionData data)}
                 \begin{itemize}
                     \item Effect: Updates a subscription in the database (e.g. change state to 'disabled').
-                    \item Created for:
+                    \item Created for: UC18
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -291,7 +268,8 @@
                 \item \texttt{void sendHeartbeat(int moteID, List<PluggableDeviceInfo> devices)}
                 \begin{itemize}
                     \item Effect: Sends a heartbeat to a certain gateway with information about operational devices.
-                    \item Created for:
+                    \item Created for: UC14 \\
+                          Av3: failure detection
                 \end{itemize}
             \end{itemize}
 
@@ -300,47 +278,59 @@
                 \item \texttt{List<DeviceInfo> getConnectedDevices()}
                 \begin{itemize}
                     \item Effect: Describe the effect of calling this operation.
-                    \item Created for:
+                    \item Created for: UC18
                 \end{itemize}
                 \item \texttt{void timerExpired(int deviceID)}
                 \begin{itemize}
                     \item Effect: Lets the gateway know that a timer for pluggable device or mote has expired.
                                   This will generate a notification for an infrastructure owner.
-                    \item Created for:
+                    \item Created for: \\
+                          Av3: The infrastructure owner should be notified of
+                          any persistent pluggable device or mote failures.
                 \end{itemize}
                 \item \texttt{void deactivateApplicationInstance(int applicationInstanceID)}
                 \begin{itemize}
                     \item Effect: Deactivates a certain application. This could happen when
                                   mandatory pluggable devices for the application are missing.
-                    \item Created for:
+                    \item Created for:\\
+                          Av3: automatic suspension/reactivation of applications.
                 \end{itemize}
                 \item \texttt{void reactivateApplicationInstance(int applicationInstanceID)}
                 \begin{itemize}
                     \item Effect: Reactivate an application instance. This could happen
                                   automatically after a broken sensor has been replaced.
-                    \item Created for:
+                    \item Created for:\\
+                          Av3: automatic suspension/reactivation of applications.
                 \end{itemize}
             \end{itemize}
 
             \item AppDeviceMgmt
             \begin{itemize}
+                \item \texttt{void setPluggableDevicesRequirements(int applicationID, List<PluggableDeviceInfo> devices)}
+                \begin{itemize}
+                    \item Effect: Sets an application's requirements for pluggable devices.
+                    \item Created for: \\
+                          Av3: Application providers can design their applications
+                          such that they explicitly require redundancy in
+                          the available pluggable devices.
+                \end{itemize}
                 \item \texttt{bool areEssentialDevicesOperational(int applicationID)}
                 \begin{itemize}
                     \item Effect: Returns true if all essential devices for the application
                                   with id "applicationID" are operational.
-                    \item Created for:
+                    \item Created for: UC18
                 \end{itemize}
             \end{itemize}
         \end{itemize}
 
     \subsubsection{MoteFacade}
         \begin{itemize}
-            \item PluggableDeviceDataMgmt
+            \item PluggableDeviceMgmt
             \begin{itemize}
                 \item \texttt{List<DeviceInfo> getConnectedDevices()}
                 \begin{itemize}
                     \item Effect: Returns a list of information about devices that are connected to the mote.
-                    \item Created for:
+                    \item Created for: UC18
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -352,7 +342,8 @@
                 \item \texttt{void notify(int userID, String message)}
                 \begin{itemize}
                     \item Effect: Describe the effect of calling this operation.
-                    \item Created for:
+                    \item Created for: UV14 \\
+                          Av3: notifications
                 \end{itemize}
             \end{itemize}
 
@@ -361,7 +352,7 @@
                 \item \texttt{void sendAcknowledgement(int notificationID)}
                 \begin{itemize}
                     \item Effect: Sends an acknowledgement to the system for a certain notification.
-                    \item Created for:
+                    \item Created for: UC15
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -373,7 +364,7 @@
                 \item \texttt{void notify(JSONObject data)}
                 \begin{itemize}
                     \item Effect: Deliver a notification to an end user using a specific delivery service.
-                    \item Created for:
+                    \item Created for: UC15
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -385,13 +376,21 @@
         		\item \texttt{void sendHeartbeat(int moteID, List<PluggableDeviceInfo> devices)}
         		\begin{itemize}
         			\item Effect: Send a heartbeat from a mote to check/update timers for operational devices.
-        			\item Created for:
+        			\item Created for: UC14 \\
+                          Av3: failure detection
         		\end{itemize}
+                \item \texttt{void setPluggableDevicesRequirements(int applicationID, List<PluggableDeviceInfo> devices)}
+                \begin{itemize}
+                    \item Effect: Sets an application's requirements for pluggable devices.
+                          Av3: Application providers can design their applications
+                          such that they explicitly require redundancy in
+                          the available pluggable devices.
+                \end{itemize}
         		\item \texttt{bool areEssentialDevicesOperational(int applicationID)}
         		\begin{itemize}
         			\item Effect: Returns true if all essential devices for the application
                                   with id "applicationID" are operational.
-        			\item Created for:
+        			\item Created for: UC18
         		\end{itemize}
         	\end{itemize}
         \end{itemize}
@@ -508,11 +507,6 @@
             \item \emph{UC27}: Receive application command or message to external front-end
             \item \emph{UC28}: Log in
             \item \emph{UC29}: Log out
-        \end{itemize}
-
-    \paragraph{PluggableDeviceFacade}
-        \begin{itemize}
-        	\item \emph{U2}: Easy Installation: d
         \end{itemize}
 
     \paragraph{PluggableDeviceManager}

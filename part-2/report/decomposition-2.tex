@@ -176,6 +176,18 @@
     extension of the interfaces defined in previous sections, unless
     explicitly stated otherwise.
 
+    \subsubsection{ApplicationManager}
+        \begin{itemize}
+            \item ForwardData
+            \begin{itemize}
+                \item \texttt{void sendData(PluggableDeviceData data)}
+                \begin{itemize}
+                    \item Effect: Send pluggable device data to an application that wants to use it
+                    %\item Created for:
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+
     \subsubsection{GatewayFacade}
         \begin{itemize}
             \item MoteDataMgmt, last defined in section \ref{add1-interfaces}
@@ -183,7 +195,7 @@
                 \item \texttt{void sendData(PluggableDeviceData data)}
                 \begin{itemize}
                     \item Effect: Sends pluggable device data to the connected mote.
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
             \end{itemize}
 
@@ -192,7 +204,7 @@
                 \item \texttt{void initialiseDevice(int deviceID, PluggableDeviceSettings settings)}
                 \begin{itemize}
                     \item Effect: Initialises a pluggable device for use with the system.
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
             \end{itemize}
 
@@ -203,7 +215,7 @@
                     \item For: Use case 11 step 3.b
                     \item Effect: Causes certain settings to be set on a pluggable
                           device that the gateway is connected to.
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -215,7 +227,7 @@
                 \item \texttt{void sendData(PluggableDeviceData data)}
                 \begin{itemize}
                     \item Effect: Sends pluggable device data to the connected mote.
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
             \end{itemize}
 
@@ -224,7 +236,7 @@
                 \item \texttt{void initialise(int deviceID, PluggableDeviceSettings settings)}
                 \begin{itemize}
                     \item Effect: Initialises a connected pluggable device according to some settings
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -236,7 +248,7 @@
                 \item \texttt{void initialise(PluggableDeviceSettings settings)}
                 \begin{itemize}
                     \item Effect: Initialises the pluggable device according to some settings
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
         	\end{itemize}
         \end{itemize}
@@ -248,7 +260,7 @@
         		\item \texttt{bool isDeviceInitialised(int deviceID)}
         		\begin{itemize}
         			\item Effect: Returns true if the device with id "deviceID" has been initialized.
-        			\item Created for:
+        			%\item Created for:
         		\end{itemize}
         	\end{itemize}
         \end{itemize}
@@ -260,7 +272,7 @@
                 \item \texttt{List<PluggableDeviceData> requestData(int applicationID, int deviceID, DateTime from, DateTime to)}
                 \begin{itemize}
                     \item Effect: Request data from a specific device in a certain time period
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
             \end{itemize}
 
@@ -269,7 +281,7 @@
                 \item \texttt{void sendData(PluggableDeviceData data)}
                 \begin{itemize}
                     \item Effect: Sends pluggable device data to the scheduler to be processed.
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -281,17 +293,17 @@
                 \item \texttt{void sendData(PluggableDeviceData data)}
                 \begin{itemize}
                     \item Effect: Sends pluggable device data to the DB to be stored.
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
                 \item \texttt{List<PluggableDeviceData> getData(int deviceID, DateTime from, DateTime to)}
                 \begin{itemize}
                     \item Effect: Returns data from a specific device in a certain time period.
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
                 \item \texttt{List<int> getApplicationsForDevice(int deviceID)}
                 \begin{itemize}
                     \item Effect: Returns a list of applications that can use the device with id "deviceID."
-                    \item Created for:
+                    %\item Created for:
                 \end{itemize}
             \end{itemize}
         \end{itemize}
