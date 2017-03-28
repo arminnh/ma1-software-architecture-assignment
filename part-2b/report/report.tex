@@ -32,276 +32,31 @@
 \dominilof
 \fakelistoffigures
 
-\chapter{Architectural Decisions}\label{sec:overview}
-%\input{decomposition-1}
-%\newpage
-%\input{decomposition-2}
+\chapter{Architectural Decisions}\label{ch:overview}
+    \input{architectural-decisions}
+    \clearpage
 
-% Delete the command below to remove the hints and instructions
-\showdecisionsnotes{}
+\chapter{Client-server view (UML Component diagram)}\label{ch:client-server}
+    \minilof
+    \input{client-server-view}
+    \clearpage
 
+\chapter{Decomposition view (UML Component diagram)}\label{ch:decomposition}
+    \minilof
+    \input{decomposition-view}
+    \clearpage
+    % \stoplist[decomp]{lof}
 
+\chapter{Deployment view (UML Deployment diagram)}\label{ch:deployment}
+    \minilof
+    \input{deployment-view}
+    \clearpage
 
-\section{ReqX: Requirement Name}
-\todoinline{Use this section structure for each requirement}
-\subsection*{Key Decisions}
-\todoinline{
-	Briefly list your key architectural decisions.
-	Pay attention to the solutions that you employed (in your own terms or using tactics and/or patterns).}
-\begin{itemize}
-	\item decision 1
-	\item \ldots
-\end{itemize}
-\emph{Employed tactics and patterns:} \ldots
+\chapter{Scenarios}\label{ch:scenarios}
+    \minilof
+    \input{scenarios}
 
-\subsection*{Rationale}
-\todoinline{Describe the design choices related to \emph{ReqX} together with the rationale
-	of why these choices where made.}
-
-\subsection*{Considered Alternatives}
-\paragraph{Alternative(s) for choice 1} Explain what alternative(s) you
-considered for this design choice and why they where not selected.
-
-\subsection*{Deployment Decisions}
-\ldots
-
-\subsection*{Considered Deployment Alternatives}
-\ldots
-
-\section{Other decisions}
-\todoinline{\emph{Optional} If you have made any other important architectural decisions that do not directly fit in the sections of the other qualities you can mention them here.
-
-Follow the same structure as above.}
-\subsection{Decision 1}
-\subsubsection*{KeyDecisions}
-\ldots
-\subsubsection*{Rationale}
-\ldots
-\subsubsection*{Considered Alternatives}
-\ldots
-\subsubsection*{Deployment Decisions}
-\ldots
-\subsubsection*{Considered Deployment Alternatives}
-\ldots
-
-\section{Discussion}
-\todoinline{
-	Use this section to discuss your architecture in retrospect.
-	For example, what are the strong points of your architecture?
-	What are the weak points? Is there anything you would have done otherwise with your current experience?
-	Are there any remarks about the architecture that you would give to your customers?
-	Etc.
-}
-
-
-\chapter{Client-server view (UML Component diagram)}\label{sec:client-server}
-\minilof
-
-% Delete the command below to remove the hints and instructions
-\showcsnotes{}
-
-\todoinline{
-The context diagram of the client-server view:
-Discuss which components communicate with external components and what these external components represent.
-}
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Context diagram of the client-server
-		view.}
-	\caption{Context diagram for the client-server view.
-	}\label{fig:cc-context}
-\end{figure}
-
-\todoinline{The primary diagram and accompanying explanation.}
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Primary diagram of the client-server
-		view.}
-	\caption{Primary diagram of the client-server view.}\label{fig:cs-primary}
-\end{figure}
-
-
-\clearpage
-\chapter{Decomposition view (UML Component diagram)}\label{sec:decomposition}
-\minilof
-
-% Delete the command below to remove the hints and instructions
-\showdecompnotes{}
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Diagram showing decomposition of
-		ComponentX}
-	\caption{Decomposition of \texttt{ComponentX}}\label{fig:decomp-componentx}
-\end{figure}
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Diagram showing decomposition of
-		ComponentX}
-	\caption[Decomposition of \texttt{ComponentY}]{Decomposition of \texttt{ComponentY}.\\
-	This caption contains a longer explanation over multiple lines. This additional explanation is not shown in the list of figures.}\label{fig:decomp-componenty}
-\end{figure}
-
-%\clearpage \stoplist[decomp]{lof}
-\chapter{Deployment view (UML Deployment diagram)}\label{sec:deployment}
-\minilof
-
-% Delete the command below to remove the hints and instructions
-\showdeploynotes{}
-
-\todoinline{
-Describe the context diagram for the deployment view.
-For example, which protocols are used for communication with external systems
-and why?
-}
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Context diagram for the deployment
-		view.}
-	\caption{Context diagram for the deployment view.}\label{fig:depl_context}
-\end{figure}
-
-\todoinline{
-The primary deployment diagram itself.
-This discussion on the parts of the deployment diagram which are crucial for
-achieving certain non-functional requirements, and any alternative deployments that you considered, should be in the architectural decisions chapter.
-}
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Primary diagram for the deployment
-		view.}
-	\caption{Primary diagram for the deployment view.}\label{fig:depl_primary}
-\end{figure}
-
-\clearpage
-\chapter{Scenarios}\label{sec:scenarios}
-\minilof
-
-% Delete the command below to remove the hints and instructions
-\showscenariosnotes{}
-
-\todoinline{
-	Illustrate how your architecture fulfills the most important data flows. As a rule of thumb, focus on the scenario of the assignment. Describe the scenario in terms of architectural components using UML Sequence diagrams and further explain the most important interactions in text. Illustrating the scenarios serves as a quick validation of the completeness of
-	your architecture. If you notice at this point that for some reason, certain functionality or qualities are not addressed sufficiently in your architecture, it suffices to
-	document this, together with a rationale of why this is the case according to you. You do not have to further refine you architecture at this point.}
-
-
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Sequence diagram scenario 1}
-	\caption[Scenario 1]{The system behavior for the first scenario.
-	}\label{fig:seq_scenario1}
-\end{figure}
-
-
-\chapter{Element Catalog and Datatypes}
-% Delete the command below to remove the hints and instructions
-\showcatalognotes{}
-
-\section{Element catalog}\label{app:catalog}
-\todoinline{
-List all components and describe their responsibilities and provided
-interfaces.
-Per interface, list all methods using a Java-like syntax and describe their
-effect and exceptions if any.
-List all elements and interfaces alphabetically for ease of navigation.
-}
-
-\componentItem{ComponentZ}{
-	\begin{itemize}[noitemsep,nolistsep]
-		\item \textbf{Responsibility:} Responsibilities of the component.
-		\item \textbf{Super-component:} The direct super-component, if any.
-		\item \textbf{Sub-components:} the direct sub-components, if any.
-	\end{itemize}
-	\subsubsection*{Provided interfaces}
-	\begin{itemize}[noitemsep,nolistsep]
-		\item InterfaceA
-		\begin{itemize}
-			\item \texttt{returntType1 operation1(ParamType param) throws SomeException}
-			\begin{itemize}
-				\item Effect: Describe the effect of the operation
-			\end{itemize}
-			%
-			\item \texttt{void operation2(ParamType2 param)}
-			\begin{itemize}
-				\item Effect: Describe the effect of the operation
-				\item Exceptions: None
-			\end{itemize}
-		\end{itemize}
-		%
-		\item InterfaceB
-		\begin{itemize}
-			\item \texttt{returntType2 operation3()}
-			\begin{itemize}
-				\item Effect: Describe the effect of the operation
-			\end{itemize}
-		\end{itemize}
-	\end{itemize}
-	}
-
-\componentItem{ComponentA}{
-	\begin{itemize}[noitemsep,nolistsep]
-		\item \textbf{Responsibility:} Responsibilities of the component.
-		\item \textbf{Super-component:} The direct super-component, if any.
-		\item \textbf{Sub-components:} the direct sub-components, if any.
-	\end{itemize}
-	\subsubsection*{Provided interfaces}
-	\begin{itemize}[noitemsep,nolistsep]
-		\item InterfaceC
-		\begin{itemize}
-			\item \texttt{returntType1 operation1(ParamType param) throws SomeException}
-			\begin{itemize}
-				\item Effect: Describe the effect of the operation
-			\end{itemize}
-			%
-			\item \texttt{void operation2(ParamType2 param)}
-			\begin{itemize}
-				\item Effect: Describe the effect of the operation
-			\end{itemize}
-		\end{itemize}
-		%
-		\item InterfaceD
-		\begin{itemize}[noitemsep,nolistsep]
-			\item \texttt{returntType2 operation3()}
-			\begin{itemize}
-				\item Effect: Describe the effect of the operation
-			\end{itemize}
-		\end{itemize}
-	\end{itemize}
-}
-
-% This will alphabetically print the list of components.
-\printComponents
-
-
-\section{Common interfaces}
-\todoinline{If you have any common interfaces used by multiple components you may define them here and refer to them.}
-
-\section{Defined Exceptions}
-\todoinline{Instead of describing the exceptions with each operation, you may define common exceptions here and refer to them from the operation definition.}
-
-\section{Defined data types}\label{app:datatypes}
-\todoinline{
-List and describe all data types defined in your interface specifications. List
-them alphabetically for ease of navigation.
-}
-
-\begin{itemize}
-	\item \texttt{Paramtype1}: Description of data type.
-	\item \texttt{Paramtype2}: Description of data type.
-	\item \texttt{returnType1}: Description of data type.
-\end{itemize}
+\chapter{Element Catalog and Datatypes}\label{ch:elements-datatypes}
+    \input{element-catalog-and-datatypes}
 
 \end{document}
