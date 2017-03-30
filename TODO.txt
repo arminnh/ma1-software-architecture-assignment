@@ -1,5 +1,26 @@
 List of changes for our ADD method
 
+\section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
+    Instead of "Element", we do elements or subsystems to decompose/expand.
+    The elements/subsystems to decompose/expand are the result
+    of the chosen architectural drivers.
+
+\subsection{Selected architectural drivers}
+    \paragraph{Rationale}
+        We leave this out, since the rationale is pretty much always the
+        same. Of the drivers that are left, we chose the drivers that
+        have highest priority assigned to them. Within a class of priority
+        we choose the ones that we believe are most important to the core of the
+        sytem or that will have the biggest impact on end-users.
+        If drivers are grouped, this is because they fulfill similar
+        responsibilities or they will force us to think about the design
+        of a subsystem as a whole (e.g. Decomposition 2).
+
+
+\subsection{Verify and refine}
+    \noindent We will not do this step. We chose to handle all chosen architectural
+    drivers completely in every decomposition.
+
 ==========================================================================
 
 Update current decomposition with given interfaces for pluggable devices (= constraint)
