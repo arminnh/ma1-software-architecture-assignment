@@ -10,7 +10,7 @@
     	\item \emph{Av3}: Pluggable device or mote failure
     \end{itemize}
 
-    \noindent The related functional drivers are:
+    The related functional drivers are:
     \begin{itemize}
     	\item \emph{UC14}: Send heartbeat (Av3) \\
               This use case checks whether or not motes and pluggable devices
@@ -147,7 +147,7 @@
             \label{fig:it1-cc_main}
         \end{figure}
 
-        \noindent The responsibilities of the components are as follows:
+        The responsibilities of the components are as follows:
 
     \subparagraph{ApplicationManager}
         Responsible for activating/deactivating applications, setting
@@ -199,7 +199,7 @@
     in the section above. Per interface, we list its methods by means of its
     syntax. The data types used in these interfaces are defined in the following section. \\
 
-    \noindent Each method shows which (part of a) quality attribute or use case caused
+    Each method shows which (part of a) quality attribute or use case caused
     a need for the method. However, this does not mean that a method is
     only to be used to satisfy that quality attribute or use case, it could
     be used for other causes not yet mentioned here.
@@ -246,7 +246,7 @@
                 \end{itemize}
             \end{itemize}
 
-            \item AppDataMgmt
+            \item AppMgmt
             \begin{itemize}
                 \item \texttt{void updateApplication(ApplicationData data)}
                 \begin{itemize}
@@ -269,8 +269,8 @@
                 \item \texttt{void heartbeat(MoteInfo moteInfo,
                                              List<Tuple<PluggableDeviceID, PluggableDeviceType>> pds)}
                 \begin{itemize}
-                    \item Effect: Periodic heartbeat from the mote to the gateway,
-                          including a list of the PluggableDevices and their DeviceTypes
+                    \item Effect: Sends a heartbeat from the mote to the gateway,
+                          including a list of the pluggable devices and their device types
                           (i.e. those currently plugged into the mote)
                     \item Created for: Given constraint \\
                           UC14 \\
@@ -280,14 +280,14 @@
 
             \item DeviceData
             \begin{itemize}
-                \item \texttt{rcvData(PluggableDeviceID pID, DeviceData data)}
+                \item \texttt{void rcvData(PluggableDeviceID pID, DeviceData data)}
                     \begin{itemize}
-                        \item Effect: Provide pluggable device data to the gateway (Initiated by the device).
+                        \item Effect: Provides pluggable device data to the gateway (Initiated by the device).
                         \item Created for: Given constraint, unused at the moment.
                     \end{itemize}
-                \item \texttt{rrcvDataCallback(PluggableDeviceID pID, DeviceData data, int requestID)}
+                \item \texttt{void rcvDataCallback(PluggableDeviceID pID, DeviceData data, int requestID)}
                     \begin{itemize}
-                        \item Effect: Provide device data to the gateway (Callback of getDataAsync).
+                        \item Effect: Provides device data to the gateway (Callback of getDataAsync).
                         \item Created for: Given constraint, unused at the moment.
                     \end{itemize}
             \end{itemize}
@@ -298,24 +298,25 @@
                                                             PluggableDeviceID pID,
                                                             PluggableDeviceType type)}
                     \begin{itemize}
-                        \item Effect: Notify the gateway that a new PluggableDevice of the given type is connected to the mote.
+                        \item Effect: Notifies the gateway that a new pluggable device
+                              of the given type is connected to the mote.
                         \item Created for: Given constraint, unused at the moment.
                     \end{itemize}
                 \item \texttt{void pluggableDeviceRemoved(PluggableDeviceID pID)}
                     \begin{itemize}
-                        \item Effect: Notify the gateway that a PluggableDevice is removed.
+                        \item Effect: Notifies the gateway that a pluggable device is removed.
                         \item Created for: Given constraint, unused at the moment.
                     \end{itemize}
                 \item \texttt{void pluggableDevicePersisentFailure(int deviceID)}
                     \begin{itemize}
                         \item Effect: Lets the gateway know that a timer for pluggable device or mote has expired.
-                                      This will generate a notification for an infrastructure owner.
+                              This will generate a notification for an infrastructure owner.
                         \item Created for: Av3: The infrastructure owner should be notified of
-                                           any persistent pluggable device or mote failures.
+                              any persistent pluggable device or mote failures.
                     \end{itemize}
                 \item \texttt{List<DeviceInfo> getConnectedDevices()}
                     \begin{itemize}
-                        \item Effect: Describe the effect of calling this operation.
+                        \item Effect: Returns a list of information about devices that are connected to the gateway.
                         \item Created for: UC18
                         \item Tradeoff: send PluggableDeviceID instead of DeviceInfo.
                               If you send DeviceInfo, then ApplicationManager does
@@ -326,7 +327,7 @@
                 \item \texttt{void deactivateApplicationInstance(int applicationInstanceID)}
                     \begin{itemize}
                         \item Effect: Deactivates a certain application. This could happen when
-                                      mandatory pluggable devices for the application are missing.
+                              mandatory pluggable devices for the application are missing.
                         \item Created for: Av3: automatic suspension/reactivation of applications.
                     \end{itemize}
                 \item \texttt{void reactivateApplicationInstance(int applicationInstanceID)}
@@ -363,6 +364,11 @@
                 \begin{itemize}
                     \item Effect: Returns a list of information about devices that are connected to the mote.
                     \item Created for: UC18
+                    \item Tradeoff: send PluggableDeviceID instead of DeviceInfo.
+                          If you send DeviceInfo, then ApplicationManager does
+                          not have to fetch this info.
+                          If you send PluggableDeviceID's, then less bandwidth
+                          is used and the Gateways do less work.
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -373,7 +379,8 @@
             \begin{itemize}
                 \item \texttt{void notify(int userID, String message)}
                 \begin{itemize}
-                    \item Effect: Describe the effect of calling this operation.
+                    \item Effect: Stores a new notification in the system and
+                          causes it to be sent to a user.
                     \item Created for: UC14 \\
                           Av3: notifications
                 \end{itemize}
@@ -395,7 +402,7 @@
             \begin{itemize}
                 \item \texttt{void notify(JSONObject data)}
                 \begin{itemize}
-                    \item Effect: Deliver a notification to an end user using a specific delivery service.
+                    \item Effect: Delivers a notification to an end user using a specific delivery service.
                     \item Created for: UC15
                 \end{itemize}
             \end{itemize}
@@ -407,7 +414,7 @@
         	\begin{itemize}
         		\item \texttt{void sendHeartbeat(int moteID, List<PluggableDeviceInfo> devices)}
         		\begin{itemize}
-        			\item Effect: Send a heartbeat from a mote to check/update timers for operational devices.
+        			\item Effect: Sends a heartbeat from a mote to check/update timers for operational devices.
         			\item Created for: UC14 \\
                           Av3: failure detection
         		\end{itemize}
@@ -445,7 +452,7 @@
 
 
 \subsection{Verify and refine}
-    \noindent The selected architectural drivers have been handled completely
+    The selected architectural drivers have been handled completely
     in this decomposition.
     This section describes per component which (parts of) the remaining
     requirements it is responsible for. If requirements are split in
@@ -475,7 +482,7 @@
     \paragraph{GatewayFacade}
         \begin{itemize}
             \item \emph{Av1}: Communication between SIoTIP gateway and Online Service \\
-                               Resolution: b, c, d
+                              Resolution: b, c, d
             \item \emph{M1}: Integrate new sensor or actuator manufacturer: 1.a, 2.b
             \item \emph{U2}: Easy Installation: a, c, d
             \item \emph{UC11}: Send pluggable device data: 1

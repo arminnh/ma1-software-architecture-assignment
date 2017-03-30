@@ -48,13 +48,13 @@
 \groupname{{\color{red}LastnameA-LastnameB-LastnameC}}
 
 
-\newcommand\warning[2][]{\todo[inline, caption={2do},color=red!30, #1]{\noindent\makebox[\textwidth][c]{%
+\newcommand\warning[2][]{\todo[inline, caption={2do},color=red!30, #1]{\makebox[\textwidth][c]{%
 			\begin{minipage}{0.975\textwidth}\textbf{\faExclamationTriangle{} Attention:} #2\end{minipage}}}}
-\newcommand\note[2][]{\todo[inline, caption={2do},color=orange!20, #1]{\noindent\makebox[\textwidth][c]{%
+\newcommand\note[2][]{\todo[inline, caption={2do},color=orange!20, #1]{\makebox[\textwidth][c]{%
 			\begin{minipage}{0.975\textwidth}\textbf{\faInfoCircle{} Note:} #2\end{minipage}}}}
-\newcommand\hint[2][]{\todo[inline, caption={2do},color=green!20, #1]{\noindent\makebox[\textwidth][c]{%
+\newcommand\hint[2][]{\todo[inline, caption={2do},color=green!20, #1]{\makebox[\textwidth][c]{%
 			\begin{minipage}{0.975\textwidth}\textbf{\faCheck{} Hint:} #2\end{minipage}}}}
-\newcommand{\todoinline}[2][]{\todo[inline, caption={2do},color=blue!20, #1]{\noindent\makebox[\textwidth][c]{%
+\newcommand{\todoinline}[2][]{\todo[inline, caption={2do},color=blue!20, #1]{\makebox[\textwidth][c]{%
 			\begin{minipage}{0.975\textwidth}\textbf{\faClipboard{} TODO:} #2\end{minipage}}}}
 
 \newcommand{\captioninstruction}{\hint{Add any essential information, necessary for interpreting the figure, in the caption. Be sure to add a separate short title for inclusion in the list of figures: \texttt{\textbackslash caption[shorttitle]\{longtitle\}}.\\
@@ -72,9 +72,9 @@
 \newcommand{\showcsnotes}{
 	\smallskip
 	\hint{No need to just repeat what we can see on the diagram.
-		
-		Don't do this: \emph{As you can see on fig. x: comp A consists of B and C, and C connects to D}. 
-		
+
+		Don't do this: \emph{As you can see on fig. x: comp A consists of B and C, and C connects to D}.
+
 		But, please do explain if there is anything non-trivial (e.g., a custom mapping from actors to external components on the context diagram).}
 	\smallskip
 	\captioninstruction{}
@@ -89,9 +89,9 @@
 \newcommand{\showdecompnotes}{
 	\smallskip
 	\hint{No need to just repeat what we can see on the diagram.
-		
-		Don't do this: \emph{As you can see on fig. x: comp A consists of B and C, and C connects to D}. 
-		
+
+		Don't do this: \emph{As you can see on fig. x: comp A consists of B and C, and C connects to D}.
+
 		But, please do explain if there is anything non-trivial (e.g., a custom mapping from actors to external components on the context diagram).}
 	\smallskip
 	\captioninstruction
@@ -104,9 +104,9 @@
 \newcommand{\showdeploynotes}{
 	\smallskip
 	\hint{No need to just repeat what we can see on the diagram.
-		
-		Don't do this: \emph{As you can see on fig. x: components A and B are deployed on node C}. 
-		
+
+		Don't do this: \emph{As you can see on fig. x: components A and B are deployed on node C}.
+
 		But, please do explain if there is anything non-trivial (e.g., a custom mapping from actors to external components on the context diagram).}
 	\smallskip
 	\captioninstruction
@@ -119,19 +119,19 @@
 \newcommand{\showscenariosnotes}{
 	\smallskip
 	\hint{No need to just repeat what we can see on the diagram.
-		
-		Don't do this: \emph{As you can see on fig. x: component A calls operation b, next component C calls operation d}. 
-		
+
+		Don't do this: \emph{As you can see on fig. x: component A calls operation b, next component C calls operation d}.
+
 		But, please do explain if there is anything non-trivial (e.g., a custom mapping from actors to external components on the context diagram).}
 	\smallskip
 	\captioninstruction
 	\smallskip
-	
-	
+
+
 	\warning{Do include a list of which sequence diagrams together illustrate a which scenario from the assignment.}
-	
+
 	\smallskip
-	
+
 	\hint{Don't only model the `happy path' in your sequence diagrams. Take into account the quality attributes. For example, what happens when a certain component fails (Av) or overloads (P)? Use the sequence diagrams to illustrate how you have achieved the qualities in your architecture.}
 	\smallskip
 }
@@ -231,7 +231,7 @@
 	\end{center}
 	\vfill
 	\hfill\makebox[8.5cm][l]{%
-		\vbox to 7cm{\vfill\noindent
+		\vbox to 7cm{\vfill
 			\ifthenelse{\boolean{anonymize}}{%
 				{\rm \textbf{Anonymized}}\\
 				{\rm Academic year 2015--2016}

@@ -1,8 +1,6 @@
-Decomposition 1 and 2, check datatypes after addition of constraint interfaces.
-Decomposition 2, check sendData functions
-
-
-Report 2b: List of changes for our ADD method
+*) Decomposition 1 and 2, check datatypes after addition of constraint interfaces.
+*) Decomposition 1 and 2, check datatype DeviceInfo, is this still necessary after what we saw with their Map<String, String> ?
+*) Add to report 2b: List of changes for our ADD method
 
 \section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
     Instead of "Element", we do elements or subsystems to decompose/expand.
@@ -52,6 +50,8 @@ Interfaces: What's the point of exceptions here? Also, we added
 How to make interface names transparent?
 
 Can we extend the given interfaces?
+
+DeviceData, but PluggableDeviceID, what's up with that?
 
 ==========================================================================
 
