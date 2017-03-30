@@ -10,7 +10,7 @@
 \usepackage{rotating}
 \usepackage{float}
 \usepackage{enumitem}
-\setlist{noitemsep} % \setlist{nosep}
+\setl0ist{noitemsep} % \setlist{nosep}
 
 % Set all authors, if your group counts 2, set third author empty \authorthree{}
 % Set the groupname as well
@@ -31,6 +31,12 @@
 % the following two command are necessary for obtaining the mini list of figures in the cs-view, decomposition view, deployment view and scenarios chapters
 \dominilof
 \fakelistoffigures
+
+\chapter{Introduction}\label{ch:introduction}
+"Since you are a two-student group, you can omit/disregard the low-priority
+non-functional requirements (i.e., P2, U1, M2). Please make sure all other
+elements of the assignment are provided."
+
 
 \chapter{Architectural Decisions}\label{ch:overview}
     \input{architectural-decisions}
@@ -58,5 +64,13 @@
 
 \chapter{Element Catalog and Datatypes}\label{ch:elements-datatypes}
     \input{element-catalog-and-datatypes}
+
+\chapter{Attribute-driven design documentation}\label{sec:add}
+    \input{decomposition-1}
+    \newpage
+    \input{decomposition-2}
+    \newpage
+    % \input{decomposition-3}
+
 
 \end{document}
