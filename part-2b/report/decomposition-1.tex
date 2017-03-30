@@ -264,42 +264,77 @@
 
     \subsubsection{GatewayFacade}
         \begin{itemize}
-            \item MoteDataMgmt
+            \item Heartbeat
             \begin{itemize}
-                \item \texttt{void sendHeartbeat(int moteID, List<PluggableDeviceInfo> devices)}
+                \item \texttt{void heartbeat(MoteInfo moteInfo,
+                                             List<Tuple<PluggableDeviceID, PluggableDeviceType>> pds)}
                 \begin{itemize}
-                    \item Effect: Sends a heartbeat to a certain gateway with information about operational devices.
-                    \item Created for: UC14 \\
+                    \item Effect: Periodic heartbeat from the mote to the gateway,
+                          including a list of the PluggableDevices and their DeviceTypes
+                          (i.e. those currently plugged into the mote)
+                    \item Created for: Given constraint \\
+                          UC14 \\
                           Av3: failure detection
                 \end{itemize}
             \end{itemize}
 
-            \item DeviceMgmt
+            \item DeviceData
             \begin{itemize}
+                \item \texttt{rcvData(PluggableDeviceID pID, DeviceData data)}
+                    \begin{itemize}
+                        \item Effect: Provide pluggable device data to the gateway (Initiated by the device).
+                        \item Created for: Given constraint, unused at the moment.
+                    \end{itemize}
+                \item \texttt{rrcvDataCallback(PluggableDeviceID pID, DeviceData data, int requestID)}
+                    \begin{itemize}
+                        \item Effect: Provide device data to the gateway (Callback of getDataAsync).
+                        \item Created for: Given constraint, unused at the moment.
+                    \end{itemize}
+            \end{itemize}
+
+            \item DeviceManagement
+            \begin{itemize}
+                \item \texttt{void pluggableDevicePluggedIn(MoteInfo mInfo,
+                                                            PluggableDeviceID pID,
+                                                            PluggableDeviceType type)}
+                    \begin{itemize}
+                        \item Effect: Notify the gateway that a new PluggableDevice of the given type is connected to the mote.
+                        \item Created for: Given constraint, unused at the moment.
+                    \end{itemize}
+                \item \texttt{void pluggableDeviceRemoved(PluggableDeviceID pID)}
+                    \begin{itemize}
+                        \item Effect: Notify the gateway that a PluggableDevice is removed.
+                        \item Created for: Given constraint, unused at the moment.
+                    \end{itemize}
+                \item \texttt{void pluggableDevicePersisentFailure(int deviceID)}
+                    \begin{itemize}
+                        \item Effect: Lets the gateway know that a timer for pluggable device or mote has expired.
+                                      This will generate a notification for an infrastructure owner.
+                        \item Created for: Av3: The infrastructure owner should be notified of
+                                           any persistent pluggable device or mote failures.
+                    \end{itemize}
                 \item \texttt{List<DeviceInfo> getConnectedDevices()}
-                \begin{itemize}
-                    \item Effect: Describe the effect of calling this operation.
-                    \item Created for: UC18
-                \end{itemize}
-                \item \texttt{void timerExpired(int deviceID)}
-                \begin{itemize}
-                    \item Effect: Lets the gateway know that a timer for pluggable device or mote has expired.
-                                  This will generate a notification for an infrastructure owner.
-                    \item Created for: Av3: The infrastructure owner should be notified of
-                          any persistent pluggable device or mote failures.
-                \end{itemize}
+                    \begin{itemize}
+                        \item Effect: Describe the effect of calling this operation.
+                        \item Created for: UC18
+                        \item Tradeoff: send PluggableDeviceID instead of DeviceInfo.
+                              If you send DeviceInfo, then ApplicationManager does
+                              not have to fetch this info.
+                              If you send PluggableDeviceID's, then less bandwidth
+                              is used and the Gateways do less work.
+                    \end{itemize}
                 \item \texttt{void deactivateApplicationInstance(int applicationInstanceID)}
-                \begin{itemize}
-                    \item Effect: Deactivates a certain application. This could happen when
-                                  mandatory pluggable devices for the application are missing.
-                    \item Created for: Av3: automatic suspension/reactivation of applications.
-                \end{itemize}
+                    \begin{itemize}
+                        \item Effect: Deactivates a certain application. This could happen when
+                                      mandatory pluggable devices for the application are missing.
+                        \item Created for: Av3: automatic suspension/reactivation of applications.
+                    \end{itemize}
                 \item \texttt{void reactivateApplicationInstance(int applicationInstanceID)}
-                \begin{itemize}
-                    \item Effect: Reactivate an application instance. This could happen
-                                  automatically after a broken sensor has been replaced.
-                    \item Created for: Av3: automatic suspension/reactivation of applications.
-                \end{itemize}
+                    \begin{itemize}
+                        \item Effect: Reactivate an application instance. This could happen
+                                      automatically after a broken sensor has been replaced.
+                        \item Created for: Av3: automatic suspension/reactivation of applications.
+                    \end{itemize}
             \end{itemize}
 
             \item AppDeviceMgmt

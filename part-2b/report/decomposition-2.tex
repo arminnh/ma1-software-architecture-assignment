@@ -190,21 +190,27 @@
 
     \subsubsection{GatewayFacade}
         \begin{itemize}
-            \item MoteDataMgmt, last defined in section \ref{add1-interfaces}
+            \item DeviceData, last defined in section \ref{add1-interfaces}
             \begin{itemize}
-                \item \texttt{void sendData(PluggableDeviceData data)}
-                \begin{itemize}
-                    \item Effect: Sends pluggable device data to the connected mote.
-                    \item Created for: UC11 \\
-                          P2: storing new pluggable data
-                \end{itemize}
+                \item \texttt{rcvData(PluggableDeviceID pID, DeviceData data)}
+                    \begin{itemize}
+                        \item Now used by: UC11 \\
+                              P2: storing new pluggable data
+                    \end{itemize}
+                \item \texttt{rcvDataCallback(PluggableDeviceID pID, DeviceData data, int requestID)}
+                    \begin{itemize}
+                        \item Now used by: UC11 \\
+                              P2: storing new pluggable data
+                    \end{itemize}
             \end{itemize}
 
-            \item DeviceMgmt, last defined in section \ref{add1-interfaces}
+            \item DeviceManagement, last defined in section \ref{add1-interfaces}
             \begin{itemize}
-                \item \texttt{void initialiseDevice(int deviceID, PluggableDeviceSettings settings)}
+                \item \texttt{void setConfig(int deviceID, Map<String,String> config)}
                 \begin{itemize}
-                    \item Effect: Initialises a pluggable device for use with the system.
+                    \item Effect: Set the given configuration parameters of a
+                          PluggableDevice to the given values. Setting unknown parameters
+                          on a PluggableDevice has no effect.
                     \item Created for: UC11: pluggable device needs to be initialised \\
                           M1: pluggable device must be able to be initialised
                 \end{itemize}
@@ -213,21 +219,27 @@
 
     \subsubsection{MoteFacade}
         \begin{itemize}
-            \item PluggableDeviceDataMgmt
+            \item DeviceData
             \begin{itemize}
-                \item \texttt{void sendData(PluggableDeviceData data)}
-                \begin{itemize}
-                    \item Effect: Sends pluggable device data to the connected mote.
-                    \item Created for: UC11 \\
-                          P2: storing new pluggable data
-                \end{itemize}
+                \item \texttt{rcvData(PluggableDeviceID pID, DeviceData data)}
+                    \begin{itemize}
+                        \item Now used by: UC11 \\
+                              P2: storing new pluggable data
+                    \end{itemize}
+                \item \texttt{rcvDataCallback(PluggableDeviceID pID, DeviceData data, int requestID)}
+                    \begin{itemize}
+                        \item Now used by: UC11 \\
+                              P2: storing new pluggable data
+                    \end{itemize}
             \end{itemize}
 
             \item PluggableDeviceMgmt, last defined in section \ref{add1-interfaces}
             \begin{itemize}
-                \item \texttt{void initialise(int deviceID, PluggableDeviceSettings settings)}
+                \item \texttt{void setConfig(int deviceID, Map<String,String> config)}
                 \begin{itemize}
-                    \item Effect: Initialises a connected pluggable device according to some settings
+                    \item Effect: Set the given configuration parameters of a
+                          PluggableDevice to the given values. Setting unknown parameters
+                          on a PluggableDevice has no effect.
                     \item Created for: UC11: pluggable device needs to be initialised \\
                           M1: pluggable device must be able to be initialised
                 \end{itemize}
@@ -236,14 +248,48 @@
 
     \subsubsection{PluggableDeviceFacade}
         \begin{itemize}
-        	\item PluggableDeviceMgmt
+        	\item Config
         	\begin{itemize}
-                \item \texttt{void initialise(PluggableDeviceSettings settings)}
-                \begin{itemize}
-                    \item Effect: Initialises the pluggable device according to some settings
-                    \item Created for: UC11: pluggable device needs to be initialised \\
-                          M1: pluggable device must be able to be initialised
-                \end{itemize}
+                \item \texttt{Map<String,String> getConfig()}
+                    \begin{itemize}
+                        \item Effect: Returns the current configuration of a
+                              PluggableDevice as a parameter-value map.
+                        \item Created for: Given constraint, unused at the moment.
+                    \end{itemize}
+                \item \texttt{boolean setConfig(Map<String,String> config)}
+                    \begin{itemize}
+                        \item Effect: Set the given configuration parameters of the
+                              PluggableDevice to the given values. Setting unknown parameters
+                              on a PluggableDevice (e.g., ‘noise threshold’ → ‘3’ on a light
+                              sensor) has no effect.
+                        \item Created for: Given constraint \\
+                              UC11: pluggable device needs to be initialised \\
+                              M1: pluggable device must be able to be initialised
+                    \end{itemize}
+        	\end{itemize}
+
+        	\item RequestData
+        	\begin{itemize}
+                \item \texttt{DeviceData getData()}
+                    \begin{itemize}
+                        \item Effect: Synchronously retrieve the device data of a device.
+                        \item Created for: Given constraint, unused at the moment.
+                    \end{itemize}
+                \item \texttt{void getDataAsync(int requestID)}
+                    \begin{itemize}
+                        \item Effect: Asynchronously retrieve the device data
+                              of a device (by calling rcvDataCallback).
+                        \item Created for: Given constraint, unused at the moment.
+                    \end{itemize}
+        	\end{itemize}
+
+        	\item Actuate
+        	\begin{itemize}
+                \item \texttt{void sendActuationCommand(String commandName)}
+                    \begin{itemize}
+                        \item Effect:
+                        \item Created for: Given constraint, unused at the moment.
+                    \end{itemize}
         	\end{itemize}
         \end{itemize}
 
@@ -256,6 +302,7 @@
         			\item Effect: Returns true if the device with id "deviceID" has been initialized.
                     \item Created for: UC11: pluggable device needs to be initialised \\
                           M1: pluggable device must be able to be initialised
+                    \item: TODO: need this check? is 'initialized' status stored in DB or on gateways? or both?
         		\end{itemize}
         	\end{itemize}
         \end{itemize}
