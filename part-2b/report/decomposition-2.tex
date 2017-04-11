@@ -204,7 +204,7 @@
                     \end{itemize}
             \end{itemize}
 
-            \item DeviceManagement, last defined in section \ref{add1-interfaces}
+            \item DeviceMgmt, last defined in section \ref{add1-interfaces}
             \begin{itemize}
                 \item \texttt{void setConfig(PluggableDeviceID pID, Map<String,String> config)}
                 \begin{itemize}
@@ -379,11 +379,15 @@
     \paragraph{DeviceData}
                contains data from a pluggable device at a certain point in time
                (value, type, date) (e.g. a sensor reading, an actuator status)
-   \paragraph{PluggableDeviceSettings}
+    \paragraph{PluggableDeviceSettings}
               contains settings for a pluggable device (power status,
               data update rate, ...)
     \paragraph{DateTime}
                Represents an instant in time, typically expressed as a date and time of day.
+    \paragraph{PluggableDeviceID}
+               A unique identifier of the \texttt{PluggableDevice}
+    \paragraph{Map<String,String>}
+               is a map of key-value pairs.  E.g., ‘sensitivity’→‘10’.
 
 
 \subsection{Verify and refine}

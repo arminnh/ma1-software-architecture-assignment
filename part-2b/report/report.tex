@@ -39,9 +39,59 @@
 non-functional requirements (i.e., P2, U1, M2). Please make sure all other
 elements of the assignment are provided."\\
 
-Changes to decompositions 1 and 2.
+\section{Changes to decompositions 1 and 2}
+    \subsection{ADD 1}
+        \subsubsection{MoteFacade}
+            \paragraph{ renamed PluggableDeviceMgmt -> DeviceMgmt}
 
+        \subsubsection{GetwayFacade}
+            \paragraph{renamed MoteDataMgmt -> Heartbeat}
+            removed functions: sendHeartbeat
+            added functions: heartbeat 
+            \paragraph{added DeviceData}
+            \paragraph{added DeviceMgmt}
+             removed functions: timerExpired\\
+             added functions: pluggableDevicePluggedIn, pluggableDeviceRemoved, 
+                              pluggableDevicePersisentFailure             
 
+        \subsubsection{Data type definition}
+            added data types: PluggableDeviceID, PluggableDeviceType, DeviceData,Map<String,String>
+
+    \subsection{ADD 2}
+        \subsubsection{GatewayFacade}
+            removed interfaces: MoteDataMgmt
+            added interfaces: DeviceData
+            \paragraph {DeviceMgmt}
+            removed functions: initialiseDevice
+            added functions: setConfig
+     
+        \subsubsection{MoteFacade}
+            \paragraph{renamed PluggableDeviceDataMgmt -> DeviceData}
+            removed functions: sendData\\
+            added functions: rcvData,rcvDataCallback
+            \paragraph{renamed PluggableDeviceMgmt -> DeviceMgmt}
+            removed functions: initialise 
+            added functions: setConfig
+        \subsubsection{PluggableDeviceFacade}
+            removed interfaces:PluggableDeviceMgmt 
+            added interfaces: Config, Actuate, RequestData
+        
+        \subsubsection{renamed PluggableDeviceDataConverter -> DeviceDataConverter}
+        \subsubsection{renamed PluggableDeviceDataScheduler -> DeviceDataScheduler}
+            \paragraph{RequestData}
+            removed functions: requestData\\
+            added functions: getData,rcvData
+           
+        \subsubsection{PluggableDeviceDB}
+            \paragraph{renamed PluggableDeviceDataMgmt -> DeviceData}
+            removed functions: sendData\\
+            added functions: rcvData
+
+        \subsubsection{Data type definition}
+            renamed PluggableDeviceData -> DeviceData\\
+            added data types: PluggableDeviceID,Map<String,String>
+
+                                         
 \chapter{Architectural Decisions}\label{ch:overview}
     \input{architectural-decisions}
     \clearpage

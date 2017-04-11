@@ -1,8 +1,7 @@
-*) Decomposition 1 and 2, check datatypes after addition of constraint interfaces.
-*) Decomposition 1 and 2, check datatype DeviceInfo, is this still necessary after what we saw with their Map<String, String> ?
-*) Add to report 2b: List of changes for our ADD method
-*) Check names for PluggableDeviceDataConverter, PluggableDeviceDataScheduler, PluggableDeviceDB, PluggableDeviceManager
-   I changed it to "Device...", should we at least keep "PluggableDevice" in the component names? Since we need the PluggableDeviceFacade for sure...
+NOTES: we have more interfaces in graph as in description
+  (e.g. AppMgmt in ADD 2 - it is not describe because it is in ADD 1 - we should remove it from 
+  graph or add also description in to ADD 2, it is confusing.) 
+
 
 \section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
     Instead of "Element", we do elements or subsystems to decompose/expand.

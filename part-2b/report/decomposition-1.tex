@@ -246,7 +246,7 @@
                 \end{itemize}
             \end{itemize}
 
-            \item AppMgmt
+            \item AppDataMgmt
             \begin{itemize}
                 \item \texttt{void updateApplication(ApplicationData data)}
                 \begin{itemize}
@@ -266,7 +266,7 @@
         \begin{itemize}
             \item Heartbeat
             \begin{itemize}
-                \item \texttt{void heartbeat(MoteInfo moteInfo,
+                \item \texttt{void heartbeat(Map<String,String> moteInfo,
                                              List<Tuple<PluggableDeviceID, PluggableDeviceType>> pds)}
                 \begin{itemize}
                     \item Effect: Sends a heartbeat from the mote to the gateway,
@@ -292,9 +292,9 @@
                     \end{itemize}
             \end{itemize}
 
-            \item DeviceManagement
+            \item DeviceMgmt
             \begin{itemize}
-                \item \texttt{void pluggableDevicePluggedIn(MoteInfo mInfo,
+                \item \texttt{void pluggableDevicePluggedIn(Map<String,String> mInfo,
                                                             PluggableDeviceID pID,
                                                             PluggableDeviceType type)}
                     \begin{itemize}
@@ -358,7 +358,7 @@
 
     \subsubsection{MoteFacade}
         \begin{itemize}
-            \item PluggableDeviceMgmt
+            \item DeviceMgmt
             \begin{itemize}
                 \item \texttt{List<DeviceInfo> getConnectedDevices()}
                 \begin{itemize}
@@ -396,7 +396,7 @@
             \end{itemize}
         \end{itemize}
 
-    \subsubsection{External notification delivery serivce}
+    \subsubsection{External notification delivery service}
         \begin{itemize}
             \item NotificationDeliveryMgmt
             \begin{itemize}
@@ -449,7 +449,19 @@
     \paragraph{SubscriptionData}
                contains data about a subscription (subscription id, subscription status,
                subscription period, ...).
-
+    \paragraph{PluggableDeviceID}
+               is a unique identifier of the \texttt{PluggableDevice}
+    \paragraph{PluggableDeviceType}
+              denotes the type of the pluggable device.
+    \paragraph{DeviceData}
+               is the data from a pluggable device. For sensors, this contains sensor values.  
+               For actuators, this  contains the state of the actuator. 
+               The data is encapsulated within a JSON message, and should be 
+               converted into something meaningful based on the device type of
+               the pluggable device that sent the data.
+    \paragraph{Map<String,String>}
+               is a map of key-value pairs.  E.g., ‘sensitivity’→‘10’.
+     
 
 \subsection{Verify and refine}
     The selected architectural drivers have been handled completely
