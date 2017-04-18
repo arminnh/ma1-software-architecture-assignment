@@ -1,0 +1,128 @@
+% INSTRUCTIONS:
+% Put your score for each question between the brackets [ ].
+%
+% For the questions in sections 1-3, use the following scale:
+%  0: No evidence found (no explanation is necessary)
+%  1: Partial/Yes, but... (and explain why)
+%  2: Yes (and summarize the evidence)
+%  NA: unclear or impossible to assess (and explain why)
+% Example:
+%  Q1:   [ 0] explanation: [ ]
+%  Q2:   [ 1] explanation: [The concepts are there, but not linked]
+%  Q3:   [ 2] explanation: [From gateway class on fig 1 and first constraint]
+%  Q4:   [NA] explanation: [The domain model is missing from the report]
+%
+% 1. DOMAIN MODEL
+%
+Q1:    [ 2] explanation: [Notification: message]
+Q2:    [ 0] explanation: [ ]
+Q3:    [ 1] explanation: [Gateway identifier element and Mote identifier attribute in data message element]
+Q4:    [ 1] explanation: [We assume that identifiers impose uniqness]
+Q5:    [ 0] explanation: [ ]
+Q6:    [ 2] explanation: [Sensor and Actuator elements]
+Q7:    [ 1] explanation: [Not explicitly produced by sensor, but by Mote and there is a Data Message element with the attributes]
+Q8:    [ 2] explanation: [Heartbeat Message, Data Message, Connection Message]
+Q9:    [ 0] explanation: [ ]
+Q10:   [ 0] explanation: [ ]
+Q11:   [ 0] explanation: [ ]
+Q12:   [ 2] explanation: [This could be done by using Data Message element]
+Q13:   [ 0] explanation: [ ]
+Q14:   [ 0] explanation: [ ]
+Q15:   [ 2] explanation: [-> Bulding -> Topology]
+Q16:   [ 1] explanation: [The glossary mentions different type of notifications]
+Q17:   [ 0] explanation: [ ]
+Q18:   [ 1] explanation: [Implied by constraint: Application developers only receive rejection notifications about the applications they want to  deploy.]
+Q19:   [ 2] explanation: [Application and Mobile app elements]
+Q20:   [ 2] explanation: [Relationship: part of]
+Q21:   [ 2] explanation: [Path from Customer organization to Application through Subsription]
+Q22:   [ 0] explanation: [ ]
+Q23:   [ 0] explanation: [ ]
+Q24:   [ 1] explanation: [Constraint: An application should be idle until all the necessary hardware is available and if the hardware is available it should be activated automatically.]
+Q25:   [ 0] explanation: [ ]
+Q26:   [ 0] explanation: [ ]
+Q27:   [ 0] explanation: [ ]
+Q28:   [ 2] explanation: [Topology element]
+Q29:   [ 0] explanation: [ ]
+Q30:   [ 2] explanation: [Constraint: If a component of the hardware fails, the system should automatically switch to a nearby, similar device if possible, based on the topology provided by the infrastructure owner]
+Q31:   [ 0] explanation: [ ]
+Q32:   [ 0] explanation: [ ]
+Q33:   [ 1] explanation: [e.g. constraints 1,2,5]
+%
+% 2. USE CASES
+%
+Q34:   [ 2] explanation: [UC11]
+Q35:   [ 0] explanation: [ ]
+Q36:   [ 2] explanation: [UC11]
+Q37:   [ 2] explanation: [UC8]
+Q38:   [ 2] explanation: [UC16]
+Q39:   [ 2] explanation: [UC17]
+Q40:   [ 2] explanation: [UC14]
+Q41:   [ 0] explanation: [ ]
+Q42:   [ 0] explanation: [ ]
+Q43:   [ 0] explanation: [ ]
+Q44:   [ 2] explanation: [UC4]
+Q45:   [ 2] explanation: [UC5]
+Q46:   [ 2] explanation: [UC4,UC5]
+Q47:   [ 1] explanation: [Instead of using UC10, we would choose UC14: Transmit Data, because then the group of use cases is a better representation of the core of the system.]
+Q48:   [ 2] explanation: [E.g. UC14 is missing in the use case diagram. UC10 has different titles in the description and in the use case diagram.]
+Q49:   [ 1] explanation: [UC11: Step 1 is not an interaction between the primary actor and the system. Gateway should be a secondary actor.]
+Q50:   [ 0] explanation: [ ]
+Q51:   [ 0] explanation: [ ]
+Q52:   [ 2] explanation: [Application Provider]
+Q53:   [ 2] explanation: [e.g. UC4]
+Q54:   [ 2] explanation: [e.g. Notification delivery method is missing from the domain model.]
+%
+% 3. QUALITY ATTRIBUTE SCENARIOS
+%
+Q55:   [ 1] explanation: [P2 is just functionality. M1 "to the system" instead of "to the topology".]
+Q56:   [ 2] explanation: [Descriptions and stimulus are clear.]
+Q57:   [ 0] explanation: [ ]
+Q58:   [ 1] explanation: [Av1: It unecessary term minimal applications. Av2: It is unrealistic for the system administrator (should be infrastructure owner?) to always check the battery of all motes. The guarateed lifetimes are not responses from the system.]
+Q59:   [ 2] explanation: [ii, iii]
+Q60:   [ 0] explanation: [ ]
+Q61:   [ 2] explanation: [ii]
+Q62:   [ 0] explanation: [ ]
+Q63:   [ 2] explanation: [code/functionality]
+Q64:   [ 1] explanation: [Not under control of the system and doesn't make sense: A system administrator should respond to an possible rejection notification within 8 hours.]
+Q65:   [ 1] explanation: [U2: Easy adding of applications, but nothing about error/debug information.]
+%
+% 4. GENERAL
+%
+% For questions 66-69, use the following scale:
+%  1 (problematic)
+%  2 (insufficient)
+%  3 (satisfactory)
+%  4 (good)
+%  5 (excellent)
+%  NA (unclear or impossible to assess)
+% Also, briefly explain your answers.
+%
+Q66:   [  ]
+Q66explanation: [
+
+
+]
+Q67:   [  ]
+Q67explanation: [
+
+
+]
+Q68:   [  ]
+Q68explanation: [
+
+
+]
+Q69:   [  ]
+Q69explanation: [
+
+
+]
+% Questions 70-71 are open questions.
+Q70:   [
+
+
+]
+Q71:   [
+
+
+]

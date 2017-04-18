@@ -1,0 +1,128 @@
+% INSTRUCTIONS:
+% Put your score for each question between the brackets [ ].
+%
+% For the questions in sections 1-3, use the following scale:
+%  0: No evidence found (no explanation is necessary)
+%  1: Partial/Yes, but... (and explain why)
+%  2: Yes (and summarize the evidence)
+%  NA: unclear or impossible to assess (and explain why)
+% Example:
+%  Q1:   [ 0] explanation: [ ]
+%  Q2:   [ 1] explanation: [The concepts are there, but not linked]
+%  Q3:   [ 2] explanation: [From gateway class on fig 1 and first constraint]
+%  Q4:   [NA] explanation: [The domain model is missing from the report]
+%
+% 1. DOMAIN MODEL
+%
+Q1:    [  ] explanation: [ ]
+Q2:    [  ] explanation: [ ]
+Q3:    [  ] explanation: [ ]
+Q4:    [  ] explanation: [ ]
+Q5:    [  ] explanation: [ ]
+Q6:    [  ] explanation: [ ]
+Q7:    [  ] explanation: [ ]
+Q8:    [  ] explanation: [ ]
+Q9:    [  ] explanation: [ ]
+Q10:   [  ] explanation: [ ]
+Q11:   [  ] explanation: [ ]
+Q12:   [  ] explanation: [ ]
+Q13:   [  ] explanation: [ ]
+Q14:   [  ] explanation: [ ]
+Q15:   [  ] explanation: [ ]
+Q16:   [  ] explanation: [ ]
+Q17:   [  ] explanation: [ ]
+Q18:   [  ] explanation: [ ]
+Q19:   [  ] explanation: [ ]
+Q20:   [  ] explanation: [ ]
+Q21:   [  ] explanation: [ ]
+Q22:   [  ] explanation: [ ]
+Q23:   [  ] explanation: [ ]
+Q24:   [  ] explanation: [ ]
+Q25:   [  ] explanation: [ ]
+Q26:   [  ] explanation: [ ]
+Q27:   [  ] explanation: [ ]
+Q28:   [  ] explanation: [ ]
+Q29:   [  ] explanation: [ ]
+Q30:   [  ] explanation: [ ]
+Q31:   [  ] explanation: [ ]
+Q32:   [  ] explanation: [ ]
+Q33:   [  ] explanation: [ ]
+%
+% 2. USE CASES
+%
+Q34:   [  ] explanation: [ ]
+Q35:   [  ] explanation: [ ]
+Q36:   [  ] explanation: [ ]
+Q37:   [  ] explanation: [ ]
+Q38:   [  ] explanation: [ ]
+Q39:   [  ] explanation: [ ]
+Q40:   [  ] explanation: [ ]
+Q41:   [  ] explanation: [ ]
+Q42:   [  ] explanation: [ ]
+Q43:   [  ] explanation: [ ]
+Q44:   [  ] explanation: [ ]
+Q45:   [  ] explanation: [ ]
+Q46:   [  ] explanation: [ ]
+Q47:   [  ] explanation: [ ]
+Q48:   [  ] explanation: [ ]
+Q49:   [  ] explanation: [ ]
+Q50:   [  ] explanation: [ ]
+Q51:   [  ] explanation: [ ]
+Q52:   [  ] explanation: [ ]
+Q53:   [  ] explanation: [ ]
+Q54:   [  ] explanation: [ ]
+%
+% 3. QUALITY ATTRIBUTE SCENARIOS
+%
+Q55:   [  ] explanation: [ ]
+Q56:   [  ] explanation: [ ]
+Q57:   [  ] explanation: [ ]
+Q58:   [  ] explanation: [ ]
+Q59:   [  ] explanation: [ ]
+Q60:   [  ] explanation: [ ]
+Q61:   [  ] explanation: [ ]
+Q62:   [  ] explanation: [ ]
+Q63:   [  ] explanation: [ ]
+Q64:   [  ] explanation: [ ]
+Q65:   [  ] explanation: [ ]
+%
+% 4. GENERAL
+%
+% For questions 66-69, use the following scale:
+%  1 (problematic)
+%  2 (insufficient)
+%  3 (satisfactory)
+%  4 (good)
+%  5 (excellent)
+%  NA (unclear or impossible to assess)
+% Also, briefly explain your answers.
+%
+Q66:   [  ]
+Q66explanation: [
+
+
+]
+Q67:   [  ]
+Q67explanation: [
+
+
+]
+Q68:   [  ]
+Q68explanation: [
+
+
+]
+Q69:   [  ]
+Q69explanation: [
+
+
+]
+% Questions 70-71 are open questions.
+Q70:   [
+
+
+]
+Q71:   [
+
+
+]
