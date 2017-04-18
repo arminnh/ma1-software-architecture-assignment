@@ -63,7 +63,7 @@ Q43:   [ 0] explanation: [ ]
 Q44:   [ 2] explanation: [UC4]
 Q45:   [ 2] explanation: [UC5]
 Q46:   [ 2] explanation: [UC4,UC5]
-Q47:   [ 1] explanation: [Instead of using UC10, we would choose UC14: Transmit Data, because then the group of use cases is a better representation of the core of the system.]
+Q47:   [ 1] explanation: [Instead of UC10, we would choose UC14: Transmit Data. This way, the group of use cases is a better representation of the core of the system.]
 Q48:   [ 2] explanation: [E.g. UC14 is missing in the use case diagram. UC10 has different titles in the description and in the use case diagram.]
 Q49:   [ 1] explanation: [UC11: Step 1 is not an interaction between the primary actor and the system. Gateway should be a secondary actor.]
 Q50:   [ 0] explanation: [ ]
@@ -118,5 +118,5 @@ Q70:   [
     We think this report would be a decent starting point for part 2 of the project. A couple of quality attributes need some more details. Some more use cases would need to be added and all of the use cases would need to be written out in full.
 ]
 Q71:   [
-    Good job, love you.
+    Keep up the good work, love you.
 ]

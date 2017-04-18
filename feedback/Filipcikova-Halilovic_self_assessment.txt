@@ -14,77 +14,77 @@
 %
 % 1. DOMAIN MODEL
 %
-Q1:    [  ] explanation: [ ]
-Q2:    [  ] explanation: [ ]
-Q3:    [  ] explanation: [ ]
-Q4:    [  ] explanation: [ ]
-Q5:    [  ] explanation: [ ]
-Q6:    [  ] explanation: [ ]
-Q7:    [  ] explanation: [ ]
-Q8:    [  ] explanation: [ ]
-Q9:    [  ] explanation: [ ]
-Q10:   [  ] explanation: [ ]
-Q11:   [  ] explanation: [ ]
-Q12:   [  ] explanation: [ ]
-Q13:   [  ] explanation: [ ]
-Q14:   [  ] explanation: [ ]
-Q15:   [  ] explanation: [ ]
-Q16:   [  ] explanation: [ ]
-Q17:   [  ] explanation: [ ]
-Q18:   [  ] explanation: [ ]
-Q19:   [  ] explanation: [ ]
-Q20:   [  ] explanation: [ ]
-Q21:   [  ] explanation: [ ]
-Q22:   [  ] explanation: [ ]
-Q23:   [  ] explanation: [ ]
-Q24:   [  ] explanation: [ ]
-Q25:   [  ] explanation: [ ]
-Q26:   [  ] explanation: [ ]
-Q27:   [  ] explanation: [ ]
-Q28:   [  ] explanation: [ ]
-Q29:   [  ] explanation: [ ]
-Q30:   [  ] explanation: [ ]
-Q31:   [  ] explanation: [ ]
-Q32:   [  ] explanation: [ ]
-Q33:   [  ] explanation: [ ]
+Q1:    [ 2] explanation: [Actuator: location]
+Q2:    [ 0] explanation: [ ]
+Q3:    [ 1] explanation: [ The location attribute could be used for this ]
+Q4:    [ 1] explanation: [ The location attribute could be used for this ]
+Q5:    [ 0] explanation: [ ]
+Q6:    [ 2] explanation: [ Sensor and Actuator elements]
+Q7:    [ 0] explanation: [ ]
+Q8:    [ 0] explanation: [ ]
+Q9:    [ 0] explanation: [ ]
+Q10:   [ 0] explanation: [ ]
+Q11:   [ 0] explanation: [ ]
+Q12:   [ 0] explanation: [ ]
+Q13:   [ 0] explanation: [ ]
+Q14:   [ 0] explanation: [ ]
+Q15:   [ 1] explanation: [ Only Infrastructure owner -> Devices]
+Q16:   [ 1] explanation: [ The type attribute could be used for this ]
+Q17:   [ 0] explanation: [ ]
+Q18:   [ 0] explanation: [ ]
+Q19:   [ 0] explanation: [ ]
+Q20:   [ 0] explanation: [ ]
+Q21:   [ 0] explanation: [ ]
+Q22:   [ 2] explanation: [ Invoice: period ]
+Q23:   [ 0] explanation: [ ]
+Q24:   [ 0] explanation: [ ]
+Q25:   [ 1] explanation: [ The configurations attribute could be used for this ]
+Q26:   [ 0] explanation: [ ]
+Q27:   [ 0] explanation: [ ]
+Q28:   [ 0] explanation: [ ]
+Q29:   [ 0] explanation: [ ]
+Q30:   [ 0] explanation: [ ]
+Q31:   [ 0] explanation: [ ]
+Q32:   [ 0] explanation: [ ]
+Q33:   [ 0] explanation: [ ]
 %
 % 2. USE CASES
 %
-Q34:   [  ] explanation: [ ]
-Q35:   [  ] explanation: [ ]
-Q36:   [  ] explanation: [ ]
-Q37:   [  ] explanation: [ ]
-Q38:   [  ] explanation: [ ]
-Q39:   [  ] explanation: [ ]
-Q40:   [  ] explanation: [ ]
-Q41:   [  ] explanation: [ ]
-Q42:   [  ] explanation: [ ]
-Q43:   [  ] explanation: [ ]
-Q44:   [  ] explanation: [ ]
-Q45:   [  ] explanation: [ ]
-Q46:   [  ] explanation: [ ]
-Q47:   [  ] explanation: [ ]
-Q48:   [  ] explanation: [ ]
-Q49:   [  ] explanation: [ ]
-Q50:   [  ] explanation: [ ]
-Q51:   [  ] explanation: [ ]
-Q52:   [  ] explanation: [ ]
-Q53:   [  ] explanation: [ ]
-Q54:   [  ] explanation: [ ]
+Q34:   [ 0] explanation: [ ]
+Q35:   [ 2] explanation: [ UC16 ]
+Q36:   [ 0] explanation: [ ]
+Q37:   [ 2] explanation: [ UC10 ]
+Q38:   [ 2] explanation: [ UC25 ]
+Q39:   [ 2] explanation: [ UC7 ]
+Q40:   [ 2] explanation: [ UC17 ]
+Q41:   [ 2] explanation: [ UC19 ]
+Q42:   [ 2] explanation: [ UC19 ]
+Q43:   [ 2] explanation: [ UC15 ]
+Q44:   [ 2] explanation: [ UC4 ]
+Q45:   [ 2] explanation: [ UC5 ]
+Q46:   [ 2] explanation: [ UC4, UC5, UC6 ]
+Q47:   [ 1] explanation: [ Instead of UC2: "Review application", we would choose the non existent UC7: "allocate hardware to customer organisation". This way, the group of use cases is a better representation of the core of the system.]
+Q48:   [ 0] explanation: [ ]
+Q49:   [ 0] explanation: [ ]
+Q50:   [ 0] explanation: [ ]
+Q51:   [ 2] explanation: [ Application actor ]
+Q52:   [ 2] explanation: [ Application provider actor]
+Q53:   [ 2] explanation: [ All written out use cases have alternative scenarios ]
+Q54:   [ 2] explanation: [ Many things are missing from the domain model ]
 %
 % 3. QUALITY ATTRIBUTE SCENARIOS
 %
-Q55:   [  ] explanation: [ ]
-Q56:   [  ] explanation: [ ]
-Q57:   [  ] explanation: [ ]
-Q58:   [  ] explanation: [ ]
-Q59:   [  ] explanation: [ ]
-Q60:   [  ] explanation: [ ]
-Q61:   [  ] explanation: [ ]
-Q62:   [  ] explanation: [ ]
-Q63:   [  ] explanation: [ ]
-Q64:   [  ] explanation: [ ]
-Q65:   [  ] explanation: [ ]
+Q55:   [ 1] explanation: [ Changes for bigger impact on the business: "Changes to UI components" -> "Big data analytics on pluggable data and/or application usage data", "User wants to learn to use the system" -> "Application updates" ]
+Q56:   [ 2] explanation: [ Descriptions and stimuli are clear. ]
+Q57:   [ 2] explanation: [ "review application", "send sensor data"]
+Q58:   [ 2] explanation: [ Responses make sense, metrics are suitable ]
+Q59:   [ 2] explanation: [ i, iii ]
+Q60:   [ 2] explanation: [ Responses make sense, metrics are suitable ]
+Q61:   [ 2] explanation: [ ii, iii ]
+Q62:   [ 2] explanation: [ Responses make sense, metrics are suitable ]
+Q63:   [ 2] explanation: [ code/functionality ]
+Q64:   [ 2] explanation: [ Responses make sense, metrics are suitable ]
+Q65:   [ 0] explanation: [ ]
 %
 % 4. GENERAL
 %
@@ -97,32 +97,26 @@ Q65:   [  ] explanation: [ ]
 %  NA (unclear or impossible to assess)
 % Also, briefly explain your answers.
 %
-Q66:   [  ]
+Q66:   [ 1]
 Q66explanation: [
-
-
+    Way too few attributes. A lot of domain elements are missing. Unclear and too few relationships.
 ]
-Q67:   [  ]
+Q67:   [ 4]
 Q67explanation: [
-
-
+    Could do with a couple more use cases.
 ]
-Q68:   [  ]
+Q68:   [ 4]
 Q68explanation: [
-
-
+    M2 and U2 should have been chosen better.
 ]
-Q69:   [  ]
+Q69:   [ 4]
 Q69explanation: [
-
-
+    The report is easy to read and navigate, but there are a couple of spelling errors. The diagrams are easy to read. The report is not longer than it needs to be. The terminology is consistent throughout the report.
 ]
 % Questions 70-71 are open questions.
 Q70:   [
-
-
+    We think this report would be a good starting point for part 2 of the project. All of the use cases would need to be written out in full and some mode use cases are definitely needed: for "Installing a mote" and "Plugging in a new sensor/actuator". The domain model is pretty useless, but as we are doing part 2 without one, that doesn't seem to be too much of a problem.
 ]
 Q71:   [
-
-
+    /
 ]
