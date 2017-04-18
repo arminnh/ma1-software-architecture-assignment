@@ -75,9 +75,9 @@ Q54:   [ 2] explanation: [e.g. Notification delivery method is missing from the 
 % 3. QUALITY ATTRIBUTE SCENARIOS
 %
 Q55:   [ 1] explanation: [P2 is just functionality. M1 "to the system" instead of "to the topology".]
-Q56:   [ 2] explanation: [Descriptions and stimulus are clear.]
+Q56:   [ 2] explanation: [Descriptions and stimuli are clear.]
 Q57:   [ 0] explanation: [ ]
-Q58:   [ 1] explanation: [Av1: It unecessary term minimal applications. Av2: It is unrealistic for the system administrator (should be infrastructure owner?) to always check the battery of all motes. The guarateed lifetimes are not responses from the system.]
+Q58:   [ 1] explanation: [Av1: "minimal applications" is unnecessary. Av2: It is unrealistic for the system administrator (should be infrastructure owner?) to always check the battery of all motes. The guarateed lifetimes are not responses from the system.]
 Q59:   [ 2] explanation: [ii, iii]
 Q60:   [ 0] explanation: [ ]
 Q61:   [ 2] explanation: [ii]
@@ -97,32 +97,26 @@ Q65:   [ 1] explanation: [U2: Easy adding of applications, but nothing about err
 %  NA (unclear or impossible to assess)
 % Also, briefly explain your answers.
 %
-Q66:   [  ]
+Q66:   [ 4]
 Q66explanation: [
-
-
+    All elements we could think of while answering the questiong were in the domain model. The domain model should have more attributes and some more relationships could be useful.
 ]
-Q67:   [  ]
+Q67:   [ 3]
 Q67explanation: [
-
-
+    A couple of important use cases/actors (e.g. Send Heartbeat, Application actor) are missing and there are some inconsistensies.
 ]
-Q68:   [  ]
+Q68:   [ 3]
 Q68explanation: [
-
-
+    We believe that all of the chosen quality attributes were good, except for P2. The descriptions and stimuli are clear. Some responses and measures don't really make sense or should be clearer.
 ]
-Q69:   [  ]
+Q69:   [ 4]
 Q69explanation: [
-
-
+    The report is easy to navigate, but there are many spelling errors. The domain model diagrams are easy to read. The use case diagram is a bit unorganized. The report is not longer than it needs to be. The terminology is consistent throughout the report.
 ]
 % Questions 70-71 are open questions.
 Q70:   [
-
-
+    We think this report would be a decent starting point for part 2 of the project. A couple of quality attributes need some more details. Some more use cases would need to be added and all of the use cases would need to be written out in full.
 ]
 Q71:   [
-
-
+    Good job, love you.
 ]
