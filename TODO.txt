@@ -1,6 +1,6 @@
 NOTES: we have more interfaces in graph as in description
-  (e.g. AppMgmt in ADD 2 - it is not describe because it is in ADD 1 - we should remove it from 
-  graph or add also description in to ADD 2, it is confusing.) 
+  (e.g. AppMgmt in ADD 2 - it is not describe because it is in ADD 1 - we should remove it from
+  graph or add also description in to ADD 2, it is confusing.)
 
 
 \section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
@@ -32,15 +32,7 @@ Update current decomposition with given interfaces for pluggable devices (= cons
 
 QUESTIONS:
 
-In use case 11 step 2: The  system  checks  whether  the  pluggable
-device has  been  initialised (cf. UC8: Initialise  a pluggable device)
-IS THIS IN THE SYSTEM OR IN GATEWAYS? CAN WE CHOOSE?
-We said we would do this in the PluggableDeviceManager
-
 When can we register for final presentation
-
-OtherFunctionality: do we need to add interfaces already?
-                    -> No, can add in later iterations
 
 Each decomposition you choose an element. Is this supposed to be a component
 (like OtherFunctionality) or can this be a collection of components/subsystems?
@@ -50,16 +42,18 @@ Interfaces: What's the point of exceptions here? Also, we added
 
 How to make interface names transparent?
 
-Can we extend the given interfaces?
-
 DeviceData, but PluggableDeviceID, what's up with that?
+
+Is this ok to handle part of U2: A connection to the internet is a constraint of the GatewayFacade.
+
+How to model the mote's broadcast message to search for a gateway
 
 ==========================================================================
 
 DO SOMETHING WITH THIS, UC11/UC13
 \item AppDeviceMgmt, last defined in section \ref{add1-interfaces}
 \begin{itemize}
-    \item \texttt{void configurePluggableDevice(int deviceID, PluggableDeviceSettings settings)}
+    \item \texttt{void configurePluggableDevice(int deviceID, Map<String, String> settings)}
     \begin{itemize}
         \item For: Use case 11 step 3.b
         \item Effect: Causes certain settings to be set on a pluggable
@@ -72,9 +66,6 @@ DO SOMETHING WITH THIS, UC11/UC13
 ============================ REMAINING DRIVERS ===========================
 ==========================================================================
 
-High Priority
-U2: Easy installation
-
 Medium Priority
 Av1: Communication between SIoTIP gateway and Online Service
 Av2: Application failure
@@ -85,15 +76,10 @@ Low Priority
 % M2: Big data analytics on pluggable data and/or application usage data
 
 High:
-UC04: Install mote
 UC05: Uninstall mote
-UC06: Insert a pluggable device into a mote
 UC07: Remove a pluggable device from its mote
 UC08: Initialise a pluggable device
-UC09: Configure pluggable device access rights
-UC10: Consult and configure the topology
 UC12: Perform actuation command
-UC17: Activate an application
 UC19: Subscribe to application
 UC20: Unsubscribe from application
 UC25: Access topology and available devices

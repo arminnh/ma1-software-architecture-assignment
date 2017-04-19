@@ -1,0 +1,61 @@
+Listing...
+texlive/yakkety,yakkety 2016.20160819-2 all
+texlive-base/yakkety,yakkety,now 2016.20160819-2 all [installed,automatic]
+texlive-bibtex-extra/yakkety,yakkety 2016.20160819-1 all
+texlive-binaries/yakkety,now 2016.20160513.41080-6 amd64 [installed,automatic]
+texlive-extra-utils/yakkety,yakkety,now 2016.20160819-1 all [installed,automatic]
+texlive-font-utils/yakkety,yakkety,now 2016.20160819-1 all [installed]
+texlive-fonts-extra/yakkety,yakkety,now 2016.20160819-1 all [installed]
+texlive-fonts-extra-doc/yakkety,yakkety,now 2016.20160819-1 all [installed,automatic]
+texlive-fonts-recommended/yakkety,yakkety,now 2016.20160819-2 all [installed,automatic]
+texlive-fonts-recommended-doc/yakkety,yakkety,now 2016.20160819-2 all [installed,automatic]
+texlive-formats-extra/yakkety,yakkety 2016.20160819-1 all
+texlive-full/yakkety,yakkety 2016.20160819-2 all
+texlive-games/yakkety,yakkety 2016.20160819-1 all
+texlive-generic-extra/yakkety,yakkety 2016.20160819-1 all
+texlive-generic-recommended/yakkety,yakkety,now 2016.20160819-2 all [installed,automatic]
+texlive-htmlxml/yakkety,yakkety 2016.20160819-1 all
+texlive-humanities/yakkety,yakkety 2016.20160819-1 all
+texlive-humanities-doc/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-african/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-all/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-arabic/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-chinese/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-cjk/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-cyrillic/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-czechslovak/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-english/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-european/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-french/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-german/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-greek/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-indic/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-italian/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-japanese/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-korean/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-other/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-polish/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-portuguese/yakkety,yakkety 2016.20160819-1 all
+texlive-lang-spanish/yakkety,yakkety 2016.20160819-1 all
+texlive-latex-base/yakkety,yakkety,now 2016.20160819-2 all [installed]
+texlive-latex-base-doc/yakkety,yakkety,now 2016.20160819-2 all [installed,automatic]
+texlive-latex-extra/yakkety,yakkety,now 2016.20160819-1 all [installed]
+texlive-latex-extra-doc/yakkety,yakkety,now 2016.20160819-1 all [installed,automatic]
+texlive-latex-recommended/yakkety,yakkety,now 2016.20160819-2 all [installed]
+texlive-latex-recommended-doc/yakkety,yakkety,now 2016.20160819-2 all [installed,automatic]
+texlive-luatex/yakkety,yakkety 2016.20160819-2 all
+texlive-math-extra/yakkety,yakkety 2016.20160819-1 all
+texlive-metapost/yakkety,yakkety 2016.20160819-2 all
+texlive-metapost-doc/yakkety,yakkety 2016.20160819-2 all
+texlive-music/yakkety,yakkety 2016.20160819-1 all
+texlive-omega/yakkety,yakkety 2016.20160819-2 all
+texlive-pictures/yakkety,yakkety,now 2016.20160819-2 all [installed,automatic]
+texlive-pictures-doc/yakkety,yakkety,now 2016.20160819-2 all [installed,automatic]
+texlive-plain-extra/yakkety,yakkety 2016.20160819-1 all
+texlive-pstricks/yakkety,yakkety,now 2016.20160819-1 all [installed,automatic]
+texlive-pstricks-doc/yakkety,yakkety,now 2016.20160819-1 all [installed,automatic]
+texlive-publishers/yakkety,yakkety 2016.20160819-1 all
+texlive-publishers-doc/yakkety,yakkety 2016.20160819-1 all
+texlive-science/yakkety,yakkety 2016.20160819-1 all
+texlive-science-doc/yakkety,yakkety 2016.20160819-1 all
+texlive-xetex/yakkety,yakkety 2016.20160819-2 all

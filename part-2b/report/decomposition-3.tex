@@ -1,4 +1,4 @@
-\section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
+\section{Decomposition 3: U2, UC4, UC6, UC9, UC10, UC17, UC19.7-11}
 
 \subsection{Elements/Subsystem to decompose/expand}
     In this run we decompose/expand ...
@@ -7,13 +7,23 @@
 \subsection{Selected architectural drivers}
     The non-functional drivers for this decomposition are:
     \begin{itemize}
-    	\item \emph{QA}: Name of QA
+    	\item \emph{U2}: Easy installation
     \end{itemize}
 
     The related functional drivers are:
     \begin{itemize}
-        \item \emph{UCX}: Name of UC \\
-              Short description of the UC.
+        \item \emph{UC4}: Install mote \\
+              Short description
+        \item \emph{UC6}: Inset a pluggable device into a mote \\
+              Short description
+        \item \emph{UC9}: Configure pluggable device access rights \\
+              Short description
+        \item \emph{UC10}: Consult and configure topology \\
+              Short description
+        \item \emph{UC17}: Activate an application \\
+              Short description
+        \item \emph{UC19}: Subscribe to application \\
+              Short description
     \end{itemize}
 
 
@@ -21,8 +31,48 @@
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
 
-    \paragraph{QA: Problem title}
-        Short description of the problem.\\
+    \paragraph{U2: Gateway installation}
+        The gateway should not require any configuration, other than being connected
+        to the local wired or WiFi network, after it is plugged into an electrical
+        socket. An infrastructure owner should be able get the SIoTIP gateway
+        up-and-running (connected) within 10 minutes given that the information
+        (e.g. WiFi SSID and passphrase) is available to the person responsible for
+        the installation. \\
+        We need something that registers the gateway automatically with the
+        online service after bootup. A connection to the internet is a constraint
+        of the GatewayFacade.
+
+    \paragraph{U2: Mote installation}
+        Installing a new mote should not require more configuration than adding it
+        to the topology. Adding new motes, sensors or actuators should not involve
+        more than just starting motes, and plugging devices into motes – plug-and-play! \\
+        What the actual fuck? \\
+        Reintroducing a previously known mote, with the same pluggable devices attached to it,
+        should not require any configuration. It is automatically re-added on
+        its last known location on the topology. The attached pluggable devices
+        are automatically initialised and configured with their last known
+        configuration and access rights. \\
+        Thing that need to happen automatically:
+        *) mote should find the gateway (mote sends a broadcast message->ReceiveBroadcast)
+        *) gateway should register the mote (PluggableDeviceManager update, store entry in DB)
+        *) on reintroduction of motes: PluggableDeviceManager notices this, makes the gateway send a message to online service to reuse some old topology
+
+    \paragraph{U2: Pluggable device installation}
+        Adding new sensors or actuators should require no further customer
+        actions besides plugging it into the mote. Configurable sensors and
+        actuators should have a working default configuration.
+        Pluggable devices added to an already known mote are automatically
+        added in the right location on the topology.
+        Making (initialised) sensors and actuators available to customer
+        organisations and applications should not require more effort than
+        configuring access rights (cf. UC9). \\
+        Solution for the problem.
+
+    \paragraph{U2: Easy applications}
+        Applications should work out of the box if the required sensors and
+        actuators are available. Only when mandatory end-user roles must be
+        assigned, additional explicit configuration actions are required
+        from a customer organisation (cf. UC17, UC19). \\
         Solution for the problem.
 
 
