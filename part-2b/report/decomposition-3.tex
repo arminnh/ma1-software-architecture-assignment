@@ -47,6 +47,7 @@
         up-and-running (connected) within 10 minutes given that the information
         (e.g. WiFi SSID and passphrase) is available to the person responsible for
         the installation. \\
+        TODO: ask \\
         We need something that registers the gateway automatically with the
         online service after bootup. A connection to the internet is a constraint
         of the GatewayFacade.
@@ -54,8 +55,7 @@
     \paragraph{U2: Mote installation}
         Installing a new mote should not require more configuration than adding it
         to the topology. Adding new motes, sensors or actuators should not involve
-        more than just starting motes, and plugging devices into motes – plug-and-play! \\
-        What the actual fuck? \\
+        more than just starting motes, and plugging devices into motes – plug-and-play! TODO: ask \\
         Reintroducing a previously known mote, with the same pluggable devices attached to it,
         should not require any configuration. It is automatically re-added on
         its last known location on the topology. The attached pluggable devices
@@ -63,14 +63,30 @@
         configuration and access rights. \\
         Thing that need to happen automatically:
         *) mote should find the gateway (mote sends a broadcast message->ReceiveBroadcast)
-        *) gateway should register the mote (PluggableDeviceManager update, store entry in DB)
-        *) on reintroduction of motes: PluggableDeviceManager notices this, makes the gateway send a message to online service to reuse some old topology
+        *) gateway should register the mote (DeviceManager update, store entry in DB)
+        *) on reintroduction of motes: DeviceManager notices this, makes the gateway send a message to online service to reuse some old topology
 
         UC4:
-            copy paste "Remarks" => mote is already linked to a gateway
-            => registerMote(IPAddress moteIPAddress) (= mote is added in topology with "unplaced" status)
-            send notification to IO about new device
+            Remark : The mote is pre-congured to connect to a specic gateway by
+             the hardware manufacturer. This linking process is out of scope for
+             this assignment. Likewise, the automatic assignment of an IPv6 address
+             to the mote is out of scope.
 
+            if new mote:
+                2. MoteFacade -> GatewayFacade: registerMote(moteID, IPAddress moteIPAddress)
+                3. GatewayFacade -> DeviceManager: registerMote(moteID, IPAddress moteIPAddress)
+                3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: addMote(moteID, IPAddress moteIPAddress)
+                3. DeviceManager -> GatewayFacade -> TopologyManager: addMote(infrastructureOwnerID, moteID) // status = unplaced
+                4. DeviceManager -> GatewayFacade -> NotificationHandler: notify(infrastructureOwnerID, message)
+
+        if reintroduced mote:
+            It is automatically re-added on its last known location on the topology.
+                3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: reactivateMote(moteID)
+                3. DeviceManager -> GatewayFacade -> TopologyManager: reactivateMote(moteID) // status = placed? (TODO ASK?), location is still there from the past, it was not removed
+
+            The attached pluggable devices are automatically initialised and configured with their last known configuration.
+            The attached pluggable devices are automatically initialised and configured with their last known access rights.
+                3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: reactivateDevice(deviceID)
 
 
     \paragraph{U2: Pluggable device installation}
@@ -93,51 +109,53 @@
 
         *) Pluggable devices added to an already known mote are automatically added in "the right location" on the topology.
             what exactly is a location?
-            do we keep something like last known location in a separate table or just a field in devices
+            => when a pluggable device is connected to a new mote, the pluggable device gets the location of the mote by default
 
-        UC6:
+        UC6: insert a pluggable device into a mote
             mote is already installed
 
             when device is plugged into a mote:
-                mote -> PluggableDeviceManager: registerDevice(id, type) (registers device as uninitialised)
-                PluggableDeviceManager -> PluggableDeviceDatabase: addDevice(id, type, status) (status = uninitialised)
-                PluggableDeviceManager -> TopologyManager: addDeviceToMote(deviceID, moteID, status) (status = unplaced) (sets the location to the same of the mote)
-                PluggableDeviceManager -> NotificationHandler: newPluggableDevice
+                mote -> DeviceManager: registerDevice(id, type) (registers device as uninitialised)
+                DeviceManager -> PluggableDeviceDatabase: addDevice(id, type, status) (status = uninitialised)
+                DeviceManager -> TopologyManager: addDeviceToMote(deviceID, moteID, status) (status = unplaced) (sets the location to the same of the mote)
+                DeviceManager -> NotificationHandler: newPluggableDevice
 
                 In these methods, if the device already exists and is plugged in in another mote, clear the data
 
             if the device is a known previously active device (ON THE SAME MOTE):
-                mote -> PluggableDeviceManager: registerDevice(id, type)
+                mote -> DeviceManager: registerDevice(id, type)
 
                 ∗ marks the pluggable device as ‘active’: DB pluggable_devices
-                    PluggableDeviceManager -> PluggableDeviceDatabase: reactivateDevice(deviceID)
+                    DeviceManager -> PluggableDeviceDataScheduler: reactivateDevice(deviceID)
 
                 ∗ updates the topology: DB topology_pluggable_devices
-                    PluggableDeviceManager -> TopologyManager: reactivateDevice(deviceID)
+                    DeviceManager -> TopologyManager: reactivateDevice(deviceID)
 
                 ∗ configures the pluggable device with the last known access rights: DB permissions_pluggable_devices
-                    % PluggableDeviceManager -> DeviceAccessRightsManager: reactivate(deviceID)
+                    % DeviceManager -> DeviceAccessRightsManager: reactivate(deviceID)
                     nothing needs to happen here, permission information will just not be used if the device is inactive
                                                   if the device is reactivated, the permissions are already there
 
                 * configures the pluggable device with the last known configuration: DB pluggable_devices
-                    PluggableDeviceManager -> PluggableDevice: setConfiguration(Map<String, String> lastKnownConfiguratoin) (lastKnown.. taken from DB)
+                    DeviceManager -> PluggableDevice: setConfiguration(Map<String, String> lastKnownConfiguratoin) (lastKnown.. taken from DB)
 
                 ∗ checks and activates applications which can now execute again:
-                    PluggableDeviceManager -> ApplicationManager: checkPluggableDevices() something like this
+                    DeviceManager -> ApplicationManager: checkPluggableDevices() something like this
 
                 * send notification
-                    PluggableDeviceManager -> NotificationHandler: reactivatedPluggableDevice
+                    DeviceManager -> NotificationHandler: reactivatedPluggableDevice
 
-        UC9:
-            1.On access rights dashboard -> configureAccessRights
-                2. UI -> PluggableDeviceManager: getPluggableDevices(infrastructureOwnerID)
-                3. UI -> AccessRightsManager: getAccessRights(pluggableDeviceID)
-                4. UI -> OtherFunctionality: getCustomerOrganisations(infrastructureOwnerID)
-            6. UI -> PluggableDeviceManager: configureAccessRights(pluggableDeviceID, List<int> customerOrganisations)
+        UC9: configure pluggable device access rights
+            1. InfrastructureOwnerClient -> InfrastructureOwnerFacade: getAccessRights()
+                2. InfrastructureOwnerFacade -> DeviceManager: getPluggableDevices(infrastructureOwnerID)
+                3. InfrastructureOwnerFacade -> AccessRightsManager: getAccessRights(pluggableDeviceID)
+                4. InfrastructureOwnerFacade -> OtherFunctionality: getCustomerOrganisations(infrastructureOwnerID)
+            6. InfrastructureOwnerClient -> InfrastructureOwnerFacade: setAccessRights/updateAccessRights(pluggableDeviceID, List<int> customerOrganisations)
+                6. InfrastructureOwnerFacade -> DeviceManager: configureAccessRights(pluggableDeviceID, List<int> customerOrganisations)
                 7.a. AccessRightsManager -> PluggableDeviceDatabase: updateDeviceAccessRights(deviceID, custOrg) / deleteAccessRights()
-            7.b. AccessRightsManager -> ApplicationManager: checkAccessRights(custOrg)
-            7.c. AccessRightsManager -> ApplicationManager: checkPluggableDevices(custOrg)
+                7.b. AccessRightsManager -> ApplicationManager: checkAccessRights(custOrg)
+                7.c. AccessRightsManager -> ApplicationManager: checkPluggableDevices(custOrg)
+
 
     \paragraph{U2: Easy applications}
         Applications should work out of the box if the required sensors and
@@ -151,7 +169,7 @@
         UC17:
             application needs to be activated because new subscription, changed topology, new version of application
 
-            ApplicationManager is triggered by somthing else do to the following: OtherFunctionality -> ApplicationManager: activateApplication(applicationInstanceID)
+            ApplicationManager is triggered by something else do to the following: method activateApplication(applicationInstanceID)
             1. ApplicationManager -> UserRolesManager: checkMandatoryUserRoles(applicationInstanceID)
             2. ApplicationManager -> DeviceManager: checkPluggableDevices(applicationInstanceID)
             3. ApplicationManager -> GatewayFacade: activateApplication(applicationInstanceID) -> ApplicationSandbox component on gateway
@@ -165,17 +183,21 @@
             TODO notifications for alternative scenario's
 
         UC19:
-            CustomerOrganisationDashboard -> ApplicationManager: getAvailableApplication(custOrgID)
-            CustomerOrganisationDashboard -> ApplicationManager: getSubscribeApplication(custOrgID, applicationID)
-                ApplicationManager: getMandatoryDevicesAndTopologyConfigurations(applicationID)
-            6. The primary actor carries out the topology configuration ??????????????????????????????????????????????????????????????????????????????????
-            7. ApplicationManager: getAllUserRoles(applicationID)
-            8. UserRolesManager: getAllUserRoles(custOrgID)
-            9. UserRolesManager: setUserRoles(custOrgID, map<String, String> userRoles)
-            11. UI -> CustomerOrganisationDash
-            12. ApplicationManager: setCriticality(applicationID, bool isCritical)
-            13. SubscriptionManager: unsubscribe(customerOrganisationID, applicationInstanceID)
-            14. ApplicationManager: activateApplication(applicationInstanceID)
+            2. CustomerOrganisationClient -> CustomerOrganisationFacade: List<Application> getApplicationsToSubscribe(custOrgID)
+                   CustomerOrganisationFacade -> ApplicationManager: List<Application> getApplicationsToSubscribe(custOrgID)
+            4. CustomerOrganisationClient -> CustomerOrganisationFacade: subscribeToApplication(custOrgID, applicationID)
+            5. CustomerOrganisationFacade -> ApplicationManager: getMandatoryDevicesAndTopologyConfigurations(applicationID)
+            6. TODO: The primary actor carries out the topology configuration ??????????????????????????????????????????????????????????????????????????????????
+            7. CustomerOrganisationFacade -> ApplicationManager: getAllUserRoles(applicationID)
+            8. CustomerOrganisationFacade -> UserRolesManager: getAllUsers(custOrgID)
+            9. CustomerOrganisationClient -> CustomerOrganisationFacade: setUserRoles(custOrgID, map<String, String> userRoles)
+                   CustomerOrganisationFacade -> UserRolesManager: setUserRoles(custOrgID, map<String, String> userRoles)
+                   10. <- return value is next page for selection of criticality
+            11. CustomerOrganisationClient -> CustomerOrganisationFacade: setCriticality(applicationID, bool isCritical)
+                    12. CustomerOrganisationFacade -> ApplicationManager: setCriticality(applicationID, bool isCritical)
+            13. CustomerOrganisationFacade -> SubscriptionManager: subscribe(customerOrganisationID, applicationID) // returns applicationInstanceID of new application instance, if the org is subscribed to a older version, automatically unsubscribe
+            14. CustomerOrganisationFacade -> ApplicationManager: activateApplication(applicationInstanceID)
+
 
 \subsection{Instantiation and allocation of functionality}
     This section describes the new components which instantiate our solutions described
