@@ -14,7 +14,7 @@
     \begin{itemize}
         \item \emph{UC4}: Install mote \\
               Short description
-        \item \emph{UC6}: Inset a pluggable device into a mote \\
+        \item \emph{UC6}: Insert a pluggable device into a mote \\
               Short description
         \item \emph{UC9}: Configure pluggable device access rights \\
               Short description
@@ -30,6 +30,15 @@
 \subsection{Architectural design}
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
+
+    topology
+        gateways(id, floor, room_number, wall, status)
+        motes(id, gateway_id, floor, room_number, status)
+        pluggable_devices(id, mote_id, gateway_id, status, physical location)
+        pluggable_devices_redundancies(deviceID1, deviceID2)
+
+    access rights
+        rights(id, origranisation_id, device_id, can_read, can_configure, can_send_actuation_command)
 
     \paragraph{U2: Gateway installation}
         The gateway should not require any configuration, other than being connected
@@ -57,6 +66,13 @@
         *) gateway should register the mote (PluggableDeviceManager update, store entry in DB)
         *) on reintroduction of motes: PluggableDeviceManager notices this, makes the gateway send a message to online service to reuse some old topology
 
+        UC4:
+            copy paste "Remarks" => mote is already linked to a gateway
+            => registerMote(IPAddress moteIPAddress) (= mote is added in topology with "unplaced" status)
+            send notification to IO about new device
+
+
+
     \paragraph{U2: Pluggable device installation}
         Adding new sensors or actuators should require no further customer
         actions besides plugging it into the mote. Configurable sensors and
@@ -66,15 +82,100 @@
         Making (initialised) sensors and actuators available to customer
         organisations and applications should not require more effort than
         configuring access rights (cf. UC9). \\
-        Solution for the problem.
+        *) After devices are plugged in: connect to mote, set up default configurations
+        *) if the mote is already known, the device is added to the right location on the topology
+        *) need something for configuration of access rights, can only happen for initialised devices
+
+        *) for reactivating last configurations: just set status to active and don't change configuration field, it will still be the same as in the past
+            alternative: current_configuration and last_configuration in DB
+            alternative: store all configurations on Gateway -> but it has bad resources
+            alternative: store all versions on PluggableDeviceDB -> but lots of useless data then = extra work for db
+
+        *) Pluggable devices added to an already known mote are automatically added in "the right location" on the topology.
+            what exactly is a location?
+            do we keep something like last known location in a separate table or just a field in devices
+
+        UC6:
+            mote is already installed
+
+            when device is plugged into a mote:
+                mote -> PluggableDeviceManager: registerDevice(id, type) (registers device as uninitialised)
+                PluggableDeviceManager -> PluggableDeviceDatabase: addDevice(id, type, status) (status = uninitialised)
+                PluggableDeviceManager -> TopologyManager: addDeviceToMote(deviceID, moteID, status) (status = unplaced) (sets the location to the same of the mote)
+                PluggableDeviceManager -> NotificationHandler: newPluggableDevice
+
+                In these methods, if the device already exists and is plugged in in another mote, clear the data
+
+            if the device is a known previously active device (ON THE SAME MOTE):
+                mote -> PluggableDeviceManager: registerDevice(id, type)
+
+                ∗ marks the pluggable device as ‘active’: DB pluggable_devices
+                    PluggableDeviceManager -> PluggableDeviceDatabase: reactivateDevice(deviceID)
+
+                ∗ updates the topology: DB topology_pluggable_devices
+                    PluggableDeviceManager -> TopologyManager: reactivateDevice(deviceID)
+
+                ∗ configures the pluggable device with the last known access rights: DB permissions_pluggable_devices
+                    % PluggableDeviceManager -> DeviceAccessRightsManager: reactivate(deviceID)
+                    nothing needs to happen here, permission information will just not be used if the device is inactive
+                                                  if the device is reactivated, the permissions are already there
+
+                * configures the pluggable device with the last known configuration: DB pluggable_devices
+                    PluggableDeviceManager -> PluggableDevice: setConfiguration(Map<String, String> lastKnownConfiguratoin) (lastKnown.. taken from DB)
+
+                ∗ checks and activates applications which can now execute again:
+                    PluggableDeviceManager -> ApplicationManager: checkPluggableDevices() something like this
+
+                * send notification
+                    PluggableDeviceManager -> NotificationHandler: reactivatedPluggableDevice
+
+        UC9:
+            1.On access rights dashboard -> configureAccessRights
+                2. UI -> PluggableDeviceManager: getPluggableDevices(infrastructureOwnerID)
+                3. UI -> AccessRightsManager: getAccessRights(pluggableDeviceID)
+                4. UI -> OtherFunctionality: getCustomerOrganisations(infrastructureOwnerID)
+            6. UI -> PluggableDeviceManager: configureAccessRights(pluggableDeviceID, List<int> customerOrganisations)
+                7.a. AccessRightsManager -> PluggableDeviceDatabase: updateDeviceAccessRights(deviceID, custOrg) / deleteAccessRights()
+            7.b. AccessRightsManager -> ApplicationManager: checkAccessRights(custOrg)
+            7.c. AccessRightsManager -> ApplicationManager: checkPluggableDevices(custOrg)
 
     \paragraph{U2: Easy applications}
         Applications should work out of the box if the required sensors and
         actuators are available. Only when mandatory end-user roles must be
         assigned, additional explicit configuration actions are required
         from a customer organisation (cf. UC17, UC19). \\
-        Solution for the problem.
+        *) if there is a subsription and new hardware is plugged in: need something to check
+           if some application can be activated now
+        *) need something to assign user roles to users during UC19
 
+        UC17:
+            application needs to be activated because new subscription, changed topology, new version of application
+
+            ApplicationManager is triggered by somthing else do to the following: OtherFunctionality -> ApplicationManager: activateApplication(applicationInstanceID)
+            1. ApplicationManager -> UserRolesManager: checkMandatoryUserRoles(applicationInstanceID)
+            2. ApplicationManager -> DeviceManager: checkPluggableDevices(applicationInstanceID)
+            3. ApplicationManager -> GatewayFacade: activateApplication(applicationInstanceID) -> ApplicationSandbox component on gateway
+            4. application.start();
+            4. ApplicationManager -> InvoiceManager: activatedApplication(applicationInstanceID, custOrgID, date)
+            5. ApplicationManager -> NotificationManager: activatedApplication(custOrgID)
+            6. ApplicationManager -> UserRolesManager: List<User> getUsersWithRoles(custOrgID)
+            6. ApplicationManager -> getInstallationInstructions(applicationID)
+            6. ApplicationManager -> NotificationManager: notify(userID, message)
+
+            TODO notifications for alternative scenario's
+
+        UC19:
+            CustomerOrganisationDashboard -> ApplicationManager: getAvailableApplication(custOrgID)
+            CustomerOrganisationDashboard -> ApplicationManager: getSubscribeApplication(custOrgID, applicationID)
+                ApplicationManager: getMandatoryDevicesAndTopologyConfigurations(applicationID)
+            6. The primary actor carries out the topology configuration ??????????????????????????????????????????????????????????????????????????????????
+            7. ApplicationManager: getAllUserRoles(applicationID)
+            8. UserRolesManager: getAllUserRoles(custOrgID)
+            9. UserRolesManager: setUserRoles(custOrgID, map<String, String> userRoles)
+            11. UI -> CustomerOrganisationDash
+            12. ApplicationManager: setCriticality(applicationID, bool isCritical)
+            13. SubscriptionManager: unsubscribe(customerOrganisationID, applicationInstanceID)
+            14. ApplicationManager: activateApplication(applicationInstanceID)
 
 \subsection{Instantiation and allocation of functionality}
     This section describes the new components which instantiate our solutions described
