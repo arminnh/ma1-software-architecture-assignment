@@ -73,8 +73,13 @@
              to the mote is out of scope.
 
             if new mote:
-                % 2. MoteFacade -> GatewayFacade: registerMote(moteID, IPAddress moteIPAddress)
-                % 3. GatewayFacade -> DeviceManager: registerMote(moteID, IPAddress moteIPAddress)
+                for step 2., we can use the heartbeat system. heartbeat is sent from mote to gateway,
+                the DeviceManager in the gateway notices that this is from a new mote and starts
+                the registerMote procedure
+                FOR RATIONALE: The IPAddress of the mote can be parsed out of the 6lowpan header in the heartbeat messages
+                ALTERNATIVE IS GatewayFacade: registerMote, but this is more work (battery power and implementation)
+                % DONT NEED THIS ONE 2. MoteFacade -> GatewayFacade: registerMote(moteID, IPAddress moteIPAddress)
+                % ALSO DONT NEED THIS ONE 3. GatewayFacade -> DeviceManager: registerMote(moteID, IPAddress moteIPAddress)
                 % 3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: addMote(moteID, gatewayID, IPAddress moteIPAddress)
                                                     %  PluggableDeviceDataScheduler -> PluggableDeviceDB: addMote(moteID, gatewayID, IPAddress moteIPAddress)
                                                 %   -> TopologyManager: addMote(infrastructureOwnerID, gatewayID, moteID) // status = unplaced
@@ -258,7 +263,7 @@
 
     \subsubsection{DeviceDataScheduler}
         \begin{itemize}
-            \item Devices, renamed DeviceData of decomposition-2
+            \item DeviceMgmt
             \begin{itemize}
                 \item \texttt{void addMote(int moteID, int gatewayID, IPAddress moteIPAddress)}
                     \begin{itemize}
@@ -281,26 +286,15 @@
         		\end{itemize}
 
                 \item \texttt{void reactivateMoteInTopology(int moteID)}
-                    \begin{itemize}
-                        \item Effect: Sets status to placed.
-                        \item Created for: UC4.3
-                    \end{itemize}
+                \begin{itemize}
+                    \item Effect: Sets status to placed.
+                    \item Created for: UC4.3
+                \end{itemize}
         	\end{itemize}
         \end{itemize}
 
     \subsubsection{GatewayFacade}
         \begin{itemize}
-            \item RegisterMote
-            \begin{itemize}
-                \item \texttt{void registerMote(int moteID, IPAddress moteIPAddress)}
-                    \begin{itemize}
-                        \item Effect: Uses the DeviceDataScheduler to add the new mote in the PluggableDeviceDatabase.
-                              Uses the TopologyManager to add the mote in the topology of the infrastructure owner.
-                              Uses the NotificationHandler to send a notification of this event to the infrastructure owner.
-                        \item Created for: UC4.2
-                    \end{itemize}
-            \end{itemize}
-
             \item DeviceMgmt, last defined in section \ref{add1-interfaces}
             \begin{itemize}
                 \item \texttt{void addMote(moteID, int gatewayID, IPAddress moteIPAddress)}
@@ -348,18 +342,6 @@
                     \end{itemize}
         	\end{itemize}
 
-        \end{itemize}
-
-    \subsubsection{DeviceManager}
-        \begin{itemize}
-        	\item DeviceMgmt
-        	\begin{itemize}
-        		\item \texttt{void registerMote(moteID, IPAddress moteIPAddress)}
-        		\begin{itemize}
-        			\item Effect: Sends a heartbeat from a mote to check/update timers for operational devices.
-        			\item Created for: UC4.3
-        		\end{itemize}
-        	\end{itemize}
         \end{itemize}
 
     \subsubsection{TopologyManager}
