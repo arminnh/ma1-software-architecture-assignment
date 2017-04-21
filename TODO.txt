@@ -26,7 +26,8 @@ NOTES: we have more interfaces in graph as in description
 
 ==========================================================================
 
-Update current decomposition with given interfaces for pluggable devices (= constraint)
+How is hardware linked to Infrastructure owners? Check if this is handled in one of the use cases
+1 gateway <-> 1 infrastructure owner
 
 ==========================================================================
 
@@ -47,6 +48,8 @@ DeviceData, but PluggableDeviceID, what's up with that?
 Is this ok to handle part of U2: A connection to the internet is a constraint of the GatewayFacade.
 
 How to model the mote's broadcast message to search for a gateway
+
+Where to create the actual db queries?
 
 ==========================================================================
 

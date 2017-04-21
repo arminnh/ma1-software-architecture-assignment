@@ -31,14 +31,19 @@
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
 
-    topology
-        gateways(id, floor, room_number, wall, status)
-        motes(id, gateway_id, floor, room_number, status)
-        pluggable_devices(id, mote_id, gateway_id, status, physical location)
-        pluggable_devices_redundancies(deviceID1, deviceID2)
+    Some dabatase tables text we wrote:
+        pluggable_devices
+        topology_pluggable_devices
+        permissions_pluggable_devices
 
-    access rights
-        rights(id, origranisation_id, device_id, can_read, can_configure, can_send_actuation_command)
+        topology
+            gateways(id, floor, room_number, wall, status)
+            motes(id, gateway_id, floor, room_number, status)
+            pluggable_devices(id, mote_id, gateway_id, status, physical location)
+            pluggable_devices_redundancies(deviceID1, deviceID2)
+
+        access rights
+            rights(id, origranisation_id, device_id, can_read, can_configure, can_send_actuation_command)
 
     \paragraph{U2: Gateway installation}
         The gateway should not require any configuration, other than being connected
@@ -51,6 +56,7 @@
         We need something that registers the gateway automatically with the
         online service after bootup. A connection to the internet is a constraint
         of the GatewayFacade.
+
 
     \paragraph{U2: Mote installation}
         Installing a new mote should not require more configuration than adding it
@@ -78,9 +84,12 @@
                 the registerMote procedure
                 FOR RATIONALE: The IPAddress of the mote can be parsed out of the 6lowpan header in the heartbeat messages
                 ALTERNATIVE IS GatewayFacade: registerMote, but this is more work (battery power and implementation)
+
+                FOR RATIONALE: be careful with int moteID. when we register, we send MoteInfo to the DB, DB returns a DIFFERENT int moteID
+                               we use the other moteID in the rest of the system
                 % DONT NEED THIS ONE 2. MoteFacade -> GatewayFacade: registerMote(moteID, IPAddress moteIPAddress)
                 % ALSO DONT NEED THIS ONE 3. GatewayFacade -> DeviceManager: registerMote(moteID, IPAddress moteIPAddress)
-                % 3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: addMote(moteID, gatewayID, IPAddress moteIPAddress)
+                % 3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: int moteID addMote(moteID, gatewayID, IPAddress moteIPAddress)
                                                     %  PluggableDeviceDataScheduler -> PluggableDeviceDB: addMote(moteID, gatewayID, IPAddress moteIPAddress)
                                                 %   -> TopologyManager: addMote(infrastructureOwnerID, gatewayID, moteID) // status = unplaced
                                                     %  TopologyManager -> PluggableDeviceDataScheduler -> PluggableDeviceDB: addMoteInTopology(infrastructureOwnerID, gatewayID, moteID)
@@ -123,35 +132,45 @@
             mote is already installed
 
             when device is plugged into a mote:
-                mote -> DeviceManager: registerDevice(id, type) (registers device as uninitialised)
-                DeviceManager -> PluggableDeviceDatabase: addDevice(id, type, status) (status = uninitialised)
-                DeviceManager -> TopologyManager: addDeviceToMote(deviceID, moteID, status) (status = unplaced) (sets the location to the same of the mote)
-                DeviceManager -> NotificationHandler: newPluggableDevice
+                2. The system receives a message from the mote, informing it of the new pluggable device. This
+                message species the identier and type of the new pluggable device.
+                => for registration, we can use the heartbeat system. heartbeat is sent from mote to gateway,
+                the DeviceManager in the gateway notices that there is a new pluggable device
 
-                In these methods, if the device already exists and is plugged in in another mote, clear the data
+                Status of new pluggable devices will be 'uninitialised' by default in the DB, and 'unplaced' in topology
+                New pluggable devices get the location of the mote in the topology, but have status unplaced
+
+                % DONT NEED THIS mote -> DeviceManager: registerDevice(id, type) (registers device as uninitialised)
+                % DeviceManager -> PluggableDeviceDatabase: addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)
+                % DeviceManager -> TopologyManager: addDevice(PluggableDeviceID id, int moteID)
+                % DeviceManager -> GatewayFacade: newPluggableDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)
+
+                % In these methods, if the device already exists and is plugged in in another mote, clear the data
 
             if the device is a known previously active device (ON THE SAME MOTE):
-                mote -> DeviceManager: registerDevice(id, type)
+                % DONT NEED THIS mote -> DeviceManager: registerDevice(id, type)
 
-                ∗ marks the pluggable device as ‘active’: DB pluggable_devices
-                    DeviceManager -> PluggableDeviceDataScheduler: reactivateDevice(deviceID)
+                ∗ marks the pluggable device as ‘active’:
+                    % DeviceManager -> PluggableDeviceDataScheduler: reactivateDevice(PluggableDeviceID id)
 
-                ∗ updates the topology: DB topology_pluggable_devices
-                    DeviceManager -> TopologyManager: reactivateDevice(deviceID)
+                ∗ updates the topology:
+                    % DeviceManager -> TopologyManager: reactivateDevice(PluggableDeviceID id)
 
-                ∗ configures the pluggable device with the last known access rights: DB permissions_pluggable_devices
-                    % DeviceManager -> DeviceAccessRightsManager: reactivate(deviceID)
-                    nothing needs to happen here, permission information will just not be used if the device is inactive
-                                                  if the device is reactivated, the permissions are already there
+                ∗ configures the pluggable device with the last known access rights:
+                    % DeviceManager -> AccessRightsManager: reactivate(deviceID)
+                    RATIONALE: nothing needs to happen here, permission information will just not be used if the device is inactive
+                               if the device is reactivated, the permissions are already there
 
-                * configures the pluggable device with the last known configuration: DB pluggable_devices
-                    DeviceManager -> PluggableDevice: setConfiguration(Map<String, String> lastKnownConfiguratoin) (lastKnown.. taken from DB)
+                * configures the pluggable device with the last known configuration:
+                    % DeviceManager -> PluggableDeviceDB: Map<String, String> getConfig(PluggableDeviceID id)
+                    % DeviceManager -> PluggableDeviceFacade: setConfig(config)
 
                 ∗ checks and activates applications which can now execute again:
-                    DeviceManager -> ApplicationManager: checkPluggableDevices() something like this
+                    RATIONALE: gateway sends id of IO instead of fetching customers of IO. the online service will do that extra work = less work for gateway.
+                    % DeviceManager -> GatewayFacade -> ApplicationManager: checkApplicationsForActivation(int infrastructureOwnerID)
 
                 * send notification
-                    DeviceManager -> NotificationHandler: reactivatedPluggableDevice
+                    % DeviceManager -> NotificationHandler: reactivatedPluggableDevice
 
         UC9: configure pluggable device access rights
             1. InfrastructureOwnerClient -> InfrastructureOwnerFacade: getAccessRights()
@@ -174,7 +193,7 @@
            if some application can be activated now
         *) need something to assign user roles to users during UC19
 
-        UC17:
+        UC17: Activate an application
             application needs to be activated because new subscription, changed topology, new version of application
 
             ApplicationManager is triggered by something else do to the following: method activateApplication(applicationInstanceID)
@@ -190,7 +209,7 @@
 
             TODO notifications for alternative scenario's
 
-        UC19:
+        UC19: Subscribe to application
             2. CustomerOrganisationClient -> CustomerOrganisationFacade: List<Application> getApplicationsToSubscribe(custOrgID)
                    CustomerOrganisationFacade -> ApplicationManager: List<Application> getApplicationsToSubscribe(custOrgID)
             4. CustomerOrganisationClient -> CustomerOrganisationFacade: subscribeToApplication(custOrgID, applicationID)
@@ -261,35 +280,71 @@
     extension of the interfaces defined in previous sections, unless
     explicitly stated otherwise.
 
+    \subsubsection{ApplicationManager}
+        \begin{itemize}
+            \item AppMgmt, last defined in section \ref{add1-interfaces}
+                \begin{itemize}
+                    \item \texttt{void checkApplicationsForActivation(int infrastructureOwnerID)}
+                        \begin{itemize}
+                			\item Effect: Checks and activates applications which can now execute again. Finds relevant applications through the customers of the given infrastructureOwnerID.
+                			\item Created for: UC17 \\ UC6.3 - reintroduced device
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+
     \subsubsection{DeviceDataScheduler}
         \begin{itemize}
             \item DeviceMgmt
             \begin{itemize}
-                \item \texttt{void addMote(int moteID, int gatewayID, IPAddress moteIPAddress)}
+                \item \texttt{int addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)}
                     \begin{itemize}
-                        \item Effect:
+                        \item Effect: Schedules a DB query to add a new mote to the PluggableDeviceDB.
                         \item Created for: UC4.3
                     \end{itemize}
                 \item \texttt{void reactivateMote(int moteID)}
                     \begin{itemize}
-                        \item Effect:
-                        \item Created for: UC4.3
+                        \item Effect: Schedules a DB query to change the status of the mote to active.
+                        \item Created for: UC4.3 - reintroduced mote
+                    \end{itemize}
+                \item \texttt{void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)}
+                    \begin{itemize}
+                        \item Effect: Schedules a DB query to add a new pluggable device to the PluggableDeviceDB.
+                        \item Created for: UC6.3
+                    \end{itemize}
+                \item \texttt{void reactivateDevice(PluggableDeviceID id)}
+                    \begin{itemize}
+                        \item Effect: Schedules a DB query to change the status of the pluggable device to active.
+                        \item Created for: UC6.3 - reintroduced device
+                    \end{itemize}
+                \item \texttt{Map<String, String> getConfigDB(PluggableDeviceID pID)}
+                    \begin{itemize}
+                        \item Effect: Schedules a DB query to get the last set configuration of a pluggable device.
+                        \item Created for: UC6.3 - reintroduced device
                     \end{itemize}
             \end{itemize}
 
         	\item TopologyMgmt
         	\begin{itemize}
-        		\item \texttt{void addMoteInTopology(int infrastructureOwnerID, int gatewayID, int moteID)}
-        		\begin{itemize}
-        			\item Effect:
-        			\item Created for: UC4.3
-        		\end{itemize}
-
+        		\item \texttt{void addMoteInTopology(int moteID, int infrastructureOwnerID, int gatewayID)}
+            		\begin{itemize}
+                        \item Effect: Schedules a DB query to add a new mote in the topology.
+            			\item Created for: UC4.3
+            		\end{itemize}
                 \item \texttt{void reactivateMoteInTopology(int moteID)}
-                \begin{itemize}
-                    \item Effect: Sets status to placed.
-                    \item Created for: UC4.3
-                \end{itemize}
+                    \begin{itemize}
+                        \item Effect: Schedules a DB query to change the status of the mote in the topology to 'placed'.
+                        \item Created for: UC4.3 - reintroduced mote
+                    \end{itemize}
+                \item \texttt{void addDevice(PluggableDeviceID id, int moteID)}
+                    \begin{itemize}
+                        \item Effect: Schedules a DB query to add a new pluggable device to the topology.
+                        \item Created for: UC6.3
+                    \end{itemize}
+                \item \texttt{void reactivateDevice(PluggableDeviceID id)}
+                    \begin{itemize}
+                        \item Effect: Schedules a DB query to change the status of the pluggable device to 'placed'.
+                        \item Created for: UC6.3 - reintroduced device
+                    \end{itemize}
         	\end{itemize}
         \end{itemize}
 
@@ -297,17 +352,83 @@
         \begin{itemize}
             \item DeviceMgmt, last defined in section \ref{add1-interfaces}
             \begin{itemize}
-                \item \texttt{void addMote(moteID, int gatewayID, IPAddress moteIPAddress)}
-                \begin{itemize}
-                    \item Effect:
-                    \item Created for: UC11: UC4.3
-                \end{itemize}
+                \item \texttt{int addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)}
+                    \begin{itemize}
+                        \item Effect: Sends a DB query to the DeviceDataScheduler to add the new mote. \\
+                              Sends a request to the TopologyManager to add the new mote to the topology of the infrastructure owner.
+                        \item Created for: UC4.3
+                    \end{itemize}
                 \item \texttt{void reactivateMote(int moteID)}
+                    \begin{itemize}
+                        \item Effect: Sends a DB query to the DeviceDataScheduler to reactivate the mote. \\
+                              Sends a request to the TopologyManager to update the mote's topology status.
+                        \item Created for: UC4.3 - reintroduced mote
+                    \end{itemize}
+                \item \texttt{void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations, int moteID)}
+                    \begin{itemize}
+                        \item Effect: Sends a DB query to the DeviceDataScheduler to add the new device. If the device already exists, removes the data first. The device's status is 'uninitialised' by default. \\
+                              Sends a request to the TopologyManager to add the new device to the topology and link it to a mote.
+                        \item Created for: UC6.3
+                    \end{itemize}
+                \item \texttt{void reactivateDevice(PluggableDeviceID id)}
+                    \begin{itemize}
+                        \item Effect: Sends a DB query to the DeviceDataScheduler to reactivate the device. Marks the pluggable device as 'active'. \\
+                              Sends a request to the TopologyManager to update the device's topology status.
+                        \item Created for: UC6.3 - reintroduced device
+                    \end{itemize}
+                \item \texttt{void notifyNewMote(int moteID, MoteInfo mote)}
+                    \begin{itemize}
+                        \item Effect: Lets the gateway know that a new mote has been installed in the system.
+                              This will generate a notification for an infrastructure owner.
+                        \item Created for: UC4.4
+                    \end{itemize}
+                \item \texttt{void notifyReactivatedMote(int moteID, MoteInfo mote)}
+                    \begin{itemize}
+                        \item Effect: Lets the gateway know that a mote has been reactivated in the system.
+                              This will generate a notification for an infrastructure owner.
+                        \item Created for: UC4.4
+                    \end{itemize}
+                \item \texttt{void notifyNewPluggableDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)}
+                    \begin{itemize}
+                        \item Effect: Lets the gateway know that a new device has been installed in the system.
+                              This will generate a notification for an infrastructure owner.
+                        \item Created for: UC6.3
+                    \end{itemize}
+                \item \texttt{void notifyReactivatedPluggableDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)}
+                    \begin{itemize}
+                        \item Effect: Lets the gateway know that a pluggable device has been reactivated in the system.
+                              This will generate a notification for an infrastructure owner.
+                        \item Created for: UC6.3
+                    \end{itemize}
+                \item \texttt{void setConfig(PluggableDeviceID pID, Map<String, String> config)}
+                    \begin{itemize}
+                        \item Now also used for UC6.3 - reintroduced device
+                    \end{itemize}
+                \item \texttt{Map<String, String> getConfigDB(PluggableDeviceID pID)}
+                    \begin{itemize}
+                        \item Effect: Sends a DB query to the DeviceDataScheduler to get the last set configuration of a pluggable device.
+                        \item Created for: UC6.3 - reintroduced device
+                    \end{itemize}
+            \end{itemize}
+
+            \item AppMgmt, last defined in section \ref{add1-interfaces}
                 \begin{itemize}
-                    \item Effect: Uses the DeviceDataScheduler to change the status of the mote to active.
-                          Uses the TopologyManager to change the status of the mote to placed again.
-                          Uses the NotificationHandler to send a notification of this event to the infrastructure owner.
-                    \item Created for: UC4.3 - reintroduced mote
+                    \item \texttt{void checkApplicationsForActivation(int infrastructureOwnerID)}
+                        \begin{itemize}
+                			\item Effect: Forwards this request to the ApplicationManager.
+                                  Used by DeviceManager after connecting a pluggable device.
+                			\item Created for: UC17 \\  UC6.3 - reintroduced device
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+
+    \subsubsection{MoteFacade}
+        \begin{itemize}
+            \item DeviceMgmt, last defined in section \ref{add1-interfaces}
+            \begin{itemize}
+                \item \texttt{void setConfig(PluggableDeviceID pID, Map<String, String> config)}
+                \begin{itemize}
+                    \item Now also used for UC6.3 - reintroduced mote
                 \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -316,47 +437,92 @@
         \begin{itemize}
         	\item DeviceMgmt
         	\begin{itemize}
-        		\item \texttt{void addMote(int moteID, int gatewayID, IPAddress moteIPAddress)}
-        		\begin{itemize}
-        			\item Effect:
-        			\item Created for: UC4.3
-        		\end{itemize}
-                \item \texttt{void reactivateMote(int moteID)}
+                \item \texttt{int addMote(DBQuery query)}
+            		\begin{itemize}
+            			\item Effect: Executes a DB request to add a new mote to the PluggableDeviceDB.
+            			\item Created for: UC4.3
+            		\end{itemize}
+                \item \texttt{void reactivateMote(DBQuery query)}
                     \begin{itemize}
-                        \item Effect:
-                        \item Created for: UC4.3
+                        \item Effect: Executes a DB request to change the status of the mote to active.
+                        \item Created for: UC4.3 - reintroduced mote
+                    \end{itemize}
+                \item \texttt{void addDevice(DBQuery query)}
+                    \begin{itemize}
+                        \item Effect: Executes a DB request to add a new pluggable device to the PluggableDeviceDB.
+                        \item Created for: UC6.3
+                    \end{itemize}
+                \item \texttt{void reactivateDevice(DBQuery query)}
+                    \begin{itemize}
+                        \item Effect: Executes a DB request to change the status of the pluggable device to active.
+                        \item Created for: UC6.3 - reintroduced device
+                    \end{itemize}
+                \item \texttt{Map<String, String> getConfigDB(PluggableDeviceID pID)}
+                    \begin{itemize}
+                        \item Effect: Schedules a DB query to get the last set configuration of a pluggable device.
+                        \item Created for: UC6.3 - reintroduced device
                     \end{itemize}
         	\end{itemize}
 
         	\item TopologyMgmt
         	\begin{itemize}
-        		\item \texttt{void addMoteInTopology(int infrastructureOwnerID, int gatewayID, int moteID)}
+        		\item \texttt{void addMote(DBQuery query)}
         		\begin{itemize}
-        			\item Effect:
+                    \item Effect: Executes a DB query to add a new mote in the topology.
         			\item Created for: UC4.3
         		\end{itemize}
-                \item \texttt{void reactivateMoteInTopology(int moteID)}
+                \item \texttt{void reactivateMote(DBQuery query)}
                     \begin{itemize}
-                        \item Effect: Sets status to placed.
-                        \item Created for: UC4.3
+                        \item Effect: Executes a DB query to change the status of the mote in the topology to 'placed'.
+                        \item Created for: UC4.3 - reintroduced mote
+                    \end{itemize}
+                \item \texttt{void addDevice(DBQuery query)}
+                    \begin{itemize}
+                        \item Effect: Executes a DB query to add a new pluggable device to the topology and link it to a mote.
+                        \item Created for: UC6.3
+                    \end{itemize}
+                \item \texttt{void reactivateDevice(DBQuery query)}
+                    \begin{itemize}
+                        \item Effect: Executes a DB query to change the status of the pluggable device to 'placed'.
+                        \item Created for: UC6.3 - reintroduced device
                     \end{itemize}
         	\end{itemize}
-
         \end{itemize}
+
+    \subsubsection{PluggableDeviceFacade}
+        \begin{itemize}
+        	\item Config, last defined in section \ref{add1-interfaces}
+        	\begin{itemize}
+                \item \texttt{boolean setConfig(Map<String, String> config)}
+                    \begin{itemize}
+                        \item Now also used for UC6.3 - reintroduced mote
+                    \end{itemize}
+        	\end{itemize}
 
     \subsubsection{TopologyManager}
         \begin{itemize}
         	\item TopologyMgmt
         	\begin{itemize}
-        		\item \texttt{void addMote(infrastructureOwnerID, int gatewayID, int moteID)}
-        		\begin{itemize}
-        			\item Effect: // status = unplaced
-        			\item Created for: UC4.3
-        		\end{itemize}
+        		\item \texttt{void addMote(int moteID, int infrastructureOwnerID, int gatewayID)}
+            		\begin{itemize}
+            			\item Effect: Sends a DB query to the DeviceDataScheduler to add a mote to the topology. Its status is 'unplaced' by default.
+            			\item Created for: UC4.3
+            		\end{itemize}
                 \item \texttt{void reactivateMote(int moteID)}
                     \begin{itemize}
-                        \item Effect:
-                        \item Created for: UC4.3
+                        \item Effect: Sends a DB query to the DeviceDataScheduler to change the status of the mote to 'placed'.
+                        \item Created for: UC4.3 - reintroduced mote
+                    \end{itemize}
+                \item \texttt{void addDevice(PluggableDeviceID id, int moteID)}
+                    \begin{itemize}
+                        \item Effect: Sends a DB query to the DeviceDataScheduler to add a device in the topology and link it to a mote.
+                              The device gets the mote's location by default. If the device is already linked to another mote, overwrite that link.
+                        \item Created for: UC6.3
+                    \end{itemize}
+                \item \texttt{void reactivateDevice(PluggableDeviceID id)}
+                    \begin{itemize}
+                        \item Effect: Sends a DB query to the DeviceDataScheduler to change the status of the device to 'placed'.
+                        \item Created for: UC6.3 - reintroduced device
                     \end{itemize}
         	\end{itemize}
         \end{itemize}
