@@ -43,7 +43,7 @@
         send heartbeats to their connected gateways. The gateways can
         then monitor their connected devices. The heartbeats contain a list
         of devices that are connected/operational at the moment the mote sends
-        the heartbeat. Each gateway makes use of a \texttt{PluggableDeviceManager}
+        the heartbeat. Each gateway makes use of a \texttt{DeviceManager}
         component to monitor the devices. This component uses timers to keep track
         of how long it has been since a device has sent a heartbeat or occured in
         a list of connected devices. Once a timer expires, this is treated as
@@ -61,14 +61,14 @@
         once the failure is resolved. Application providers can design their
         applications such that they explicitly require redundancy in
         the available pluggable devices. \\
-        This problem is tackled by the \texttt{PluggableDeviceManager}. It
+        This problem is tackled by the \texttt{DeviceManager}. It
         stores the requirements for pluggable devices set by applications for all
-        applications that use the gateway that the the \texttt{PluggableDeviceManager}
+        applications that use the gateway that the the \texttt{DeviceManager}
         runs on. When it detects that an application can no longer operate
         due to failures, it will send a command to the \texttt{ApplicationManager}
         (via the \texttt{GatewayFacade})
         to suspend that application. When the required devices are operational
-        again, the \texttt{PluggableDeviceManager} detects this and sends a
+        again, the \texttt{DeviceManager} detects this and sends a
         command to reactivate the application. \\
 
         Applications are suspended within 1 minute after detecting
@@ -100,7 +100,7 @@
 
     \subsubsection{Alternatives considered}
         \paragraph{Av3: Failure detection}
-            An alternative would have been to move the \texttt{PluggableDeviceManager}
+            An alternative would have been to move the \texttt{DeviceManager}
             component from gateways to the Online Service. This solution would make the
             gateways do less work, but would be very unscalable. The reason is
             that as the customer base (and thus the amount of devices) increases,
@@ -151,7 +151,7 @@
 
     \subparagraph{ApplicationManager}
         Responsible for activating/deactivating applications, setting
-        pluggable device redundancy requirements on \texttt{PluggableDeviceManager}
+        pluggable device redundancy requirements on \texttt{DeviceManager}
         components, and using \texttt{the NotificationHandler} to send notifications
         to customer organisations. (Av3)
 
@@ -162,7 +162,7 @@
     \subparagraph{GatewayFacade}
         Main component on the gateway that allows different components to work
         with each other. E.g. transmits heartbeats from motes to
-        \texttt{PluggableDeviceManager}, transmits commands to shut down applications,
+        \texttt{DeviceManager}, transmits commands to shut down applications,
         triggers notifications to be generated, ...
 
     \subparagraph{MoteFacade}
@@ -173,7 +173,7 @@
         Responsible for generation, storage, and delivery of notifications
         based on users' preferred communication channel. (UC15)
 
-    \subparagraph{PluggableDeviceManager}
+    \subparagraph{DeviceManager}
         Monitors connected/operational devices on a gateway. Sends notifications
         in case of hardware failure. Can send a command to disable or reactivate
         applications when necessary. (Av3)
@@ -408,9 +408,9 @@
             \end{itemize}
         \end{itemize}
 
-    \subsubsection{PluggableDeviceManager}
+    \subsubsection{DeviceManager}
         \begin{itemize}
-        	\item DeviceListMgmt
+        	\item DeviceMgmt
         	\begin{itemize}
         		\item \texttt{void sendHeartbeat(int moteID, List<PluggableDeviceInfo> devices)}
         		\begin{itemize}
@@ -454,14 +454,14 @@
     \paragraph{PluggableDeviceType}
               denotes the type of the pluggable device.
     \paragraph{DeviceData}
-               is the data from a pluggable device. For sensors, this contains sensor values.  
-               For actuators, this  contains the state of the actuator. 
-               The data is encapsulated within a JSON message, and should be 
+               is the data from a pluggable device. For sensors, this contains sensor values.
+               For actuators, this  contains the state of the actuator.
+               The data is encapsulated within a JSON message, and should be
                converted into something meaningful based on the device type of
                the pluggable device that sent the data.
     \paragraph{Map<String,String>}
                is a map of key-value pairs.  E.g., ‘sensitivity’→‘10’.
-     
+
 
 \subsection{Verify and refine}
     The selected architectural drivers have been handled completely
@@ -554,7 +554,7 @@
             \item \emph{UC29}: Log out
         \end{itemize}
 
-    \paragraph{PluggableDeviceManager}
+    \paragraph{DeviceManager}
         \begin{itemize}
             \item \emph{U2}: Easy Installation: c, d
             \item \emph{UC04}: Install mote: 4
