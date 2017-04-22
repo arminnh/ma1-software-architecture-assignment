@@ -32,18 +32,18 @@
     this decomposition and how involved problems/obstacles are solved.
 
     Some dabatase tables text we wrote:
-        pluggable_devices
-        topology_pluggable_devices
-        permissions_pluggable_devices
+        pluggable\_devices
+        topology\_pluggable\_devices
+        permissions\_pluggable\_devices
 
         topology
-            gateways(id, floor, room_number, wall, status)
-            motes(id, gateway_id, floor, room_number, status)
-            pluggable_devices(id, mote_id, gateway_id, status, physical location)
-            pluggable_devices_redundancies(deviceID1, deviceID2)
+            gateways(id, floor, room\_number, wall, status)
+            motes(id, gateway\_id, floor, room\_number, status)
+            pluggable\_devices(id, mote\_id, gateway\_id, status, physical location)
+            pluggable\_devices\_redundancies(deviceID1, deviceID2)
 
         access rights
-            rights(id, origranisation_id, device_id, can_read, can_configure, can_send_actuation_command)
+            rights(id, origranisation\_id, device\_id, can\_read, can\_configure, can\_send\_actuation\_command)
 
     \paragraph{U2: Gateway installation}
         The gateway should not require any configuration, other than being connected
@@ -120,7 +120,7 @@
         *) need something for configuration of access rights, can only happen for initialised devices
 
         *) for reactivating last configurations: just set status to active and don't change configuration field, it will still be the same as in the past
-            alternative: current_configuration and last_configuration in DB
+            alternative: current\_configuration and last\_configuration in DB
             alternative: store all configurations on Gateway -> but it has bad resources
             alternative: store all versions on PluggableDeviceDB -> but lots of useless data then = extra work for db
 
@@ -180,7 +180,7 @@
             6. InfrastructureOwnerClient -> InfrastructureOwnerFacade: setAccessRights/updateAccessRights(pluggableDeviceID, List<int> customerOrganisations)
                 6. InfrastructureOwnerFacade -> DeviceManager: configureAccessRights(pluggableDeviceID, List<int> customerOrganisations)
                 7.a. AccessRightsManager -> PluggableDeviceDatabase: updateDeviceAccessRights(deviceID, custOrg) / deleteAccessRights()
-                7.b. AccessRightsManager -> ApplicationManager: checkAccessRights(custOrg)
+                7.b. AccessRightsManager -> ApplicationManager: checkApplicationsForActivation(custOrg)
                 7.c. AccessRightsManager -> ApplicationManager: checkPluggableDevices(custOrg)
 
 
@@ -497,7 +497,8 @@
                     \begin{itemize}
                         \item Now also used for UC6.3 - reintroduced mote
                     \end{itemize}
-        	\end{itemize}
+            \end{itemize}
+        \end{itemize}
 
     \subsubsection{TopologyManager}
         \begin{itemize}
