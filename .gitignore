@@ -1,6 +1,8 @@
 *~
 *.vpp.working
 *.mlf*
+*.vpp.lck
+*.vpp.bak_*
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

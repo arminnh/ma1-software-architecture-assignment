@@ -1,69 +1,51 @@
-NOTES: we have more interfaces in graph as in description
-  (e.g. AppMgmt in ADD 2 - it is not describe because it is in ADD 1 - we should remove it from
-  graph or add also description in to ADD 2, it is confusing.)
+FOR PROJECT DEFENSE: best is 25/05 - 27/05,
+                     24/05 armin exam and monika project deadline
 
-
-\section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
-    Instead of "Element", we do elements or subsystems to decompose/expand.
-    The elements/subsystems to decompose/expand are the result
-    of the chosen architectural drivers.
-
-\subsection{Selected architectural drivers}
-    \paragraph{Rationale}
-        We leave this out, since the rationale is pretty much always the
-        same. Of the drivers that are left, we chose the drivers that
-        have highest priority assigned to them. Within a class of priority
-        we choose the ones that we believe are most important to the core of the
-        sytem or that will have the biggest impact on end-users.
-        If drivers are grouped, this is because they fulfill similar
-        responsibilities or they will force us to think about the design
-        of a subsystem as a whole (e.g. Decomposition 2).
-
-
-\subsection{Verify and refine}
-    \noindent We will not do this step. We chose to handle all chosen architectural
-    drivers completely in every decomposition.
-
-==========================================================================
-
-How is hardware linked to Infrastructure owners? Check if this is handled in one of the use cases
-1 gateway <-> 1 infrastructure owner
+Rename PluggableDeviceDB -> DeviceDB
 
 ==========================================================================
 
 QUESTIONS:
 
-When can we register for final presentation
+Interfaces: What's the point of exceptions? Do we use them for alternative scenario's? Like "not found exception"
 
-Each decomposition you choose an element. Is this supposed to be a component
-(like OtherFunctionality) or can this be a collection of components/subsystems?
-
-Interfaces: What's the point of exceptions here? Also, we added
-            the reasons for adding each method, is this ok?
+            We added the reasons for adding each method ("Created for"), is this ok?
 
 How to make interface names transparent?
 
-DeviceData, but PluggableDeviceID, what's up with that?
-
-Is this ok to handle part of U2: A connection to the internet is a constraint of the GatewayFacade.
-
-How to model the mote's broadcast message to search for a gateway
+Is this ok to handle part of U2 for easy gateway installation? "A connection to the internet is a constraint of the GatewayFacade".
 
 Where to create the actual db queries?
 
 ==========================================================================
 
-DO SOMETHING WITH THIS, UC11/UC13
-\item AppDeviceMgmt, last defined in section \ref{add1-interfaces}
-\begin{itemize}
-    \item \texttt{void configurePluggableDevice(int deviceID, Map<String, String> settings)}
-    \begin{itemize}
-        \item For: Use case 11 step 3.b
-        \item Effect: Causes certain settings to be set on a pluggable
-              device that the gateway is connected to.
-        \item Created for:
-    \end{itemize}
-\end{itemize}
+FOR THE SECTION ON CHANGES WE DID TO THE ADD SYSTEM:
+
+    \section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
+        Instead of "Element", we do elements or subsystems to decompose/expand.
+        The elements/subsystems to decompose/expand are the result
+        of the chosen architectural drivers.
+
+    \subsection{Selected architectural drivers}
+        \paragraph{Rationale}
+            We leave this out, since the rationale is pretty much always the
+            same. Of the drivers that are left, we chose the drivers that
+            have highest priority assigned to them. Within a class of priority
+            we choose the ones that we believe are most important to the core of the
+            sytem or that will have the biggest impact on end-users.
+            If drivers are grouped, this is because they fulfill similar
+            responsibilities or they will force us to think about the design
+            of a subsystem as a whole (e.g. Decomposition 2).
+
+
+    \subsection{Verify and refine}
+        \noindent We will not do this step. We chose to handle all chosen architectural
+        drivers completely in every decomposition.
+
+==========================================================================
+
+How is hardware linked to Infrastructure owners? Check if this is handled in one of the use cases
+1 gateway <-> 1 infrastructure owner
 
 ==========================================================================
 ============================ REMAINING DRIVERS ===========================

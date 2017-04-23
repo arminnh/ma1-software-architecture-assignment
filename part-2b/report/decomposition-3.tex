@@ -68,7 +68,7 @@
         are automatically initialised and configured with their last known
         configuration and access rights. \\
         Thing that need to happen automatically:
-        *) mote should find the gateway (mote sends a broadcast message->ReceiveBroadcast)
+        *) mote should find the gateway (mote sends a broadcast message->ReceiveBroadcast) => this is done automatically? see remarks of the use case
         *) gateway should register the mote (DeviceManager update, store entry in DB)
         *) on reintroduction of motes: DeviceManager notices this, makes the gateway send a message to online service to reuse some old topology
 
@@ -167,21 +167,49 @@
 
                 ∗ checks and activates applications which can now execute again:
                     RATIONALE: gateway sends id of IO instead of fetching customers of IO. the online service will do that extra work = less work for gateway.
-                    % DeviceManager -> GatewayFacade -> ApplicationManager: checkApplicationsForActivation(int infrastructureOwnerID)
+                    % DeviceManager -> GatewayFacade -> ApplicationManager: checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
 
                 * send notification
                     % DeviceManager -> NotificationHandler: reactivatedPluggableDevice
 
         UC9: configure pluggable device access rights
-            1. InfrastructureOwnerClient -> InfrastructureOwnerFacade: getAccessRights()
-                2. InfrastructureOwnerFacade -> DeviceManager: getPluggableDevices(infrastructureOwnerID)
-                3. InfrastructureOwnerFacade -> AccessRightsManager: getAccessRights(pluggableDeviceID)
-                4. InfrastructureOwnerFacade -> OtherFunctionality: getCustomerOrganisations(infrastructureOwnerID)
-            6. InfrastructureOwnerClient -> InfrastructureOwnerFacade: setAccessRights/updateAccessRights(pluggableDeviceID, List<int> customerOrganisations)
-                6. InfrastructureOwnerFacade -> DeviceManager: configureAccessRights(pluggableDeviceID, List<int> customerOrganisations)
-                7.a. AccessRightsManager -> PluggableDeviceDatabase: updateDeviceAccessRights(deviceID, custOrg) / deleteAccessRights()
-                7.b. AccessRightsManager -> ApplicationManager: checkApplicationsForActivation(custOrg)
-                7.c. AccessRightsManager -> ApplicationManager: checkPluggableDevices(custOrg)
+            Map<int, AccessRights> : maps customerOrganisationIDs to their AccessRights
+
+            1. The primary actor indicates that they want to configure the access rights to pluggable devices.
+                % InfrastructureOwnerClient -> InfrastructureOwnerFacade - interface AccessRights: List<DeviceInfo> getAccessRights(int infrastructureOwnerID)
+
+            2. The system retrieves the list of pluggable devices associated with the primary actor and presents these to the primary actor.
+                % InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt: List<DeviceInfo>  getDevices(int infrastructureOwnerID)
+                % InfrastructureOwnerManager -> DeviceDataScheduler:       interface IODeviceMgmt: List<DeviceInfo>  getDevices(int infrastructureOwnerID)
+                % DeviceDataScheduler -> PluggableDeviceDB:                interface DeviceMgmt: List<DeviceInfo>  getDevices(int infrastructureOwnerID)
+                % presents these to the primary actor = return of getAccessRights(int infrastructureOwnerID)
+
+            3. The primary actor indicates for which pluggable device they want to configure the access rights.
+                % InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: Map<int, AccessRights> configureDevice(PluggableDeviceID id)
+
+            4. The system retrieves all customer organisations associated with the primary actor and presents these to the primary actor,
+               thereby indicating which of these customer organizations already have access to the pluggable device.
+                % InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt: List<int> getCustomerOrganisations(int infrastructureOwnerID)
+                % InfrastructureOwnerManager -> Database:                  interface IOMgmt: List<int> getCustomerOrganisations(int infrastructureOwnerID)
+                % InfrastructureOwnerFacade -> AccessRightsManager:        interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
+                % AccessRightsManager -> DeviceDataScheduler:              interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
+                % DeviceDataScheduler -> PluggableDeviceDB:                interface DeviceMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
+
+            5. The system asks to indicate which of these should have access to the pluggable device.
+                % = is return value of configureDevice(PluggableDeviceID id)
+
+            6. The primary actor selects the customer organisations that may use the pluggable device and submits the selection.
+                % InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+
+            7. The system
+                { updates the roles of the selected customer organisations, giving them access rights to the pluggable device.
+                    % InfrastructureOwnerFacade -> AccessRightsManager:  interface AccessRightsMgmt: updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+                    % AccessRightsManager -> DeviceDataScheduler:        interface AccessRightsMgmt: updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+                    % DeviceDataScheduler -> PluggableDeviceDB:          interface DeviceMgmt:       updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+                { checks and activates 'inactive' applications for the customer organisations with updated access rights (Include: UC17: Activate an application).
+                    % InfrastructureOwnerFacade -> ApplicationManager:  interface IOAppMgmt: checkApplicationsForActivationForCustomerOrganisations(List<int> custOrgIDs)
+                { checks for applications that require deactivation because of the unavailability of pluggable devices
+                    % InfrastructureOwnerFacade -> ApplicationManager:  interface IOAppMgmt: checkApplicationsForDeactivationForCustomerOrganisations(List<int> custOrgIDs)
 
 
     \paragraph{U2: Easy applications}
@@ -284,10 +312,25 @@
         \begin{itemize}
             \item AppMgmt, last defined in section \ref{add1-interfaces}
                 \begin{itemize}
-                    \item \texttt{void checkApplicationsForActivation(int infrastructureOwnerID)}
+                    \item \texttt{void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)}
                         \begin{itemize}
                 			\item Effect: Checks and activates applications which can now execute again. Finds relevant applications through the customers of the given infrastructureOwnerID.
                 			\item Created for: UC17 \\ UC6.3 - reintroduced device
+                        \end{itemize}
+                \end{itemize}
+
+            \item IOAppMgmt
+                \begin{itemize}
+                    \item \texttt{void checkApplicationsForActivationForCustomerOrganisations(List<int> customerOrganisationIDs)}
+                        \begin{itemize}
+                			\item Effect: Checks and activates applications which can now execute again. Finds relevant applications through the given customerOrganisationIDs.
+                			\item Created for: UC9.7 - checks and activates 'inactive' applications for the customer organisations with updated access rights \\ UC17
+                        \end{itemize}
+                    \item \texttt{void checkApplicationsForDeactivationForCustomerOrganisations(List<int> customerOrganisationIDs)}
+                        \begin{itemize}
+                			\item Effect: Checks and deactivates applications which that require deactivation because of the unavailability of pluggable devices.
+                                  Only checks applications that are linked to the given customerOrganisationIDs.
+                			\item Created for: UC9.7 - checks for applications that require deactivation \\ UC18
                         \end{itemize}
                 \end{itemize}
         \end{itemize}
@@ -413,7 +456,7 @@
 
             \item AppMgmt, last defined in section \ref{add1-interfaces}
                 \begin{itemize}
-                    \item \texttt{void checkApplicationsForActivation(int infrastructureOwnerID)}
+                    \item \texttt{void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)}
                         \begin{itemize}
                 			\item Effect: Forwards this request to the ApplicationManager.
                                   Used by DeviceManager after connecting a pluggable device.
