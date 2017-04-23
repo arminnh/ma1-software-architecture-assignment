@@ -1,4 +1,4 @@
-%%% element catalog, generated on Fri Apr 21 22:14:42 CEST 2017
+%%% element catalog, generated on Sun Apr 23 13:14:39 CEST 2017
 
 
 % EXPORT CMDS
@@ -62,6 +62,22 @@
 
 % COMPONENTS
 \section{Components}\label{sec:components}
+\subsection{AccessRightsManager}\label{comp:AccessRightsManager}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AccessRightsMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AccessRightsMgmt}}		
+	\end{description}
+\subsection{ApplicationContainer}\label{comp:ApplicationContainer}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppMgmt}}
+		\item[Required interfaces:]~None		
+	\end{description}
 \subsection{ApplicationManager}\label{comp:ApplicationManager}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Responsible for activating/deactivating applications, setting
@@ -70,15 +86,15 @@ components, and using \vpett{\nameref{comp:NotificationHandler}} to send notific
 to customer organisations. (Av3)
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppMgmt}}, \iconprovided{}~\vpett{\nameref{int:ForwardData}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AppDataMgmt}}, \iconrequired{}~\vpett{\nameref{int:AppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:Notify}}, \iconrequired{}~\vpett{\nameref{int:RequestData}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppMgmt}}, \iconprovided{}~\vpett{\nameref{int:ForwardData}}, \iconprovided{}~\vpett{\nameref{int:IOAppMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AppDataMgmt}}, \iconrequired{}~\vpett{\nameref{int:AppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:AppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:AppMgmt}}, \iconrequired{}~\vpett{\nameref{int:AppMgmt}}, \iconrequired{}~\vpett{\nameref{int:AppRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:InvoiceMgmt}}, \iconrequired{}~\vpett{\nameref{int:Notify}}, \iconrequired{}~\vpett{\nameref{int:RequestData}}, \iconrequired{}~\vpett{\nameref{int:TopologyMgmt}}		
 	\end{description}
 \subsection{Database}\label{comp:Database}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppDataMgmt}}, \iconprovided{}~\vpett{\nameref{int:NotificationMgmt}}, \iconprovided{}~\vpett{\nameref{int:Other}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppDataMgmt}}, \iconprovided{}~\vpett{\nameref{int:InvoiceMgmt}}, \iconprovided{}~\vpett{\nameref{int:IOMgmt}}, \iconprovided{}~\vpett{\nameref{int:NotificationMgmt}}, \iconprovided{}~\vpett{\nameref{int:Other}}, \iconprovided{}~\vpett{\nameref{int:UserRoleMgmt}}
 		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{DeviceDataConverter}\label{comp:DeviceDataConverter}
@@ -94,7 +110,7 @@ to customer organisations. (Av3)
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:DeviceData}}, \iconprovided{}~\vpett{\nameref{int:DeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:RequestData}}, \iconprovided{}~\vpett{\nameref{int:TopologyMgmt}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AccessRightsMgmt}}, \iconprovided{}~\vpett{\nameref{int:AppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:DeviceData}}, \iconprovided{}~\vpett{\nameref{int:GWDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:IODeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:RequestData}}, \iconprovided{}~\vpett{\nameref{int:TopologyMgmt}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:DeviceData}}, \iconrequired{}~\vpett{\nameref{int:DeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:ForwardData}}, \iconrequired{}~\vpett{\nameref{int:TopologyMgmt}}		
 	\end{description}
 \subsection{DeviceManager}\label{comp:DeviceManager}
@@ -103,7 +119,7 @@ to customer organisations. (Av3)
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:DeviceMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AppMgmt}}		
+		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{GatewayFacade}\label{comp:GatewayFacade}
 	\begin{description}[noitemsep,nolistsep]
@@ -111,7 +127,47 @@ to customer organisations. (Av3)
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:AppMgmt}}, \iconprovided{}~\vpett{\nameref{int:DeviceData}}, \iconprovided{}~\vpett{\nameref{int:DeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:Heartbeat}}, \iconprovided{}~\vpett{\nameref{int:Notify}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AppMgmt}}, \iconrequired{}~\vpett{\nameref{int:DataConversion}}, \iconrequired{}~\vpett{\nameref{int:DeviceData}}, \iconrequired{}~\vpett{\nameref{int:DeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:DeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:Other}}, \iconrequired{}~\vpett{\nameref{int:TopologyMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AppMgmt}}, \iconrequired{}~\vpett{\nameref{int:AppMgmt}}, \iconrequired{}~\vpett{\nameref{int:DataConversion}}, \iconrequired{}~\vpett{\nameref{int:DeviceData}}, \iconrequired{}~\vpett{\nameref{int:DeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GWDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:Other}}, \iconrequired{}~\vpett{\nameref{int:TopologyMgmt}}		
+	\end{description}
+\subsection{GWApplicationContainer}\label{comp:GWApplicationContainer}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppMgmt}}
+		\item[Required interfaces:]~None		
+	\end{description}
+\subsection{InfrastructreOwnerClient}\label{comp:InfrastructreOwnerClient}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~None
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AccessRights}}		
+	\end{description}
+\subsection{InfrastructureOwnerFacade}\label{comp:InfrastructureOwnerFacade}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AccessRights}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AccessRightsMgmt}}, \iconrequired{}~\vpett{\nameref{int:IOAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:IOMgmt}}		
+	\end{description}
+\subsection{InfrastructureOwnerManager}\label{comp:InfrastructureOwnerManager}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:IOMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:IODeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:IOMgmt}}		
+	\end{description}
+\subsection{InvoiceManager}\label{comp:InvoiceManager}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:InvoiceMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:InvoiceMgmt}}		
 	\end{description}
 \subsection{MoteFacade}\label{comp:MoteFacade}
 	\begin{description}[noitemsep,nolistsep]
@@ -142,8 +198,8 @@ to customer organisations. (Av3)
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~None
-		\item[Required interfaces:]~None		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:Other}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:Other}}, \iconrequired{}~\vpett{\nameref{int:Other}}		
 	\end{description}
 \subsection{PluggableDeviceDB}\label{comp:PluggableDeviceDB}
 	\begin{description}[noitemsep,nolistsep]
@@ -169,11 +225,46 @@ to customer organisations. (Av3)
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:TopologyMgmt}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:TopologyMgmt}}		
 	\end{description}
+\subsection{UserRolesManager}\label{comp:UserRolesManager}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppRoleMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:UserRoleMgmt}}		
+	\end{description}
 
 % END COMPONENTS
 
 % INTERFACES
 \section{Interfaces} \label{sec:interfaces}
+  %%%%%%%% AccessRights
+  \subsection{AccessRights}\label{int:AccessRights}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:InfrastructureOwnerFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:InfrastructreOwnerClient}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% AccessRightsMgmt
+  \subsection{AccessRightsMgmt}\label{int:AccessRightsMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDataScheduler}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:AccessRightsManager}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% AccessRightsMgmt
+  \subsection{AccessRightsMgmt}\label{int:AccessRightsMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:AccessRightsManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:InfrastructureOwnerFacade}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
   %%%%%%%% Actuate
   \subsection{Actuate}\label{int:Actuate}
     \begin{description}[noitemsep,nolistsep]
@@ -201,11 +292,29 @@ to customer organisations. (Av3)
 % no operations
     \end{description}
 
+  %%%%%%%% AppDeviceMgmt
+  \subsection{AppDeviceMgmt}\label{int:AppDeviceMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDataScheduler}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationManager}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
   %%%%%%%% AppMgmt
   \subsection{AppMgmt}\label{int:AppMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationManager}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% AppMgmt
+  \subsection{AppMgmt}\label{int:AppMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GWApplicationContainer}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -215,6 +324,24 @@ to customer organisations. (Av3)
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationManager}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% AppMgmt
+  \subsection{AppMgmt}\label{int:AppMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationContainer}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationManager}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% AppRoleMgmt
+  \subsection{AppRoleMgmt}\label{int:AppRoleMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:UserRolesManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationManager}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -263,8 +390,8 @@ to customer organisations. (Av3)
   %%%%%%%% DeviceData
   \subsection{DeviceData}\label{int:DeviceData}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] None
-      \item[Required by:] None
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDataScheduler}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -278,11 +405,11 @@ to customer organisations. (Av3)
 % no operations
     \end{description}
 
-  %%%%%%%% DeviceData   
-  \subsection{DeviceData   }\label{int:DeviceData}
+  %%%%%%%% DeviceData
+  \subsection{DeviceData}\label{int:DeviceData}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDataScheduler}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
+      \item[Provided by:] None
+      \item[Required by:] None
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -313,15 +440,6 @@ to customer organisations. (Av3)
   %%%%%%%% DeviceMgmt
   \subsection{DeviceMgmt}\label{int:DeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDataScheduler}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
-      \item[Operations:] ~
-% no operations
-    \end{description}
-
-  %%%%%%%% DeviceMgmt
-  \subsection{DeviceMgmt}\label{int:DeviceMgmt}
-    \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:MoteFacade}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
       \item[Operations:] ~
@@ -346,11 +464,74 @@ to customer organisations. (Av3)
 % no operations
     \end{description}
 
+  %%%%%%%% GWDeviceMgmt
+  \subsection{GWDeviceMgmt}\label{int:GWDeviceMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDataScheduler}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
   %%%%%%%% Heartbeat
   \subsection{Heartbeat}\label{int:Heartbeat}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteFacade}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% InvoiceMgmt
+  \subsection{InvoiceMgmt}\label{int:InvoiceMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:InvoiceManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationManager}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% InvoiceMgmt
+  \subsection{InvoiceMgmt}\label{int:InvoiceMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:Database}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:InvoiceManager}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% IOAppMgmt
+  \subsection{IOAppMgmt}\label{int:IOAppMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:InfrastructureOwnerFacade}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% IODeviceMgmt
+  \subsection{IODeviceMgmt}\label{int:IODeviceMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDataScheduler}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:InfrastructureOwnerManager}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% IOMgmt
+  \subsection{IOMgmt}\label{int:IOMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:InfrastructureOwnerManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:InfrastructureOwnerFacade}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% IOMgmt
+  \subsection{IOMgmt}\label{int:IOMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:Database}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:InfrastructureOwnerManager}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -385,7 +566,7 @@ to customer organisations. (Av3)
   %%%%%%%% Other
   \subsection{Other}\label{int:Other}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherFunctionality1}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherFunctionality1}}, \iconcomponent{}~\vpett{\nameref{comp:OtherFunctionality2}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
       \item[Operations:] ~
 % no operations
@@ -395,7 +576,7 @@ to customer organisations. (Av3)
   \subsection{Other}\label{int:Other}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PluggableDeviceDB}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OtherFunctionality1}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OtherFunctionality1}}, \iconcomponent{}~\vpett{\nameref{comp:OtherFunctionality2}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -404,7 +585,7 @@ to customer organisations. (Av3)
   \subsection{Other}\label{int:Other}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:Database}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OtherFunctionality1}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OtherFunctionality1}}, \iconcomponent{}~\vpett{\nameref{comp:OtherFunctionality2}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -430,15 +611,6 @@ to customer organisations. (Av3)
   %%%%%%%% TopologyMgmt
   \subsection{TopologyMgmt}\label{int:TopologyMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:TopologyManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
-      \item[Operations:] ~
-% no operations
-    \end{description}
-
-  %%%%%%%% TopologyMgmt
-  \subsection{TopologyMgmt}\label{int:TopologyMgmt}
-    \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDataScheduler}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:TopologyManager}}
       \item[Operations:] ~
@@ -448,8 +620,26 @@ to customer organisations. (Av3)
   %%%%%%%% TopologyMgmt
   \subsection{TopologyMgmt}\label{int:TopologyMgmt}
     \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:TopologyManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayFacade}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% TopologyMgmt
+  \subsection{TopologyMgmt}\label{int:TopologyMgmt}
+    \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PluggableDeviceDB}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDataScheduler}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% UserRoleMgmt
+  \subsection{UserRoleMgmt}\label{int:UserRoleMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:Database}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:UserRolesManager}}
       \item[Operations:] ~
 % no operations
     \end{description}

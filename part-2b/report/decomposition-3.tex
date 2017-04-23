@@ -218,24 +218,62 @@
         assigned, additional explicit configuration actions are required
         from a customer organisation (cf. UC17, UC19). \\
         *) if there is a subsription and new hardware is plugged in: need something to check
-           if some application can be activated now
+           if some application can be activated now => see UC6: checkApplicationsForActivationForInfrastructureOwner
         *) need something to assign user roles to users during UC19
 
         UC17: Activate an application
-            application needs to be activated because new subscription, changed topology, new version of application
+            ApplicationManager is triggered by something else do to the following: activateApplication(int applicationInstanceID)
+            could be triggered because of: new pluggable device detected, new subscription, changed topology, new version of application
 
-            ApplicationManager is triggered by something else do to the following: method activateApplication(applicationInstanceID)
-            1. ApplicationManager -> UserRolesManager: checkMandatoryUserRoles(applicationInstanceID)
-            2. ApplicationManager -> DeviceManager: checkPluggableDevices(applicationInstanceID)
-            3. ApplicationManager -> GatewayFacade: activateApplication(applicationInstanceID) -> ApplicationSandbox component on gateway
-            4. application.start();
-            4. ApplicationManager -> InvoiceManager: activatedApplication(applicationInstanceID, custOrgID, date)
-            5. ApplicationManager -> NotificationManager: activatedApplication(custOrgID)
-            6. ApplicationManager -> UserRolesManager: List<User> getUsersWithRoles(custOrgID)
-            6. ApplicationManager -> getInstallationInstructions(applicationID)
-            6. ApplicationManager -> NotificationManager: notify(userID, message)
+            1. The system checks that all mandatory roles have been assigned to end-users.
+                % ApplicationManager -> UserRolesManager: interface AppRoleMgmt:  boolean checkMandatoryUserRoles(int applicationInstanceID)
+                % UserRolesManager -> Database:           interface UserRoleMgmt: boolean checkMandatoryUserRoles(int applicationInstanceID)
+                // returns true if all mandatory user roles for the application have been assigned to users
+                // can find the customer organisation through the ApplicationInstance, because instances are for cust orgs
 
-            TODO notifications for alternative scenario's
+            2. If all mandatory roles have been assigned, the system checks that all necessary pluggable devices are available in the topology.
+                // pluggable device status has to be 'active' in the DB, and status has to be 'placed/available' in the topology
+                % ApplicationManager -> DeviceDataScheduler:       interface AppDeviceMgmt: List<DeviceInfo> getDevicesForApplication(int applicationInstanceID) // get the devices
+                % DeviceDataScheduler -> PluggableDeviceDatabase:  interface DeviceMgmt:    List<DeviceInfo> getDevicesForApplication(int applicationInstanceID)
+                % ApplicationManager -> TopologyManager:           interface TopologyMgmt: boolean arePluggableDevicesActive(List<PluggableDeviceID> devices) // check that they are all 'placed'. If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
+                % TopologyManager -> DeviceDataScheduler:          interface TopologyMgmt: boolean arePluggableDevicesActive(List<PluggableDeviceID> devices)
+                % DeviceDataScheduler -> PluggableDeviceDatabase:  interface TopologyMgmt: boolean arePluggableDevicesActive(List<PluggableDeviceID> devices)
+
+            3. If all necessary pluggable devices are available, the system activates all necessary parts of the application on gateways and in the Online Service.
+                FOR RATIONALE: we add ApplicationContainer component that will contain application INSTANCES in some kind of sandbox environment. The container can run/pause/stop these instances
+
+                % ApplicationManager -> GatewayFacade:     interface AppMgmt:    activateAllApplicationParts(int applicationInstanceID) // activate all necessary parts of the application on gateways, whatever "all parts" means
+                % GatewayFacade -> GWApplicationContainer: interface AppMgmt:    activateAllApplicationParts(int applicationInstanceID)
+                % ApplicationManager -> ApplicationContainer: interface AppMgmt: activateAllApplicationParts(int applicationInstanceID) // activate all necessary parts of the application in the online service, whatever "all parts" means
+
+            4. The system marks the application as 'active' and updates the billing information.
+                % ApplicationManager -> Database: interface AppDataMgmt:       updateApplication(int applicationInstanceID, string status) // status = 'active'
+                % ApplicationManager -> InvoiceManager: interface InvoiceMgmt: markActivatedApplication(int applicationInstanceID, int custOrgID, Date date) // updates billing information, marks the start of a period
+                % InvoiceManager -> Database: interface: InvoiceMgmt:          markActivatedApplication(int applicationInstanceID, int custOrgID, Date date)
+
+            5. The system sends a notication to the customer organisation subscribed to the application, to inform them that the application is running (Include: UC15: Send notication).
+                % ApplicationManager -> NotificationManager: interface Notify: notify(int userID, string message)
+
+            6. The system sends an SMS or e-mail to the end-users that were assigned roles. Possibly, this contains instructions for the end-user on how to install a mobile app linked to the application.
+                % ApplicationManager -> UserRolesManager:    interface AppRoleMgmt:  List<User> getUsersWithRoles(int custOrgID)
+                % UserRolesManager -> Database:              interface UserRoleMgmt: List<User> getUsersWithRoles(int custOrgID)
+                % ApplicationManager -> Database:            interface AppDataMgmt:  string getInstallationInstructions(applicationID) // applications optionally have some installation instruction
+                % ApplicationManager -> NotificationManager: interface Notify:       notify(int userID, string message)
+
+            ALTERNATIVE SCENARIOS:
+                2a. If end-users are not assigned to each mandatory role, the application is added as an 'inactive'
+                application and the subscription info is set accordingly. The system notifies the customer
+                organisation subscribed to the application (Include: UC15: Send notication). The use case ends.
+                    This happens if checkMandatoryUserRoles returned false.
+                    FOR RATIONALE: the UC is called "activate application", thus we assume the system already contains the
+                                   application instance and subscription information, but the instance is 'inactive' at the start of the UC
+                    => OK
+
+                3a. If not all pluggable devices necessary for the application are available, the application is added
+                as an 'inactive' application and the subscription info is set accordingly. The system notifies
+                the customer organisation subscribed to the application (Include: UC15: Send notication). The use case ends.
+                    This happens if arePluggableDevicesActive returned false.
+                    Same as 2a. => OK
 
         UC19: Subscribe to application
             2. CustomerOrganisationClient -> CustomerOrganisationFacade: List<Application> getApplicationsToSubscribe(custOrgID)

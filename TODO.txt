@@ -2,6 +2,7 @@ FOR PROJECT DEFENSE: best is 25/05 - 27/05,
                      24/05 armin exam and monika project deadline
 
 Rename PluggableDeviceDB -> DeviceDB
+Rename Database:AppDataMgmt to AppMgmt
 
 ==========================================================================
 
