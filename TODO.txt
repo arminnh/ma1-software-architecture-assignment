@@ -57,7 +57,7 @@ Av1: Communication between SIoTIP gateway and Online Service
 Av2: Application failure
 P1: Large number of users
 
-Low Priority
+Low Priority, we can skip these
 % U1: Application updates
 % M2: Big data analytics on pluggable data and/or application usage data
 
