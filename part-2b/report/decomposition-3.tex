@@ -40,7 +40,21 @@
             gateways(id, floor, room\_number, wall, status)
             motes(id, gateway\_id, floor, room\_number, status)
             pluggable\_devices(id, mote\_id, gateway\_id, status, physical location)
-            pluggable\_devices\_redundancies(deviceID1, deviceID2)
+            % pluggable\_devices\_redundancies(deviceID1, deviceID2)
+            pluggable\_devices\_relationships(deviceID1, deviceID2, type)
+
+            Relationship
+                PluggableDeviceID device1
+                PluggableDeviceID device2
+                string type
+
+                Relationship(fireDetector, smokeDetector, "redundancy")
+                Relationship(fireDetector, smokeDetector, "\>")
+
+            RoomTopology:
+                int roomID
+                List<DeviceInfo> devices
+                List<Relationship> devices_relationships
 
         access rights
             rights(id, origranisation\_id, device\_id, can\_read, can\_configure, can\_send\_actuation\_command)
@@ -52,16 +66,22 @@
         up-and-running (connected) within 10 minutes given that the information
         (e.g. WiFi SSID and passphrase) is available to the person responsible for
         the installation. \\
-        TODO: ask \\
-        We need something that registers the gateway automatically with the
-        online service after bootup. A connection to the internet is a constraint
-        of the GatewayFacade.
+
+        A connection to the internet is a constraint of the GatewayFacade.
+        After the gateway is connected to the internet (we don't model this),
+        it connects to the gateway (we don't model this?) and registers itself (we model this). \\
+        When an infrastructure owner orders a gateway, that gateway is linked to the IO.
+        Gateway was already in the DeviceDB, but it was not linked to anyone. It has a gatewayID.
+        Important info related to gateways: GatewayID (new class), infrastructureOwnerID, IPAddress, status (active/inactive), location (in topology table)
+        gateway registers with online service:
+            sets status to 'active' and updates IPAddress if different
+            GatewayFacade -> DeviceDB: interface GWDeviceMgmt: registerGateway(GatewayID id, IPAddress address)
 
 
     \paragraph{U2: Mote installation}
         Installing a new mote should not require more configuration than adding it
         to the topology. Adding new motes, sensors or actuators should not involve
-        more than just starting motes, and plugging devices into motes – plug-and-play! TODO: ask \\
+        more than just starting motes, and plugging devices into motes – plug-and-play!
         Reintroducing a previously known mote, with the same pluggable devices attached to it,
         should not require any configuration. It is automatically re-added on
         its last known location on the topology. The attached pluggable devices
@@ -98,7 +118,7 @@
         if reintroduced mote:
             It is automatically re-added on its last known location on the topology.
                 % 3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: reactivateMote(moteID)
-                % 3. DeviceManager -> GatewayFacade -> TopologyManager: reactivateMote(moteID) // status = placed? (TODO ASK?), location is still there from the past, it was not removed
+                % 3. DeviceManager -> GatewayFacade -> TopologyManager: reactivateMote(moteID) // status = placed, location is still there from the past, it was not removed
 
             The attached pluggable devices are automatically initialised and configured with their last known configuration.
             The attached pluggable devices are automatically initialised and configured with their last known access rights.
@@ -146,6 +166,8 @@
                 % DeviceManager -> GatewayFacade: newPluggableDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)
 
                 % In these methods, if the device already exists and is plugged in in another mote, clear the data
+
+                % For default configurations: when it is a new device, we assume that the defaults are turned on by default so we don't have to do anything here
 
             if the device is a known previously active device (ON THE SAME MOTE):
                 % DONT NEED THIS mote -> DeviceManager: registerDevice(id, type)
@@ -226,7 +248,7 @@
             could be triggered because of: new pluggable device detected, new subscription, changed topology, new version of application
 
             1. The system checks that all mandatory roles have been assigned to end-users.
-                % ApplicationManager -> UserRolesManager: interface AppRoleMgmt:  boolean checkMandatoryUserRoles(int applicationInstanceID)
+                % ApplicationManager -> UserRolesManager: interface RoleMgmt:     boolean checkMandatoryUserRoles(int applicationInstanceID)
                 % UserRolesManager -> Database:           interface UserRoleMgmt: boolean checkMandatoryUserRoles(int applicationInstanceID)
                 // returns true if all mandatory user roles for the application have been assigned to users
                 // can find the customer organisation through the ApplicationInstance, because instances are for cust orgs
@@ -255,7 +277,7 @@
                 % ApplicationManager -> NotificationManager: interface Notify: notify(int userID, string message)
 
             6. The system sends an SMS or e-mail to the end-users that were assigned roles. Possibly, this contains instructions for the end-user on how to install a mobile app linked to the application.
-                % ApplicationManager -> UserRolesManager:    interface AppRoleMgmt:  List<User> getUsersWithRoles(int custOrgID)
+                % ApplicationManager -> UserRolesManager:    interface RoleMgmt:     List<User> getUsersWithRoles(int custOrgID)
                 % UserRolesManager -> Database:              interface UserRoleMgmt: List<User> getUsersWithRoles(int custOrgID)
                 % ApplicationManager -> Database:            interface AppDataMgmt:  string getInstallationInstructions(applicationID) // applications optionally have some installation instruction
                 % ApplicationManager -> NotificationManager: interface Notify:       notify(int userID, string message)
@@ -276,20 +298,83 @@
                     Same as 2a. => OK
 
         UC19: Subscribe to application
-            2. CustomerOrganisationClient -> CustomerOrganisationFacade: List<Application> getApplicationsToSubscribe(custOrgID)
-                   CustomerOrganisationFacade -> ApplicationManager: List<Application> getApplicationsToSubscribe(custOrgID)
-            4. CustomerOrganisationClient -> CustomerOrganisationFacade: subscribeToApplication(custOrgID, applicationID)
-            5. CustomerOrganisationFacade -> ApplicationManager: getMandatoryDevicesAndTopologyConfigurations(applicationID)
-            6. TODO: The primary actor carries out the topology configuration ??????????????????????????????????????????????????????????????????????????????????
-            7. CustomerOrganisationFacade -> ApplicationManager: getAllUserRoles(applicationID)
-            8. CustomerOrganisationFacade -> UserRolesManager: getAllUsers(custOrgID)
-            9. CustomerOrganisationClient -> CustomerOrganisationFacade: setUserRoles(custOrgID, map<String, String> userRoles)
-                   CustomerOrganisationFacade -> UserRolesManager: setUserRoles(custOrgID, map<String, String> userRoles)
-                   10. <- return value is next page for selection of criticality
-            11. CustomerOrganisationClient -> CustomerOrganisationFacade: setCriticality(applicationID, bool isCritical)
-                    12. CustomerOrganisationFacade -> ApplicationManager: setCriticality(applicationID, bool isCritical)
-            13. CustomerOrganisationFacade -> SubscriptionManager: subscribe(customerOrganisationID, applicationID) // returns applicationInstanceID of new application instance, if the org is subscribed to a older version, automatically unsubscribe
-            14. CustomerOrganisationFacade -> ApplicationManager: activateApplication(applicationInstanceID)
+            A customer organisation subscribes to an application via the dashboard.
+
+            REMARKS:
+                *) This use case concerns both subscribing to a new application, as well as upgrading an existing
+                   application to a newer version (if this is not an automatic update, as indicated in UC22 : Upload an application).
+                *) Roles in an application can be used to indicate which end-user(s) should be notified in case of specific events.
+                *) It is possible to reassign end-users to roles later on. For simplicity, no separate use case is provided for this.
+
+            1. The primary actor indicates they want to subscribe to an application.
+                    % CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
+
+            2. The system looks up the available applications (i.e., those to which the primary actor is not yet subscribed,
+               or applications for which a newer version is available that requires a new subscription).
+                    % CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
+                    % SubscriptionManager -> ApplicationManager:         interface Apps:             List<Application> getApplications()
+                    % ApplicationManager -> Database:                    interface AppDataMgmt:      List<Application> getApplications()
+                    % SubscriptionManager -> Database:                   interface SubscriptionMgmt: List<Subscription> getSubscriptions(int custOrgID)
+
+            3. The system presents the available applications to the primary actor, e.g. as a list or table,
+               thereby indicating whether it is a new application or an update.
+                    % = return value of getApplicationsToSubscribe
+
+            4. The primary actor selects the desired application.
+                    % CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: int subscribeToApplication(int custOrgID, int applicationID)
+                    % CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             int createNewApplicationInstance(int custOrgID, int applicationID)
+                    % ApplicationManager -> Database:                           interface AppDataMgmt:      int createNewApplicationInstance(int custOrgID, int applicationID) // returns an application instance id
+                    % // subscribes the customer org to the application or updates the subscription if the org is already subscribed
+
+            5. The system checks which topology configuration and selection of pluggable devices for the application are necessary
+               (e.g., to indicate in which rooms a heating control application should run)
+               and presents a topology allowing the primary actor to indicate their configuration.
+                    % CustomerOrganisationFacade -> ApplicationManager: interface Apps:         List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID) // load this data to display rules of the application in the UI
+                    % ApplicationManager -> Database:                   interface AppDataMgmt:  List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID) // load this data to display rules of the application in the UI
+                    % CustomerOrganisationFacade -> TopologyManager:    interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID) // load the topology of the customer organisation
+                    % TopologyManager -> DeviceDB:                      interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID) // load the topology of the customer organisation
+
+            6. The primary actor carries out the topology configuration.
+                    % // update the topology settings for the application instance = which devices the application will use for different things + relationships between the devices
+                    % CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+                    % CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+                    % ApplicationManager -> Database:                           interface AppDataMgmt:      void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+
+            7. The system loads the (mandatory and optional) roles to which end-users have to be (or can be) assigned for that application.
+                    % CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:     List<UserRole> getAllUserRoles(int applicationID)
+                    % UserRolesManager -> Database:                   interface UserRoleMgmt: List<UserRole> getAllUserRoles(int applicationID)
+                    UserRole contains isMandatory member
+
+            8. The system loads the end-users associated with the primary actor, presents them to the primary actor, and requests to assign end-users to the roles in the application.
+                    % CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:     List<User> getEndUsers(int custOrgID)
+                    % UserRolesManager -> Database:                   interface UserRoleMgmt: List<User> getEndUsers(int custOrgID)
+
+            9. The primary actor provides end-users for the roles.
+                    % CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: updateUserRoles(int applicationInstanceID, map<int, int> usersAndRoles)
+                    % CustomerOrganisationFacade -> UserRolesManager:           interface RoleMgmt:         updateUserRoles(int applicationInstanceID, map<int, int> usersAndRoles)
+                    % UserRolesManager -> Database:                             interface UserRoleMgmt:     updateUserRoles(int applicationInstanceID, map<int, int> usersAndRoles)
+                    can users have multiple roles? => no, only one
+
+            10. The system asks the primary actor if this application should be considered a critical application (cf. P2 : Requests to the pluggable data database).
+                    % CustomerOrganisationClient moves to the next page = form asking for criticality of app
+
+            11. The primary actor indicates the criticality of the application.
+                    % CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: updateCriticality(int applicationInstanceID, bool isCritical)
+
+            12. The system registers the subscription and criticality of the application.
+                    % CustomerOrganisationFacade -> SubscriptionManager:        interface SubscriptionMgmt: createSubscription(int custOrgID, int applicationInstanceID)
+                    % // applicationInstanceID contains an application version member,
+                    % // If the selected application is a newer version of an application to which the primary actor was previously subscribed, the primary actor is automatically unsubscribed from that earlier version
+                    % SubscriptionManager -> Database:                          interface SubscriptionMgmt: createSubscription(int custOrgID, int applicationInstanceID)
+                    % CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             updateCriticality(int applicationInstanceID, bool isCritical)
+                    % ApplicationManager -> Database:                           interface AppDataMgmt:      updateCriticality(int applicationInstanceID, bool isCritical)
+
+            13. If the selected application is a newer version of an application to which the primary actor was previously subscribed,
+                the primary actor is automatically unsubscribed from that earlier version (cf. step 4 or UC20 : Unsubscribe from application).
+                    % See step 12 method createSubscription
+
+            14. The system activates the application (Include: UC17 : Activate an application).
+                    % CustomerOrganisationFacade -> ApplicationManager: interface Apps: activateApplication(int applicationInstanceID)
 
 
 \subsection{Instantiation and allocation of functionality}
@@ -608,6 +693,7 @@
                     \end{itemize}
         	\end{itemize}
         \end{itemize}
+
 
 \subsection{Data type definitions}
     This section defines new data types that are used in the interface descriptions above.

@@ -1,26 +1,40 @@
+model and all decompositions: update PluggableDeviceDB, DeviceDB, Database usage
+decomposition 3: update DB queries: no Query objects
+
 FOR PROJECT DEFENSE: best is 25/05 - 27/05,
                      24/05 armin exam and monika project deadline
 
-Rename PluggableDeviceDB -> DeviceDB
+Rename PluggableDeviceDB -> PluggableDeviceDataDB
 Rename Database:AppDataMgmt to AppMgmt
+
+Check how we used Facade, maybe another pattern is more appropriate, we kind
+of use them as request handlers right now.
 
 ==========================================================================
 
 QUESTIONS:
 
 Interfaces: What's the point of exceptions? Do we use them for alternative scenario's? Like "not found exception"
+    -> if we good designed system then we don't need exceptions
+    -> not mandatory, but data flow should be clear for the alternative scenarios in use cases
 
-            We added the reasons for adding each method ("Created for"), is this ok?
-
-How to make interface names transparent?
-
-Is this ok to handle part of U2 for easy gateway installation? "A connection to the internet is a constraint of the GatewayFacade".
+Package or component in diagram for Gateway, Online Service, ...?
+    -> both are ok, both make it clear that we separate the components in groups
+    -> components could be used for decomposition diagram
 
 Where to create the actual db queries?
+    -> not necessary at this level of abstraction, send the parameters along and make
+       it clear what you want from the query. In the actual implementation, the query
+       will probably be formed before it reached the DB.
+
+How to make interface names transparent?
 
 ==========================================================================
 
 FOR THE SECTION ON CHANGES WE DID TO THE ADD SYSTEM:
+
+    For component, interfaces, datatypes: we list the new ones, but refer
+    to the plugin exported catalog for descriptions
 
     \section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
         Instead of "Element", we do elements or subsystems to decompose/expand.
@@ -47,6 +61,8 @@ FOR THE SECTION ON CHANGES WE DID TO THE ADD SYSTEM:
 
 How is hardware linked to Infrastructure owners? Check if this is handled in one of the use cases
 1 gateway <-> 1 infrastructure owner
+    => our own answer, when an IO buys/orders hardware, then that hardware is linked
+       to the IO after the order is completed.
 
 ==========================================================================
 ============================ REMAINING DRIVERS ===========================
