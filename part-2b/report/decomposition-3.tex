@@ -75,7 +75,8 @@
         Important info related to gateways: GatewayID (new class), infrastructureOwnerID, IPAddress, status (active/inactive), location (in topology table)
         gateway registers with online service:
             sets status to 'active' and updates IPAddress if different
-            GatewayFacade -> DeviceDB: interface GWDeviceMgmt: registerGateway(GatewayID id, IPAddress address)
+
+            GatewayFacade -> DeviceDB: interface DeviceMgmt: registerGateway(GatewayID id, IPAddress address)
 
 
     \paragraph{U2: Mote installation}
@@ -109,21 +110,20 @@
                                we use the other moteID in the rest of the system
                 % DONT NEED THIS ONE 2. MoteFacade -> GatewayFacade: registerMote(moteID, IPAddress moteIPAddress)
                 % ALSO DONT NEED THIS ONE 3. GatewayFacade -> DeviceManager: registerMote(moteID, IPAddress moteIPAddress)
-                % 3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: int moteID addMote(moteID, gatewayID, IPAddress moteIPAddress)
-                                                    %  PluggableDeviceDataScheduler -> PluggableDeviceDB: addMote(moteID, gatewayID, IPAddress moteIPAddress)
+                % 3. DeviceManager -> GatewayFacade -> DeviceDB: int moteID addMote(moteID, gatewayID, IPAddress moteIPAddress)
                                                 %   -> TopologyManager: addMote(infrastructureOwnerID, gatewayID, moteID) // status = unplaced
-                                                    %  TopologyManager -> PluggableDeviceDataScheduler -> PluggableDeviceDB: addMoteInTopology(infrastructureOwnerID, gatewayID, moteID)
+                                                    %  TopologyManager -> DeviceDB: addMoteInTopology(infrastructureOwnerID, gatewayID, moteID)
                 % 4. DeviceManager -> GatewayFacade -> NotificationHandler: notify(infrastructureOwnerID, message)
 
         if reintroduced mote:
             It is automatically re-added on its last known location on the topology.
-                % 3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: reactivateMote(moteID)
+                % 3. DeviceManager -> GatewayFacade -> DeviceDB: reactivateMote(moteID)
                 % 3. DeviceManager -> GatewayFacade -> TopologyManager: reactivateMote(moteID) // status = placed, location is still there from the past, it was not removed
 
             The attached pluggable devices are automatically initialised and configured with their last known configuration.
             The attached pluggable devices are automatically initialised and configured with their last known access rights.
                 Already done by DeviceManager, it detects the devices, updates DB, and configures the devices
-                % 3. DeviceManager -> GatewayFacade -> PluggableDeviceDataScheduler: reactivateDevice(deviceID)
+                % 3. DeviceManager -> GatewayFacade -> DeviceDB: reactivateDevice(deviceID)
 
 
     \paragraph{U2: Pluggable device installation}
@@ -142,7 +142,7 @@
         *) for reactivating last configurations: just set status to active and don't change configuration field, it will still be the same as in the past
             alternative: current\_configuration and last\_configuration in DB
             alternative: store all configurations on Gateway -> but it has bad resources
-            alternative: store all versions on PluggableDeviceDB -> but lots of useless data then = extra work for db
+            alternative: store all versions on DeviceDB -> but lots of useless data then = extra work for db
 
         *) Pluggable devices added to an already known mote are automatically added in "the right location" on the topology.
             what exactly is a location?
@@ -161,8 +161,8 @@
                 New pluggable devices get the location of the mote in the topology, but have status unplaced
 
                 % DONT NEED THIS mote -> DeviceManager: registerDevice(id, type) (registers device as uninitialised)
-                % DeviceManager -> PluggableDeviceDatabase: addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)
-                % DeviceManager -> TopologyManager: addDevice(PluggableDeviceID id, int moteID)
+                % DeviceManager -> PluggableDeviceDatabase -> DeviceDB: addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)
+                % DeviceManager -> TopologyManager -> DeviceDB: addDevice(PluggableDeviceID id, int moteID)
                 % DeviceManager -> GatewayFacade: newPluggableDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)
 
                 % In these methods, if the device already exists and is plugged in in another mote, clear the data
@@ -173,7 +173,7 @@
                 % DONT NEED THIS mote -> DeviceManager: registerDevice(id, type)
 
                 ∗ marks the pluggable device as ‘active’:
-                    % DeviceManager -> PluggableDeviceDataScheduler: reactivateDevice(PluggableDeviceID id)
+                    % DeviceManager -> DeviceDB: reactivateDevice(PluggableDeviceID id)
 
                 ∗ updates the topology:
                     % DeviceManager -> TopologyManager: reactivateDevice(PluggableDeviceID id)
@@ -184,8 +184,8 @@
                                if the device is reactivated, the permissions are already there
 
                 * configures the pluggable device with the last known configuration:
-                    % DeviceManager -> PluggableDeviceDB: Map<String, String> getConfig(PluggableDeviceID id)
-                    % DeviceManager -> PluggableDeviceFacade: setConfig(config)
+                    % DeviceManager -> GatewayFacade -> DeviceDB: interface DeviceMgmt: Map<String, String> getConfig(PluggableDeviceID id)
+                    % DeviceManager -> MoteFacade -> PluggableDeviceFacade: setConfig(config)
 
                 ∗ checks and activates applications which can now execute again:
                     RATIONALE: gateway sends id of IO instead of fetching customers of IO. the online service will do that extra work = less work for gateway.
@@ -201,9 +201,8 @@
                 % InfrastructureOwnerClient -> InfrastructureOwnerFacade - interface AccessRights: List<DeviceInfo> getAccessRights(int infrastructureOwnerID)
 
             2. The system retrieves the list of pluggable devices associated with the primary actor and presents these to the primary actor.
-                % InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt: List<DeviceInfo>  getDevices(int infrastructureOwnerID)
-                % InfrastructureOwnerManager -> DeviceDataScheduler:       interface IODeviceMgmt: List<DeviceInfo>  getDevices(int infrastructureOwnerID)
-                % DeviceDataScheduler -> PluggableDeviceDB:                interface DeviceMgmt: List<DeviceInfo>  getDevices(int infrastructureOwnerID)
+                % InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt:     List<DeviceInfo>  getDevices(int infrastructureOwnerID)
+                % InfrastructureOwnerManager -> DeviceDB:                  interface DeviceMgmt: List<DeviceInfo>  getDevices(int infrastructureOwnerID)
                 % presents these to the primary actor = return of getAccessRights(int infrastructureOwnerID)
 
             3. The primary actor indicates for which pluggable device they want to configure the access rights.
@@ -211,11 +210,10 @@
 
             4. The system retrieves all customer organisations associated with the primary actor and presents these to the primary actor,
                thereby indicating which of these customer organizations already have access to the pluggable device.
-                % InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt: List<int> getCustomerOrganisations(int infrastructureOwnerID)
-                % InfrastructureOwnerManager -> Database:                  interface IOMgmt: List<int> getCustomerOrganisations(int infrastructureOwnerID)
+                % InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt:           List<int> getCustomerOrganisations(int infrastructureOwnerID)
+                % InfrastructureOwnerManager -> Database:                  interface IOMgmt:           List<int> getCustomerOrganisations(int infrastructureOwnerID)
                 % InfrastructureOwnerFacade -> AccessRightsManager:        interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
-                % AccessRightsManager -> DeviceDataScheduler:              interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
-                % DeviceDataScheduler -> PluggableDeviceDB:                interface DeviceMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
+                % AccessRightsManager -> DeviceDB:                         interface DeviceMgmt:       Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
 
             5. The system asks to indicate which of these should have access to the pluggable device.
                 % = is return value of configureDevice(PluggableDeviceID id)
@@ -226,8 +224,7 @@
             7. The system
                 { updates the roles of the selected customer organisations, giving them access rights to the pluggable device.
                     % InfrastructureOwnerFacade -> AccessRightsManager:  interface AccessRightsMgmt: updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
-                    % AccessRightsManager -> DeviceDataScheduler:        interface AccessRightsMgmt: updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
-                    % DeviceDataScheduler -> PluggableDeviceDB:          interface DeviceMgmt:       updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+                    % AccessRightsManager -> DeviceDB:                   interface DeviceMgmt:       updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
                 { checks and activates 'inactive' applications for the customer organisations with updated access rights (Include: UC17: Activate an application).
                     % InfrastructureOwnerFacade -> ApplicationManager:  interface IOAppMgmt: checkApplicationsForActivationForCustomerOrganisations(List<int> custOrgIDs)
                 { checks for applications that require deactivation because of the unavailability of pluggable devices
@@ -255,11 +252,9 @@
 
             2. If all mandatory roles have been assigned, the system checks that all necessary pluggable devices are available in the topology.
                 // pluggable device status has to be 'active' in the DB, and status has to be 'placed/available' in the topology
-                % ApplicationManager -> DeviceDataScheduler:       interface AppDeviceMgmt: List<DeviceInfo> getDevicesForApplication(int applicationInstanceID) // get the devices
-                % DeviceDataScheduler -> PluggableDeviceDatabase:  interface DeviceMgmt:    List<DeviceInfo> getDevicesForApplication(int applicationInstanceID)
-                % ApplicationManager -> TopologyManager:           interface TopologyMgmt: boolean arePluggableDevicesActive(List<PluggableDeviceID> devices) // check that they are all 'placed'. If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
-                % TopologyManager -> DeviceDataScheduler:          interface TopologyMgmt: boolean arePluggableDevicesActive(List<PluggableDeviceID> devices)
-                % DeviceDataScheduler -> PluggableDeviceDatabase:  interface TopologyMgmt: boolean arePluggableDevicesActive(List<PluggableDeviceID> devices)
+                % ApplicationManager -> DeviceDB:        interface AppDeviceMgmt: List<DeviceInfo> getDevicesForApplication(int applicationInstanceID)
+                % ApplicationManager -> TopologyManager: interface TopologyMgmt:  boolean arePluggableDevicesActive(List<PluggableDeviceID> devices) // check that they are all 'placed'. If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
+                % TopologyManager -> DeviceDB:           interface TopologyMgmt:  boolean arePluggableDevicesActive(List<PluggableDeviceID> devices)
 
             3. If all necessary pluggable devices are available, the system activates all necessary parts of the application on gateways and in the Online Service.
                 FOR RATIONALE: we add ApplicationContainer component that will contain application INSTANCES in some kind of sandbox environment. The container can run/pause/stop these instances
@@ -269,7 +264,7 @@
                 % ApplicationManager -> ApplicationContainer: interface AppMgmt: activateAllApplicationParts(int applicationInstanceID) // activate all necessary parts of the application in the online service, whatever "all parts" means
 
             4. The system marks the application as 'active' and updates the billing information.
-                % ApplicationManager -> Database: interface AppDataMgmt:       updateApplication(int applicationInstanceID, string status) // status = 'active'
+                % ApplicationManager -> Database: interface AppMgmt:       updateApplication(int applicationInstanceID, string status) // status = 'active'
                 % ApplicationManager -> InvoiceManager: interface InvoiceMgmt: markActivatedApplication(int applicationInstanceID, int custOrgID, Date date) // updates billing information, marks the start of a period
                 % InvoiceManager -> Database: interface: InvoiceMgmt:          markActivatedApplication(int applicationInstanceID, int custOrgID, Date date)
 
@@ -279,7 +274,7 @@
             6. The system sends an SMS or e-mail to the end-users that were assigned roles. Possibly, this contains instructions for the end-user on how to install a mobile app linked to the application.
                 % ApplicationManager -> UserRolesManager:    interface RoleMgmt:     List<User> getUsersWithRoles(int custOrgID)
                 % UserRolesManager -> Database:              interface UserRoleMgmt: List<User> getUsersWithRoles(int custOrgID)
-                % ApplicationManager -> Database:            interface AppDataMgmt:  string getInstallationInstructions(applicationID) // applications optionally have some installation instruction
+                % ApplicationManager -> Database:            interface AppMgmt:  string getInstallationInstructions(applicationID) // applications optionally have some installation instruction
                 % ApplicationManager -> NotificationManager: interface Notify:       notify(int userID, string message)
 
             ALTERNATIVE SCENARIOS:
@@ -313,7 +308,7 @@
                or applications for which a newer version is available that requires a new subscription).
                     % CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
                     % SubscriptionManager -> ApplicationManager:         interface Apps:             List<Application> getApplications()
-                    % ApplicationManager -> Database:                    interface AppDataMgmt:      List<Application> getApplications()
+                    % ApplicationManager -> Database:                    interface AppMgmt:      List<Application> getApplications()
                     % SubscriptionManager -> Database:                   interface SubscriptionMgmt: List<Subscription> getSubscriptions(int custOrgID)
 
             3. The system presents the available applications to the primary actor, e.g. as a list or table,
@@ -323,14 +318,14 @@
             4. The primary actor selects the desired application.
                     % CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: int subscribeToApplication(int custOrgID, int applicationID)
                     % CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             int createNewApplicationInstance(int custOrgID, int applicationID)
-                    % ApplicationManager -> Database:                           interface AppDataMgmt:      int createNewApplicationInstance(int custOrgID, int applicationID) // returns an application instance id
+                    % ApplicationManager -> Database:                           interface AppMgmt:      int createNewApplicationInstance(int custOrgID, int applicationID) // returns an application instance id
                     % // subscribes the customer org to the application or updates the subscription if the org is already subscribed
 
             5. The system checks which topology configuration and selection of pluggable devices for the application are necessary
                (e.g., to indicate in which rooms a heating control application should run)
                and presents a topology allowing the primary actor to indicate their configuration.
                     % CustomerOrganisationFacade -> ApplicationManager: interface Apps:         List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID) // load this data to display rules of the application in the UI
-                    % ApplicationManager -> Database:                   interface AppDataMgmt:  List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID) // load this data to display rules of the application in the UI
+                    % ApplicationManager -> Database:                   interface AppMgmt:  List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID) // load this data to display rules of the application in the UI
                     % CustomerOrganisationFacade -> TopologyManager:    interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID) // load the topology of the customer organisation
                     % TopologyManager -> DeviceDB:                      interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID) // load the topology of the customer organisation
 
@@ -338,7 +333,7 @@
                     % // update the topology settings for the application instance = which devices the application will use for different things + relationships between the devices
                     % CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
                     % CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
-                    % ApplicationManager -> Database:                           interface AppDataMgmt:      void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+                    % ApplicationManager -> Database:                           interface AppMgmt:      void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
 
             7. The system loads the (mandatory and optional) roles to which end-users have to be (or can be) assigned for that application.
                     % CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:     List<UserRole> getAllUserRoles(int applicationID)
@@ -367,7 +362,7 @@
                     % // If the selected application is a newer version of an application to which the primary actor was previously subscribed, the primary actor is automatically unsubscribed from that earlier version
                     % SubscriptionManager -> Database:                          interface SubscriptionMgmt: createSubscription(int custOrgID, int applicationInstanceID)
                     % CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             updateCriticality(int applicationInstanceID, bool isCritical)
-                    % ApplicationManager -> Database:                           interface AppDataMgmt:      updateCriticality(int applicationInstanceID, bool isCritical)
+                    % ApplicationManager -> Database:                           interface AppMgmt:      updateCriticality(int applicationInstanceID, bool isCritical)
 
             13. If the selected application is a newer version of an application to which the primary actor was previously subscribed,
                 the primary actor is automatically unsubscribed from that earlier version (cf. step 4 or UC20 : Unsubscribe from application).
@@ -458,60 +453,61 @@
                 \end{itemize}
         \end{itemize}
 
-    \subsubsection{DeviceDataScheduler}
+    \subsubsection{DeviceDB}
         \begin{itemize}
             \item DeviceMgmt
-            \begin{itemize}
-                \item \texttt{int addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)}
-                    \begin{itemize}
-                        \item Effect: Schedules a DB query to add a new mote to the PluggableDeviceDB.
-                        \item Created for: UC4.3
+                \begin{itemize}
+                    \item \texttt{int addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)}
+                        \begin{itemize}
+                            \item Effect: Schedules a DB query to add a new mote to the .
+                            \item Created for: UC4.3
+                        \end{itemize}
+                    \item \texttt{void reactivateMote(int moteID)}
+                        \begin{itemize}
+                            \item Effect: Schedules a DB query to change the status of the mote to active.
+                            \item Created for: UC4.3 - reintroduced mote
+                        \end{itemize}
+                    \item \texttt{void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)}
+                        \begin{itemize}
+                            \item Effect: Schedules a DB query to add a new pluggable device to the .
+                            \item Created for: UC6.3
+                        \end{itemize}
+                    \item \texttt{void reactivateDevice(PluggableDeviceID id)}
+                        \begin{itemize}
+                            \item Effect: Schedules a DB query to change the status of the pluggable device to active.
+                            \item Created for: UC6.3 - reintroduced device
+                        \end{itemize}
+                    \item \texttt{Map<String, String> getConfigDB(PluggableDeviceID pID)}
+                        \begin{itemize}
+                            \item Effect: Schedules a DB query to get the last set configuration of a pluggable device.
+                            \item Created for: UC6.3 - reintroduced device
+                        \end{itemize}
                     \end{itemize}
-                \item \texttt{void reactivateMote(int moteID)}
-                    \begin{itemize}
-                        \item Effect: Schedules a DB query to change the status of the mote to active.
-                        \item Created for: UC4.3 - reintroduced mote
-                    \end{itemize}
-                \item \texttt{void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<String, String> defaultConfigurations)}
-                    \begin{itemize}
-                        \item Effect: Schedules a DB query to add a new pluggable device to the PluggableDeviceDB.
-                        \item Created for: UC6.3
-                    \end{itemize}
-                \item \texttt{void reactivateDevice(PluggableDeviceID id)}
-                    \begin{itemize}
-                        \item Effect: Schedules a DB query to change the status of the pluggable device to active.
-                        \item Created for: UC6.3 - reintroduced device
-                    \end{itemize}
-                \item \texttt{Map<String, String> getConfigDB(PluggableDeviceID pID)}
-                    \begin{itemize}
-                        \item Effect: Schedules a DB query to get the last set configuration of a pluggable device.
-                        \item Created for: UC6.3 - reintroduced device
-                    \end{itemize}
-            \end{itemize}
+                \end{itemize}
 
         	\item TopologyMgmt
-        	\begin{itemize}
-        		\item \texttt{void addMoteInTopology(int moteID, int infrastructureOwnerID, int gatewayID)}
-            		\begin{itemize}
-                        \item Effect: Schedules a DB query to add a new mote in the topology.
-            			\item Created for: UC4.3
-            		\end{itemize}
-                \item \texttt{void reactivateMoteInTopology(int moteID)}
-                    \begin{itemize}
-                        \item Effect: Schedules a DB query to change the status of the mote in the topology to 'placed'.
-                        \item Created for: UC4.3 - reintroduced mote
-                    \end{itemize}
-                \item \texttt{void addDevice(PluggableDeviceID id, int moteID)}
-                    \begin{itemize}
-                        \item Effect: Schedules a DB query to add a new pluggable device to the topology.
-                        \item Created for: UC6.3
-                    \end{itemize}
-                \item \texttt{void reactivateDevice(PluggableDeviceID id)}
-                    \begin{itemize}
-                        \item Effect: Schedules a DB query to change the status of the pluggable device to 'placed'.
-                        \item Created for: UC6.3 - reintroduced device
-                    \end{itemize}
-        	\end{itemize}
+            	\begin{itemize}
+            		\item \texttt{void addMoteInTopology(int moteID, int infrastructureOwnerID, int gatewayID)}
+                		\begin{itemize}
+                            \item Effect: Schedules a DB query to add a new mote in the topology.
+                			\item Created for: UC4.3
+                		\end{itemize}
+                    \item \texttt{void reactivateMoteInTopology(int moteID)}
+                        \begin{itemize}
+                            \item Effect: Schedules a DB query to change the status of the mote in the topology to 'placed'.
+                            \item Created for: UC4.3 - reintroduced mote
+                        \end{itemize}
+                    \item \texttt{void addDevice(PluggableDeviceID id, int moteID)}
+                        \begin{itemize}
+                            \item Effect: Schedules a DB query to add a new pluggable device to the topology.
+                            \item Created for: UC6.3
+                        \end{itemize}
+                    \item \texttt{void reactivateDevice(PluggableDeviceID id)}
+                        \begin{itemize}
+                            \item Effect: Schedules a DB query to change the status of the pluggable device to 'placed'.
+                            \item Created for: UC6.3 - reintroduced device
+                        \end{itemize}
+            	\end{itemize}
         \end{itemize}
 
     \subsubsection{GatewayFacade}
@@ -597,62 +593,6 @@
                     \item Now also used for UC6.3 - reintroduced mote
                 \end{itemize}
             \end{itemize}
-        \end{itemize}
-
-    \subsubsection{PluggableDeviceDB}
-        \begin{itemize}
-        	\item DeviceMgmt
-        	\begin{itemize}
-                \item \texttt{int addMote(DBQuery query)}
-            		\begin{itemize}
-            			\item Effect: Executes a DB request to add a new mote to the PluggableDeviceDB.
-            			\item Created for: UC4.3
-            		\end{itemize}
-                \item \texttt{void reactivateMote(DBQuery query)}
-                    \begin{itemize}
-                        \item Effect: Executes a DB request to change the status of the mote to active.
-                        \item Created for: UC4.3 - reintroduced mote
-                    \end{itemize}
-                \item \texttt{void addDevice(DBQuery query)}
-                    \begin{itemize}
-                        \item Effect: Executes a DB request to add a new pluggable device to the PluggableDeviceDB.
-                        \item Created for: UC6.3
-                    \end{itemize}
-                \item \texttt{void reactivateDevice(DBQuery query)}
-                    \begin{itemize}
-                        \item Effect: Executes a DB request to change the status of the pluggable device to active.
-                        \item Created for: UC6.3 - reintroduced device
-                    \end{itemize}
-                \item \texttt{Map<String, String> getConfigDB(PluggableDeviceID pID)}
-                    \begin{itemize}
-                        \item Effect: Schedules a DB query to get the last set configuration of a pluggable device.
-                        \item Created for: UC6.3 - reintroduced device
-                    \end{itemize}
-        	\end{itemize}
-
-        	\item TopologyMgmt
-        	\begin{itemize}
-        		\item \texttt{void addMote(DBQuery query)}
-        		\begin{itemize}
-                    \item Effect: Executes a DB query to add a new mote in the topology.
-        			\item Created for: UC4.3
-        		\end{itemize}
-                \item \texttt{void reactivateMote(DBQuery query)}
-                    \begin{itemize}
-                        \item Effect: Executes a DB query to change the status of the mote in the topology to 'placed'.
-                        \item Created for: UC4.3 - reintroduced mote
-                    \end{itemize}
-                \item \texttt{void addDevice(DBQuery query)}
-                    \begin{itemize}
-                        \item Effect: Executes a DB query to add a new pluggable device to the topology and link it to a mote.
-                        \item Created for: UC6.3
-                    \end{itemize}
-                \item \texttt{void reactivateDevice(DBQuery query)}
-                    \begin{itemize}
-                        \item Effect: Executes a DB query to change the status of the pluggable device to 'placed'.
-                        \item Created for: UC6.3 - reintroduced device
-                    \end{itemize}
-        	\end{itemize}
         \end{itemize}
 
     \subsubsection{PluggableDeviceFacade}

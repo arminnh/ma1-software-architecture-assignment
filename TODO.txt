@@ -1,11 +1,8 @@
-model and all decompositions: update PluggableDeviceDB, DeviceDB, Database usage
-decomposition 3: update DB queries: no Query objects
-
 FOR PROJECT DEFENSE: best is 25/05 - 27/05,
                      24/05 armin exam and monika project deadline
 
-Rename PluggableDeviceDB -> PluggableDeviceDataDB
-Rename Database:AppDataMgmt to AppMgmt
+Update decomposition 3: Interfaces for child modules
+decomposition 3: update DB queries: no Query objects
 
 Check how we used Facade, maybe another pattern is more appropriate, we kind
 of use them as request handlers right now.
@@ -28,6 +25,8 @@ Where to create the actual db queries?
        will probably be formed before it reached the DB.
 
 How to make interface names transparent?
+
+Should we denote when methods should be sync/async?
 
 ==========================================================================
 
