@@ -77,27 +77,180 @@ Low Priority, we can skip these
 % M2: Big data analytics on pluggable data and/or application usage data
 
 High:
-UC05: Uninstall mote
-UC07: Remove a pluggable device from its mote
-UC08: Initialise a pluggable device
-UC12: Perform actuation command
-UC19: Subscribe to application
-UC20: Unsubscribe from application
-UC25: Access topology and available devices
-UC26: Send application command or message to external front-end
-UC27: Receive application command or message from external front-end
-
 Medium:
-UC13: Configure pluggable device
-UC22: Upload an application
-UC24: Consult historical data
-UC28: Log in
-UC29: Log out
-
+    UC22: Upload an application
+    UC28: Log in
+    UC29: Log out
 Low:
-UC01: Register a customer organisation
-UC02: Register an end-user
-UC03: Unregister an end-user
-UC16: Consult notification message
-UC21: Send invoice
-UC23: Consult application statistics
+    UC21: Send invoice
+    UC23: Consult application statistics
+
+==========================================================================
+====== Av1: Communication between SIoTIP gateway and Online Service ======
+==========================================================================
+Prevention:
+    *) SLA 99.9% availability, can't model this
+    *) Local networks 90% availability
+
+Detection:
+    *) Online Service can detect failures of its individual internal
+       communication components:
+       Ping/Echo, Monitor, Heartbeat, Timestamp
+       The failure of an internal SIoTIP Online Service component is
+       detected within 30 seconds.
+
+    *) SIoTIP gateway can detect failures of its individual internal
+       communication components:
+       Ping/Echo, Monitor, Heartbeat, Timestamp
+
+    *) Online service can detect that a SIoTIP gateway is not sending
+       data anymore based on the expected synchronisation interval:
+       Monitor: GWMonitor
+       An outage is defined as 3 consecutive expected synchronisations
+       that do not arrive within 1 minute of their expected arrival time.
+
+    *) Online Service should acknowledge each message sent by the SIoTIP
+       gateway so that the gateway can detect failures.
+
+       CommunicationModule on gateway and Online Service.
+       Sends all messages to Online Service and waits for
+       acknowlegdements for all sent messages. If no acknowledgement
+       within X seconds -> Online Service failure
+
+Resolution:
+    *) gateway outage (= complete failure) detected
+       -> notify IO and SIoTIP system administrator
+       The infrastructure owner is notified within 5 minutes after
+       the detection of an outage of their gateway. A SIoTIP system administrator
+       should be notified within 1 minute after the detection of a simultaneous
+       outage of more than 1% of the registered gateways.
+
+    *) gateway component failure detected
+       -> first, restart component. If still fails, reboot gateway entirely.
+
+    *) Online Service / communication channel failure detected ->
+       -> temporarily store all incoming pluggable data and issued
+          application commands internally
+       The SIoTIP gateway can store at least 3 days of pluggable data before
+       old data has to be overwritten.
+
+    *) When Online Service = unreachable, applications on SIoTIP gateway
+       can still operate normally, TODO ask
+
+Response Measure:
+    *) The SIoTIP gateway will start synchronising with the Online service
+       within 1 minute after the communication channel becomes available.
+
+Use cases:
+    None
+
+==========================================================================
+====================== Av2: Application failure ==========================
+==========================================================================
+An application fails. This does not affect other applications. This does
+not affect availability of other functionality (e.g. dashboards).
+
+Prevention:
+    *) Applications run within their own container.
+       -> we already have this, the ApplicationContainer component.
+
+    ∗) The subsystem for executing applications in the Online Service must
+       have a guaranteed minimal up-time.
+       -> ??? Something like Monitor to restart instances as fast a possible?
+
+Detection:
+    ∗) The system is able to autonomously detect failures of its individual
+       application execution components.
+       == APPLICATION CRASH?
+       -> Monitor
+
+       ApplicationContainer becomes:
+            ApplicationManager: that does management of instances and communication
+            with other components
+
+            ApplicationInstance: is a container/sandbox that has
+                                 1 running application instance
+                                 = application execution component
+                                 ?? run on different hardware maybe?
+
+            ContainerMonitor: that monitors the ContainerInstance instances
+
+        ContainerMonitor -> ApplicationInstance: boolean check()
+        ApplicationInstance -> ContainerMonitor: void applicationCrashed(id applicationInstanceID)
+
+        The failure of an internal application execution component is detected within 30 seconds.
+        Detection of failed hardware or crashed software happens within 5 seconds.
+
+    ∗) The system is able to autonomously detect failing applications and
+       application containers.
+       == CONTAINER CRASH?
+       -> we say container has crashed/failed when the following has no response:
+            ContainerMonitor -> ApplicationInstance: boolean check()
+       is ok????
+
+       Detection of failed hardware or crashed software happens within 5 seconds.
+       TODO ask what hardware?? separate hardware that runs application instances?
+
+    ∗) Upon detection, a SIoTIP system administrator is notified.
+       -> send notification
+       SIoTIP system administrators are notified within 1 minute.
+
+Resolution:
+    ∗) In case of application crash, the system autonomously restarts failed
+       applications.
+       -> ContainerMonitor -> ApplicationInstance: restart
+       After 3 failed restarts the application is suspended, and the application
+       developer and customer organisation are notified within 5 minutes.
+
+    ∗) In case of failure of application execution components or an
+       application container, a system administrator is notified.
+       -> ApplicationInstance failure -> send notification
+       SIoTIP system administrators are notified within 1 minute.
+
+    ∗) If part of an application fails, the remaining parts remain operational,
+       possibly in a degraded mode (graceful degradation).
+       -> send message to other parts to notify of failed part
+
+Use cases:
+    UC12: Perform actuation command
+    UC13: Configure pluggable device
+    UC25: Access topology and available devices
+    UC24: Consult historical data
+    UC26: Send application command or message to external front-end
+    UC27: Receive application command or message from external front-end
+
+
+==========================================================================
+====================== P1: Large number of users =========================
+==========================================================================
+*) The SIoTIP Online Service replies to the service requests of the
+   infrastructure owner and customer organisations.
+
+*) The Online Service processes the data received from the gateways.
+
+*) The application execution subsystem should be able to execute an increasing
+   number of active applications.
+
+*) The initial deployment of SIoTIP should be able to deal with at least 5000
+   gateways in total, and should be provisioned to service at least 3000
+   registered users simultaneously connected to SIoTIP.
+   -> 5000 gateways * 4 motes per gateway * 3 devices per mote = 60000 devices
+   -> Keep communication with gateways at a minimum
+      e.g. gateway messages are of type "send data", "new device connected", ...
+   -> LOAD BALANCING
+
+*) Scaling up to service an increasing amount of infrastructure owners,
+   customers organisations and applications should (in worst case) be linear ;
+   i.e. it should not require proportionally more resources (machines, etc.)
+   than the initial amount of resources provisioned per customer
+   organisation/infrastructure owner and per gateway.
+
+Use cases:
+    UC01: Register a customer organisation
+    UC02: Register an end-user
+    UC03: Unregister an end-user
+    UC05: Uninstall mote
+    UC07: Remove a pluggable device from its mote
+    UC08: Initialise a pluggable device
+    UC20: Unsubscribe from application
+    UC16: Consult notification message

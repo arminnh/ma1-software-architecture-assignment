@@ -1,0 +1,99 @@
+\section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
+
+\subsection{Elements/Subsystem to decompose/expand}
+    In this run we decompose/expand ...
+
+
+\subsection{Selected architectural drivers}
+    The non-functional drivers for this decomposition are:
+    \begin{itemize}
+    	\item \emph{QA}: Name of QA
+    \end{itemize}
+
+    The related functional drivers are:
+    \begin{itemize}
+        \item \emph{UCX}: Name of UC \\
+              Short description of the UC.
+    \end{itemize}
+
+
+\subsection{Architectural design}
+    This section describes what needs to be done to satisfy the requirements for
+    this decomposition and how involved problems/obstacles are solved.
+
+    \paragraph{QA: Problem title}
+        Short description of the problem.\\
+        Solution for the problem.
+
+
+\subsection{Instantiation and allocation of functionality}
+    This section describes the new components which instantiate our solutions described
+    in the section above and how components are deployed on physical nodes. \\
+    Unless stated otherwise the responsibilities assigned in the first decomposition are unchanged.
+
+    \paragraph{Decomposition}
+        Figure \ref{fig:FIGURELABEL} shows the components resulting from the
+        decomposition in this run.
+
+        \begin{figure}[!h]
+        	\centering
+            %\includegraphics[width=1\textwidth]{IMAGE FILE NAME}
+        	\missingfigure[figwidth=0.8\textwidth]{Component-and-connector diagram of this decomposition}
+        	\caption{Component-and-connector diagram of this decomposition.}
+            \label{fig:FIGURELABEL}
+        \end{figure}
+
+        The responsibilities of the components are as follows:
+
+    \subparagraph{Component}
+        Short description of its responsibilities. (Relevant QA or UC)
+
+
+    % \paragraph{Behaviour}
+        % USEFUL SEQUENCE DIAGRAMS FOR CHOSEN USE CASES
+
+
+    \paragraph{Deployment}
+        Figure \ref{fig:FIGURELABEL} shows the allocation of components
+        to physical nodes.
+
+        \begin{figure}[!h]
+        	\centering
+        	%\includegraphics[width=0.8\textwidth]{IMAGE FILE NAME}
+        	\missingfigure[figwidth=0.8\textwidth]{Deployment diagram}
+        	\caption{Deployment diagram of this decomposition.}
+            \label{fig:FIGURELABEL}
+        \end{figure}
+
+
+\subsection{Interfaces for child modules}\label{add2-interfaces}
+    This section describes the interfaces assigned to the components defined
+    in the section above. Per interface, we list its methods by means of its
+    syntax. The data types used in these interfaces are defined in the following section. \\
+
+    Each method shows which (part of a) quality attribute or use case caused
+    a need for the method. However, this does not mean that a method is
+    only to be used to satisfy that quality  attribute or use case, it could
+    be used for other causes not yet mentioned here.
+
+    The interfaces and methods defined here are to be seen as an
+    extension of the interfaces defined in previous sections, unless
+    explicitly stated otherwise.
+
+    \subsubsection{Component}
+        \begin{itemize}
+            \item InterfaceName
+            \begin{itemize}
+                \item \texttt{void methodName(.. parameters ..)}
+                \begin{itemize}
+                    \item Effect: Short description of the method
+                    \item Created for: Reason for the addition of this method.
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+
+\subsection{Data type definitions}
+    This section defines new data types that are used in the interface descriptions above.
+
+    \paragraph{DataType}
+        Description of data type
