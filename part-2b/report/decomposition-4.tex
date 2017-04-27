@@ -1,18 +1,30 @@
-\section{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
+\section{Decomposition 4: Av2, UC12, UC25, UC26, UC27}
 
 \subsection{Elements/Subsystem to decompose/expand}
     In this run we decompose/expand ...
+    decompose the ApplicationContainer component
+    expand the application execution subsystem
 
 
 \subsection{Selected architectural drivers}
     The non-functional drivers for this decomposition are:
     \begin{itemize}
-    	\item \emph{QA}: Name of QA
+    	\item \emph{Av2}: Application failure
     \end{itemize}
 
     The related functional drivers are:
     \begin{itemize}
-        \item \emph{UCX}: Name of UC \\
+        \item \emph{UC12}: Perform actuation command \\
+              Short description of the UC.
+        \item \emph{UC13}: Configure pluggable device \\
+              Short description of the UC.
+        \item \emph{UC25}: Access topology and available devices \\
+              Short description of the UC.
+        \item \emph{UC24}: Consult historical data \\
+              Short description of the UC.
+        \item \emph{UC26}: Send application command or message to external front-end \\
+              Short description of the UC.
+        \item \emph{UC27}: Receive application command or message from external front-end \\
               Short description of the UC.
     \end{itemize}
 
@@ -21,9 +33,76 @@
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
 
-    \paragraph{QA: Problem title}
-        Short description of the problem.\\
+    \paragraph{Av2: Detection of failures}
+        The system is able to autonomously detect failures of its individual
+        application execution components, failing applications, and failing application containers. \\
+        Upon detection, a SIoTIP system administrator is notified. \\
+        The failure of an internal application execution component is detected within 30 seconds.
+        Detection of failed hardware or crashed software happens within 5 seconds.
+        SIoTIP system administrators are notified within 1 minute.\\
+
+        *) APPLICATION CRASH
+        -> Monitor
+
+        ApplicationContainer becomes:
+            ApplicationManager: that does management of instances and communication
+            with other components
+
+            ApplicationInstance: is a container/sandbox that has
+            1 running application instance
+            = application execution component
+            ?? run on different hardware maybe?
+
+            ContainerMonitor: that monitors the ContainerInstance instances
+
+        ContainerMonitor -> ApplicationInstance: boolean check()
+        ApplicationInstance -> ContainerMonitor: void applicationCrashed(id applicationInstanceID)
+
+        *) OR APPLICATION EXECUTION COMPONENT CRASH
+        -> we say container has crashed/failed when the following has no response:
+        ContainerMonitor -> ApplicationInstance: boolean check()
+        is ok????
+
+        *) Detection of failed hardware
+        TODO ask what hardware?? separate hardware that runs application instances?
+
+        *) Send notification
+
+    \paragraph{Av2: Resolution of application failures}
+        In case of application crash, the system autonomously restarts failed applications.
+        If part of an application fails, the remaining parts remain operational,
+        possibly in a degraded mode (graceful degradation). \\
+        After 3 failed restarts the application is suspended, and the
+        application developer and customer organisation are notified within 5 minutes.\\
+        Application fails -> ContainerMonitor detects this -> ApplicationInstance: restart
+        3 failed restarts -> suspend app and send notification
+
+        *) Graceful degradation:
+        -> send message to other parts to notify of failed part
+
+    \paragraph{Av2: Resolution of application execution component failures}
+        In case of failure of application execution components or an application
+        container, a system administrator is notified. \\
+        SIoTIP system administrators are notified within 1 minute.\\
         Solution for the problem.
+        ApplicationInstance failure -> send notification to system administrator
+        SIoTIP system administrators are notified within 1 minute.
+
+    \paragraph{Av2: Failures do not impact other applications or other functionality of the system}
+        This does not affect other applications that are executing on the Online
+        service or SIoTIP gateway. This does not affect the availability of
+        other functionality of the system, such as the dashboards. \\
+        Applications fail independently: they are executed within their own
+        container to avoid application crashes to affect other applications.\\
+       -> we already have this, the ApplicationContainer component.
+
+    \paragraph{Av2: Up-time of application execution subsystem}
+        The subsystem for executing applications in the Online Service must
+        have a guaranteed minimal up-time. The subsystem for executing
+        applications in the Online Service must be available
+        99\% of the time, measured per month. \\
+        Solution for the problem.
+        Subsystem = ApplicationManager + ApplicationContainer + new components ???
 
 
 \subsection{Instantiation and allocation of functionality}
