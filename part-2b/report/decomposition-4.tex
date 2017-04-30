@@ -81,6 +81,10 @@
 
         *) Graceful degradation:
         -> send message to other parts to notify of failed part
+        we ca have component responsible for controlling state of application
+        and can start, stop or restart application. 
+        
+        
 
     \paragraph{Av2: Resolution of application execution component failures}
         In case of failure of application execution components or an application
@@ -89,6 +93,11 @@
         Solution for the problem.
         ApplicationInstance failure -> send notification to system administrator
         SIoTIP system administrators are notified within 1 minute.
+        application return diferent metrics 
+
+        (usage of memory, number of served requestst and so ) and some monitoring 
+        system (component), that monitors container sends regularly request to this endpoint 
+        and  collect this information about aplications
 
     \paragraph{Av2: Failures do not impact other applications or other functionality of the system}
         This does not affect other applications that are executing on the Online
@@ -105,8 +114,114 @@
         99\% of the time, measured per month. \\
         Solution for the problem.
         Subsystem = ApplicationManager + ApplicationContainer + new components ???
+        
+        containers can have replicas, for example every container has 3 replicas and 
+        when one crash  there has to be sometnig that find out that there are 
+        just 2 replicas now and it is needed to create new replica.
+        
+        There is also needed component for load balancing.
+        
+        UC12:
+            1. An application indicates that it wants one or more pluggable devices 
+            to perform an actuation command (e.g., sound all buzzers on the first floor).
+            ApplicationClient -> ApplicationFacade: interface AppMgmt: sendCommand(DeviceDataID id, MoteID id, Map<String,String> data) 
+            ApplicationFacade -> CommandHandler: interface AppMgmt: sendCommand(DeviceDataID id, MoteID id, Map<String,String> data)
+            
+            2. The system 
+                -constructs the actuation command message according to the specific formatting syntax
+                for the involved pluggable device(s)
+                CommandHandler -> ApplicationManager: 
+                                                void sendCommand(DeviceDataID id, MoteID id, Map<String,String> data)
+                                                   Json message createData(DeviceDataID id, MoteID id, Map<String,String> data)
+                                                     
+                -sends the command message to the intended pluggable device(s).
+                    
+                    ApplicationManager -> GatewayFacade: interface AppDeviceMgmt: 
+                                                            void sendCommand(List<int> acctuators, Json message)
+            
+            3. The pluggable device(s) receive(s) the actuation command message
+               and perform(s) the contained actuation command.
+                    GatewayFacade -> MoteFacade: interface DeviceMgmt: sendCommand(Json messsage)
+                    MoteFacade -> PluggableDeviceFacade: interface Actuate: 
+                                                            void sendActuationCommand(String commandName)
+            
+            Remarks:
+            The topology may be used to determine the set of actuators that need 
+            to perform the actuation command.
+                ApplicationManager -> TopologyManager: interface TopologyMgmt:
+                                                             List<int> determineAcuators(Json message).
+            
+            Note that an explicit acknowledgement is not sent by the pluggable device. However, 
+            the pluggable device will regularly send its data, including state information, to the system 
+            (cf. UC11:Send pluggable device data). This state will reflect the outcome of the actuation command
+            (e.g., indicating that a buzzer is on). Furthermore, the application will be notified when
+            pluggable devices fail (cf. UC14: Send heartbeat).
+                PluggableDeviceData -> MoteFacade: interface DeviceData: void rcvData(PluggableDeviceID pID, DeviceData data)
+                MoteFacade -> GatewayFacade: interface DeviceData: void rcvData(PluggableDeviceID pID, DeviceData data)
+                GatewayFacade -> ApplicationManager: interface AppMgmt: sendDeviceStatus(PluggableDeviceID pID, String status)
 
+                
+                
+        UC13: 
+            1. The primary actor specifies that it wants to set a configuration parameter of a pluggable
+            device.
+                ApplicationClient -> ApplicationFacade: interface AppMgmt:
+                                                        void setConfiguration(PluggableDevideID id, Map<String,String> parameters)
+                ApplicationFacade -> ApplicationManager: interface DeviceMgmt:
+                                                        void setConfiguration(PluggableDevideID id, Map<String,String> parameters)
+            
+                
+            2. The system verifies that the value of the configuration parameter is valid for the device (for
+               example, a sensor which provides temperature information may have hardware limits on the
+               sampling frequency).
+               ApplicationManager -> DeviceDB: interface AppDeviceMgmt: bool checkDeviceParameter(PluggableDeviceID):
+                                                      
+            3. The system determines whether the pluggable device needs to be reconfigured, and if so,
+               constructs a reconfiguration command according to the specific formatting syntax for the
+               pluggable device and sends it to the pluggable device. ????how
+            
+            4. The system updates the internal configuration of the pluggable device.
+                ApplicationManager -> Datatase: interface AppMgmt:
+                                                     void setConfiguration(PluggableDeviceID id, Map<String,String> parameters) 
+            
+            5. The system informs the primary actor that the reconfiguration was done successfully.  
+                ApplicationManager -> NotificationManager: interface Notify: notify(int userID, string message)  
+         
+            Alternative scenarios:
+            2a. If the value is invalid for the pluggable device, the system informs the application via an
+                exception. The use case ends.
+                - first exception
+            Remarks:
+                Note that different applications may have different preferences for a single pluggable device
+        
+        UC24:
+            1. The primary actor indicates that it wants to consult a specified collection of historical data in
+                a specified timeframe.
+                ApplicationClient -> ApplicationFacade: interface AppData:
+                                                void getHistoricalData(DateTime from, DateTime to, int custOrgID)
+                ApplicationFacade -> ApplicationManager: interface Apps:
+                                                void getHistoricalData(DateTime from, DateTime to, int custOrgID)
+            2. The system determines from which pluggable devices the data is required and looks up the data.
+                 ????
+            3. The system presents the primary actor with the requested historical overview, e.g. as a table.
+                ApplicationManager -> DeviceDataScheduler: interface RequestData:
+                                      HistoricalData getHistoricalData(List<PluggableDeviceID> id,DateTime from, DateTime to)
+                DeviceDataScheduler -> PluggableDeviceDB: interface DeviceData:
+                                      HistoricalData getHistoricalData(List<PluggableDeviceID> id,DateTime from, DateTime to) 
+                
+        UC25:
+            1. The primary actor indicates that it wants an overview of the topology.
+                ApplicationClient -> ApplicationFacade: interface TopologyOverview
+                                                               void getTopologyOverview(int custOrgID)
+            2. The system looks up the pluggable devices that are available to the customer organisation
+           that owns the primary actor, and composes a view on the topology including these pluggable devices.
+                ApplicationFacade -> ApplicationManager: interface Apps: List<RoomTopology> getTopology(int custOrgID)
+                TopologyManager -> DeviceDB: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID) 
+            3. The system presents the topology view to the primary actor.
+        
+        UC26:
 
+        
 \subsection{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions
     described in the section above. For each component we note the quality

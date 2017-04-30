@@ -1,4 +1,4 @@
-%%% element catalog, generated on Sun Apr 30 21:21:13 CEST 2017
+%%% element catalog, generated on Sun Apr 30 21:46:34 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -124,7 +124,7 @@
 	\end{description}
 \subsection{DeviceDataConverter}\label{comp:OnlineServiceDeviceDataConverter}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~The \texttt{\vpett{\nameref{comp:OnlineServiceDeviceDataConverter}}} is resposible for converting pluggable device data in the data processing subsystem.
+		\item[Responsibility:]~The \vpett{\nameref{comp:OnlineServiceDeviceDataConverter}} is resposible for converting pluggable device data in the data processing subsystem.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDataConverterDataConversion}}
@@ -136,7 +136,7 @@
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDataSchedulerDeviceData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDataSchedulerRequestData}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeDeviceData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationManagerForwardData}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBDeviceData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationManagerForwardData}}		
 	\end{description}
 \subsection{DeviceDB}\label{comp:OnlineServiceDeviceDB}
 	\begin{description}[noitemsep,nolistsep]
@@ -164,7 +164,7 @@ Access rights
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Main component on the gateway that allows different components to work
 with each other. E.g. transmits heartbeats from motes to
-\texttt{\vpett{\nameref{comp:GatewayGatewayDeviceManager}}}, transmits commands to shut down applications,
+\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, transmits commands to shut down applications,
 triggers notifications to be generated, ...
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
@@ -213,7 +213,7 @@ triggers notifications to be generated, ...
 	\end{description}
 \subsection{MoteFacade}\label{comp:MoteMoteFacade}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~Sends heartbeats to the \texttt{\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}}. Includes a list
+		\item[Responsibility:]~Sends heartbeats to the \vpett{\nameref{comp:GatewayGatewayGatewayFacade}}. Includes a list
 of connected pluggable devices in the heartbeats.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
@@ -262,7 +262,7 @@ of connected pluggable devices in the heartbeats.
 	\end{description}
 \subsection{PluggableDeviceFacade}\label{comp:PuggableDevicePluggableDeviceFacade}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~Responsible for sending pluggable device data to \texttt{\vpett{\nameref{comp:MoteMoteFacade}}}. Needs to be initialised in order for the data to be used/stored.
+		\item[Responsibility:]~Responsible for sending pluggable device data to \vpett{\nameref{comp:MoteMoteFacade}}. Needs to be initialised in order for the data to be used/stored.
 		\item[Super-components:]~None
 		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDeviceFacadeSubscriptionManager}}
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeActuate}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeConfig}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeRequestData}}
@@ -502,7 +502,7 @@ TODO: update this with Relationship type?
   \subsection{DeviceData}\label{int:PluggableDeviceDatabasePluggableDeviceDataDBDeviceData}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PluggableDeviceDatabasePluggableDeviceDataDB}}
-      \item[Required by:] None
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceDeviceDataScheduler}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{List\textless{}\ref{data:DataTypesDeviceData}\textgreater{} getData(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesDateTime} from, \ref{data:DataTypesDateTime} to)}
@@ -557,7 +557,7 @@ TODO: update this with Relationship type?
   \subsection{DeviceData}\label{int:GatewayGatewayGatewayFacadeDeviceData}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceDeviceDataScheduler}}, \iconcomponent{}~\vpett{\nameref{comp:MoteMoteFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMoteFacade}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void rcvData(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesDeviceData} data)}
