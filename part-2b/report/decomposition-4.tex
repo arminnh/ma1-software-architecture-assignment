@@ -220,23 +220,29 @@
             3. The system presents the topology view to the primary actor.
         
         UC26:
+            1. The primary actor indicates it wants to send an application command or message to an external
+                front-end and specifies the destination (e.g., as an application identier for SIoTIP applications,
+                or a hostname and port for external systems).
+            2. The system checks that the primary actor is allowed to send to the specied destination.
+            3. If the primary actor is allowed to send to the destination, and if the destination is another
+                application, the system delivers the application command to that destination (Include: UC27:
+                Receive application command or message from external front-end).
+            4. The system informs the primary actor that the message was sent.
 
         
 \subsection{Instantiation and allocation of functionality}
-    This section lists the new components which instantiate our solutions
-    described in the section above. For each component we note the quality
-    attribute or use case that prompted us to create it. Descriptions about
-    the components can be found under chapter \ref{ch:elements-datatypes}. \\
+    This section describes the new components (and their responsibilities)
+    which instantiate our solutions described in the section above. \\
+    Unless stated otherwise, responsibilities assigned in previous decompositions are unchanged.
 
-    \begin{itemize}
-        \item Component: (Relevant QA or UC)
-    \end{itemize}
+    \subparagraph{Component}
+        Short description of its responsibilities. (Relevant QA or UC)
 
 
 \subsection{Interfaces for child modules}
     This section lists new interfaces assigned to the components defined
     in the section above. Detailed information about each interface and
-    its methods can be found under chapter \ref{ch:elements-datatypes}. \\
+    its methods can be found under chapter \ref{ch:elements-datatype}. \\
 
     \subsubsection{Component}
         \begin{itemize}
