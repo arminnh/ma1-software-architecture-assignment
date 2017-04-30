@@ -6,10 +6,14 @@
 \usepackage{fontawesome}
 \usepackage[normalem]{ulem}
 
+\usepackage{appendix}
 \usepackage{graphicx}
 \usepackage{rotating}
 \usepackage{float}
 \usepackage{enumitem}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 
 \setlist{noitemsep} % \setlist{nosep}
 \setlength{\parindent}{0pt}
@@ -34,64 +38,6 @@
 \dominilof
 \fakelistoffigures
 
-\chapter{Introduction}\label{ch:introduction}
-"Since you are a two-student group, you can omit/disregard the low-priority
-non-functional requirements (i.e., P2, U1, M2). Please make sure all other
-elements of the assignment are provided."\\
-
-\section{Changes to decompositions 1 and 2}
-    \subsection{ADD 1}
-        \subsubsection{MoteFacade}
-            \paragraph{ renamed PluggableDeviceMgmt -> DeviceMgmt}
-
-        \subsubsection{GetwayFacade}
-            \paragraph{renamed MoteDataMgmt -> Heartbeat}
-            removed functions: sendHeartbeat
-            added functions: heartbeat 
-            \paragraph{added DeviceData}
-            \paragraph{added DeviceMgmt}
-             removed functions: timerExpired\\
-             added functions: pluggableDevicePluggedIn, pluggableDeviceRemoved, 
-                              pluggableDevicePersisentFailure             
-
-        \subsubsection{Data type definition}
-            added data types: PluggableDeviceID, PluggableDeviceType, DeviceData,Map<String,String>
-
-    \subsection{ADD 2}
-        \subsubsection{GatewayFacade}
-            removed interfaces: MoteDataMgmt
-            added interfaces: DeviceData
-            \paragraph {DeviceMgmt}
-            removed functions: initialiseDevice
-            added functions: setConfig
-     
-        \subsubsection{MoteFacade}
-            \paragraph{renamed PluggableDeviceDataMgmt -> DeviceData}
-            removed functions: sendData\\
-            added functions: rcvData,rcvDataCallback
-            \paragraph{renamed PluggableDeviceMgmt -> DeviceMgmt}
-            removed functions: initialise 
-            added functions: setConfig
-        \subsubsection{PluggableDeviceFacade}
-            removed interfaces:PluggableDeviceMgmt 
-            added interfaces: Config, Actuate, RequestData
-        
-        \subsubsection{renamed PluggableDeviceDataConverter -> DeviceDataConverter}
-        \subsubsection{renamed PluggableDeviceDataScheduler -> DeviceDataScheduler}
-            \paragraph{RequestData}
-            removed functions: requestData\\
-            added functions: getData,rcvData
-           
-        \subsubsection{PluggableDeviceDB}
-            \paragraph{renamed PluggableDeviceDataMgmt -> DeviceData}
-            removed functions: sendData\\
-            added functions: rcvData
-
-        \subsubsection{Data type definition}
-            renamed PluggableDeviceData -> DeviceData\\
-            added data types: PluggableDeviceID,Map<String,String>
-
-                                         
 \chapter{Architectural Decisions}\label{ch:overview}
     \input{architectural-decisions}
     \clearpage
@@ -116,20 +62,66 @@ elements of the assignment are provided."\\
     \minilof
     \input{scenarios}
 
+% TODO: before submitting report, replace the chapter line in "exported_catalog.tex" by this line and generate the report 2 times to set all references
 \chapter{Element Catalog and Datatypes}\label{ch:elements-datatypes}
-    %\input{element-catalog-and-datatypes}
-    \input{exported-catalog}
+\input{exported_catalog}
 
+\begin{appendices}
 \chapter{Attribute-driven design documentation}\label{sec:add}
     \section{Introduction}
-        Explain we changed ADD. List of our changes here. \\
-        Changed decomposition 1 and 2 compared to part 2a.
+        This chapter contains our ADD log. First, we list the changes we
+        made the ADD process so it fits our workflow better. The remaining part
+        of this chapter is the ADD log. Decompositions 1 and 2 have been changed
+        relative to phase 2a of this project, because we forgot about the given
+        interfaces for gateways and pluggable devices and made up our own
+        (but similar) interfaces instead. The decompositions have been updated
+        to use the given interfaces.
 
+    \section{Adapted ADD process}
+        We left off step a ("Pick an element that needs to be decomposed") since we
+        never really chose a single Element to decompose. Instead, we chose the drivers
+        for each decomposition first and then looked at which elements/subsystems
+        would require changes or which new elements we would need to satisfy those drivers.
+
+        For component, interfaces, datatypes: we list the new ones, but refer
+        to the plugin exported catalog for descriptions
+
+        \subsection{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
+            We changed these titles to show the architectural drivers we chose first and then
+            denote which elements/subsystems needed changes to satisfy the drivers.
+
+        % \subsection{Selected architectural drivers}
+        %     \paragraph{Rationale}
+        %         The rationale for selecting and grouping architectural drivers is similar
+        %         for each decomposition, so we left this paragraph out. \\
+        %         The selection process goes as follows. Of the remaining quality attributes,
+        %         choose those that have highest priority assigned to them.
+
+        \subsection{Data type definitions and Interfaces for child modules}
+            For each decomposition, we have listed all new interfaces and data types
+            that we added during the decomposition, but all details have been left out.
+            We used the Visual Paradigm plugin provided by the SA team to generate
+            the element catalog of chapter \ref{ch:elements-datatypes}. All details
+            can be found in there.
+
+        \subsection{Verify and refine}
+            We have skipped the verify and refine step because we chose to
+            handle all chosen architectural drivers completely in every decomposition.
+            We did not find this step to be useful after decompositions 1 and 2.
+
+    \newpage
     \input{decomposition-1}
     \newpage
     \input{decomposition-2}
     \newpage
-    \input{decomposition-3}
+    %\input{decomposition-3}
+    \newpage
+    %\input{decomposition-4}
+    \newpage
+    %\input{decomposition-5}
+    \newpage
+    %\input{decomposition-6}
 
+\end{appendices}
 
 \end{document}

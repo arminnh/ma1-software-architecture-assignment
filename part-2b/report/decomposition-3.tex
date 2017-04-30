@@ -49,12 +49,12 @@
                 string type
 
                 Relationship(fireDetector, smokeDetector, "redundancy")
-                Relationship(fireDetector, smokeDetector, "\>")
+                Relationship(fireDetector, smokeDetector, ">")
 
             RoomTopology:
                 int roomID
                 List<DeviceInfo> devices
-                List<Relationship> devices_relationships
+                List<Relationship> devices\_relationships
 
         access rights
             rights(id, origranisation\_id, device\_id, can\_read, can\_configure, can\_send\_actuation\_command)
