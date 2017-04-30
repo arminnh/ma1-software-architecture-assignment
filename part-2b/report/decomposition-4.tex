@@ -163,31 +163,65 @@
                 
                 
         UC13: 
-        1. The primary actor specifies that it wants to set a configuration parameter of a pluggable
+            1. The primary actor specifies that it wants to set a configuration parameter of a pluggable
             device.
-                ApplicationClient -> ApplicationFacade: interface DeviceMgmt:
+                ApplicationClient -> ApplicationFacade: interface AppMgmt:
                                                         void setConfiguration(PluggableDevideID id, Map<String,String> parameters)
                 ApplicationFacade -> ApplicationManager: interface DeviceMgmt:
                                                         void setConfiguration(PluggableDevideID id, Map<String,String> parameters)
             
                 
-        2. The system verifies that the value of the configuration parameter is valid for the device (for
-            example, a sensor which provides temperature information may have hardware limits on the
-            sampling frequency).
-                ApplicationManager -> DeviceDB: interface AppDeviceMgmt: bool checkDeviceParameter(PluggableDeviceID):
+            2. The system verifies that the value of the configuration parameter is valid for the device (for
+               example, a sensor which provides temperature information may have hardware limits on the
+               sampling frequency).
+               ApplicationManager -> DeviceDB: interface AppDeviceMgmt: bool checkDeviceParameter(PluggableDeviceID):
                                                       
+            3. The system determines whether the pluggable device needs to be reconfigured, and if so,
+               constructs a reconfiguration command according to the specific formatting syntax for the
+               pluggable device and sends it to the pluggable device. ????how
             
-        3. The system determines whether the pluggable device needs to be reconfigured, and if so,
-           constructs a reconfiguration command according to the specific formatting syntax for the
-           pluggable device and sends it to the pluggable device. ????how
-            
-        4. The system updates the internal configuration of the pluggable device.
+            4. The system updates the internal configuration of the pluggable device.
                 ApplicationManager -> Datatase: interface AppMgmt:
                                                      void setConfiguration(PluggableDeviceID id, Map<String,String> parameters) 
             
-         5. The system informs the primary actor that the reconfiguration was done successfully.  
-                ApplicationManager -> NotificationManager: interface Notify: notify(int userID, string message)      
+            5. The system informs the primary actor that the reconfiguration was done successfully.  
+                ApplicationManager -> NotificationManager: interface Notify: notify(int userID, string message)  
+         
+            Alternative scenarios:
+            2a. If the value is invalid for the pluggable device, the system informs the application via an
+                exception. The use case ends.
+                - first exception
+            Remarks:
+                Note that different applications may have different preferences for a single pluggable device
+        
+        UC24:
+            1. The primary actor indicates that it wants to consult a specified collection of historical data in
+                a specified timeframe.
+                ApplicationClient -> ApplicationFacade: interface AppData:
+                                                void getHistoricalData(DateTime from, DateTime to, int custOrgID)
+                ApplicationFacade -> ApplicationManager: interface Apps:
+                                                void getHistoricalData(DateTime from, DateTime to, int custOrgID)
+            2. The system determines from which pluggable devices the data is required and looks up the data.
+                 ????
+            3. The system presents the primary actor with the requested historical overview, e.g. as a table.
+                ApplicationManager -> DeviceDataScheduler: interface RequestData:
+                                      HistoricalData getHistoricalData(List<PluggableDeviceID> id,DateTime from, DateTime to)
+                DeviceDataScheduler -> PluggableDeviceDB: interface DeviceData:
+                                      HistoricalData getHistoricalData(List<PluggableDeviceID> id,DateTime from, DateTime to) 
+                
+        UC25:
+            1. The primary actor indicates that it wants an overview of the topology.
+                ApplicationClient -> ApplicationFacade: interface TopologyOverview
+                                                               void getTopologyOverview(int custOrgID)
+            2. The system looks up the pluggable devices that are available to the customer organisation
+           that owns the primary actor, and composes a view on the topology including these pluggable devices.
+                ApplicationFacade -> ApplicationManager: interface Apps: List<RoomTopology> getTopology(int custOrgID)
+                TopologyManager -> DeviceDB: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID) 
+            3. The system presents the topology view to the primary actor.
+        
+        UC26:
 
+        
 \subsection{Instantiation and allocation of functionality}
     This section describes the new components (and their responsibilities)
     which instantiate our solutions described in the section above. \\
