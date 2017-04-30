@@ -6,7 +6,6 @@
 \usepackage{fontawesome}
 \usepackage[normalem]{ulem}
 
-\usepackage{appendix}
 \usepackage{graphicx}
 \usepackage{rotating}
 \usepackage{float}
@@ -38,6 +37,8 @@
 \dominilof
 \fakelistoffigures
 
+% TODO: before submitting report, remove extra notes from the template
+
 \chapter{Architectural Decisions}\label{ch:overview}
     \input{architectural-decisions}
     \clearpage
@@ -63,10 +64,15 @@
     \input{scenarios}
 
 % TODO: before submitting report, replace the chapter line in "exported_catalog.tex" by this line and generate the report 2 times to set all references
+% TODO: before submitting report, add \newpage before \section{Interfaces} in "exported_catalog.tex"
 \chapter{Element Catalog and Datatypes}\label{ch:elements-datatypes}
+    % TODO: before submitting report, move this into exported_catalog
+    Each method contains a short note on why the method was added (under "Created for").
+    This was done to keep track of our decisions and does not mean that the methods can only
+    be used for the Quality Attribute/Use Case referenced in the "Created for" note.
 \input{exported_catalog}
 
-\begin{appendices}
+\appendix
 \chapter{Attribute-driven design documentation}\label{sec:add}
     \section{Introduction}
         This chapter contains our ADD log. First, we list the changes we
@@ -87,7 +93,7 @@
         to the plugin exported catalog for descriptions
 
         \subsection{Decomposition X: DRIVERS (Elements/Subsystem to decompose/expand)}
-            We changed these titles to show the architectural drivers we chose first and then
+            We changed these titles to reflect the architectural drivers we chose first and then
             denote which elements/subsystems needed changes to satisfy the drivers.
 
         % \subsection{Selected architectural drivers}
@@ -102,7 +108,11 @@
             that we added during the decomposition, but all details have been left out.
             We used the Visual Paradigm plugin provided by the SA team to generate
             the element catalog of chapter \ref{ch:elements-datatypes}. All details
-            can be found in there.
+            can be found in there. \\
+
+            Also, since an ADD log was no longer a requirement for phase 2b, we
+            have left out intermediary "OtherFunctionality" components and
+            figures of diagrams. This was done to save time.
 
         \subsection{Verify and refine}
             We have skipped the verify and refine step because we chose to
@@ -114,14 +124,18 @@
     \newpage
     \input{decomposition-2}
     \newpage
-    %\input{decomposition-3}
+    \input{decomposition-3}
     \newpage
-    %\input{decomposition-4}
+    \input{decomposition-4}
     \newpage
-    %\input{decomposition-5}
+    \input{decomposition-5}
     \newpage
-    %\input{decomposition-6}
-
-\end{appendices}
+    \input{decomposition-6}
+    \newpage
+    \input{decomposition-7}
+    \newpage
+    \input{decomposition-8}
+    \newpage
+    \input{decomposition-9}
 
 \end{document}

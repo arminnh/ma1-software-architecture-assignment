@@ -1,9 +1,4 @@
-\section{Decomposition 4: Av2, UC12, UC25, UC26, UC27}
-
-\subsection{Elements/Subsystem to decompose/expand}
-    In this run we decompose/expand ...
-    decompose the ApplicationContainer component
-    expand the application execution subsystem
+\section{Decomposition 4: Av2, UC12, UC25, UC26, UC27 (application execution subsystem)}
 
 
 \subsection{Selected architectural drivers}
@@ -27,6 +22,13 @@
         \item \emph{UC27}: Receive application command or message from external front-end \\
               Short description of the UC.
     \end{itemize}
+
+    \paragraph{Rationale}
+        At this point the remaining drivers were Av1, Av2, and P1,
+        which all had medium priority. We chose decompositions 4, 5,
+        and 6 based on the priorities of the use cases that are related to the quality attributes. \\
+        The related use cases from now on are the ones that would use components
+        that are going to be changed in the decomposition.
 
 
 \subsection{Architectural design}
@@ -106,73 +108,27 @@
 
 
 \subsection{Instantiation and allocation of functionality}
-    This section describes the new components which instantiate our solutions described
-    in the section above and how components are deployed on physical nodes. \\
-    Unless stated otherwise the responsibilities assigned in the first decomposition are unchanged.
-
-    \paragraph{Decomposition}
-        Figure \ref{fig:FIGURELABEL} shows the components resulting from the
-        decomposition in this run.
-
-        \begin{figure}[!h]
-        	\centering
-            %\includegraphics[width=1\textwidth]{IMAGE FILE NAME}
-        	\missingfigure[figwidth=0.8\textwidth]{Component-and-connector diagram of this decomposition}
-        	\caption{Component-and-connector diagram of this decomposition.}
-            \label{fig:FIGURELABEL}
-        \end{figure}
-
-        The responsibilities of the components are as follows:
+    This section describes the new components (and their responsibilities)
+    which instantiate our solutions described in the section above. \\
+    Unless stated otherwise, responsibilities assigned in previous decompositions are unchanged.
 
     \subparagraph{Component}
         Short description of its responsibilities. (Relevant QA or UC)
 
 
-    % \paragraph{Behaviour}
-        % USEFUL SEQUENCE DIAGRAMS FOR CHOSEN USE CASES
-
-
-    \paragraph{Deployment}
-        Figure \ref{fig:FIGURELABEL} shows the allocation of components
-        to physical nodes.
-
-        \begin{figure}[!h]
-        	\centering
-        	%\includegraphics[width=0.8\textwidth]{IMAGE FILE NAME}
-        	\missingfigure[figwidth=0.8\textwidth]{Deployment diagram}
-        	\caption{Deployment diagram of this decomposition.}
-            \label{fig:FIGURELABEL}
-        \end{figure}
-
-
-\subsection{Interfaces for child modules}\label{add2-interfaces}
-    This section describes the interfaces assigned to the components defined
-    in the section above. Per interface, we list its methods by means of its
-    syntax. The data types used in these interfaces are defined in the following section. \\
-
-    Each method shows which (part of a) quality attribute or use case caused
-    a need for the method. However, this does not mean that a method is
-    only to be used to satisfy that quality  attribute or use case, it could
-    be used for other causes not yet mentioned here.
-
-    The interfaces and methods defined here are to be seen as an
-    extension of the interfaces defined in previous sections, unless
-    explicitly stated otherwise.
+\subsection{Interfaces for child modules}
+    This section lists new interfaces assigned to the components defined
+    in the section above. Detailed information about each interface and
+    its methods can be found under chapter \ref{ch:elements-datatype}. \\
 
     \subsubsection{Component}
         \begin{itemize}
-            \item InterfaceName
-            \begin{itemize}
-                \item \texttt{void methodName(.. parameters ..)}
-                \begin{itemize}
-                    \item Effect: Short description of the method
-                    \item Created for: Reason for the addition of this method.
-                \end{itemize}
-            \end{itemize}
+            \item Interface
         \end{itemize}
 
 \subsection{Data type definitions}
-    This section defines new data types that are used in the interface descriptions above.
+    This section lists the new data types introduced during this decomposition.
 
-    \paragraph{DataType}
-        Description of data type
+    \begin{itemize}
+        \item DateTime: Represents an instant in time, typically expressed as a date and time of day.
+    \end{itemize}

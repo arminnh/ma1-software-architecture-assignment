@@ -1,0 +1,99 @@
+\section{Decomposition 5: Av1 (Elements/Subsystem to decompose/expand)}
+
+
+\subsection{Selected architectural drivers}
+    The non-functional drivers for this decomposition are:
+    \begin{itemize}
+    	\item \emph{Av1}: Communication between SIoTIP gateway and Online Service
+    \end{itemize}
+
+
+\subsection{Architectural design}
+    This section describes what needs to be done to satisfy the requirements for
+    this decomposition and how involved problems/obstacles are solved.
+
+    \paragraph{Av1: Problem title}
+        Short description of the problem.\\
+        Solution for the problem.
+
+    Communication pattern: broker ?
+
+    Prevention:
+        *) SLA 99.9\% availability, can't model this
+        *) Local networks 90\% availability
+
+    Detection:
+        *) Online Service can detect failures of its individual internal
+           communication components:
+           Ping/Echo, Monitor, Heartbeat, Timestamp
+           The failure of an internal SIoTIP Online Service component is
+           detected within 30 seconds.
+
+        *) SIoTIP gateway can detect failures of its individual internal
+           communication components:
+           Ping/Echo, Monitor, Heartbeat, Timestamp
+
+        *) Online service can detect that a SIoTIP gateway is not sending
+           data anymore based on the expected synchronisation interval:
+           Monitor: GWMonitor
+           An outage is defined as 3 consecutive expected synchronisations
+           that do not arrive within 1 minute of their expected arrival time.
+
+        *) Online Service should acknowledge each message sent by the SIoTIP
+           gateway so that the gateway can detect failures.
+
+           CommunicationModule on gateway and Online Service.
+           Sends all messages to Online Service and waits for
+           acknowlegdements for all sent messages. If no acknowledgement
+           within X seconds -> Online Service failure
+
+    Resolution:
+        *) gateway outage (= complete failure) detected
+           -> notify IO and SIoTIP system administrator
+           The infrastructure owner is notified within 5 minutes after
+           the detection of an outage of their gateway. A SIoTIP system administrator
+           should be notified within 1 minute after the detection of a simultaneous
+           outage of more than 1\% of the registered gateways.
+
+        *) gateway component failure detected
+           -> first, restart component. If still fails, reboot gateway entirely.
+
+        *) Online Service / communication channel failure detected ->
+           -> temporarily store all incoming pluggable data and issued
+              application commands internally
+           The SIoTIP gateway can store at least 3 days of pluggable data before
+           old data has to be overwritten.
+
+        *) When Online Service = unreachable, applications on SIoTIP gateway
+           can still operate normally, TODO ask
+
+    Response Measure:
+        *) The SIoTIP gateway will start synchronising with the Online service
+           within 1 minute after the communication channel becomes available.
+
+
+\subsection{Instantiation and allocation of functionality}
+    This section describes the new components (and their responsibilities)
+    which instantiate our solutions described in the section above. \\
+    Unless stated otherwise, responsibilities assigned in previous decompositions are unchanged.
+
+    \subparagraph{Component}
+        Short description of its responsibilities. (Av1 or UC)
+
+
+\subsection{Interfaces for child modules}
+    This section lists new interfaces assigned to the components defined
+    in the section above. Detailed information about each interface and
+    its methods can be found under chapter \ref{ch:elements-datatype}. \\
+
+    \subsubsection{Component}
+        \begin{itemize}
+            \item Interface
+        \end{itemize}
+
+\subsection{Data type definitions}
+    This section lists the new data types introduced during this decomposition.
+
+    \begin{itemize}
+        \item DateTime: Represents an instant in time, typically expressed as a date and time of day.
+    \end{itemize}

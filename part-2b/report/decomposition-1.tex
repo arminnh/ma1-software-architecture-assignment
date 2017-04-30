@@ -1,8 +1,5 @@
 \section{Decomposition 1: Av3, UC14, UC15, UC18 (SIoTIP System)}
 
-\subsection{Module to decompose}
-    In this run we decompose the \texttt{SIoTIP System}.
-
 
 \subsection{Selected architectural drivers}
     The non-functional drivers for this decomposition are:
@@ -133,8 +130,8 @@
 
 
 \subsection{Instantiation and allocation of functionality}
-    This section describes the components which instantiate our solutions described
-    in the section above and how the components are deployed on physical nodes.
+    This section describes the new components (and their responsibilities)
+    which instantiate our solutions described in the section above. \\
 
     \paragraph{Decomposition}
         Figure \ref{fig:it1-cc_main} shows the components resulting from the
@@ -146,8 +143,6 @@
         	\caption{Component-and-connector diagram of this decomposition.}
             \label{fig:it1-cc_main}
         \end{figure}
-
-        The responsibilities of the components are as follows:
 
     \subparagraph{ApplicationManager}
         Responsible for activating/deactivating applications, setting
@@ -178,11 +173,6 @@
         in case of hardware failure. Can send a command to disable or reactivate
         applications when necessary. (Av3)
 
-    % \paragraph{Behaviour}
-    % A SEQUENCE DIAGRAM WOULD BE USEFUL FOR
-    % UC11: shows how the gateway checks if devices are initialised
-    % UC14: shows how applications can get deactivated
-
     \paragraph{Deployment}
         Figure \ref{fig:it1-depl_main} shows the allocation of components
         to physical nodes.
@@ -196,15 +186,8 @@
 
 \subsection{Interfaces for child modules}\label{add1-interfaces}
     This section lists new interfaces assigned to the components defined
-    in the section above. More detailed information about each interface and
+    in the section above. Detailed information about each interface and
     its methods can be found under chapter \ref{ch:elements-datatype}. \\
-     Per interface, we list its methods by means of its
-    syntax. The data types used in these interfaces are defined in the following section. \\
-
-    Each method shows which (part of a) quality attribute or use case caused
-    a need for the method. However, this does not mean that a method is
-    only to be used to satisfy that quality attribute or use case, it could
-    be used for other causes not yet mentioned here.
 
     \subsubsection{ApplicationManager}
         \begin{itemize}

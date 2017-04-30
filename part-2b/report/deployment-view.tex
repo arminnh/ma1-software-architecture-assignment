@@ -3,30 +3,42 @@
 % Delete the command below to remove the hints and instructions
 \showdeploynotes{}
 
-\todoinline{
-Describe the context diagram for the deployment view.
-For example, which protocols are used for communication with external systems
-and why?
-}
+\section{Context diagram}
+    TODO: find a way to display the page horizontally with the image covering the whole page. \\
 
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Context diagram for the deployment
-		view.}
-	\caption{Context diagram for the deployment view.}\label{fig:depl_context}
-\end{figure}
+    The context diagram for the deployment view is displayed in figure \ref{fig:depl_context}. \\
 
-\todoinline{
-The primary deployment diagram itself.
-This discussion on the parts of the deployment diagram which are crucial for
-achieving certain non-functional requirements, and any alternative deployments that you considered, should be in the architectural decisions chapter.
-}
+    Components X, Y, Z are deployed on multiple nodes for bla bla bla.\\
+    Components A and B communicate using the C protocol...
 
-\begin{figure}[!htp]
-	\centering
-	%\includegraphics[width=\textwidth]{}
-	\missingfigure[figwidth=0.8\textwidth]{Primary diagram for the deployment
-		view.}
-	\caption{Primary diagram for the deployment view.}\label{fig:depl_primary}
-\end{figure}
+    \todoinline{
+    Describe the context diagram for the deployment view.
+    For example, which protocols are used for communication with external systems
+    and why?
+    }
+
+    \begin{figure}[!htp]
+    	\centering
+    	%\includegraphics[width=\textwidth]{}
+        \includegraphics[width=\textwidth]{images/deployment-context}
+    	\caption{Context diagram for the deployment view.}\label{fig:depl_context}
+    \end{figure}
+
+
+\section{Primary diagram}
+    The primary diagram for the deployment view is displayed in figure \ref{fig:depl_primary}.
+
+    TODO: add references to "architectural decisions" where we made some choices related to deployment of components. \\
+
+    \todoinline{
+    The primary deployment diagram itself.
+    This discussion on the parts of the deployment diagram which are crucial for
+    achieving certain non-functional requirements, and any alternative deployments that you considered, should be in the architectural decisions chapter.
+    }
+
+    \begin{figure}[!htp]
+    	\centering
+        \includegraphics[width=\textwidth]{images/deployment-primary}
+    	%\includegraphics[width=\textwidth]{}
+    	\caption{Primary diagram for the deployment view.}\label{fig:depl_primary}
+    \end{figure}

@@ -1,8 +1,5 @@
 \section{Decomposition 2: M1, P2, UC11 (OtherFunctionality1)}
 
-\subsection{Module to decompose}
-    In this run we decompose OtherFunctionality1.
-
 
 \subsection{Selected architectural drivers}
     The non-functional drivers for this decomposition are:
@@ -112,9 +109,9 @@
 
 
 \subsection{Instantiation and allocation of functionality}
-    This section describes the new components which instantiate our solutions described
-    in the section above and how components are deployed on physical nodes. \\
-    Unless stated otherwise the responsibilities assigned in the first decomposition are unchanged.
+    This section describes the new components (and their responsibilities)
+    which instantiate our solutions described in the section above. \\
+    Unless stated otherwise, responsibilities assigned in previous decompositions are unchanged.
 
     \paragraph{Decomposition}
         Figure \ref{fig:it2-cc_main} shows the components resulting from the
@@ -126,8 +123,6 @@
         	\caption{Component-and-connector diagram of this decomposition.}
             \label{fig:it2-cc_main}
         \end{figure}
-
-        The responsibilities of the components are as follows:
 
     \subparagraph{DeviceDataConverter}
         The \texttt{DeviceDataConverter} is resposible for converting
@@ -146,10 +141,6 @@
         Responsible for sending pluggable device data to \texttt{MoteFacade}.
         Needs to be initialised in order for the data to be used/stored. (UC11)
 
-    % \paragraph{Behaviour}
-        % A SEQUENCE DIAGRAM WOULD BE USEFUL FOR
-        % UC11: shows how the gateway checks if devices are initialised
-
     \paragraph{Deployment}
         Figure \ref{fig:it2-depl_main} shows the allocation of components
         to physical nodes.
@@ -162,19 +153,10 @@
         \end{figure}
 
 
-\subsection{Interfaces for child modules}\label{add2-interfaces}
-    This section describes the interfaces assigned to the components defined
-    in the section above. Per interface, we list its methods by means of its
-    syntax. The data types used in these interfaces are defined in the following section. \\
-
-    Each method shows which (part of a) quality attribute or use case caused
-    a need for the method. However, this does not mean that a method is
-    only to be used to satisfy that quality  attribute or use case, it could
-    be used for other causes not yet mentioned here.
-
-    The interfaces and methods defined here are to be seen as an
-    extension of the interfaces defined in previous sections, unless
-    explicitly stated otherwise.
+\subsection{Interfaces for child modules}
+    This section lists new interfaces assigned to the components defined
+    in the section above. Detailed information about each interface and
+    its methods can be found under chapter \ref{ch:elements-datatype}. \\
 
     \subsubsection{ApplicationManager}
         \begin{itemize}
@@ -387,20 +369,12 @@
 
 
 \subsection{Data type definitions}
-    This section defines new data types that are used in the interface descriptions above.
+    This section lists the new data types introduced during this decomposition.
 
-    \paragraph{DeviceData}
-               contains data from a pluggable device at a certain point in time
-               (value, type, date) (e.g. a sensor reading, an actuator status)
-    \paragraph{PluggableDeviceSettings}
-              contains settings for a pluggable device (power status,
-              data update rate, ...)
-    \paragraph{DateTime}
-               Represents an instant in time, typically expressed as a date and time of day.
-    \paragraph{PluggableDeviceID}
-               A unique identifier of the \texttt{PluggableDevice}
-    \paragraph{Map<String,String>}
-               is a map of key-value pairs.  E.g., ‘sensitivity’→‘10’.
+    \begin{itemize}
+        \item DateTime: Represents an instant in time, typically expressed as a date and time of day.
+    \end{itemize}
+
 
 
 \subsection{Verify and refine}

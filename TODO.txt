@@ -1,10 +1,52 @@
 FOR PROJECT DEFENSE: best is 25/05 - 27/05,
                      24/05 armin exam and monika project deadline
 
+In all decompositions check decisions important for deployment and add some where we forgot
+
+
 Update decomposition 3: Interfaces for child modules
 decomposition 3: update DB queries: no Query objects
+rename Databse -> OtherDataDB
 
-READ IN THE BOOK:
+
+U2:
+    These conversions should be possible per application. For example, one application might be able to only use temperature measurement in degrees Celsius, whereas another application (also) uses degrees Fahrenheit.
+    -> Let DeviceDataConverter be used by ApplicationManager or devicedataScheduler, not GatewayFacade
+
+==========================================================================
+================================ REPORT ==================================
+==========================================================================
+
+    1. Architectural Decisions:
+        *) Architectural decisions for each QAS
+        *) Other decisions
+        *) Discussion
+    2. Client-server view (UML Component diagram):
+        *) The context diagram of the client-server view
+        *) The primary diagram
+    3. Decomposition view (UML Component diagram)
+        Gateway, PluggableDeviceDB, Application execution subsystem
+    4. Deployment view (UML Deployment diagram):
+        *) The context diagram of the deployment view
+        *) The primary diagram
+    5. Scenarios:
+        *) UC11: Sensor data being processed by the system
+        *) UC19: Subscribing to an application
+        *) UC12: Applications issuing actuation commands
+        *) UC14, Av3, UC18: Sensors/actuators failing, causing
+                            (i) deactivation of specic applications,
+                            (ii) a redundant sensor/actuator to take over in the context of a single application.
+        *) Av2 : Application crash
+        *) U2, UC4: Plugging in a new pluggable device (sensor or actuator)
+        *) Av1, UC15: Detection and handling of communication channel failure
+        *) UC22, U1: Upgrading an application
+        *) UC26, UC27, UC12: Sending actuation commands via a mobile app
+    6. Element catalog and datatypes:
+
+==========================================================================
+================================== BOOK ==================================
+==========================================================================
+
     76 separating user interfaces
     79 distributing functionality
     130 warehouse topology baseline
@@ -30,10 +72,6 @@ READ IN THE BOOK:
         501 task coordinator
         503 resource pool
 
-U2:
-    These conversions should be possible per application. For example, one application might be able to only use temperature measurement in degrees Celsius, whereas another application (also) uses degrees Fahrenheit.
-    -> Let DeviceDataConverter be used by ApplicationManager or devicedataScheduler, not GatewayFacade
-
 ==========================================================================
 ================================ QUESTIONS ===============================
 ==========================================================================
@@ -58,121 +96,3 @@ Should we denote when methods should be sync/async?
 How is hardware linked to Infrastructure owners?
     => 1 gateway <-> 1 infrastructure owner
     => when an IO buys/orders hardware, then that hardware is linked to the IO after the order is completed.
-
-==========================================================================
-============================ REMAINING DRIVERS ===========================
-==========================================================================
-
-    Av1, Av2, and P1 have the same priority. We then choose based on the priorities of
-    the use cases that are related to the quality attributes.
-
-    So remaining decompositions in order:
-    *) Av1 (no use cases but medium priority QA)
-
-    *) P1 (low priority use cases mixed with high priority ones)
-       UC01: Register a customer organisation, UC02: Register an end-user,
-       UC03: Unregister an end-user, UC05: Uninstall mote,
-       UC07: Remove a pluggable device from its mote, UC08: Initialise a pluggable device,
-       UC20: Unsubscribe from application, UC16: Consult notification message
-
-    *) UC22: Upload an application, UC23: Consult application statistics
-
-    *) UC21: Send invoice
-
-    *) UC28: Log in, UC29: Log out
-
-==========================================================================
-====== Av1: Communication between SIoTIP gateway and Online Service ======
-==========================================================================
-    Communication pattern: broker ?
-
-    Prevention:
-        *) SLA 99.9% availability, can't model this
-        *) Local networks 90% availability
-
-    Detection:
-        *) Online Service can detect failures of its individual internal
-           communication components:
-           Ping/Echo, Monitor, Heartbeat, Timestamp
-           The failure of an internal SIoTIP Online Service component is
-           detected within 30 seconds.
-
-        *) SIoTIP gateway can detect failures of its individual internal
-           communication components:
-           Ping/Echo, Monitor, Heartbeat, Timestamp
-
-        *) Online service can detect that a SIoTIP gateway is not sending
-           data anymore based on the expected synchronisation interval:
-           Monitor: GWMonitor
-           An outage is defined as 3 consecutive expected synchronisations
-           that do not arrive within 1 minute of their expected arrival time.
-
-        *) Online Service should acknowledge each message sent by the SIoTIP
-           gateway so that the gateway can detect failures.
-
-           CommunicationModule on gateway and Online Service.
-           Sends all messages to Online Service and waits for
-           acknowlegdements for all sent messages. If no acknowledgement
-           within X seconds -> Online Service failure
-
-    Resolution:
-        *) gateway outage (= complete failure) detected
-           -> notify IO and SIoTIP system administrator
-           The infrastructure owner is notified within 5 minutes after
-           the detection of an outage of their gateway. A SIoTIP system administrator
-           should be notified within 1 minute after the detection of a simultaneous
-           outage of more than 1% of the registered gateways.
-
-        *) gateway component failure detected
-           -> first, restart component. If still fails, reboot gateway entirely.
-
-        *) Online Service / communication channel failure detected ->
-           -> temporarily store all incoming pluggable data and issued
-              application commands internally
-           The SIoTIP gateway can store at least 3 days of pluggable data before
-           old data has to be overwritten.
-
-        *) When Online Service = unreachable, applications on SIoTIP gateway
-           can still operate normally, TODO ask
-
-    Response Measure:
-        *) The SIoTIP gateway will start synchronising with the Online service
-           within 1 minute after the communication channel becomes available.
-
-    Use cases:
-        None
-
-==========================================================================
-====================== P1: Large number of users =========================
-==========================================================================
-    *) The SIoTIP Online Service replies to the service requests of the
-       infrastructure owner and customer organisations.
-
-    *) The Online Service processes the data received from the gateways.
-
-    *) The application execution subsystem should be able to execute an increasing
-       number of active applications.
-
-    *) The initial deployment of SIoTIP should be able to deal with at least 5000
-       gateways in total, and should be provisioned to service at least 3000
-       registered users simultaneously connected to SIoTIP.
-       -> 5000 gateways * 4 motes per gateway * 3 devices per mote = 60000 devices
-       -> Keep communication with gateways at a minimum
-          e.g. gateway messages are of type "send data", "new device connected", ...
-       -> LOAD BALANCING
-
-    *) Scaling up to service an increasing amount of infrastructure owners,
-       customers organisations and applications should (in worst case) be linear ;
-       i.e. it should not require proportionally more resources (machines, etc.)
-       than the initial amount of resources provisioned per customer
-       organisation/infrastructure owner and per gateway.
-
-    Use cases:
-        UC01: Register a customer organisation
-        UC02: Register an end-user
-        UC03: Unregister an end-user
-        UC05: Uninstall mote
-        UC07: Remove a pluggable device from its mote
-        UC08: Initialise a pluggable device
-        UC20: Unsubscribe from application
-        UC16: Consult notification message

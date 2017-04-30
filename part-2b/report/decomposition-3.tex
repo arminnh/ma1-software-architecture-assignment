@@ -1,7 +1,4 @@
-\section{Decomposition 3: U2, UC4, UC6, UC9, UC10, UC17, UC19}
-
-\subsection{Elements/Subsystem to decompose/expand}
-    In this run we decompose the OtherFunctionality component.
+\section{Decomposition 3: U2, UC4, UC6, UC9, UC10, UC17, UC19 (Elements/Subsystem to decompose/expand)}
 
 
 \subsection{Selected architectural drivers}
@@ -31,33 +28,33 @@
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
 
-    Some dabatase tables text we wrote:
-        pluggable\_devices
-        topology\_pluggable\_devices
-        permissions\_pluggable\_devices
-
-        topology
-            gateways(id, floor, room\_number, wall, status)
-            motes(id, gateway\_id, floor, room\_number, status)
-            pluggable\_devices(id, mote\_id, gateway\_id, status, physical location)
-            % pluggable\_devices\_redundancies(deviceID1, deviceID2)
-            pluggable\_devices\_relationships(deviceID1, deviceID2, type)
-
-            Relationship
-                PluggableDeviceID device1
-                PluggableDeviceID device2
-                string type
-
-                Relationship(fireDetector, smokeDetector, "redundancy")
-                Relationship(fireDetector, smokeDetector, ">")
-
-            RoomTopology:
-                int roomID
-                List<DeviceInfo> devices
-                List<Relationship> devices\_relationships
-
-        access rights
-            rights(id, origranisation\_id, device\_id, can\_read, can\_configure, can\_send\_actuation\_command)
+    % Some dabatase tables text we wrote:
+    %     pluggable\_devices
+    %     topology\_pluggable\_devices
+    %     permissions\_pluggable\_devices
+    %
+    %     topology
+    %         gateways(id, floor, room\_number, wall, status)
+    %         motes(id, gateway\_id, floor, room\_number, status)
+    %         pluggable\_devices(id, mote\_id, gateway\_id, status, physical location)
+    %         % pluggable\_devices\_redundancies(deviceID1, deviceID2)
+    %         pluggable\_devices\_relationships(deviceID1, deviceID2, type)
+    %
+    %         Relationship
+    %             PluggableDeviceID device1
+    %             PluggableDeviceID device2
+    %             string type
+    %
+    %             Relationship(fireDetector, smokeDetector, "redundancy")
+    %             Relationship(fireDetector, smokeDetector, \">")
+    %
+    %         RoomTopology:
+    %             int roomID
+    %             List<DeviceInfo> devices
+    %             List<Relationship> devices\_relationships
+    %
+    %     access rights
+    %         rights(id, origranisation\_id, device\_id, can\_read, can\_configure, can\_send\_actuation\_command)
 
     \paragraph{U2: Gateway installation}
         The gateway should not require any configuration, other than being connected
@@ -373,58 +370,18 @@
 
 
 \subsection{Instantiation and allocation of functionality}
-    This section describes the new components which instantiate our solutions described
-    in the section above and how components are deployed on physical nodes. \\
-    Unless stated otherwise the responsibilities assigned in the first decomposition are unchanged.
-
-    \paragraph{Decomposition}
-        Figure \ref{fig:FIGURELABEL} shows the components resulting from the
-        decomposition in this run.
-
-        \begin{figure}[!h]
-        	\centering
-            %\includegraphics[width=1\textwidth]{IMAGE FILE NAME}
-        	\missingfigure[figwidth=0.8\textwidth]{Component-and-connector diagram of this decomposition}
-        	\caption{Component-and-connector diagram of this decomposition.}
-            \label{fig:FIGURELABEL}
-        \end{figure}
-
-        The responsibilities of the components are as follows:
+    This section describes the new components (and their responsibilities)
+    which instantiate our solutions described in the section above. \\
+    Unless stated otherwise, responsibilities assigned in previous decompositions are unchanged.
 
     \subparagraph{Component}
         Short description of its responsibilities. (Relevant QA or UC)
 
 
-    % \paragraph{Behaviour}
-        % USEFUL SEQUENCE DIAGRAMS FOR CHOSEN USE CASES
-
-
-    \paragraph{Deployment}
-        Figure \ref{fig:FIGURELABEL} shows the allocation of components
-        to physical nodes.
-
-        \begin{figure}[!h]
-        	\centering
-        	%\includegraphics[width=0.8\textwidth]{IMAGE FILE NAME}
-        	\missingfigure[figwidth=0.8\textwidth]{Deployment diagram}
-        	\caption{Deployment diagram of this decomposition.}
-            \label{fig:FIGURELABEL}
-        \end{figure}
-
-
-\subsection{Interfaces for child modules}\label{add2-interfaces}
-    This section describes the interfaces assigned to the components defined
-    in the section above. Per interface, we list its methods by means of its
-    syntax. The data types used in these interfaces are defined in the following section. \\
-
-    Each method shows which (part of a) quality attribute or use case caused
-    a need for the method. However, this does not mean that a method is
-    only to be used to satisfy that quality  attribute or use case, it could
-    be used for other causes not yet mentioned here.
-
-    The interfaces and methods defined here are to be seen as an
-    extension of the interfaces defined in previous sections, unless
-    explicitly stated otherwise.
+\subsection{Interfaces for child modules}
+    This section lists new interfaces assigned to the components defined
+    in the section above. Detailed information about each interface and
+    its methods can be found under chapter \ref{ch:elements-datatype}. \\
 
     \subsubsection{ApplicationManager}
         \begin{itemize}
@@ -482,7 +439,6 @@
                             \item Effect: Schedules a DB query to get the last set configuration of a pluggable device.
                             \item Created for: UC6.3 - reintroduced device
                         \end{itemize}
-                    \end{itemize}
                 \end{itemize}
 
         	\item TopologyMgmt
@@ -636,7 +592,8 @@
 
 
 \subsection{Data type definitions}
-    This section defines new data types that are used in the interface descriptions above.
+    This section lists the new data types introduced during this decomposition.
 
-    \paragraph{DataType}
-        Description of data type
+    \begin{itemize}
+        \item None
+    \end{itemize}

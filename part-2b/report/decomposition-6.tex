@@ -1,0 +1,87 @@
+\section{Decomposition 6: P1, UC1, UC2, UC3, UC5, UC7, UC8, UC16, UC20 (Elements/Subsystem to decompose/expand)}
+
+
+\subsection{Selected architectural drivers}
+    The non-functional drivers for this decomposition are:
+    \begin{itemize}
+    	\item \emph{P1}: Large number of users
+    \end{itemize}
+
+    The related functional drivers are:
+    \begin{itemize}
+        \item \emph{UC1}: Register a customer organisation \\
+            Short description of the UC.
+        \item \emph{UC2}: Register an end-user \\
+            Short description of the UC.
+        \item \emph{UC3}: Unregister an end-user \\
+            Short description of the UC.
+        \item \emph{UC5}: Uninstall mote \\
+            Short description of the UC.
+        \item \emph{UC7}: Remove a pluggable device from its mote \\
+            Short description of the UC.
+        \item \emph{UC8}: Initialise a pluggable device \\
+            Short description of the UC.
+        \item \emph{UC16}: Consult notification message \\
+            Short description of the UC.
+        \item \emph{UC20}: Unsubscribe from application \\
+            Short description of the UC.
+    \end{itemize}
+
+
+\subsection{Architectural design}
+    This section describes what needs to be done to satisfy the requirements for
+    this decomposition and how involved problems/obstacles are solved.
+
+    \paragraph{P1: Problem title}
+        The SIoTIP Online Service replies to the service requests of the
+        infrastructure owner and customer organisations.
+
+    \paragraph{P1: Problem title}
+        The Online Service processes the data received from the gateways.
+
+    \paragraph{P1: Problem title}
+        The application execution subsystem should be able to execute an increasing
+        number of active applications.
+
+    \paragraph{P1: Problem title}
+        The initial deployment of SIoTIP should be able to deal with at least 5000
+        gateways in total, and should be provisioned to service at least 3000
+        registered users simultaneously connected to SIoTIP.
+        -> 5000 gateways * 4 motes per gateway * 3 devices per mote = 60000 devices
+        -> Keep communication with gateways at a minimum
+           e.g. gateway messages are of type "send data", "new device connected", ...
+        -> LOAD BALANCING
+
+    \paragraph{P1: Problem title}
+        Scaling up to service an increasing amount of infrastructure owners,
+        customers organisations and applications should (in worst case) be linear ;
+        i.e. it should not require proportionally more resources (machines, etc.)
+        than the initial amount of resources provisioned per customer
+        organisation/infrastructure owner and per gateway.
+
+
+\subsection{Instantiation and allocation of functionality}
+    This section describes the new components (and their responsibilities)
+    which instantiate our solutions described in the section above. \\
+    Unless stated otherwise, responsibilities assigned in previous decompositions are unchanged.
+
+    \subparagraph{Component}
+        Short description of its responsibilities. (P1 or UC)
+
+
+\subsection{Interfaces for child modules}
+    This section lists new interfaces assigned to the components defined
+    in the section above. Detailed information about each interface and
+    its methods can be found under chapter \ref{ch:elements-datatype}. \\
+
+    \subsubsection{Component}
+        \begin{itemize}
+            \item Interface
+        \end{itemize}
+
+\subsection{Data type definitions}
+    This section lists the new data types introduced during this decomposition.
+
+    \begin{itemize}
+        \item DateTime: Represents an instant in time, typically expressed as a date and time of day.
+    \end{itemize}
