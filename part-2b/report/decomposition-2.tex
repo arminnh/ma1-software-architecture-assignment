@@ -109,9 +109,17 @@
 
 
 \subsection{Instantiation and allocation of functionality}
-    This section describes the new components (and their responsibilities)
-    which instantiate our solutions described in the section above. \\
-    Unless stated otherwise, responsibilities assigned in previous decompositions are unchanged.
+    This section lists the new components which instantiate our solutions
+    described in the section above. For each component we note the quality
+    attribute or use case that prompted us to create it. Descriptions about
+    the components can be found under chapter \ref{ch:elements-datatypes}. \\
+
+    \begin{itemize}
+        \item DeviceDataConverter: M1
+        \item DeviceDataScheduler: P2
+        \item PluggableDeviceDataDB: P2
+        \item PluggableDeviceFacade: UC11
+    \end{itemize}
 
     \paragraph{Decomposition}
         Figure \ref{fig:it2-cc_main} shows the components resulting from the
@@ -124,23 +132,6 @@
             \label{fig:it2-cc_main}
         \end{figure}
 
-    \subparagraph{DeviceDataConverter}
-        The \texttt{DeviceDataConverter} is resposible for converting
-        pluggable device data in the data processing subsystem. (M1)
-
-    \subparagraph{DeviceDataScheduler}
-        Responsible for scheduling incoming read and write requests for
-        pluggable device data. Monitors throughput of requests and switches
-        between normal and overload mode when appropriate. Avoids starvation
-        of any type of request. (P2)
-
-    \subparagraph{PluggableDeviceDataDB}
-        Database dedicated to pluggable device data. (P2)
-
-    \subparagraph{PluggableDeviceFacade}
-        Responsible for sending pluggable device data to \texttt{MoteFacade}.
-        Needs to be initialised in order for the data to be used/stored. (UC11)
-
     \paragraph{Deployment}
         Figure \ref{fig:it2-depl_main} shows the allocation of components
         to physical nodes.
@@ -148,223 +139,47 @@
         \begin{figure}[!h]
         	\centering
         	\includegraphics[width=0.8\textwidth]{images/deployment-diagram-2}
-        	\caption{Deployment diagram of this decomposition.
-        	}\label{fig:it2-depl_main}
+        	\caption{Deployment diagram of this decomposition.}
+            \label{fig:it2-depl_main}
         \end{figure}
 
 
 \subsection{Interfaces for child modules}
     This section lists new interfaces assigned to the components defined
     in the section above. Detailed information about each interface and
-    its methods can be found under chapter \ref{ch:elements-datatype}. \\
+    its methods can be found under chapter \ref{ch:elements-datatypes}. \\
 
     \subsubsection{ApplicationManager}
         \begin{itemize}
             \item ForwardData
-            \begin{itemize}
-                \item \texttt{void rcvData(PluggableDeviceID pID, DeviceData data)}
-                    \begin{itemize}
-                        \item Effect: Sends pluggable device data to an application that wants to use it
-                        \item Created for: UC11: system relays data to applications
-                    \end{itemize}
-                \item \texttt{List<int> getApplicationsForDevice(PluggableDeviceID pID)}
-                    \begin{itemize}
-                        \item Effect: Returns a list of application instances that can use the device with id "pID".
-                        \item Created for: UC11: the system looks up the list of applications that use the pluggable device
-                    \end{itemize}
-            \end{itemize}
-        \end{itemize}
-
-    \subsubsection{Database}
-        \begin{itemize}
-            \item AppMgmt
-            \begin{itemize}
-                \item \texttt{List<int> getApplicationsForDevice(PluggableDeviceID pID)}
-                    \begin{itemize}
-                        \item Effect: Returns a list of applications that can use the device with id "pID".
-                        \item Created for: UC11: the system looks up the list of applications that use the pluggable device
-                    \end{itemize}
-            \end{itemize}
-        \end{itemize}
-
-
-    \subsubsection{GatewayFacade}
-        \begin{itemize}
-            \item DeviceData, last defined in section \ref{add1-interfaces}
-            \begin{itemize}
-                \item \texttt{void rcvData(PluggableDeviceID pID, DeviceData data)}
-                    \begin{itemize}
-                        \item Now (also) used by: UC11 \\
-                              P2: storing new pluggable data
-                    \end{itemize}
-                \item \texttt{void rcvDataCallback(PluggableDeviceID pID, DeviceData data, int requestID)}
-                    \begin{itemize}
-                        \item Now (also) used by: UC11 \\
-                              P2: storing new pluggable data
-                    \end{itemize}
-            \end{itemize}
-
-            \item DeviceMgmt, last defined in section \ref{add1-interfaces}
-            \begin{itemize}
-                \item \texttt{void setConfig(PluggableDeviceID pID, Map<String,String> config)}
-                \begin{itemize}
-                    \item Effect: Set the given configuration parameters of a
-                          PluggableDevice to the given values. Setting unknown parameters
-                          on a PluggableDevice has no effect.
-                    \item Created for: UC11: pluggable device needs to be initialised \\
-                          M1: pluggable device must be able to be initialised
-                \end{itemize}
-            \end{itemize}
         \end{itemize}
 
     \subsubsection{MoteFacade}
         \begin{itemize}
             \item DeviceData
-            \begin{itemize}
-                \item \texttt{void rcvData(PluggableDeviceID pID, DeviceData data)}
-                    \begin{itemize}
-                        \item Effect: Propagates pluggable device data to
-                              the connected gateway by call rcvData on the gateway.
-                              (Initiated by the device).
-                        \item Created for: UC11 \\
-                              P2: storing new pluggable data
-                    \end{itemize}
-                \item \texttt{void rcvDataCallback(PluggableDeviceID pID, DeviceData data, int requestID)}
-                    \begin{itemize}
-                        \item Effect: Propagates pluggable device data to the
-                              connected gateway by calling rcvData on the gateway.
-                              (Callback of getDataAsync).
-                        \item Created for: UC11 \\
-                              P2: storing new pluggable data
-                    \end{itemize}
-            \end{itemize}
-
-            \item DeviceMgmt, last defined in section \ref{add1-interfaces}
-            \begin{itemize}
-                \item \texttt{void setConfig(PluggableDeviceID pID, Map<String,String> config)}
-                \begin{itemize}
-                    \item Effect: Set the given configuration parameters of a
-                          PluggableDevice to the given values. Setting unknown parameters
-                          on a PluggableDevice has no effect.
-                    \item Created for: UC11: pluggable device needs to be initialised \\
-                          M1: pluggable device must be able to be initialised
-                \end{itemize}
-            \end{itemize}
         \end{itemize}
 
     \subsubsection{PluggableDeviceFacade}
         \begin{itemize}
+            \item Actuate
         	\item Config
-        	\begin{itemize}
-                \item \texttt{Map<String,String> getConfig()}
-                    \begin{itemize}
-                        \item Effect: Returns the current configuration of a
-                              pluggable device as a parameter-value map.
-                        \item Created for: Given constraint, unused at the moment.
-                    \end{itemize}
-                \item \texttt{boolean setConfig(Map<String,String> config)}
-                    \begin{itemize}
-                        \item Effect: Set the given configuration parameters of the
-                              pluggable device to the given values. Setting unknown parameters
-                              on a pluggable device (e.g., ‘noise threshold’ → ‘3’ on a light
-                              sensor) has no effect.
-                        \item Created for: Given constraint \\
-                              UC11: pluggable device needs to be initialised \\
-                              M1: pluggable device must be able to be initialised
-                    \end{itemize}
-        	\end{itemize}
-
         	\item RequestData
-        	\begin{itemize}
-                \item \texttt{DeviceData getData()}
-                    \begin{itemize}
-                        \item Effect: Synchronously retrieve the device data of a device.
-                        \item Created for: Given constraint, unused at the moment.
-                    \end{itemize}
-                \item \texttt{void getDataAsync(int requestID)}
-                    \begin{itemize}
-                        \item Effect: Asynchronously retrieve the device data
-                              of a device (by calling rcvDataCallback).
-                        \item Created for: Given constraint, unused at the moment.
-                    \end{itemize}
-        	\end{itemize}
-
-        	\item Actuate
-        	\begin{itemize}
-                \item \texttt{void sendActuationCommand(String commandName)}
-                    \begin{itemize}
-                        \item Effect:
-                        \item Created for: Given constraint, unused at the moment.
-                    \end{itemize}
-        	\end{itemize}
-        \end{itemize}
-
-    \subsubsection{DeviceManager}
-        \begin{itemize}
-        	\item DeviceMgmt, last defined in section \ref{add1-interfaces}
-        	\begin{itemize}
-        		\item \texttt{bool isDeviceInitialised(PluggableDeviceID pID)}
-        		\begin{itemize}
-        			\item Effect: Returns true if the device with id "pID" has been initialized.
-                    \item Created for: UC11: pluggable device needs to be initialised \\
-                          M1: pluggable device must be able to be initialised
-                    \item TODO: need this check? is 'initialized' status stored in DB or on gateways? or both?
-        		\end{itemize}
-        	\end{itemize}
         \end{itemize}
 
     \subsubsection{DeviceDataConverter}
-    \begin{itemize}
-        \item DataConversion
         \begin{itemize}
-            \item \texttt{DeviceData convert(PluggableDeviceID pID, DeviceData data, string type)}
-            \begin{itemize}
-                \item Effect: Converts pluggable device data into other pluggable device
-                      data that contains the same information in a different type
-                \item Created for: M1: data processing subsystem should be
-                      extended with relevant data conversions
-            \end{itemize}
+            \item DataConversion
         \end{itemize}
-    \end{itemize}
 
     \subsubsection{DeviceDataScheduler}
         \begin{itemize}
             \item RequestData
-            \begin{itemize}
-                \item \texttt{List<DeviceData> getData(int applicationID, PluggableDeviceID pID, DateTime from, DateTime to)}
-                \begin{itemize}
-                    \item Effect: Requests data from a specific device in a certain time period
-                    \item Created for: P2: requests from applications
-                \end{itemize}
-            \end{itemize}
-
             \item DeviceData
-            \begin{itemize}
-                \item \texttt{void rcvData(PluggableDeviceID pID, DeviceData data)}
-                    \begin{itemize}
-                        \item Effect: Sends pluggable device data to the scheduler to be processed.
-                        \item Created for: UC11 \\
-                              P2: storing new pluggable data
-                    \end{itemize}
-            \end{itemize}
         \end{itemize}
 
     \subsubsection{PluggableDeviceDataDB}
         \begin{itemize}
             \item DeviceData
-            \begin{itemize}
-                \item \texttt{void rcvData(PluggableDeviceID pID, DeviceData data)}
-                \begin{itemize}
-                    \item Effect: Sends pluggable device data to the DB to be stored.
-                    \item Created for: UC11 \\
-                          P2: storing new pluggable data
-                \end{itemize}
-                \item \texttt{List<DeviceData> getData(PluggableDeviceID pID, DateTime from, DateTime to)}
-                \begin{itemize}
-                    \item Effect: Returns data from a specific device in a certain time period.
-                    \item Created for: P2: lookup queries
-                \end{itemize}
-            \end{itemize}
         \end{itemize}
 
 
@@ -372,9 +187,8 @@
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}
-        \item DateTime: Represents an instant in time, typically expressed as a date and time of day.
+        \item DateTime
     \end{itemize}
-
 
 
 \subsection{Verify and refine}

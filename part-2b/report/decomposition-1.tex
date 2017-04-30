@@ -130,8 +130,19 @@
 
 
 \subsection{Instantiation and allocation of functionality}
-    This section describes the new components (and their responsibilities)
-    which instantiate our solutions described in the section above. \\
+    This section lists the new components which instantiate our solutions
+    described in the section above. For each component we note the quality
+    attribute or use case that prompted us to create it. Descriptions about
+    the components can be found under chapter \ref{ch:elements-datatypes}. \\
+
+    \begin{itemize}
+        \item ApplicationManager: Av3
+        \item Database: /
+        \item DeviceManager: Av3
+        \item GatewayFacade: /
+        \item MoteFacade: UC14
+        \item NotificationHandler: UC15
+    \end{itemize}
 
     \paragraph{Decomposition}
         Figure \ref{fig:it1-cc_main} shows the components resulting from the
@@ -143,35 +154,6 @@
         	\caption{Component-and-connector diagram of this decomposition.}
             \label{fig:it1-cc_main}
         \end{figure}
-
-    \subparagraph{ApplicationManager}
-        Responsible for activating/deactivating applications, setting
-        pluggable device redundancy requirements on \texttt{DeviceManager}
-        components, and using \texttt{the NotificationHandler} to send notifications
-        to customer organisations. (Av3)
-
-    \subparagraph{Database}
-        General database for data. For example, storage of data
-        about notifications.
-
-    \subparagraph{GatewayFacade}
-        Main component on the gateway that allows different components to work
-        with each other. E.g. transmits heartbeats from motes to
-        \texttt{DeviceManager}, transmits commands to shut down applications,
-        triggers notifications to be generated, ...
-
-    \subparagraph{MoteFacade}
-        Sends heartbeats to the \texttt{GatewayFacade}. Includes a list
-        of connected pluggable devices in the heartbeats. (UC14)
-
-    \subparagraph{NotificationHandler}
-        Responsible for generation, storage, and delivery of notifications
-        based on users' preferred communication channel. (UC15)
-
-    \subparagraph{DeviceManager}
-        Monitors connected/operational devices on a gateway. Sends notifications
-        in case of hardware failure. Can send a command to disable or reactivate
-        applications when necessary. (Av3)
 
     \paragraph{Deployment}
         Figure \ref{fig:it1-depl_main} shows the allocation of components
@@ -187,7 +169,7 @@
 \subsection{Interfaces for child modules}\label{add1-interfaces}
     This section lists new interfaces assigned to the components defined
     in the section above. Detailed information about each interface and
-    its methods can be found under chapter \ref{ch:elements-datatype}. \\
+    its methods can be found under chapter \ref{ch:elements-datatypes}. \\
 
     \subsubsection{ApplicationManager}
         \begin{itemize}
