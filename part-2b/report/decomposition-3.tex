@@ -292,15 +292,15 @@
                     \item Created for: UC17.2, U2 - easy applications
 
             3. If all necessary pluggable devices are available, the system activates all necessary parts of the application on gateways and in the Online Service.
-                FOR RATIONALE: we add ApplicationContainer component that will contain ApplicationInstanceS in some kind of sandbox environment. The container can run/pause/stop these instances
+                FOR RATIONALE: we add ApplicationContainerManager component that will contain ApplicationInstanceS in some kind of sandbox environment. The container can run/pause/stop these instances
 
                 ApplicationManager -> GatewayFacade:        interface AppMgmt: activateApplicationInstance(int applicationInstanceID)
                     Effect: Activates an ApplicationInstance that is running on the gateway.
                     \item Created for: UC17.3, U2 - easy applications
-                GatewayFacade -> GWApplicationContainer:    interface AppMgmt: activateApplicationInstance(int applicationInstanceID)
+                GatewayFacade -> GWApplicationContainerManager:    interface AppMgmt: activateApplicationInstance(int applicationInstanceID)
                     Effect: Activates an ApplicationInstance that is running on the gateway.
                     \item Created for: UC17.3, U2 - easy applications
-                ApplicationManager -> ApplicationContainer: interface AppMgmt: activateApplicationInstance(int applicationInstanceID)
+                ApplicationManager -> ApplicationContainerManager: interface AppMgmt: activateApplicationInstance(int applicationInstanceID)
                     Effect: Activates an ApplicationInstance that is running on the online service.
                     \item Created for: UC17.3, U2 - easy applications
 
@@ -494,7 +494,7 @@
             Responsible for all functionality related to access rights to pluggable devices.
             E.g. retrieving the access rights a customer organisation has for a device,
             updating access rights for customer organisations, etc.
-        \item ApplicationContainer: U2, UC17
+        \item ApplicationContainerManager: U2, UC17
             This component contains sanbox environments for application instances to execute in.
         \item CustomerOrganisationClient: U2, UC19
             Represents the client used by a customer organisation. This is the user's dashboard.
@@ -516,7 +516,7 @@
         \item InvoiceManager: U2, UC17
             Responsible for all functionality related to access rights to invoicing.
             E.g. creating invoices.
-        \item GWApplicationContainer: U2, UC17
+        \item GWApplicationContainerManager: U2, UC17
             This component contains sanbox environments for application instances to execute in.
         \item TopologyManager: U2, UC4, UC6, UC17
               Responsible for all functionality related to topology. E.g. Adding a new
@@ -543,7 +543,7 @@
             \item AccessRightsMgmt
         \end{itemize}
 
-    \subsubsection{ApplicationContainer}
+    \subsubsection{ApplicationContainerManager}
         \begin{itemize}
             \item AppMgmt
         \end{itemize}
@@ -582,7 +582,7 @@
             \item InvoiceMgmt
         \end{itemize}
 
-    \subsubsection{GWApplicationContainer}
+    \subsubsection{GWApplicationContainerManager}
         \begin{itemize}
             \item AppMgmt
         \end{itemize}

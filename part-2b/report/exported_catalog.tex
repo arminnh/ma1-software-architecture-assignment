@@ -1,4 +1,4 @@
-%%% element catalog, generated on Sun Apr 30 21:46:34 CEST 2017
+%%% element catalog, generated on Mon May 01 16:18:35 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -82,21 +82,45 @@
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceAccessRightsManagerAccessRightsMgmt}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDBAccessRightsMgmt}}		
 	\end{description}
-\subsection{ApplicationContainer}\label{comp:OnlineServiceApplicationContainer}
+\subsection{ActuationCommandConstructor}\label{comp:OnlineServiceApplicationManagerActuationCommandConstructor}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManager}}
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerActuation}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}}		
+	\end{description}
+\subsection{ApplicationClient}\label{comp:ApplicationClient}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationContainerAppMgmt}}
+		\item[Provided interfaces:]~None
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationFacadeAppData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationFacadeDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationFacadeTopologyOverview}}		
+	\end{description}
+\subsection{ApplicationContainerManager}\label{comp:OnlineServiceApplicationContainerManager}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationContainerManagerAppMgmt}}
 		\item[Required interfaces:]~None		
+	\end{description}
+\subsection{ApplicationFacade}\label{comp:OnlineServiceApplicationFacade}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationFacadeAppData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationFacadeDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationFacadeTopologyOverview}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationManagerActuation}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationManagerApps}}		
 	\end{description}
 \subsection{ApplicationManager}\label{comp:OnlineServiceApplicationManager}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Responsible for activating/deactivating applications, setting pluggable device redundancy requirements on \vpett{\nameref{comp:GatewayGatewayDeviceManager}} components, and using \vpett{\nameref{comp:OnlineServiceNotificationHandler}} to send notifications to customer organisations.
 		\item[Super-components:]~None
-		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerApps}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerForwardData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerIOAppMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDBAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationContainerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:DatabaseDatabaseAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceInvoiceManagerInvoiceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDataSchedulerRequestData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceTopologyManagerTopologyMgmt}}		
+		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManagerActuationCommandConstructor}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerActuation}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerApps}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerForwardData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceApplicationManagerIOAppMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationContainerManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDBOtherDataDBAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceInvoiceManagerInvoiceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDataSchedulerRequestData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{CustomerOgranisationClient}\label{comp:CustomerOrganisationClientNodeCustomerOgranisationClient}
 	\begin{description}[noitemsep,nolistsep]
@@ -113,14 +137,6 @@
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceCustomerOrganisationFacadeSubscriptionMgmt}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationManagerApps}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeSubscriptionManagerSubscriptionMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceTopologyManagerTopologyMgmt}}		
-	\end{description}
-\subsection{Database}\label{comp:DatabaseDatabase}
-	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~General database for data. For example, storage of data about notifications.
-		\item[Super-components:]~None
-		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:DatabaseDatabaseAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:DatabaseDatabaseInvoiceMgmt}}, \iconprovided{}~\vpett{\nameref{int:DatabaseDatabaseIOMgmt}}, \iconprovided{}~\vpett{\nameref{int:DatabaseDatabaseNotificationMgmt}}, \iconprovided{}~\vpett{\nameref{int:DatabaseDatabaseOther}}, \iconprovided{}~\vpett{\nameref{int:DatabaseDatabaseSubscriptionMgmt}}, \iconprovided{}~\vpett{\nameref{int:DatabaseDatabaseUserRoleMgmt}}
-		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{DeviceDataConverter}\label{comp:OnlineServiceDeviceDataConverter}
 	\begin{description}[noitemsep,nolistsep]
@@ -140,16 +156,10 @@
 	\end{description}
 \subsection{DeviceDB}\label{comp:OnlineServiceDeviceDB}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~Eveything related to pluggable devices, except for the pluggable device data\\
-
-Gateways\\
-Motes\\
-Pluggable devices\\
-Topology\\
-Access rights
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDBAccessRightsMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDBAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDBDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDBIODeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDBTopologyMgmt}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDBAccessRightsMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDBDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDBIODeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceDeviceDBTopologyMgmt}}
 		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{DeviceManager}\label{comp:GatewayGatewayDeviceManager}
@@ -169,14 +179,14 @@ triggers notifications to be generated, ...
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeHeartbeat}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDataConverterDataConversion}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteFacadeDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOtherFunctionality2Other}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceTopologyManagerTopologyMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDataConverterDataConversion}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteFacadeDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOtherFunctionality2Other}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
-\subsection{GWApplicationContainer}\label{comp:GatewayGatewayGWApplicationContainer}
+\subsection{GWApplicationContainerManager}\label{comp:GatewayGatewayGWApplicationContainerManager}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerAppMgmt}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}
 		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{InfrastructreOwnerClient}\label{comp:InfrastructureOwnerClientNodeInfrastructreOwnerClient}
@@ -201,7 +211,7 @@ triggers notifications to be generated, ...
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceInfrastructureOwnerManagerIOMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDBIODeviceMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceDeviceDBIODeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDBOtherDataDBIOMgmt}}		
 	\end{description}
 \subsection{InvoiceManager}\label{comp:OnlineServiceInvoiceManager}
 	\begin{description}[noitemsep,nolistsep]
@@ -209,7 +219,7 @@ triggers notifications to be generated, ...
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceInvoiceManagerInvoiceMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:DatabaseDatabaseInvoiceMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OtherDataDBOtherDataDBInvoiceMgmt}}		
 	\end{description}
 \subsection{MoteFacade}\label{comp:MoteMoteFacade}
 	\begin{description}[noitemsep,nolistsep]
@@ -234,7 +244,15 @@ of connected pluggable devices in the heartbeats.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceNotificationHandlerDeliveryMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceNotificationHandlerNotify}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:NotificationDeliveryServiceNodeNotificationDeliveryServiceNotificationDeliveryMgmt}}, \iconrequired{}~\vpett{\nameref{int:DatabaseDatabaseNotificationMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:NotificationDeliveryServiceNodeNotificationDeliveryServiceNotificationDeliveryMgmt}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDBOtherDataDBNotificationMgmt}}		
+	\end{description}
+\subsection{OtherDataDB}\label{comp:OtherDataDBOtherDataDB}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~General database for data. For example, storage of data about notifications.
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OtherDataDBOtherDataDBAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDBOtherDataDBInvoiceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDBOtherDataDBIOMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDBOtherDataDBNotificationMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDBOtherDataDBOther}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDBOtherDataDBSubscriptionMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDBOtherDataDBUserRoleMgmt}}
+		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{OtherFunctionality1}\label{comp:OnlineServiceOtherFunctionality1}
 	\begin{description}[noitemsep,nolistsep]
@@ -242,7 +260,7 @@ of connected pluggable devices in the heartbeats.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOtherFunctionality2Other}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:DatabaseDatabaseOther}}, \iconrequired{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBOther}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OtherDataDBOtherDataDBOther}}, \iconrequired{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBOther}}		
 	\end{description}
 \subsection{OtherFunctionality2}\label{comp:OnlineServiceOtherFunctionality2}
 	\begin{description}[noitemsep,nolistsep]
@@ -250,11 +268,11 @@ of connected pluggable devices in the heartbeats.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOtherFunctionality2Other}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:DatabaseDatabaseOther}}, \iconrequired{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBOther}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OtherDataDBOtherDataDBOther}}, \iconrequired{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBOther}}		
 	\end{description}
 \subsection{PluggableDeviceDataDB}\label{comp:PluggableDeviceDatabasePluggableDeviceDataDB}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~\vpett{\nameref{comp:DatabaseDatabase}} dedicated to pluggable device data only.
+		\item[Responsibility:]~Database dedicated to pluggable device data only.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBDeviceData}}, \iconprovided{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBOther}}
@@ -274,7 +292,7 @@ of connected pluggable devices in the heartbeats.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDeviceFacade}}
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeSubscriptionManagerSubscriptionMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationManagerApps}}, \iconrequired{}~\vpett{\nameref{int:DatabaseDatabaseSubscriptionMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceApplicationManagerApps}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDBOtherDataDBSubscriptionMgmt}}		
 	\end{description}
 \subsection{TopologyManager}\label{comp:OnlineServiceTopologyManager}
 	\begin{description}[noitemsep,nolistsep]
@@ -290,7 +308,7 @@ of connected pluggable devices in the heartbeats.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceUserRolesManagerRoleMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:DatabaseDatabaseUserRoleMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OtherDataDBOtherDataDBUserRoleMgmt}}		
 	\end{description}
 
 % END COMPONENTS
@@ -338,11 +356,20 @@ of connected pluggable devices in the heartbeats.
     \end{itemize}
     \end{description}
 
-  %%%%%%%% AppDeviceMgmt
-  \subsection{AppDeviceMgmt}\label{int:OnlineServiceDeviceDBAppDeviceMgmt}
+  %%%%%%%% Actuation
+  \subsection{Actuation}\label{int:OnlineServiceApplicationManagerActuation}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceDeviceDB}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManager}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManagerActuationCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationFacade}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% AppData
+  \subsection{AppData}\label{int:OnlineServiceApplicationFacadeAppData}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationClient}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -351,7 +378,7 @@ of connected pluggable devices in the heartbeats.
   \subsection{AppDeviceMgmt}\label{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManagerActuationCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{bool areEssentialDevicesOperational(int applicationID)}
@@ -369,9 +396,9 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% AppMgmt
-  \subsection{AppMgmt}\label{int:DatabaseDatabaseAppMgmt}
+  \subsection{AppMgmt}\label{int:OtherDataDBOtherDataDBAppMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DatabaseDatabase}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherDataDBOtherDataDB}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -414,9 +441,9 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% AppMgmt
-  \subsection{AppMgmt}\label{int:OnlineServiceApplicationContainerAppMgmt}
+  \subsection{AppMgmt}\label{int:OnlineServiceApplicationContainerManagerAppMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationContainer}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationContainerManager}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManager}}
       \item[Operations:] ~
 % no operations
@@ -432,9 +459,9 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% AppMgmt
-  \subsection{AppMgmt}\label{int:GatewayGatewayGWApplicationContainerAppMgmt}
+  \subsection{AppMgmt}\label{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGWApplicationContainer}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGWApplicationContainerManager}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
       \item[Operations:] ~
 % no operations
@@ -444,7 +471,7 @@ TODO: update this with Relationship type?
   \subsection{Apps}\label{int:OnlineServiceApplicationManagerApps}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDeviceFacadeSubscriptionManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDeviceFacadeSubscriptionManager}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -602,6 +629,15 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% DeviceMgmt
+  \subsection{DeviceMgmt}\label{int:OnlineServiceApplicationFacadeDeviceMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationClient}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% DeviceMgmt
   \subsection{DeviceMgmt}\label{int:GatewayGatewayDeviceManagerDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}
@@ -712,9 +748,9 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% InvoiceMgmt
-  \subsection{InvoiceMgmt}\label{int:DatabaseDatabaseInvoiceMgmt}
+  \subsection{InvoiceMgmt}\label{int:OtherDataDBOtherDataDBInvoiceMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DatabaseDatabase}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherDataDBOtherDataDB}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceInvoiceManager}}
       \item[Operations:] ~
 % no operations
@@ -748,10 +784,10 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% IOMgmt
-  \subsection{IOMgmt}\label{int:DatabaseDatabaseIOMgmt}
+  \subsection{IOMgmt}\label{int:OtherDataDBOtherDataDBIOMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DatabaseDatabase}}
-      \item[Required by:] None
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherDataDBOtherDataDB}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceInfrastructureOwnerManager}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -781,9 +817,9 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% NotificationMgmt
-  \subsection{NotificationMgmt}\label{int:DatabaseDatabaseNotificationMgmt}
+  \subsection{NotificationMgmt}\label{int:OtherDataDBOtherDataDBNotificationMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DatabaseDatabase}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherDataDBOtherDataDB}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceNotificationHandler}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -830,9 +866,9 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% Other
-  \subsection{Other}\label{int:DatabaseDatabaseOther}
+  \subsection{Other}\label{int:OtherDataDBOtherDataDBOther}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DatabaseDatabase}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherDataDBOtherDataDB}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOtherFunctionality1}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOtherFunctionality2}}
       \item[Operations:] ~
 % no operations
@@ -890,9 +926,9 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% SubscriptionMgmt
-  \subsection{SubscriptionMgmt}\label{int:DatabaseDatabaseSubscriptionMgmt}
+  \subsection{SubscriptionMgmt}\label{int:OtherDataDBOtherDataDBSubscriptionMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DatabaseDatabase}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherDataDBOtherDataDB}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDeviceFacadeSubscriptionManager}}
       \item[Operations:] ~
 % no operations
@@ -934,10 +970,19 @@ TODO: update this with Relationship type?
 % no operations
     \end{description}
 
-  %%%%%%%% UserRoleMgmt
-  \subsection{UserRoleMgmt}\label{int:DatabaseDatabaseUserRoleMgmt}
+  %%%%%%%% TopologyOverview
+  \subsection{TopologyOverview}\label{int:OnlineServiceApplicationFacadeTopologyOverview}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DatabaseDatabase}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceApplicationFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:ApplicationClient}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% UserRoleMgmt
+  \subsection{UserRoleMgmt}\label{int:OtherDataDBOtherDataDBUserRoleMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherDataDBOtherDataDB}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceUserRolesManager}}
       \item[Operations:] ~
 % no operations
