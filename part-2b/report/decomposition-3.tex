@@ -74,9 +74,9 @@
             GatewayInfo(int gatewayID, int manufacturerID, int productID, int infrastructureOwnerID, IPAddress ip, int status)
 
         gateway registers with online service:
-            GatewayFacade -> DeviceDB: interface DeviceMgmt: registerGateway(int gatewayID, IPAddress address)
-                Effect: Sets a gateway's status to 'active' and updates its IP address
-                \item Created for: U2 - gateway installation
+            % GatewayFacade -> DeviceDB: interface DeviceMgmt: registerGateway(int gatewayID, IPAddress address)
+            %     Effect: Sets a gateway's status to 'active' and updates its IP address
+            %     \item Created for: U2 - gateway installation
 
 
     \paragraph{U2: Mote installation}
@@ -93,35 +93,35 @@
         *) gateway should register the mote (DeviceManager update, store entry in DB)
         *) on reintroduction of motes: DeviceManager notices this, makes the gateway send a message to online service to reuse some old topology
 
-        UC4:
-            Remark : The mote is pre-congured to connect to a specic gateway by
-             the hardware manufacturer. This linking process is out of scope for
-             this assignment. Likewise, the automatic assignment of an IPv6 address
-             to the mote is out of scope.
-
-            if new mote:
-                for step 2., we can use the heartbeat system. heartbeat is sent from mote to gateway,
-                the DeviceManager in the gateway notices that this is from a new mote and starts
-                the registerMote procedure
-                FOR RATIONALE: The IPAddress of the mote can be parsed out of the 6lowpan header in the heartbeat messages
-                ALTERNATIVE IS GatewayFacade: registerMote, but this is more work (battery power and implementation)
-
-                FOR RATIONALE: be careful with int moteID. when we register, we send MoteInfo to the DB, DB returns a DIFFERENT int moteID we use the other moteID in the rest of the system
-                3. DeviceManager -> GatewayFacade:       interface DeviceMgmt:   int moteID addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)
-                3. GatewayFacade -> DeviceDB:            interface DeviceMgmt:   int moteID addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)
-                3. GatewayFacade -> TopologyManager:     interface TopologyMgmt: void addMote(int moteID, int infrastructureOwnerID, int gatewayID)
-                3. TopologyManager -> DeviceDB:          interface TopologyMgmt: void addMote(int moteID, int infrastructureOwnerID, int gatewayID)
-                4. GatewayFacade -> NotificationHandler: interface Notify:       notify(int userID, string message)
-
-        if reintroduced mote:
-            It is automatically re-added on its last known location on the topology.
-                3. DeviceManager -> GatewayFacade:   interface DeviceMgmt:    void reactivateMote(int moteID)
-                3. GatewayFacade -> DeviceDB:        interface DeviceMgmt:    void reactivateMote(int moteID)
-                3. GatewayFacade -> TopologyManager: interface TopologyMgmt:  void reactivateMote(int moteID)
-                3. TopologyManager -> DeviceDB:      interface TopologyMgmt:  void reactivateMote(int moteID)
-
-            The attached pluggable devices are automatically initialised and configured with their last known configurations and access rights.
-                See UC6 - reintroduced device
+        % UC4:
+        %     Remark : The mote is pre-congured to connect to a specic gateway by
+        %      the hardware manufacturer. This linking process is out of scope for
+        %      this assignment. Likewise, the automatic assignment of an IPv6 address
+        %      to the mote is out of scope.
+        %
+        %     if new mote:
+        %         for step 2., we can use the heartbeat system. heartbeat is sent from mote to gateway,
+        %         the DeviceManager in the gateway notices that this is from a new mote and starts
+        %         the registerMote procedure
+        %         FOR RATIONALE: The IPAddress of the mote can be parsed out of the 6lowpan header in the heartbeat messages
+        %         ALTERNATIVE IS GatewayFacade: registerMote, but this is more work (battery power and implementation)
+        %
+        %         FOR RATIONALE: be careful with int moteID. when we register, we send MoteInfo to the DB, DB returns a DIFFERENT int moteID we use the other moteID in the rest of the system
+        %         3. DeviceManager -> GatewayFacade:       interface DeviceMgmt:   int moteID addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)
+        %         3. GatewayFacade -> DeviceDB:            interface DeviceMgmt:   int moteID addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)
+        %         3. GatewayFacade -> TopologyManager:     interface TopologyMgmt: void addMote(int moteID, int infrastructureOwnerID, int gatewayID)
+        %         3. TopologyManager -> DeviceDB:          interface TopologyMgmt: void addMote(int moteID, int infrastructureOwnerID, int gatewayID)
+        %         4. GatewayFacade -> NotificationHandler: interface Notify:       notify(int userID, string message)
+        %
+        % if reintroduced mote:
+        %     It is automatically re-added on its last known location on the topology.
+        %         3. DeviceManager -> GatewayFacade:   interface DeviceMgmt:    void reactivateMote(int moteID)
+        %         3. GatewayFacade -> DeviceDB:        interface DeviceMgmt:    void reactivateMote(int moteID)
+        %         3. GatewayFacade -> TopologyManager: interface TopologyMgmt:  void reactivateMote(int moteID)
+        %         3. TopologyManager -> DeviceDB:      interface TopologyMgmt:  void reactivateMote(int moteID)
+        %
+        %     The attached pluggable devices are automatically initialised and configured with their last known configurations and access rights.
+        %         See UC6 - reintroduced device
 
 
     \paragraph{U2: Pluggable device installation}
@@ -146,115 +146,115 @@
             what exactly is a location?
             => when a pluggable device is connected to a new mote, the pluggable device gets the location of the mote by default
 
-        UC6: insert a pluggable device into a mote
-            mote is already installed
+        % UC6: insert a pluggable device into a mote
+        %     mote is already installed
+        %
+        %     when device is plugged into a mote:
+        %         2. The system receives a message from the mote, informing it of the new pluggable device. This
+        %         message species the identier and type of the new pluggable device.
+        %         => for registration, we can use the heartbeat system. heartbeat is sent from mote to gateway,
+        %         the DeviceManager in the gateway notices that there is a new pluggable device
+        %
+        %         Status of new pluggable devices will be 'uninitialised' by default in the DB, and 'unplaced' in topology
+        %         New pluggable devices get the location of the mote in the topology, but have status unplaced
+        %
+        %         DeviceManager -> GatewayFacade:   interface DeviceMgmt:   void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<string, string> defaultConfigurations, int moteID)
+        %         GatewayFacade -> DeviceDB:        interface DeviceMgmt:   void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<string, string> defaultConfigurations, int moteID)
+        %         GatewayFacade -> TopologyManager: interface TopologyMgmt: void addDevice(PluggableDeviceID id, int moteID)
+        %         TopologyManager -> DeviceDB:      interface TopologyMgmt: void addDevice(PluggableDeviceID id, int moteID)
+        %
+        %         In these methods, if the device already exists and is plugged in in another mote, clear the data
+        %
+        %         For default configurations: when it is a new device, we assume that the defaults are turned on by default so we don't have to do anything here
+        %
+        %     if the device is a known previously active device (ON THE SAME MOTE):
+        %         ∗ marks the pluggable device as ‘active’:
+        %             DeviceManager -> GatewayFacade: interface DeviceMgmt: void reactivateDevice(PluggableDeviceID id)
+        %             GatewayFacade -> DeviceDB:      interface DeviceMgmt: void reactivateDevice(PluggableDeviceID id)
+        %
+        %         ∗ updates the topology:
+        %             GatewayFacade -> TopologyManager: interface TopologyMgmt: void reactivateDevice(PluggableDeviceID id)
+        %             TopologyManager -> DeviceDB:      interface TopologyMgmt: void reactivateDevice(PluggableDeviceID id)
+        %
+        %         ∗ configures the pluggable device with the last known access rights:
+        %             RATIONALE: nothing needs to happen here, permission information will just not be used if the device is inactive
+        %                        if the device is reactivated, the permissions are already there
+        %
+        %         * configures the pluggable device with the last known configuration:
+        %             DeviceManager -> GatewayFacade:      interface DeviceMgmt: Map<string, string> getConfigDB(PluggableDeviceID id)
+        %             GatewayFacade -> DeviceDB:           interface DeviceMgmt: Map<string, string> getConfigDB(PluggableDeviceID id)
+        %             DeviceManager -> MoteFacade:         interface DeviceMgmt: void setConfig(PluggableDeviceID device, Map<string, string> config)
+        %             MoteFacade -> PluggableDeviceFacade: interface Config:     void setConfig(Map<string, string> config)
+        %
+        %         ∗ checks and activates applications which can now execute again:
+        %             RATIONALE: gateway sends id of IO instead of fetching customers of IO. the online service will do that extra work = less work for gateway.
+        %             DeviceManager -> GatewayFacade:      interface DeviceMgmt: checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+        %             GatewayFacade -> ApplicationManager: interface AppMgmt: checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+        %
+        %         * send notification
+        %             GatewayFacade -> NotificationHandler: interface Notify:       notify(int userID, string message)
 
-            when device is plugged into a mote:
-                2. The system receives a message from the mote, informing it of the new pluggable device. This
-                message species the identier and type of the new pluggable device.
-                => for registration, we can use the heartbeat system. heartbeat is sent from mote to gateway,
-                the DeviceManager in the gateway notices that there is a new pluggable device
-
-                Status of new pluggable devices will be 'uninitialised' by default in the DB, and 'unplaced' in topology
-                New pluggable devices get the location of the mote in the topology, but have status unplaced
-
-                DeviceManager -> GatewayFacade:   interface DeviceMgmt:   void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<string, string> defaultConfigurations, int moteID)
-                GatewayFacade -> DeviceDB:        interface DeviceMgmt:   void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<string, string> defaultConfigurations, int moteID)
-                GatewayFacade -> TopologyManager: interface TopologyMgmt: void addDevice(PluggableDeviceID id, int moteID)
-                TopologyManager -> DeviceDB:      interface TopologyMgmt: void addDevice(PluggableDeviceID id, int moteID)
-
-                In these methods, if the device already exists and is plugged in in another mote, clear the data
-
-                For default configurations: when it is a new device, we assume that the defaults are turned on by default so we don't have to do anything here
-
-            if the device is a known previously active device (ON THE SAME MOTE):
-                ∗ marks the pluggable device as ‘active’:
-                    DeviceManager -> GatewayFacade: interface DeviceMgmt: void reactivateDevice(PluggableDeviceID id)
-                    GatewayFacade -> DeviceDB:      interface DeviceMgmt: void reactivateDevice(PluggableDeviceID id)
-
-                ∗ updates the topology:
-                    GatewayFacade -> TopologyManager: interface TopologyMgmt: void reactivateDevice(PluggableDeviceID id)
-                    TopologyManager -> DeviceDB:      interface TopologyMgmt: void reactivateDevice(PluggableDeviceID id)
-
-                ∗ configures the pluggable device with the last known access rights:
-                    RATIONALE: nothing needs to happen here, permission information will just not be used if the device is inactive
-                               if the device is reactivated, the permissions are already there
-
-                * configures the pluggable device with the last known configuration:
-                    DeviceManager -> GatewayFacade:      interface DeviceMgmt: Map<string, string> getConfigDB(PluggableDeviceID id)
-                    GatewayFacade -> DeviceDB:           interface DeviceMgmt: Map<string, string> getConfigDB(PluggableDeviceID id)
-                    DeviceManager -> MoteFacade:         interface DeviceMgmt: void setConfig(PluggableDeviceID device, Map<string, string> config)
-                    MoteFacade -> PluggableDeviceFacade: interface Config:     void setConfig(Map<string, string> config)
-
-                ∗ checks and activates applications which can now execute again:
-                    RATIONALE: gateway sends id of IO instead of fetching customers of IO. the online service will do that extra work = less work for gateway.
-                    DeviceManager -> GatewayFacade:      interface DeviceMgmt: checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
-                    GatewayFacade -> ApplicationManager: interface AppMgmt: checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
-
-                * send notification
-                    GatewayFacade -> NotificationHandler: interface Notify:       notify(int userID, string message)
-
-        UC9: configure pluggable device access rights
-            Map<int, AccessRights> : maps customerOrganisationIDs to their AccessRights
-
-            1. The primary actor indicates that they want to configure the access rights to pluggable devices.
-                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: List<PluggableDeviceInfo> getAccessRights(int infrastructureOwnerID)
-                    Effect: Returns a list of PluggableDeviceInfo to display so an infrastructure owner can select a device to configure access rights.
-                    \item Created for: UC9.1
-
-            2. The system retrieves the list of pluggable devices associated with the primary actor and presents these to the primary actor.
-                InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt:     List<PluggableDeviceInfo>  getDevices(int infrastructureOwnerID)
-                    Effect: Returns a list of PluggableDeviceInfo of devices owned by an infrastructure owner.
-                    \item Created for: UC9.2
-                InfrastructureOwnerManager -> DeviceDB:                  interface IODeviceMgmt: List<PluggableDeviceInfo>  getDevices(int infrastructureOwnerID)
-                    Effect: Returns a list of PluggableDeviceInfo of devices owned by an infrastructure owner.
-                    \item Created for: UC9.2
-                presents these to the primary actor = return of getAccessRights(int infrastructureOwnerID)
-
-            3. The primary actor indicates for which pluggable device they want to configure the access rights.
-                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: Map<int, AccessRights> configureDevice(PluggableDeviceID id)
-                    Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights.
-                    \item Created for: UC9.3 - UC9.4
-
-            4. The system retrieves all customer organisations associated with the primary actor and presents these to the primary actor,
-               thereby indicating which of these customer organizations already have access to the pluggable device.
-                InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt:           List<int> getCustomerOrganisations(int infrastructureOwnerID)
-                    Effect: Returns a list of IDs of all customer organisations associated with an infrastructure owner.
-                    \item Created for: UC9.4
-                InfrastructureOwnerManager -> OtherDataDB:               interface IOMgmt:           List<int> getCustomerOrganisations(int infrastructureOwnerID)
-                    Effect: Returns a list of IDs of all customer organisations associated with an infrastructure owner.
-                    \item Created for: UC9.4
-                InfrastructureOwnerFacade -> AccessRightsManager:        interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
-                    Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights on a certain pluggable device.
-                    \item Created for: UC9.4
-                AccessRightsManager -> DeviceDB:                         interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
-                    Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights on a certain pluggable device.
-                    \item Created for: UC9.4
-
-            5. The system asks to indicate which of these should have access to the pluggable device.
-                = is return value of configureDevice(PluggableDeviceID id)
-
-            6. The primary actor selects the customer organisations that may use the pluggable device and submits the selection.
-                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
-                    Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
-                    \item Created for: UC9.6
-
-            7. The system
-                { updates the roles of the selected customer organisations, giving them access rights to the pluggable device.
-                    InfrastructureOwnerFacade -> AccessRightsManager:  interface AccessRightsMgmt: updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
-                        Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
-                        \item Created for: UC9.7
-                    AccessRightsManager -> DeviceDB:                   interface AccessRightsMgmt: updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
-                        Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
-                        \item Created for: UC9.7
-                { checks and activates 'inactive' applications for the customer organisations with updated access rights (Include: UC17: Activate an application).
-                    InfrastructureOwnerFacade -> ApplicationManager:  interface IOAppMgmt: checkApplicationsForActivationForCustomerOrganisations(List<int> custOrgIDs)
-                        Effect: Checks and activates 'inactive' ApplicationInstances which can now execute again for a list of customer organisations.
-                        \item Created for: UC9.7
-                { checks for applications that require deactivation because of the unavailability of pluggable devices
-                    InfrastructureOwnerFacade -> ApplicationManager:  interface IOAppMgmt: checkApplicationsForDeactivationForCustomerOrganisations(List<int> custOrgIDs)
-                        Effect: Checks for ApplicationInstances that require deactivation for a list of customer organisations.
-                        \item Created for: UC9.7
+        % UC9: configure pluggable device access rights
+        %     Map<int, AccessRights> : maps customerOrganisationIDs to their AccessRights
+        %
+        %     1. The primary actor indicates that they want to configure the access rights to pluggable devices.
+        %         InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: List<PluggableDeviceInfo> getAccessRights(int infrastructureOwnerID)
+        %             Effect: Returns a list of PluggableDeviceInfo to display so an infrastructure owner can select a device to configure access rights.
+        %             \item Created for: UC9.1
+        %
+        %     2. The system retrieves the list of pluggable devices associated with the primary actor and presents these to the primary actor.
+        %         InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt:     List<PluggableDeviceInfo>  getDevices(int infrastructureOwnerID)
+        %             Effect: Returns a list of PluggableDeviceInfo of devices owned by an infrastructure owner.
+        %             \item Created for: UC9.2
+        %         InfrastructureOwnerManager -> DeviceDB:                  interface IODeviceMgmt: List<PluggableDeviceInfo>  getDevices(int infrastructureOwnerID)
+        %             Effect: Returns a list of PluggableDeviceInfo of devices owned by an infrastructure owner.
+        %             \item Created for: UC9.2
+        %         presents these to the primary actor = return of getAccessRights(int infrastructureOwnerID)
+        %
+        %     3. The primary actor indicates for which pluggable device they want to configure the access rights.
+        %         InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: Map<int, AccessRights> configureDevice(PluggableDeviceID id)
+        %             Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights.
+        %             \item Created for: UC9.3 - UC9.4
+        %
+        %     4. The system retrieves all customer organisations associated with the primary actor and presents these to the primary actor,
+        %        thereby indicating which of these customer organizations already have access to the pluggable device.
+        %         InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt:           List<int> getCustomerOrganisations(int infrastructureOwnerID)
+        %             Effect: Returns a list of IDs of all customer organisations associated with an infrastructure owner.
+        %             \item Created for: UC9.4
+        %         InfrastructureOwnerManager -> OtherDataDB:               interface IOMgmt:           List<int> getCustomerOrganisations(int infrastructureOwnerID)
+        %             Effect: Returns a list of IDs of all customer organisations associated with an infrastructure owner.
+        %             \item Created for: UC9.4
+        %         InfrastructureOwnerFacade -> AccessRightsManager:        interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
+        %             Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights on a certain pluggable device.
+        %             \item Created for: UC9.4
+        %         AccessRightsManager -> DeviceDB:                         interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
+        %             Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights on a certain pluggable device.
+        %             \item Created for: UC9.4
+        %
+        %     5. The system asks to indicate which of these should have access to the pluggable device.
+        %         = is return value of configureDevice(PluggableDeviceID id)
+        %
+        %     6. The primary actor selects the customer organisations that may use the pluggable device and submits the selection.
+        %         InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: void updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+        %             Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
+        %             \item Created for: UC9.6
+        %
+        %     7. The system
+        %         { updates the roles of the selected customer organisations, giving them access rights to the pluggable device.
+        %             InfrastructureOwnerFacade -> AccessRightsManager:  interface AccessRightsMgmt: void updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+        %                 Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
+        %                 \item Created for: UC9.7
+        %             AccessRightsManager -> DeviceDB:                   interface AccessRightsMgmt: void updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+        %                 Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
+        %                 \item Created for: UC9.7
+        %         { checks and activates 'inactive' applications for the customer organisations with updated access rights (Include: UC17: Activate an application).
+        %             InfrastructureOwnerFacade -> ApplicationManager:  interface IOAppMgmt: void checkApplicationsForActivationForCustomerOrganisations(List<int> custOrgIDs)
+        %                 Effect: Checks and activates 'inactive' ApplicationInstances which can now execute again for a list of customer organisations.
+        %                 \item Created for: UC9.7
+        %         { checks for applications that require deactivation because of the unavailability of pluggable devices
+        %             InfrastructureOwnerFacade -> ApplicationManager:  interface IOAppMgmt: void checkApplicationsForDeactivationForCustomerOrganisations(List<int> custOrgIDs)
+        %                 Effect: Checks for ApplicationInstances that require deactivation for a list of customer organisations.
+        %                 \item Created for: UC9.7
 
 
     \paragraph{U2: Easy applications}
@@ -266,222 +266,221 @@
            if some application can be activated now => see UC6: checkApplicationsForActivationForInfrastructureOwner
         *) need something to assign user roles to users during UC19
 
-        UC17: Activate an application
-            ApplicationManager is triggered by something else do to the following: activateApplication(int applicationInstanceID)
-            could be triggered because of: new pluggable device detected, new subscription, changed topology, new version of application
-
-            1. The system checks that all mandatory roles have been assigned to end-users.
-                ApplicationManager -> UserRolesManager: interface RoleMgmt:     boolean checkMandatoryUserRoles(int applicationInstanceID)
-                    Effect: Returns true if all mandatory UserRoles for the application have been assigned to users. Finds the relevant customer organisations through the ApplicationInstance.
-                    \item Created for: UC17.1, U2 - easy applications
-                UserRolesManager -> OtherDataDB:        interface UserRoleMgmt: boolean checkMandatoryUserRoles(int applicationInstanceID)
-                    Effect: Returns true if all mandatory UserRoles for the application have been assigned to users. Finds the relevant customer organisations through the ApplicationInstance.
-                    \item Created for: UC17.1, U2 - easy applications
-
-            2. If all mandatory roles have been assigned, the system checks that all necessary pluggable devices are available in the topology.
-                // pluggable device status has to be 'active' in the DB, and status has to be 'placed/available' in the topology
-
-                ApplicationManager -> OtherDataDB:     interface AppMgmt:       List<PluggableDeviceID> getDevicesForApplication(int applicationInstanceID)
-                    Effect: Returns a list of PluggableDeviceID of pluggable devices that an ApplicationInstance can use.
-                    \item Created for: UC17.2, U2 - easy applications
-                ApplicationManager -> TopologyManager: interface TopologyMgmt:  boolean arePluggableDevicesPlaced(List<PluggableDeviceID> devices)
-                    Effect: Returns true if all pluggable devices in the given list have status 'placed' in the topology.
-                    \item Created for: UC17.2, U2 - easy applications
-                TopologyManager -> DeviceDB:           interface TopologyMgmt:  boolean arePluggableDevicesPlaced(List<PluggableDeviceID> devices)
-                    Effect: Returns true if all pluggable devices in the given list have status 'placed' in the topology.
-                    \item Created for: UC17.2, U2 - easy applications
-
-            3. If all necessary pluggable devices are available, the system activates all necessary parts of the application on gateways and in the Online Service.
-                FOR RATIONALE: we add ApplicationContainerManager component that will contain ApplicationInstanceS in some kind of sandbox environment. The container can run/pause/stop these instances
-
-                ApplicationManager -> GatewayFacade:        interface AppMgmt: activateApplicationInstance(int applicationInstanceID)
-                    Effect: Activates an ApplicationInstance that is running on the gateway.
-                    \item Created for: UC17.3, U2 - easy applications
-                GatewayFacade -> GWApplicationContainerManager:    interface AppMgmt: activateApplicationInstance(int applicationInstanceID)
-                    Effect: Activates an ApplicationInstance that is running on the gateway.
-                    \item Created for: UC17.3, U2 - easy applications
-                ApplicationManager -> ApplicationContainerManager: interface AppMgmt: activateApplicationInstance(int applicationInstanceID)
+        % UC17: Activate an application
+        %     ApplicationManager is triggered by something else do to the following: activateApplication(int applicationInstanceID)
+        %     could be triggered because of: new pluggable device detected, new subscription, changed topology, new version of application
+        %
+        %     1. The system checks that all mandatory roles have been assigned to end-users.
+        %         ApplicationManager -> UserRolesManager: interface RoleMgmt:     boolean areMandatoryUserRolesAssigned(int applicationInstanceID)
+        %             Effect: Returns true if all mandatory UserRoles for the application have been assigned to users. Finds the relevant customer organisations through the ApplicationInstance.
+        %             \item Created for: UC17.1, U2 - easy applications
+        %         UserRolesManager -> OtherDataDB:        interface UserRoleMgmt: boolean areMandatoryUserRolesAssigned(int applicationInstanceID)
+        %             Effect: Returns true if all mandatory UserRoles for the application have been assigned to users. Finds the relevant customer organisations through the ApplicationInstance.
+        %             \item Created for: UC17.1, U2 - easy applications
+        %
+        %     2. If all mandatory roles have been assigned, the system checks that all necessary pluggable devices are available in the topology.
+        %         // pluggable device status has to be 'active' in the DB, and status has to be 'placed/available' in the topology
+        %
+        %         ApplicationManager -> OtherDataDB:     interface AppMgmt:       List<PluggableDeviceID> getDevicesForApplication(int applicationInstanceID)
+        %             Effect: Returns a list of PluggableDeviceID of pluggable devices that an ApplicationInstance can use.
+        %             \item Created for: UC17.2, U2 - easy applications
+        %         ApplicationManager -> TopologyManager: interface TopologyMgmt:  boolean arePluggableDevicesPlaced(List<PluggableDeviceID> devices)
+        %             Effect: Returns true if all pluggable devices in the given list have status 'placed' in the topology.
+        %             \item Created for: UC17.2, U2 - easy applications
+        %         TopologyManager -> DeviceDB:           interface TopologyMgmt:  boolean arePluggableDevicesPlaced(List<PluggableDeviceID> devices)
+        %             Effect: Returns true if all pluggable devices in the given list have status 'placed' in the topology.
+        %             \item Created for: UC17.2, U2 - easy applications
+        %
+        %     3. If all necessary pluggable devices are available, the system activates all necessary parts of the application on gateways and in the Online Service.
+        %         FOR RATIONALE: we add ApplicationContainerManager component that will contain ApplicationInstanceS in some kind of sandbox environment. The container can run/pause/stop these instances
+        %
+        %         ApplicationManager -> GatewayFacade:               interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
+        %             Effect: Activates an ApplicationInstance that is running on the gateway.
+        %             \item Created for: UC17.3, U2 - easy applications
+        %         GatewayFacade -> GWApplicationContainerManager:    interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
+        %             Effect: Activates an ApplicationInstance that is running on the gateway.
+        %             \item Created for: UC17.3, U2 - easy applications
+                TODO: propagate these changes to ApplicationContainerManager ? ? ?
+                ApplicationManager -> ApplicationContainerManager: interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
                     Effect: Activates an ApplicationInstance that is running on the online service.
                     \item Created for: UC17.3, U2 - easy applications
+        %
+        %     4. The system marks the application as 'active' and updates the billing information.
+        %         ApplicationManager -> OtherDataDB:    interface AppMgmt:     void activateApplication(int applicationInstanceID, string status)
+        %             Effect: Sets an ApplicationInstance's status in the OtherDataDB to 'active'.
+        %             \item Created for: UC17.4, U2 - easy applications
+        %         ApplicationManager -> InvoiceManager: interface InvoiceMgmt: void markActivatedApplication(int applicationInstanceID, int custOrgID, DateTime date)
+        %             Effect: Updates an ApplicationInstance's billing information: marks the start of a billing period.
+        %             \item Created for: UC17.4, U2 - easy applications
+        %         InvoiceManager -> OtherDataDB:        interface InvoiceMgmt: void markActivatedApplication(int applicationInstanceID, int custOrgID, DateTime date)
+        %             Effect: Updates an ApplicationInstance's billing information: marks the start of a billing period.
+        %             \item Created for: UC17.4, U2 - easy applications
+        %
+        %     5. The system sends a notication to the customer organisation subscribed to the application, to inform them that the application is running (Include: UC15: Send notication).
+        %         ApplicationManager -> NotificationHandler: interface Notify: notify(int userID, string message)
+        %
+        %     6. The system sends an SMS or e-mail to the end-users that were assigned roles. Possibly, this contains instructions for the end-user on how to install a mobile app linked to the application.
+        %         ApplicationManager -> UserRolesManager:    interface RoleMgmt:     List<User> getUsersWithRoles(int applicationInstanceID)
+        %             Effect: Returns a list of Users associated to an ApplicationInstance that were assigned UserRoles.
+        %             \item Created for: UC17.6, U2 - easy applications
+        %         UserRolesManager -> OtherDataDB:           interface UserRoleMgmt: List<User> getUsersWithRoles(int applicationInstanceID)
+        %             Effect: Returns a list of Users associated to an ApplicationInstance that were assigned UserRoles.
+        %             \item Created for: UC17.6, U2 - easy applications
+        %         ApplicationManager -> OtherDataDB:         interface AppMgmt:      string getInstallationInstructions(int applicationID)
+        %             Effect: Returns the installation instructions of a certain application. If there are no installation instructions set, returns an empty string.
+        %             \item Created for: UC17.6, U2 - easy applications
+        %         ApplicationManager -> NotificationHandler: interface Notify:       notify(int userID, string message)
+        %
+        %     ALTERNATIVE SCENARIOS:
+        %         2a. If end-users are not assigned to each mandatory role, the application is added as an 'inactive'
+        %         application and the subscription info is set accordingly. The system notifies the customer
+        %         organisation subscribed to the application (Include: UC15: Send notication). The use case ends.
+        %             This happens if areMandatoryUserRolesAssigned returned false.
+        %             FOR RATIONALE: the UC is called "activate application", thus we assume the system already contains the
+        %                            ApplicationInstance and subscription information, but the instance is 'inactive' at the start of the UC
+        %             => OK
+        %
+        %         3a. If not all pluggable devices necessary for the application are available, the application is added
+        %         as an 'inactive' application and the subscription info is set accordingly. The system notifies
+        %         the customer organisation subscribed to the application (Include: UC15: Send notication). The use case ends.
+        %             This happens if arePluggableDevicesPlaced returned false.
+        %             Same as 2a. => OK
 
-            4. The system marks the application as 'active' and updates the billing information.
-                ApplicationManager -> OtherDataDB:    interface AppMgmt:     activateApplication(int applicationInstanceID, string status)
-                    Effect: Sets an ApplicationInstance's status in the OtherDataDB to 'active'.
-                    \item Created for: UC17.4, U2 - easy applications
-                ApplicationManager -> InvoiceManager: interface InvoiceMgmt: markActivatedApplication(int applicationInstanceID, int custOrgID, DateTime date) // updates billing information, marks the start of a period
-                    Effect: Updates an ApplicationInstance's billing information: marks the start of a billing period.
-                    \item Created for: UC17.4, U2 - easy applications
-                InvoiceManager -> OtherDataDB:        interface InvoiceMgmt: markActivatedApplication(int applicationInstanceID, int custOrgID, DateTime date)
-                    Effect: Updates an ApplicationInstance's billing information: marks the start of a billing period.
-                    \item Created for: UC17.4, U2 - easy applications
-
-            5. The system sends a notication to the customer organisation subscribed to the application, to inform them that the application is running (Include: UC15: Send notication).
-                ApplicationManager -> NotificationHandler: interface Notify: notify(int userID, string message)
-
-            6. The system sends an SMS or e-mail to the end-users that were assigned roles. Possibly, this contains instructions for the end-user on how to install a mobile app linked to the application.
-                ApplicationManager -> UserRolesManager:    interface RoleMgmt:     List<User> getUsersWithRoles(int custOrgID)
-                    Effect: Returns a list of Users associated to a customer organisation.
-                    \item Created for: UC17.6, U2 - easy applications
-                UserRolesManager -> OtherDataDB:           interface UserRoleMgmt: List<User> getUsersWithRoles(int custOrgID)
-                    Effect: Returns a list of Users associated to a customer organisation.
-                    \item Created for: UC17.6, U2 - easy applications
-                ApplicationManager -> OtherDataDB:         interface AppMgmt:      string getInstallationInstructions(applicationID) // applications optionally have some installation instruction
-                    Effect: Returns the installation instructions of a certain application. If there are no installation instructions set, returns an empty string.
-                    \item Created for: UC17.6, U2 - easy applications
-                ApplicationManager -> NotificationHandler: interface Notify:       notify(int userID, string message)
-
-            ALTERNATIVE SCENARIOS:
-                2a. If end-users are not assigned to each mandatory role, the application is added as an 'inactive'
-                application and the subscription info is set accordingly. The system notifies the customer
-                organisation subscribed to the application (Include: UC15: Send notication). The use case ends.
-                    This happens if checkMandatoryUserRoles returned false.
-                    FOR RATIONALE: the UC is called "activate application", thus we assume the system already contains the
-                                   ApplicationInstance and subscription information, but the instance is 'inactive' at the start of the UC
-                    => OK
-
-                3a. If not all pluggable devices necessary for the application are available, the application is added
-                as an 'inactive' application and the subscription info is set accordingly. The system notifies
-                the customer organisation subscribed to the application (Include: UC15: Send notication). The use case ends.
-                    This happens if arePluggableDevicesPlaced returned false.
-                    Same as 2a. => OK
-
-        UC19: Subscribe to application
-            A customer organisation subscribes to an application via the dashboard.
-
-            REMARKS:
-                *) This use case concerns both subscribing to a new application, as well as upgrading an existing
-                   application to a newer version (if this is not an automatic update, as indicated in UC22 : Upload an application).
-                *) Roles in an application can be used to indicate which end-user(s) should be notified in case of specific events.
-                *) It is possible to reassign end-users to roles later on. For simplicity, no separate use case is provided for this.
-
-            1. The primary actor indicates they want to subscribe to an application.
-                    CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
-                        Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
-                        \item Created for: UC19.1, U2 - easy applications
-
-            2. The system looks up the available applications (i.e., those to which the primary actor is not yet subscribed,
-               or applications for which a newer version is available that requires a new subscription).
-                    CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
-                        Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
-                        \item Created for: UC19.2, U2 - easy applications
-                    SubscriptionManager -> ApplicationManager:            interface Apps:             List<Application> getApplications()
-                        Effect: Returns a list of applications in the system.
-                        \item Created for: UC19.2, U2 - easy applications
-                    ApplicationManager -> OtherDataDB:                    interface AppMgmt:          List<Application> getApplications()
-                        Effect: Returns a list of applications in the system.
-                        \item Created for: UC19.2, U2 - easy applications
-                    SubscriptionManager -> OtherDataDB:                   interface SubscriptionMgmt: List<Subscription> getSubscriptions(int custOrgID)
-                        Effect: Returns a list of subscriptions a customer organisation has.
-                        \item Created for: UC19.2, U2 - easy applications
-
-            3. The system presents the available applications to the primary actor, e.g. as a list or table,
-               thereby indicating whether it is a new application or an update.
-                    = return value of getApplicationsToSubscribe
-
-            4. The primary actor selects the desired application.
-                    CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: int subscribeToApplication(int custOrgID, int applicationID)
-                        Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
-                        \item Created for: UC19.4, U2 - easy applications
-                    CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             int createNewApplicationInstance(int custOrgID, int applicationID)
-                        Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
-                        \item Created for: UC19.4, U2 - easy applications
-                    ApplicationManager -> OtherDataDB:                        interface AppMgmt:          int createNewApplicationInstance(int custOrgID, int applicationID)
-                        Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
-                        \item Created for: UC19.4, U2 - easy applications
-
-                    // subscribes the customer org to the application or updates the subscription if the org is already subscribed
-
-            5. The system checks which topology configuration and selection of pluggable devices for the application are necessary
-               (e.g., to indicate in which rooms a heating control application should run)
-               and presents a topology allowing the primary actor to indicate their configuration.
-                    CustomerOrganisationFacade -> ApplicationManager: interface Apps:         List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
-                        Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
-                        \item Created for: UC19.5, U2 - easy applications
-                    ApplicationManager -> OtherDataDB:                interface AppMgmt:      List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
-                        Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
-                        \item Created for: UC19.5, U2 - easy applications
-                    CustomerOrganisationFacade -> TopologyManager:    interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
-                        Effect: Returns a list of RoomTopology associated to a customer organisation.
-                        \item Created for: UC19.5, U2 - easy applications
-                    TopologyManager -> DeviceDB:                      interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
-                        Effect: Returns a list of RoomTopology associated to a customer organisation.
-                        \item Created for: UC19.5, U2 - easy applications
-
-            6. The primary actor carries out the topology configuration.
-                    // update the topology settings for the ApplicationInstance = which devices the application will use for different things + relationships between the devices
-                    CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
-                        Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
-                        \item Created for: UC19.6, U2 - easy applications
-                    CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
-                        Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
-                        \item Created for: UC19.6, U2 - easy applications
-                    ApplicationManager -> OtherDataDB:                        interface AppMgmt:          void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
-                        Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
-                        \item Created for: UC19.6, U2 - easy applications
-
-            7. The system loads the (mandatory and optional) roles to which end-users have to be (or can be) assigned for that application.
-                    CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:     List<UserRole> getMandatoryUserRoles(int applicationID)
-                        Effect: Returns a list of UserRoles that which need to be assigned in order for an ApplicationInstance to run.
-                        \item Created for: UC19.7, U2 - easy applications
-                    UserRolesManager -> OtherDataDB:                interface UserRoleMgmt: List<UserRole> getMandatoryUserRoles(int applicationID)
-                        Effect: Returns a list of UserRoles that which need to be assigned in order for an ApplicationInstance to run.
-                        \item Created for: UC19.7, U2 - easy applications
-                    CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:     List<UserRole> getOptionalUserRoles(int applicationID)
-                        Effect: Returns a list of UserRoles which can optionally be assigned for an ApplicationInstance.
-                        \item Created for: UC19.7, U2 - easy applications
-                    UserRolesManager -> OtherDataDB:                interface UserRoleMgmt: List<UserRole> getOptionalUserRoles(int applicationID)
-                        Effect: Returns a list of UserRoles which can optionally be assigned for an ApplicationInstance.
-                        \item Created for: UC19.7, U2 - easy applications
-
-            8. The system loads the end-users associated with the primary actor, presents them to the primary actor, and requests to assign end-users to the roles in the application.
-                    CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:     List<User> getEndUsers(int custOrgID)
-                        Effect: Returns a list of Users which are associated to a customer organisation.
-                        \item Created for: UC19.8, U2 - easy applications
-                    UserRolesManager -> OtherDataDB:                interface UserRoleMgmt: List<User> getEndUsers(int custOrgID)
-                        Effect: Returns a list of Users which are associated to a customer organisation.
-                        \item Created for: UC19.8, U2 - easy applications
-
-            9. The primary actor provides end-users for the roles.
-                    CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: updateUserRoles(int applicationInstanceID, map<int, int> usersAndRoles)
-                        Effect: Updates the UserRoles assigned to Users for a certain ApplicationInstance. 'usersAndRoles' maps User IDs to UserRole IDs.
-                        \item Created for: UC19.9, U2 - easy applications
-                    CustomerOrganisationFacade -> UserRolesManager:           interface RoleMgmt:         updateUserRoles(int applicationInstanceID, map<int, int> usersAndRoles)
-                        Effect: Updates the UserRoles assigned to Users for a certain ApplicationInstance. 'usersAndRoles' maps User IDs to UserRole IDs.
-                        \item Created for: UC19.9, U2 - easy applications
-                    UserRolesManager -> OtherDataDB:                          interface UserRoleMgmt:     updateUserRoles(int applicationInstanceID, map<int, int> usersAndRoles)
-                        Effect: Updates the UserRoles assigned to Users for a certain ApplicationInstance. 'usersAndRoles' maps User IDs to UserRole IDs.
-                        \item Created for: UC19.9, U2 - easy applications
-
-            10. The system asks the primary actor if this application should be considered a critical application (cf. P2 : Requests to the pluggable data database).
-                    CustomerOrganisationClient moves to the next page = form asking for criticality of app
-
-            11. The primary actor indicates the criticality of the application.
-                    CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: updateCriticality(int applicationInstanceID, bool isCritical)
-                        Effect: Updates the criticality of an ApplicationInstance.
-                        \item Created for: UC19.11, U2 - easy applications
-
-            12. The system registers the subscription and criticality of the application.
-                    CustomerOrganisationFacade -> SubscriptionManager:        interface SubscriptionMgmt: createSubscription(int custOrgID, int applicationInstanceID)
-                        Effect: Creates a subscription for a customer organisation to an ApplicationInstance. If the customer organisation is already subscribed to an older version of the the application, then the organisation is unsubscribed from that earlier version.
-                        \item Created for: UC19.12-13, U2 - easy applications
-                    SubscriptionManager -> OtherDataDB:                       interface SubscriptionMgmt: createSubscription(int custOrgID, int applicationInstanceID)
-                        Effect: Creates a subscription for a customer organisation to an ApplicationInstance. If the customer organisation is already subscribed to an older version of the the application, then the organisation is unsubscribed from that earlier version.
-                        \item Created for: UC19.12-13, U2 - easy applications
-                    CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             updateCriticality(int applicationInstanceID, bool isCritical)
-                        Effect: Updates the criticality of an ApplicationInstance.
-                        \item Created for: UC19.11, U2 - easy applications
-                    ApplicationManager -> OtherDataDB:                        interface AppMgmt:          updateCriticality(int applicationInstanceID, bool isCritical)
-                        Effect: Updates the criticality of an ApplicationInstance.
-                        \item Created for: UC19.11, U2 - easy applications
-
-            13. If the selected application is a newer version of an application to which the primary actor was previously subscribed,
-                the primary actor is automatically unsubscribed from that earlier version (cf. step 4 or UC20 : Unsubscribe from application).
-                    See step 12 method createSubscription
-
-            14. The system activates the application (Include: UC17 : Activate an application).
-                    CustomerOrganisationFacade -> ApplicationManager: interface Apps: activateApplication(int applicationInstanceID)
-                        Effect: Activates an ApplicationInstance.
-                        \item Created for: UC19.14, U2 - easy applications
+        % UC19: Subscribe to application
+        %     A customer organisation subscribes to an application via the dashboard.
+        %
+        %     REMARKS:
+        %         *) This use case concerns both subscribing to a new application, as well as upgrading an existing
+        %            application to a newer version (if this is not an automatic update, as indicated in UC22 : Upload an application).
+        %         *) Roles in an application can be used to indicate which end-user(s) should be notified in case of specific events.
+        %         *) It is possible to reassign end-users to roles later on. For simplicity, no separate use case is provided for this.
+        %
+        %     1. The primary actor indicates they want to subscribe to an application.
+        %             CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
+        %                 Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
+        %                 \item Created for: UC19.1, U2 - easy applications
+        %
+        %     2. The system looks up the available applications (i.e., those to which the primary actor is not yet subscribed,
+        %        or applications for which a newer version is available that requires a new subscription).
+        %             CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
+        %                 Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
+        %                 \item Created for: UC19.2, U2 - easy applications
+        %             SubscriptionManager -> ApplicationManager:            interface Apps:             List<Application> getApplications()
+        %                 Effect: Returns a list of applications in the system.
+        %                 \item Created for: UC19.2, U2 - easy applications
+        %             ApplicationManager -> OtherDataDB:                    interface AppMgmt:          List<Application> getApplications()
+        %                 Effect: Returns a list of applications in the system.
+        %                 \item Created for: UC19.2, U2 - easy applications
+        %             SubscriptionManager -> OtherDataDB:                   interface SubscriptionMgmt: List<Subscription> getSubscriptions(int custOrgID)
+        %                 Effect: Returns a list of subscriptions a customer organisation has.
+        %                 \item Created for: UC19.2, U2 - easy applications
+        %
+        %     3. The system presents the available applications to the primary actor, e.g. as a list or table,
+        %        thereby indicating whether it is a new application or an update.
+        %             = return value of getApplicationsToSubscribe
+        %
+        %     4. The primary actor selects the desired application.
+        %             CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: int subscribeToApplication(int custOrgID, int applicationID)
+        %                 Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
+        %                 \item Created for: UC19.4, U2 - easy applications
+        %             CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             int createNewApplicationInstance(int custOrgID, int applicationID)
+        %                 Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
+        %                 \item Created for: UC19.4, U2 - easy applications
+        %             ApplicationManager -> OtherDataDB:                        interface AppMgmt:          int createNewApplicationInstance(int custOrgID, int applicationID)
+        %                 Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
+        %                 \item Created for: UC19.4, U2 - easy applications
+        %
+        %     5. The system checks which topology configuration and selection of pluggable devices for the application are necessary
+        %        (e.g., to indicate in which rooms a heating control application should run)
+        %        and presents a topology allowing the primary actor to indicate their configuration.
+        %             CustomerOrganisationFacade -> ApplicationManager: interface Apps:         List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
+        %                 Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
+        %                 \item Created for: UC19.5, U2 - easy applications
+        %             ApplicationManager -> OtherDataDB:                interface AppMgmt:      List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
+        %                 Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
+        %                 \item Created for: UC19.5, U2 - easy applications
+        %             CustomerOrganisationFacade -> TopologyManager:    interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+        %                 Effect: Returns a list of RoomTopology associated to a customer organisation.
+        %                 \item Created for: UC19.5, U2 - easy applications
+        %             TopologyManager -> DeviceDB:                      interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+        %                 Effect: Returns a list of RoomTopology associated to a customer organisation.
+        %                 \item Created for: UC19.5, U2 - easy applications
+        %
+        %     6. The primary actor carries out the topology configuration.
+        %             // update the topology settings for the ApplicationInstance = which devices the application will use for different things + relationships between the devices
+        %             CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+        %                 Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
+        %                 \item Created for: UC19.6, U2 - easy applications
+        %             CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+        %                 Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
+        %                 \item Created for: UC19.6, U2 - easy applications
+        %             ApplicationManager -> OtherDataDB:                        interface AppMgmt:          void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+        %                 Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
+        %                 \item Created for: UC19.6, U2 - easy applications
+        %
+        %     7. The system loads the (mandatory and optional) roles to which end-users have to be (or can be) assigned for that application.
+        %             CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:     List<UserRole> getMandatoryUserRoles(int applicationID)
+        %                 Effect: Returns a list of UserRoles that which need to be assigned in order for an ApplicationInstance to run.
+        %                 \item Created for: UC19.7, U2 - easy applications
+        %             UserRolesManager -> OtherDataDB:                interface UserRoleMgmt: List<UserRole> getMandatoryUserRoles(int applicationID)
+        %                 Effect: Returns a list of UserRoles that which need to be assigned in order for an ApplicationInstance to run.
+        %                 \item Created for: UC19.7, U2 - easy applications
+        %             CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:     List<UserRole> getOptionalUserRoles(int applicationID)
+        %                 Effect: Returns a list of UserRoles which can optionally be assigned for an ApplicationInstance.
+        %                 \item Created for: UC19.7, U2 - easy applications
+        %             UserRolesManager -> OtherDataDB:                interface UserRoleMgmt: List<UserRole> getOptionalUserRoles(int applicationID)
+        %                 Effect: Returns a list of UserRoles which can optionally be assigned for an ApplicationInstance.
+        %                 \item Created for: UC19.7, U2 - easy applications
+        %
+        %     8. The system loads the end-users associated with the primary actor, presents them to the primary actor, and requests to assign end-users to the roles in the application.
+        %             CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:     List<User> getEndUsers(int custOrgID)
+        %                 Effect: Returns a list of Users which are associated to a customer organisation.
+        %                 \item Created for: UC19.8, U2 - easy applications
+        %             UserRolesManager -> OtherDataDB:                interface UserRoleMgmt: List<User> getEndUsers(int custOrgID)
+        %                 Effect: Returns a list of Users which are associated to a customer organisation.
+        %                 \item Created for: UC19.8, U2 - easy applications
+        %
+        %     9. The primary actor provides end-users for the roles.
+        %             CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateUserRoles(int applicationInstanceID, Map<int, int> usersAndRoles)
+        %                 Effect: Updates the UserRoles assigned to Users for a certain ApplicationInstance. 'usersAndRoles' maps User IDs to UserRole IDs.
+        %                 \item Created for: UC19.9, U2 - easy applications
+        %             CustomerOrganisationFacade -> UserRolesManager:           interface RoleMgmt:         void updateUserRoles(int applicationInstanceID, Map<int, int> usersAndRoles)
+        %                 Effect: Updates the UserRoles assigned to Users for a certain ApplicationInstance. 'usersAndRoles' maps User IDs to UserRole IDs.
+        %                 \item Created for: UC19.9, U2 - easy applications
+        %             UserRolesManager -> OtherDataDB:                          interface UserRoleMgmt:     void updateUserRoles(int applicationInstanceID, Map<int, int> usersAndRoles)
+        %                 Effect: Updates the UserRoles assigned to Users for a certain ApplicationInstance. 'usersAndRoles' maps User IDs to UserRole IDs.
+        %                 \item Created for: UC19.9, U2 - easy applications
+        %
+        %     10. The system asks the primary actor if this application should be considered a critical application (cf. P2 : Requests to the pluggable data database).
+        %             CustomerOrganisationClient moves to the next page = form asking for criticality of app
+        %
+        %     11. The primary actor indicates the criticality of the application.
+        %             CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateCriticality(int applicationInstanceID, bool isCritical)
+        %                 Effect: Updates the criticality of an ApplicationInstance.
+        %                 \item Created for: UC19.11, U2 - easy applications
+        %
+        %     12. The system registers the subscription and criticality of the application.
+        %             CustomerOrganisationFacade -> SubscriptionManager:        interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID)
+        %                 Effect: Creates a subscription for a customer organisation to an ApplicationInstance. If the customer organisation is already subscribed to an older version of the the application, then the organisation is unsubscribed from that earlier version.
+        %                 \item Created for: UC19.12-13, U2 - easy applications
+        %             SubscriptionManager -> OtherDataDB:                       interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID)
+        %                 Effect: Creates a subscription for a customer organisation to an ApplicationInstance. If the customer organisation is already subscribed to an older version of the the application, then the organisation is unsubscribed from that earlier version.
+        %                 \item Created for: UC19.12-13, U2 - easy applications
+        %             CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             void updateCriticality(int applicationInstanceID, bool isCritical)
+        %                 Effect: Updates the criticality of an ApplicationInstance.
+        %                 \item Created for: UC19.11, U2 - easy applications
+        %             ApplicationManager -> OtherDataDB:                        interface AppMgmt:          void updateCriticality(int applicationInstanceID, bool isCritical)
+        %                 Effect: Updates the criticality of an ApplicationInstance.
+        %                 \item Created for: UC19.11, U2 - easy applications
+        %
+        %     13. If the selected application is a newer version of an application to which the primary actor was previously subscribed,
+        %         the primary actor is automatically unsubscribed from that earlier version (cf. step 4 or UC20 : Unsubscribe from application).
+        %             See step 12 method createSubscription
+        %
+        %     14. The system activates the application (Include: UC17 : Activate an application).
+        %             CustomerOrganisationFacade -> ApplicationManager: interface Apps: void activateApplication(int applicationInstanceID)
+        %                 Effect: Activates an ApplicationInstance.
+        %                 \item Created for: UC19.14, U2 - easy applications
 
 \subsection{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions
@@ -608,153 +607,6 @@
     \subsubsection{UserRolesManager}
         \begin{itemize}
             \item RoleMgmt
-        \end{itemize}
-
-
-    \subsubsection{ApplicationManager}
-        \begin{itemize}
-            \item OLD AppMgmt, last defined in section \ref{add1-interfaces}
-                \begin{itemize}
-                    \item \texttt{void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)}
-                        \begin{itemize}
-                			\item Effect: Checks and activates applications which can now execute again. Finds relevant applications through the customers of the given infrastructureOwnerID.
-                			\item Created for: UC17, UC6.3 - reintroduced device
-                        \end{itemize}
-                \end{itemize}
-            \item IOAppMgmt
-        \end{itemize}
-
-    \subsubsection{DeviceDB}
-        \begin{itemize}
-            \item NEW DeviceMgmt
-                \begin{itemize}
-                    \item \texttt{int addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)}
-                        \begin{itemize}
-                            \item Effect: Adds a new mote in the DeviceDB along with an IP address and a reference to a gateway. Returns the DB id for the mote.
-                            \item Created for: UC4.3, U2 - easy mote installation
-                        \end{itemize}
-                    \item \texttt{void reactivateMote(int moteID)}
-                        \begin{itemize}
-                            \item Effect: Changes the status of the mote with DB id 'moteID' to 'active'.
-                            \item Created for: U2 - Reintroducing a previously known mote should not require any conguration.
-                        \end{itemize}
-                    \item \texttt{void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<string, string> defaultConfigurations, int moteID)}
-                        \begin{itemize}
-                            \item Effect: Adds a new pluggable device in the DeviceDB and adds a reference to a mote. The device's status is 'uninitialised' by default and it's current configurations (which are now the default configurations) are stored as well. If the device already exists, removes the data first (in case the device is plugged into a different mote or on a different network).
-                            \item Created for: UC6.3, U2 - easy pluggable device installation
-                        \end{itemize}
-                    \item \texttt{void reactivateDevice(PluggableDeviceID id)}
-                        \begin{itemize}
-                            \item Effect: Changes the status of a pluggable device to 'active'.
-                            \item Created for: UC6.3 - reintroduced device
-                        \end{itemize}
-                    \item \texttt{Map<string, string> getConfigDB(PluggableDeviceID pID)}
-                        \begin{itemize}
-                            \item Effect: Gets the last set configurations of a pluggable device from the DeviceDB.
-                            \item Created for: UC6.3 - reintroduced device
-                        \end{itemize}
-                \end{itemize}
-
-        	\item NEW TopologyMgmt
-            	\begin{itemize}
-            		\item \texttt{void addMote(int moteID, int infrastructureOwnerID, int gatewayID)}
-                		\begin{itemize}
-                            \item Effect: Adds a new mote to a topology of an infrastructure owner. The mote is linked to a gateway and gets status 'unplaced' by default.
-                			\item Created for: UC4.3, U2 - easy mote installation
-                		\end{itemize}
-                    \item \texttt{void reactivateMote(int moteID)}
-                        \begin{itemize}
-                            \item Effect: Changes the status of the mote in the topology to 'placed'. The location of the mote is unchanged, it has already been set.
-                            \item Created for: U2 - Reintroducing a previously known mote should not require any conguration.
-                        \end{itemize}
-                    \item \texttt{void addDevice(PluggableDeviceID id, int moteID)}
-                        \begin{itemize}
-                            \item Effect: Adds a new pluggable device to the topology of the infrastructure owner and links it to a mote. The device gets the mote's location by default. If the device is already linked to another mote, overwrites that link.
-                            \item Created for: UC6.3, U2 - easy pluggable device installation
-                        \end{itemize}
-                    \item \texttt{void reactivateDevice(PluggableDeviceID id)}
-                        \begin{itemize}
-                            \item Effect: Changes the status of a pluggable device in the topology to 'placed'.
-                            \item Created for: UC6.3 - reintroduced device
-                        \end{itemize}
-            	\end{itemize}
-        \end{itemize}
-
-    \subsubsection{GatewayFacade}
-        \begin{itemize}
-            \item OLD DeviceMgmt, last defined in section \ref{add1-interfaces}
-            \begin{itemize}
-                \item \texttt{int addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)}
-                    \begin{itemize}
-                        \item Effect: Adds a new mote in the DeviceDB along with an IP address and a reference to a gateway. Returns the DB id for the mote. \\
-                              Adds a new mote to the topology of the infrastructure owner. The mote is linked to a gateway and gets status 'unplaced' by default. \\
-                              Notifies the infrastructure owner that owns the gateway that a new mote is available for conguration in the topology.
-                        \item Created for: UC4.3, U2 - easy mote installation
-                    \end{itemize}
-                \item \texttt{void reactivateMote(int moteID)}
-                    \begin{itemize}
-                        \item Effect: Changes the status of the mote with DB id 'moteID' to 'active'. \\
-                              Changes the status of the mote in the topology to 'placed'. \\
-                              Notifies the infrastructure owner that owns the gateway that the mote was detected and reactivated.
-                        \item Created for: U2 - Reintroducing a previously known mote should not require any conguration.
-                    \end{itemize}
-                \item \texttt{void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<string, string> defaultConfigurations, int moteID)}
-                    \begin{itemize}
-                        \item Effect: Adds a new pluggable device in the DeviceDB and adds a reference to a mote. The device's status is 'uninitialised' by default and it's current configurations (which are now the default configurations) are stored as well. If the device already exists, removes the data first (in case the device is plugged into a different mote or on a different network). \\
-                              Adds a new pluggable device to the topology of the infrastructure owner and links it to a mote. The device gets the mote's location by default. If the device is already linked to another mote, overwrites that link. \\
-                              Notifies the infrastructure owner that owns the gateway that the pluggable device was detected.
-                        \item Created for: UC6.3, U2 - easy pluggable device installation
-                    \end{itemize}
-                \item \texttt{void reactivateDevice(PluggableDeviceID id)}
-                    \begin{itemize}
-                        \item Effect: Changes the status of a pluggable device to 'active'. \\
-                              Changes the status of a pluggable device in the topology to 'placed'. \\
-                              Notifies the infrastructure owner that owns the gateway that the pluggable device was detected and reactivated.
-                        \item Created for: UC6.3 - reintroduced device
-                    \end{itemize}
-                \item \texttt{Map<string, string> getConfigDB(PluggableDeviceID pID)}
-                    \begin{itemize}
-                        \item Effect: Gets the last set configurations of a pluggable device from the DeviceDB.
-                        \item Created for: UC6.3 - reintroduced device
-                    \end{itemize}
-            \end{itemize}
-
-            \item OLD AppMgmt, last defined in section \ref{add1-interfaces}
-                \begin{itemize}
-                    \item \texttt{void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)}
-                        \begin{itemize}
-                			\item Effect: Forwards this request to the ApplicationManager. \\
-                                  Used by DeviceManager after connecting a pluggable device.
-                			\item Created for: UC17 \\  UC6.3 - reintroduced device
-                        \end{itemize}
-                \end{itemize}
-        \end{itemize}
-
-    \subsubsection{TopologyManager}
-        \begin{itemize}
-        	\item NEW TopologyMgmt
-        	\begin{itemize}
-        		\item \texttt{void addMote(int moteID, int infrastructureOwnerID, int gatewayID)}
-            		\begin{itemize}
-                        \item Effect: Adds a new mote to a topology of an infrastructure owner. The mote is linked to a gateway and gets status 'unplaced' by default.
-            			\item Created for: UC4.3, U2 - easy mote installation
-            		\end{itemize}
-                \item \texttt{void reactivateMote(int moteID)}
-                    \begin{itemize}
-                        \item Effect: Changes the status of the mote in the topology to 'placed'. The location of the mote is unchanged, it has already been set.
-                        \item Created for: U2 - Reintroducing a previously known mote should not require any conguration.
-                    \end{itemize}
-                \item \texttt{void addDevice(PluggableDeviceID id, int moteID)}
-                    \begin{itemize}
-                        \item Effect: Adds a new pluggable device to the topology of the infrastructure owner and links it to a mote. The device gets the mote's location by default. If the device is already linked to another mote, overwrites that link.
-                        \item Created for: UC6.3, U2 - easy pluggable device installation
-                    \end{itemize}
-                \item \texttt{void reactivateDevice(PluggableDeviceID id)}
-                    \begin{itemize}
-                        \item Effect: Changes the status of a pluggable device in the topology to 'placed'.
-                        \item Created for: UC6.3 - reintroduced device
-                    \end{itemize}
-        	\end{itemize}
         \end{itemize}
 
 
