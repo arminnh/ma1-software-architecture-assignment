@@ -3,11 +3,8 @@ FOR PROJECT DEFENSE: best is 25/05 - 27/05,
 
 In all decompositions check decisions important for deployment and add some where we forgot
 
-
-Update decomposition 3: Interfaces for child modules
-decomposition 3: update DB queries: no Query objects
-rename Databse -> OtherDataDB
-
+Need to do this somehwere, in a later use case probably?
+    If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
 
 U2:
     These conversions should be possible per application. For example, one application might be able to only use temperature measurement in degrees Celsius, whereas another application (also) uses degrees Fahrenheit.
