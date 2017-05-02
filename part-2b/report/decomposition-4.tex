@@ -151,37 +151,47 @@ and security.
             1. An application indicates that it wants one or more pluggable devices to perform an actuation command
                 from client application:
                     ApplicationClient -> ApplicationFacade:           interface AppMgmt:   sendCommand(List<PluggableDeviceID> devices, string command)
-                        Effect:
-                        \item Created for:
+                        Effect: Sends command from application to the pluggable device.
+                        \item Created for: UC12.1
                     ApplicationFacade -> ActuationCommandConstructor: interface Actuation: sendCommand(List<PluggableDeviceID> devices, string command)
-                        Effect:
-                        \item Created for:
+                        Effect: Sends command from application to the pluggable device.
+                        \item Created for:UC12.1
 
                 from application on online service:
-                    ApplicationContainerManager:
+                    ApplicationContainer -> ApplicationContainerManager: interface AppRequests
 
                 from application on gateway:
 
             2. The system
                 -constructs the actuation command message according to the specific formatting syntax for the involved pluggable device(s)
                     ActuationCommandConstructor/ApplicationManager -> ApplicationManager: interface X:
-                                                void sendCommand(PluggableDeviceID device, int moteID, Map<Pluggable,String> data)
-                                                   Json message createData(PluggableDeviceID device, int moteID, Map<String,String> data)
+                      void sendCommand(PluggableDeviceID device, int moteID, Map<Pluggable,String> data)
+                        Effect: Sends command from application to pluggable device.
+                        \item Created for: UC12.2
+                    Json message createData(PluggableDeviceID device, int moteID, Map<String,String> data)
+                        Effect: Constructs actuation command message for involved pluggable device(s)
+                        \item Created for: UC12.2
+                   
 
                 -sends the command message to the intended pluggable device(s).
                     ApplicationManager -> GatewayFacade: interface AppDeviceMgmt:
-                                                            void sendActuationCommand(List<PluggableDeviceID> actuators, List<string> commands)
+                                          void sendActuationCommand(List<PluggableDeviceID> actuators, List<string> commands)
+                         Effect: Sends command to the pluggable device
+                        \item Created for: UC12.2
+                   
 
 
             3. The pluggable device(s) receive(s) the actuation command message and perform(s) the contained actuation command.
                     GatewayFacade -> MoteFacade:         interface DeviceMgmt: void sendActuationCommand(PluggableDeviceID device, string commandName)
+                    Effect: Sends command from GatewayFacade to Mote for the pluggable device
+                        \item Created for: UC12.2
                     MoteFacade -> PluggableDeviceFacade: interface Actuate:    void sendActuationCommand(string commandName)
 
 
             Find the gateway to send the commands  to:
                 ApplicationManager -> OtherDataDB: interface AppMgmt: IPAddress getDeviceGateway(PluggableDeviceID device)
                     Effect: Returns the IP address of the gateway that a pluggable device is connected to
-                    \item Created for: UC12
+                    \item Created for: UC12 Remarks
 
 
         UC13:
@@ -243,14 +253,52 @@ and security.
 
         UC26:
             1. The primary actor indicates it wants to send an application command or message to an external
-                front-end and specifies the destination (e.g., as an application identier for SIoTIP applications,
+                front-end and specifies the destination (e.g., as an application identifier for SIoTIP applications,
                 or a hostname and port for external systems).
-            2. The system checks that the primary actor is allowed to send to the specied destination.
+                Map<String,String> destination = type of destination, value
+                Map<String,String> requestType = Message/Command, value
+                GWApplicationContainer -> GWApplicationContainerManager: interface AppRequests:
+                                                   void sendRequest(Map<String,String> destination, Map<String,String> requestType)
+                       Effect: Command or message is sent to  to an external front-end
+                       \item Created for: UC26.1
+                GWApplicationContainerManager -> GWActuationCommandConstructor: interface AppRequests:
+                                                      void sendRequest(Map<String,String> destination, Map<String,String> requestType)
+                         Effect: Command or message is sent to  to an external front-end
+                       \item Created for: UC26.1         
+            2. The system checks that the primary actor is allowed to send to the specified destination.
+            AccesRightManager???
             3. If the primary actor is allowed to send to the destination, and if the destination is another
                 application, the system delivers the application command to that destination (Include: UC27:
                 Receive application command or message from external front-end).
+                TODO: add containers and monitor to gatewayfacade
+                GWActuationCommandConstructor -> ActuationCommandConstructor: interaface Actuation
+                                        void sendRequest(Map<String,String> destination,Map<String,String> requestType)
+                See UC27
             4. The system informs the primary actor that the message was sent.
-
+       
+       UC27:     
+        1. The system receives an application command or message for a SIoTIP application.
+            ActuationCommandConstructor -> ApplicationContainerManager: interface AppRequests:
+                                                 void rcvApplicationRequest(Map<String,String> destination,Map<String,String> requestType)
+                   Effect: ApplicationContainerManager receives message or application command
+                   \item Created for: UC27.1
+            
+        2. The system checks that the destination is available.
+            ApplicationContainerManager -> ApplicationContainerMonitor: interface Availability: 
+                                                bool checkDestination(Map<String,String>  destination)
+                   Effect: Return true if destionation is available
+                   \item Created for: UC27.2
+                   
+            ApplicationContainerMonitor -> ApplicationContainer: interface AppInstanceMgmt: 
+            Map<Parameters,String> checkApplicationAvailability(AppInstanceID id)
+                    Effect: Return parameters and their values of application
+                   \item Created for: UC27.2
+            
+        3. If the destination is available, the system delivers the message to the destination application.
+            ApplicationContainerManager -> ApplicationContainer: interface AppRequests
+                               void rcvApplicationRequest(Map<String,String> destination,Map<String,String> requestType)
+                   Effect: Receive message or application command
+                   \item Created for: UC27.3
 
 \subsection{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions
@@ -259,7 +307,16 @@ and security.
     the components can be found under chapter \ref{ch:elements-datatypes}. \\
 
     \begin{itemize}
-        \item Component: (Relevant QA or UC)
+        \item Component: ApplicationClient
+        \item Component: ApplicationFacade
+        \item Component: ActuationCommandConstructor
+        \item Component: ApplicationContainer
+        \item Component: ApplicationContainerManager
+        \item Component: ApplicationContainerMonitor
+        \item Component: GWActuationCommandConstructor
+        \item Component: GWApplicationContainer
+        \item Component: GWApplicationContainerManager
+        \item Component: GWApplicationContainerMonitor
     \end{itemize}
 
 
@@ -268,14 +325,46 @@ and security.
     in the section above. Detailed information about each interface and
     its methods can be found under chapter \ref{ch:elements-datatypes}. \\
 
-    \subsubsection{Component}
+    \subsubsection{ActuationCommandConstructor}
         \begin{itemize}
-            \item Interface
+            \item Actuation
+        \end{itemize}
+    \subsubsection{GWActuationCommandConstructor}
+        \begin{itemize}
+            \item AppRequests
+        \end{itemize}
+   \subsubsection{ApplicationContainer}
+        \begin{itemize}
+            \item AppRequests
+        \end{itemize}
+    \subsubsection{ApplicationContainerManager}
+        \begin{itemize}
+            \item AppRequests
+        \end{itemize}
+    \subsubsection{GWApplicationContainerManager}
+        \begin{itemize}
+            \item AppRequests
+        \end{itemize}
+    \subsubsection{ApplicationFacade}
+        \begin{itemize}
+            \item AppMgmt
+        \end{itemize}
+    \subsubsection{ApplicationFacade}
+        \begin{itemize}
+            \item DeviceMgmt
+        \end{itemize}
+    \subsubsection{ApplicationFacade}
+        \begin{itemize}
+            \item TopologyOverview
+        \end{itemize}
+    \subsubsection{PluggableDeviceFacade}
+        \begin{itemize}
+            \item Actuate
         \end{itemize}
 
 \subsection{Data type definitions}
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}
-        \item DateTime: Represents an instant in time, typically expressed as a date and time of day.
+        \item Parameter: Parameter of application e.g. usage of memory, handle requests...
     \end{itemize}
