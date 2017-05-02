@@ -1,4 +1,4 @@
-%%% element catalog, generated on Tue May 02 10:17:09 CEST 2017
+%%% element catalog, generated on Tue May 02 10:42:18 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -102,7 +102,7 @@ updating access rights for customer organisations, etc.
 	\end{description}
 \subsection{ApplicationContainer}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~This component contains sanbox environments for application instances to execute in.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppInstanceMgmt}}
@@ -197,11 +197,11 @@ triggers notifications to be generated, ...
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeHeartbeat}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataConverterDataConversion}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteFacadeDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceOtherFunctionality2Other}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataConverterDataConversion}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteFacadeDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{GWApplicationContainerManager}\label{comp:GatewayGatewayGWApplicationContainerManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~This component contains sanbox environments for application instances to execute in.
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}
@@ -270,31 +270,15 @@ of connected pluggable devices in the heartbeats.
 		\item[Responsibility:]~General database for data. For example, storage of data about notifications.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBInvoiceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBIOMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBNotificationMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBOther}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBSubscriptionMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBUserRoleMgmt}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBInvoiceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBIOMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBNotificationMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBSubscriptionMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBUserRoleMgmt}}
 		\item[Required interfaces:]~None		
-	\end{description}
-\subsection{OtherFunctionality1}\label{comp:OnlineServiceOnlineServiceOtherFunctionality1}
-	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
-		\item[Super-components:]~None
-		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceOtherFunctionality2Other}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBOther}}, \iconrequired{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBOther}}		
-	\end{description}
-\subsection{OtherFunctionality2}\label{comp:OnlineServiceOnlineServiceOtherFunctionality2}
-	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
-		\item[Super-components:]~None
-		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceOtherFunctionality2Other}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBOther}}, \iconrequired{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBOther}}		
 	\end{description}
 \subsection{PluggableDeviceDataDB}\label{comp:PluggableDeviceDatabasePluggableDeviceDataDB}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Database dedicated to pluggable device data only.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBDeviceData}}, \iconprovided{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBOther}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBDeviceData}}
 		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{PluggableDeviceFacade}\label{comp:PuggableDevicePluggableDeviceFacade}
@@ -1123,33 +1107,6 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
 \item Created for: UC14, Av3: notifications
         \end{itemize}
     \end{itemize}
-    \end{description}
-
-  %%%%%%%% Other
-  \subsection{Other}\label{int:PluggableDeviceDatabasePluggableDeviceDataDBOther}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PluggableDeviceDatabasePluggableDeviceDataDB}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceOtherFunctionality1}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceOtherFunctionality2}}
-      \item[Operations:] ~
-% no operations
-    \end{description}
-
-  %%%%%%%% Other
-  \subsection{Other}\label{int:OtherDataDatabaseOtherDataDBOther}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherDataDatabaseOtherDataDB}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceOtherFunctionality1}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceOtherFunctionality2}}
-      \item[Operations:] ~
-% no operations
-    \end{description}
-
-  %%%%%%%% Other
-  \subsection{Other}\label{int:OnlineServiceOnlineServiceOtherFunctionality2Other}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceOtherFunctionality1}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceOtherFunctionality2}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
-      \item[Operations:] ~
-% no operations
     \end{description}
 
   %%%%%%%% RequestData
