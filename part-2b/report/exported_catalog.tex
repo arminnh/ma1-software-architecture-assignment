@@ -1,4 +1,4 @@
-%%% element catalog, generated on Tue May 02 01:24:55 CEST 2017
+%%% element catalog, generated on Tue May 02 10:17:09 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -76,7 +76,9 @@
 \section{Components}\label{sec:components}
 \subsection{AccessRightsManager}\label{comp:OnlineServiceOnlineServiceAccessRightsManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Responsible for all functionality related to access rights to pluggable devices.
+E.g. retrieving the access rights a customer organisation has for a device,
+updating access rights for customer organisations, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAccessRightsManagerAccessRightsMgmt}}
@@ -108,7 +110,7 @@
 	\end{description}
 \subsection{ApplicationContainerManager}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~This component contains sanbox environments for application instances to execute in.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~None
@@ -140,7 +142,7 @@
 	\end{description}
 \subsection{CustomerOgranisationClient}\label{comp:CustomerOgranisationClient}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Represents the client used by a customer organisation. This is the user's dashboard.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~None
@@ -148,7 +150,7 @@
 	\end{description}
 \subsection{CustomerOrganisationFacade}\label{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Acts as an access point for CustomerOrganisationClients and handles all functionality that can be done by customer organisations.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeSubscriptionMgmt}}
@@ -172,7 +174,7 @@
 	\end{description}
 \subsection{DeviceDB}\label{comp:DeviceDatabaseDeviceDB}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Contains all information related to devices in the system, but not pluggable device data such as sensor data or actuation statuses. The data includes information about pluggable devices, motes, gateways, topologies, access rights, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBAccessRightsMgmt}}, \iconprovided{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBIODeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBTopologyMgmt}}
@@ -199,7 +201,7 @@ triggers notifications to be generated, ...
 	\end{description}
 \subsection{GWApplicationContainerManager}\label{comp:GatewayGatewayGWApplicationContainerManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~This component contains sanbox environments for application instances to execute in.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}
@@ -207,7 +209,7 @@ triggers notifications to be generated, ...
 	\end{description}
 \subsection{InfrastructreOwnerClient}\label{comp:InfrastructreOwnerClient}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Represents the client used by an infrastructure owner. This is the user's dashboard.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~None
@@ -215,7 +217,7 @@ triggers notifications to be generated, ...
 	\end{description}
 \subsection{InfrastructureOwnerFacade}\label{comp:OnlineServiceOnlineServiceInfrastructureOwnerFacade}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Acts as an access point for InfrastructureOwnerClients and handles all functionality that can be done by infrastructure owners.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeAccessRights}}
@@ -223,7 +225,7 @@ triggers notifications to be generated, ...
 	\end{description}
 \subsection{InfrastructureOwnerManager}\label{comp:OnlineServiceOnlineServiceInfrastructureOwnerManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Responsible for all functionality related to infrastructure owners. E.g. looking up the devices they own, retrieving a list of customer organisations that they are associated to, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerManagerIOMgmt}}
@@ -231,7 +233,8 @@ triggers notifications to be generated, ...
 	\end{description}
 \subsection{InvoiceManager}\label{comp:OnlineServiceOnlineServiceInvoiceManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Responsible for all functionality related to access rights to invoicing.
+E.g. creating invoices.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInvoiceManagerInvoiceMgmt}}
@@ -304,7 +307,7 @@ of connected pluggable devices in the heartbeats.
 	\end{description}
 \subsection{SubscriptionManager}\label{comp:OnlineServiceOnlineServiceSubscriptionManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Responsible for all functionality related to access rights to subscriptions. E.g. retrieving the applications that a customer organisation can subscribe to, creating new subscriptions to ApplicationInstances, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceSubscriptionManagerSubscriptionMgmt}}
@@ -312,7 +315,7 @@ of connected pluggable devices in the heartbeats.
 	\end{description}
 \subsection{TopologyManager}\label{comp:OnlineServiceOnlineServiceTopologyManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Responsible for all functionality related to topology. E.g. Adding a new mote to the topology of an infrastructure, checking whether or not all devices used by an application are active in the topology, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}
@@ -320,7 +323,7 @@ of connected pluggable devices in the heartbeats.
 	\end{description}
 \subsection{UserRolesManager}\label{comp:OnlineServiceOnlineServiceUserRolesManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Responsible for all functionality related to access rights to user roles. E.g. retrieving the user roles that are mandatory for a certain application, updating the roles assigned to users, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserRolesManagerRoleMgmt}}
@@ -475,7 +478,7 @@ TODO: update this with Relationship type?
            \item Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
 \item Created for: UC19.4, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{Application}}}\textgreater{} getApplications()}
+      \item \textsf{List\textless{}\ref{data:DataTypesApplication}\textgreater{} getApplications()}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of applications in the system.
 \item Created for: UC19.2, U2 - easy applications
@@ -495,7 +498,7 @@ TODO: update this with Relationship type?
            \item Effect: Returns the installation instructions of a certain application. If there are no installation instructions set, returns an empty string.
 \item Created for: UC17.6, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{RoomTopology}}}\textgreater{} getNecessaryDevicesAndTopologyConfigurations(int applicationID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesRoomTopology}\textgreater{} getNecessaryDevicesAndTopologyConfigurations(int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
 \item Created for: UC19.5, U2 - easy applications
@@ -505,7 +508,7 @@ TODO: update this with Relationship type?
            \item Effect: Updates an application in the database (e.g. change state to 'inactive').
 \item Created for: UC18, Av3: automatic suspension/reactivation of applications.
         \end{itemize}
-      \item \textsf{void updateApplicationDevicesSettings(int applicationInstanceID, List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices, List\textless{}{\colorbox{red!30}{\underline{Relationships}}}\textgreater{} relationships)}
+      \item \textsf{void updateApplicationDevicesSettings(int applicationInstanceID, List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices, List\textless{}\ref{data:DataTypesRelationship}\textgreater{} relationships)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
 \item Created for: UC19.6, U2 - easy applications
@@ -575,7 +578,7 @@ TODO: update this with Relationship type?
            \item Effect: Deactivates a running instance of an application.
 \item Created for: UC18, Av3: automatic suspension/reactivation of applications.
         \end{itemize}
-      \item \textsf{void updateApplicationDevicesSettings(int applicationInstanceID, List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices, List\textless{}{\colorbox{red!30}{\underline{Relationships}}}\textgreater{} relationships)}
+      \item \textsf{void updateApplicationDevicesSettings(int applicationInstanceID, List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices, List\textless{}\ref{data:DataTypesRelationship}\textgreater{} relationships)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
 \item Created for: UC19.6, U2 - easy applications
@@ -609,12 +612,12 @@ TODO: update this with Relationship type?
            \item Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
 \item Created for: UC19.4, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{Application}}}\textgreater{} getApplications()}
+      \item \textsf{List\textless{}\ref{data:DataTypesApplication}\textgreater{} getApplications()}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of applications in the system.
 \item Created for: UC19.2, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{RoomTopology}}}\textgreater{} getNecessaryDevicesAndTopologyConfigurations(int applicationID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesRoomTopology}\textgreater{} getNecessaryDevicesAndTopologyConfigurations(int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
 \item Created for: UC19.5, U2 - easy applications
@@ -782,7 +785,7 @@ TODO: update this with Relationship type?
            \item Effect: Adds a new pluggable device in the \vpett{\nameref{comp:DeviceDatabaseDeviceDB}} and adds a reference to a mote. The device's status is 'uninitialised' by default and it's current configurations (which are now the default configurations) are stored as well. If the device already exists, removes the data first (in case the device is plugged into a different mote or on a different network).
 \item Created for: UC6.3, U2 - easy pluggable device installation
         \end{itemize}
-      \item \textsf{int addMote(\ref{data:DataTypesMoteInfo} mote, int gatewayID, {\colorbox{red!30}{\underline{IPAddress}}} moteIPAddress)}
+      \item \textsf{int addMote(\ref{data:DataTypesMoteInfo} mote, int gatewayID, \ref{data:DataTypesIPAddress} moteIPAddress)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Adds a new mote in the \vpett{\nameref{comp:DeviceDatabaseDeviceDB}} along with an IP address and a reference to a gateway. Returns the DB id for the mote.
 \item Created for: UC4.3, U2 - easy mote installation
@@ -802,7 +805,7 @@ TODO: update this with Relationship type?
            \item Effect: Changes the status of the mote with DB id 'moteID' to 'active'.
 \item Created for: U2 - Reintroducing a previously known mote should not require any conguration.
         \end{itemize}
-      \item \textsf{void registerGateway(int gatewayID, {\colorbox{red!30}{\underline{IPAddress}}} address)}
+      \item \textsf{void registerGateway(int gatewayID, \ref{data:DataTypesIPAddress} address)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Sets a gateway's status to 'active' and updates its IP address.
 \item Created for: U2 - gateway installation
@@ -855,7 +858,7 @@ Adds a new pluggable device to the topology of the infrastructure owner and link
 Notifies the infrastructure owner that owns the gateway that the pluggable device was detected.
 \item Created for: UC6.3, U2 - easy pluggable device installation
         \end{itemize}
-      \item \textsf{int addMote(\ref{data:DataTypesMoteInfo} mote, int gatewayID, {\colorbox{red!30}{\underline{IPAddress}}} moteIPAddress)}
+      \item \textsf{int addMote(\ref{data:DataTypesMoteInfo} mote, int gatewayID, \ref{data:DataTypesIPAddress} moteIPAddress)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Adds a new mote in the \vpett{\nameref{comp:DeviceDatabaseDeviceDB}} along with an IP address and a reference to a gateway. Returns the DB id for the mote. \\
 Adds a new mote to the topology of the infrastructure owner. The mote is linked to a gateway and gets status 'unplaced' by default. \\
@@ -1194,22 +1197,22 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
            \item Effect: Returns true if all mandatory UserRoles for the application have been assigned to users. Finds the relevant customer organisations through the ApplicationInstance.
 \item Created for: UC17.1, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{User}}}\textgreater{} getEndUsers(int custOrgID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesUser}\textgreater{} getEndUsers(int custOrgID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of Users which are associated to a customer organisation.
 \item Created for: UC19.8, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{UserRole}}}\textgreater{} getMandatoryUserRoles(int applicationID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesUserRole}\textgreater{} getMandatoryUserRoles(int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of UserRoles that which need to be assigned in order for an ApplicationInstance to run.
 \item Created for: UC19.7, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{UserRole}}}\textgreater{} getOptionalUserRoles(int applicationID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesUserRole}\textgreater{} getOptionalUserRoles(int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of UserRoles which can optionally be assigned for an ApplicationInstance.
 \item Created for: UC19.7, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{User}}}\textgreater{} getUsersWithRoles(int applicationInstanceID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesUser}\textgreater{} getUsersWithRoles(int applicationInstanceID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of Users associated to an ApplicationInstance that were assigned UserRoles.
 \item Created for: UC17.6, U2 - easy applications
@@ -1249,7 +1252,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:CustomerOgranisationClient}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{Map\textless{}{\colorbox{red!30}{\underline{Application}}}, \ref{data:DataTypesSubscription}\textgreater{} getApplicationsToSubscribe(int custOrgID)}
+      \item \textsf{Map\textless{}\ref{data:DataTypesApplication}, \ref{data:DataTypesSubscription}\textgreater{} getApplicationsToSubscribe(int custOrgID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
 \item Created for: UC19.1, U2 - easy applications
@@ -1259,7 +1262,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
            \item Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
 \item Created for: UC19.4, U2 - easy applications
         \end{itemize}
-      \item \textsf{void updateApplicationDevicesSettings(int applicationInstanceID, List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices, List\textless{}{\colorbox{red!30}{\underline{Relationships}}}\textgreater{} relationships)}
+      \item \textsf{void updateApplicationDevicesSettings(int applicationInstanceID, List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices, List\textless{}\ref{data:DataTypesRelationship}\textgreater{} relationships)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
 \item Created for: UC19.6, U2 - easy applications
@@ -1289,7 +1292,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
            \item Effect: Creates a subscription for a customer organisation to an ApplicationInstance. If the customer organisation is already subscribed to an older version of the the application, then the organisation is unsubscribed from that earlier version.
 \item Created for: UC19.12-13, U2 - easy applications
         \end{itemize}
-      \item \textsf{Map\textless{}{\colorbox{red!30}{\underline{Application}}}, \ref{data:DataTypesSubscription}\textgreater{} getApplicationsToSubscribe(int custOrgID)}
+      \item \textsf{Map\textless{}\ref{data:DataTypesApplication}, \ref{data:DataTypesSubscription}\textgreater{} getApplicationsToSubscribe(int custOrgID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
 \item Created for: UC19.2, U2 - easy applications
@@ -1319,7 +1322,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
            \item Effect: Returns true if all pluggable devices in the given list have status 'placed' in the topology.
 \item Created for: UC17.2, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{RoomTopology}}}\textgreater{} getTopology(int custOrgID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesRoomTopology}\textgreater{} getTopology(int custOrgID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of RoomTopology associated to a customer organisation.
 \item Created for: UC19.5, U2 - easy applications
@@ -1359,7 +1362,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
            \item Effect: Returns true if all pluggable devices in the given list have status 'placed' in the topology.
 \item Created for: UC17.2, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{RoomTopology}}}\textgreater{} getTopology(int custOrgID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesRoomTopology}\textgreater{} getTopology(int custOrgID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of RoomTopology associated to a customer organisation.
 \item Created for: UC19.5, U2 - easy applications
@@ -1398,22 +1401,22 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
            \item Effect: Returns true if all mandatory UserRoles for the application have been assigned to users. Finds the relevant customer organisations through the ApplicationInstance.
 \item Created for: UC17.1, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{User}}}\textgreater{} getEndUsers(int custOrgID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesUser}\textgreater{} getEndUsers(int custOrgID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of Users which are associated to a customer organisation.
 \item Created for: UC19.8, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{UserRole}}}\textgreater{} getMandatoryUserRoles(int applicationID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesUserRole}\textgreater{} getMandatoryUserRoles(int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of UserRoles that which need to be assigned in order for an ApplicationInstance to run.
 \item Created for: UC19.7, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{UserRole}}}\textgreater{} getOptionalUserRoles(int applicationID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesUserRole}\textgreater{} getOptionalUserRoles(int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of UserRoles which can optionally be assigned for an ApplicationInstance.
 \item Created for: UC19.7, U2 - easy applications
         \end{itemize}
-      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{User}}}\textgreater{} getUsersWithRoles(int applicationInstanceID)}
+      \item \textsf{List\textless{}\ref{data:DataTypesUser}\textgreater{} getUsersWithRoles(int applicationInstanceID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of Users associated to an ApplicationInstance that were assigned UserRoles.
 \item Created for: UC17.6, U2 - easy applications
@@ -1438,6 +1441,11 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
 % DATA TYPES
 \section{Data types}\label{sec:datatypes}
 \begin{itemize}[nolistsep,noitemsep]
+\item \vpedatatype{data:DataTypesApplication}{Application}: 
+\begin{itemize}[noitemsep,nolistsep]
+
+\item[] {\colorbox{red!30}{\underline{Undefined}}}
+\end{itemize}
 \item \vpedatatype{data:DataTypesApplicationInstance}{ApplicationInstance}: 
 \begin{itemize}[noitemsep,nolistsep]
 \item[] Attributes: int id, int status, int customerOrganisationID
@@ -1452,6 +1460,11 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
 \begin{itemize}[noitemsep,nolistsep]
 
 \item[] Data from a pluggable device. For sensors, this contains sensor values. For actuators, this contains the state of the actuator. The data is encapsulated within a JSON message, and should be converted into something meaningful based on the device type of the pluggable device that sent the data.
+\end{itemize}
+\item \vpedatatype{data:DataTypesIPAddress}{IPAddress}: 
+\begin{itemize}[noitemsep,nolistsep]
+
+\item[] {\colorbox{red!30}{\underline{Undefined}}}
 \end{itemize}
 \item \vpedatatype{data:DataTypesMoteInfo}{MoteInfo}: 
 \begin{itemize}[noitemsep,nolistsep]
@@ -1478,10 +1491,30 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
 
 \item[] Denotes the type of a pluggable device.
 \end{itemize}
+\item \vpedatatype{data:DataTypesRelationship}{Relationship}: 
+\begin{itemize}[noitemsep,nolistsep]
+
+\item[] {\colorbox{red!30}{\underline{Undefined}}}
+\end{itemize}
+\item \vpedatatype{data:DataTypesRoomTopology}{RoomTopology}: 
+\begin{itemize}[noitemsep,nolistsep]
+
+\item[] {\colorbox{red!30}{\underline{Undefined}}}
+\end{itemize}
 \item \vpedatatype{data:DataTypesSubscription}{Subscription}: 
 \begin{itemize}[noitemsep,nolistsep]
 \item[] Attributes: int id, int status, int customerOrganisationID, int applicationInstanceID
 \item[] Contains data about a subscription by a customer organisation for an application instance. Data about period/length of the subscription is stored in invoices.
+\end{itemize}
+\item \vpedatatype{data:DataTypesUser}{User}: 
+\begin{itemize}[noitemsep,nolistsep]
+
+\item[] {\colorbox{red!30}{\underline{Undefined}}}
+\end{itemize}
+\item \vpedatatype{data:DataTypesUserRole}{UserRole}: 
+\begin{itemize}[noitemsep,nolistsep]
+
+\item[] {\colorbox{red!30}{\underline{Undefined}}}
 \end{itemize}
 \end{itemize}
 % END TYPES

@@ -490,45 +490,18 @@
 
     \begin{itemize}
         \item AccessRightsManager: U2, UC9
-            Responsible for all functionality related to access rights to pluggable devices.
-            E.g. retrieving the access rights a customer organisation has for a device,
-            updating access rights for customer organisations, etc.
         \item ApplicationContainerManager: U2, UC17
-            This component contains sanbox environments for application instances to execute in.
         \item CustomerOrganisationClient: U2, UC19
-            Represents the client used by a customer organisation. This is the user's dashboard.
         \item CustomerOrganisationFacade: U2, UC19
-            Acts as an access point for CustomerOrganisationClients and handles all functionality that can be done by customer organisations.
         \item DeviceDB: U2, UC4, UC6
-            Contains all information related to devices in the system, but not pluggable device
-            data such as sensor data or actuation statuses. The data includes
-            information about pluggable devices, motes, gateways, topologies,
-            access rights, etc.
         \item InfrastructureOwnerClient: U2, UC9
-            Represents the client used by an infrastructure owner. This is the user's dashboard.
         \item InfrastructureOwnerFacade: U2, UC9
-            Acts as an access point for InfrastructureOwnerClients and handles all functionality that can be done by infrastructure owners.
         \item InfrastructureOwnerManager: U2, UC9
-            Responsible for all functionality related to infrastructure owners. E.g.
-            looking up the devices they own, retrieving a list of customer
-            organisations that they are associated to, etc.
         \item InvoiceManager: U2, UC17
-            Responsible for all functionality related to access rights to invoicing.
-            E.g. creating invoices.
         \item GWApplicationContainerManager: U2, UC17
-            This component contains sanbox environments for application instances to execute in.
         \item TopologyManager: U2, UC4, UC6, UC17
-              Responsible for all functionality related to topology. E.g. Adding a new
-              mote to the topology of an infrastructure, checking whether or not all
-              devices used by an application are active in the topology, etc.
         \item SubscriptionManager: U2, UC19
-              Responsible for all functionality related to access rights to subscriptions.
-              E.g. retrieving the applications that a customer organisation can subscribe to,
-              creating new subscriptions to ApplicationInstances, etc.
         \item UserRolesManager: U2, UC17, UC19
-              Responsible for all functionality related to access rights to user roles.
-              E.g. retrieving the user roles that are mandatory for a certain application,
-              updating the roles assigned to users, etc.
     \end{itemize}
 
 
@@ -614,5 +587,10 @@
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}
-        \item None
+        \item Application
+        \item IPAddress
+        \item Relationship
+        \item RoomTopology
+        \item User
+        \item UserRole
     \end{itemize}
