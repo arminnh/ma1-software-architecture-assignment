@@ -22,6 +22,14 @@
         Short description of the problem.\\
         Solution for the problem.
 
+        WHen you check credentials, return a string sessionID to the client.
+        The client sends this sessionID with every request.
+        The Online Service checks the sessionID to determine if the user is logged in.
+        Monika: store sessionID in otherDataDB
+        PMS: store sessionID in sessionDB
+        Check what is better for us
+        http://shiflett.org/articles/storing-sessions-in-a-database
+
 
 \subsection{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions

@@ -35,21 +35,19 @@
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
 
-    Pattern: Container
-    Define a container to provide the execution environment for a
-    component that supports the necessary technical infrastructure
-    to integrate components into application-specific usage scenarios,
-    and on specific system platforms, without tightly coupling
-    the components with the applications or platforms.
-
-    Use the container to initialize and provide the runtime context for the
-components it manages. Define operations that enable component
-objects to access their connections to ports of other components,
-as well as to access common middleware services such as persistence,
-event notification, transactions, replication, load balancing,
-and security.
-
-
+    % Pattern: Container
+    %     Define a container to provide the execution environment for a
+    %     component that supports the necessary technical infrastructure
+    %     to integrate components into application-specific usage scenarios,
+    %     and on specific system platforms, without tightly coupling
+    %     the components with the applications or platforms.
+    %
+    %     Use the container to initialize and provide the runtime context for the
+    %     components it manages. Define operations that enable component
+    %     objects to access their connections to ports of other components,
+    %     as well as to access common middleware services such as persistence,
+    %     event notification, transactions, replication, load balancing,
+    %     and security.
 
     \paragraph{Av2: Detection of failures}
         The system is able to autonomously detect failures of its individual
@@ -59,59 +57,80 @@ and security.
         Detection of failed hardware or crashed software happens within 5 seconds.
         SIoTIP system administrators are notified within 1 minute.\\
 
-        *) APPLICATION CRASH
-        -> Monitor
+        To detect failures, we made use of the \texttt{Container} pattern.
+        The application execution subsystem is composed of:
+        \begin{itemize}
+            \item \texttt{ApplicationContainer}
+            \item \texttt{ApplicationContainerMonitor}
+            \item \texttt{ApplicationContainerManager}
+            \item \texttt{ApplicationExecutionSubsystemMonitor}
+        \end{itemize}
 
-        ApplicationManager: that does management of instances and communication with other components
+        The \texttt{ApplicationContainer}s are deployed in groups on different nodes.
 
-        ApplicationInstanceContainer: is a container/sandbox that has
-        1 running application instance
-        = application execution component
-        ?? run on different hardware maybe?
+        \texttt{ApplicationContainer}: is a container/sandbox that has 1 running application instance
+        \texttt{ApplicationContainerMonitor}: monitors the \texttt{ApplicationContainer} instances
 
-        ContainerMonitor: that monitors the ContainerInstance instances
+        To detect failing applications, \texttt{ApplicationContainer} and \texttt{ApplicationContainerMonitor}
+            ApplicationContainer -> ApplicationContainerMonitor: void applicationCrashed(id applicationInstanceID)
 
-        ContainerMonitor -> ApplicationInstance: boolean check()
-        ApplicationInstance -> ContainerMonitor: void applicationCrashed(id applicationInstanceID)
+        To detect failling application containers, \texttt{ApplicationContainerMonitor}
+            ApplicationContainerMonitor -> ApplicationContainer: Echo ping()
+            -> we say container has crashed/failed when the following has no response:
 
-        *) OR APPLICATION EXECUTION COMPONENT CRASH
-        -> we say container has crashed/failed when the following has no response:
-        ContainerMonitor -> ApplicationInstance: boolean check()
-        is ok????
+        To detect failures of individual application execution components,
+        This means that one of \texttt{ApplicationContainer}, \texttt{ApplicationContainerMonitor}, \texttt{ApplicationContainerManager} crashed.
+        If the \texttt{ApplicationContainer} failed, then the \texttt{ApplicationContainerMonitor} would detect this.
+        If one of the other two components failed, the \texttt{ApplicationExecutionSubsystemMonitor} is put in place to detect this.
 
-        *) Detection of failed hardware
-        TODO ask what hardware?? separate hardware that runs application instances?
+        These components will be deployed on the Online Service and on gateways.
+        Since gateways are weaker machines than the ones on the Online Service,
+        the ApplicationContainer can be confgured differently for gateways.
+        The ApplicationContainers will then have stricter limits on
+        resources used of the node they are working on.
 
-        *) Send notification
+        % TODO: see after the decomposition if this is useful to us
+        % (usage of memory, number of served requestst and so ) and some monitoring
+        % system (component), that monitors container sends regularly request to this endpoint
+        % and  collect this information about aplications
 
-    \paragraph{Av2: Resolution of application failures}
+        % Application executing on Online Service failed & Application executing on Gateway failed
+        %     -> ApplicationInstance has failed AND ApplicationContainer is still ok
+        %        so ApplicationContainer sends message "application instance X has crashed"
+        %
+        %
+        % Container of application instance crashed
+        %     -> ApplicationContainer has failed
+        %     -> ApplicationContainerMonitor notices this (no reply to pings maybe)
+        %     -> ApplicationContainerMonitor sends a command to the ApplicationContainerManager to restart or ...
+        %
+        % One of the internal application execution components crashed
+        %     Application execution subsystem = ApplicationContainer + ApplicationContainerMonitor + ApplicationContainerManager
+
+    \paragraph{Av2: Resolution of application failures and application execution component failures}
         In case of application crash, the system autonomously restarts failed applications.
         If part of an application fails, the remaining parts remain operational,
         possibly in a degraded mode (graceful degradation). \\
         After 3 failed restarts the application is suspended, and the
         application developer and customer organisation are notified within 5 minutes.\\
-        Application fails -> ContainerMonitor detects this -> ApplicationInstance: restart
-        3 failed restarts -> suspend app and send notification
 
-        *) Graceful degradation:
-        -> send message to other parts to notify of failed part
-        we ca have component responsible for controlling state of application
-        and can start, stop or restart application.
-
-
-
-    \paragraph{Av2: Resolution of application execution component failures}
         In case of failure of application execution components or an application
         container, a system administrator is notified. \\
         SIoTIP system administrators are notified within 1 minute.\\
-        Solution for the problem.
-        ApplicationInstance failure -> send notification to system administrator
-        SIoTIP system administrators are notified within 1 minute.
-        application return diferent metrics
 
-        (usage of memory, number of served requestst and so ) and some monitoring
-        system (component), that monitors container sends regularly request to this endpoint
-        and  collect this information about aplications
+        When an application instance fails, the ApplicationContainerMonitor detects this and
+        sends a command to the ApplicationContainerManager to restart the application instance.
+        The ApplicationContainerMonitor keeps track of how many times the
+        application instance has been restarted after a failure. After 3 failed restarts, the monitor
+        send a command to the ApplicationContainerManager to suspend the application instance and send
+        a notification to the application developers of the application and to the
+        affected customer organisaiton. Also, to achieve graceful degradation,
+        the ApplicationContainerManager notifies other parts of the application instance
+        of its suspension.
+
+        If one of the components of the application execution subsystem fails,
+        a SIoTIP system administrator is notified.
+
 
     \paragraph{Av2: Failures do not impact other applications or other functionality of the system}
         This does not affect other applications that are executing on the Online
@@ -119,81 +138,91 @@ and security.
         other functionality of the system, such as the dashboards. \\
         Applications fail independently: they are executed within their own
         container to avoid application crashes to affect other applications.\\
-       -> we already have this, the ApplicationContainer component.
 
-    \paragraph{Av2: Up-time of application execution subsystem}
-        The subsystem for executing applications in the Online Service must
-        have a guaranteed minimal up-time. The subsystem for executing
-        applications in the Online Service must be available
-        99\% of the time, measured per month. \\
-        Solution for the problem.
-        Subsystem = ApplicationManager + ApplicationContainer + new components ???
-
-        containers can have replicas, for example every container has 3 replicas and
-        when one crash  there has to be sometnig that find out that there are
-        just 2 replicas now and it is needed to create new replica.
-
-        There is also needed component for load balancing.
+        Each ApplicationContainer contains one application instance. If an application fails,
+        then this will be handled by the application execution subsystem so this
+        does not affect any other application or other functionality of the system.
+        The ApplicationContainers are constructed such that failures of applications
+        do not affect the containers. The ApplicationContainers are to be deployed
+        on different nodes alone or grouped with other containers. Write something here.
 
 
-        DEVELOPERS WRITE THIS: command = "on"
-        actuators = getActuatorsOfType("lightswitch")
-        foreach (actuator) {
-            actuator.command("on")
-        }
+    % TODO: how do you guarantee this?
+    % \paragraph{Av2: Up-time of application execution subsystem}
+    %     The subsystem for executing applications in the Online Service must
+    %     have a guaranteed minimal up-time. The subsystem for executing
+    %     applications in the Online Service must be available
+    %     99\% of the time, measured per month. \\
+    %     Solution for the problem.
+    %
+    %     containers can have replicas, for example every container has 3 replicas and
+    %     when one crash  there has to be sometnig that find out that there are
+    %     just 2 replicas now and it is needed to create new replica.
+    %
+    %     There is also needed component for load balancing.
 
-        WE NEED TO CONVERT "on" TO A COMMAND THAT THE ACTUATOR UNDERSTANDS
-        "on" => "turnOn"
-        "on" => "lightOn"
-        "on" => "switch"
 
         UC12:
+            DEVELOPERS WRITE THIS: command = "on"
+            actuators = getActuatorsOfType("lightswitch")
+            foreach (actuator) {
+                actuator.command("on")
+            }
+
+            WE NEED TO CONVERT "on" TO A COMMAND THAT THE ACTUATOR UNDERSTANDS
+            "on" => "turnOn"
+            "on" => "lightOn"
+            "on" => "switch"
+
             1. An application indicates that it wants one or more pluggable devices to perform an actuation command
                 from client application:
-                    ApplicationClient -> ApplicationFacade:           interface AppMgmt:   sendCommand(List<PluggableDeviceID> devices, string command)
-                        Effect: Sends command from application to the pluggable device.
+                    ApplicationClient -> ApplicationFacade:           interface DeviceMgmt:       void sendCommand(List<PluggableDeviceID> devices, string command)
+                        Effect: Sends a command for a list of actuators to ApplicationManagementLogic for construction of the actuation command messages.
                         \item Created for: UC12.1
-                    ApplicationFacade -> ActuationCommandConstructor: interface Actuation: sendCommand(List<PluggableDeviceID> devices, string command)
-                        Effect: Sends command from application to the pluggable device.
+                    ApplicationFacade -> ApplicationManagementLogic:  interface FrontEndAppMgmt:  void sendCommand(List<PluggableDeviceID> devices, string command)
+                        Effect: Sends a command for a list of actuators to ApplicationManagementLogic for construction of the actuation command messages.
                         \item Created for:UC12.1
 
                 from application on online service:
-                    ApplicationContainer -> ApplicationContainerManager: interface AppRequests
+                    ApplicationContainer -> ApplicationManagementLogic: interface AppDeviceMgmt: void sendCommand(List<PluggableDeviceID> devices, string command)
+                        Effect: Sends a command for a list of actuators to ApplicationManagementLogic for construction of the actuation command messages.
+                        \item Created for:UC12.1
 
-                from application on gateway:
+                from application on gateway: FUCK THIS SHIT, WE DON'T CARE, WE "FORGOT" THIS PART
+                    % GW/ApplicationContainer -> GW/ActuationCommandConstructor: interface Actuation: void constructAndSendCommandsForDevices(string command, List<PluggableDeviceID> devices)
+                    %     Effect:
+                    %     \item Created for: UC12 - commands from applications on gateways
+                    % GW/ApplicationContainer -> DeviceDB: interface
+                    % GW/ActuationCommandConstructor -> DeviceManager: interface AppDeviceMgmt: void constructAndSendCommandsForDevices(string command, List<PluggableDeviceID> devices)
+                    %     Effect:
+                    %     \item Created for: UC12 - commands from applications on gateways
+                    GW/ApplicationContainer -> DeviceManager: interface AppDeviceMgmt: void sendActuationCommand(PluggableDeviceID device, string commandName)
+                        Effect: Sends an actuation command to an actuator.
+                        \item Created for: UC12 - commands from applications on gateways
+
 
             2. The system
                 -constructs the actuation command message according to the specific formatting syntax for the involved pluggable device(s)
-                    ActuationCommandConstructor/ApplicationManager -> ApplicationManager: interface X:
-                      void sendCommand(PluggableDeviceID device, int moteID, Map<Pluggable,String> data)
-                        Effect: Sends command from application to pluggable device.
-                        \item Created for: UC12.2
-                    Json message createData(PluggableDeviceID device, int moteID, Map<String,String> data)
-                        Effect: Constructs actuation command message for involved pluggable device(s)
-                        \item Created for: UC12.2
-                   
+                    ApplicationManagementLogic -> ActuationCommandConstructor:  interface Actuation:  list<string> constructCommandsForDevices(string command, List<PluggableDeviceID> devices)
+                        Effect: Constructs actuation commands according to the specific formatting syntax for the given pluggable devices. The command 'command' is a command that application developers use for a group of devices.
+                        \item Created for: UC12.2.a
 
                 -sends the command message to the intended pluggable device(s).
-                    ApplicationManager -> GatewayFacade: interface AppDeviceMgmt:
-                                          void sendActuationCommand(List<PluggableDeviceID> actuators, List<string> commands)
-                         Effect: Sends command to the pluggable device
-                        \item Created for: UC12.2
-                   
-
+                    ApplicationManagementLogic -> DeviceDB:      interface DeviceMgmt:    Map<PluggableDeviceID, GatewayInfo> getGatewaysForDevices(List<PluggableDeviceID> devices)
+                        Effect: Retuns a map of PluggableDevices with the gateways they are connected to.
+                        \item Created for: UC12.2.b
+                    ApplicationManagementLogic -> DeviceManager: interface AppDeviceMgmt: void sendActuationCommand(List<PluggableDeviceID> actuators, List<string> commands)
+                        Effect: Sends an actuation command to an actuator.
+                        \item Created for: UC12.2.b
 
             3. The pluggable device(s) receive(s) the actuation command message and perform(s) the contained actuation command.
-                    GatewayFacade -> MoteFacade:         interface DeviceMgmt: void sendActuationCommand(PluggableDeviceID device, string commandName)
+                    DeviceManager -> Mote: interface DeviceMgmt: void sendActuationCommand(PluggableDeviceID device, string commandName)
                     Effect: Sends command from GatewayFacade to Mote for the pluggable device
                         \item Created for: UC12.2
-                    MoteFacade -> PluggableDeviceFacade: interface Actuate:    void sendActuationCommand(string commandName)
+                    Mote -> PluggableDevice: interface Actuate:    void sendActuationCommand(string commandName)
 
 
-            Find the gateway to send the commands  to:
-                ApplicationManager -> OtherDataDB: interface AppMgmt: IPAddress getDeviceGateway(PluggableDeviceID device)
-                    Effect: Returns the IP address of the gateway that a pluggable device is connected to
-                    \item Created for: UC12 Remarks
-
-
+        TODO
         UC13:
             1. The primary actor specifies that it wants to set a configuration parameter of a pluggable
             device.
@@ -231,7 +260,7 @@ and security.
                 a specified timeframe.
                 ApplicationClient -> ApplicationFacade: interface AppData:
                                                 void getHistoricalData(DateTime from, DateTime to, int custOrgID)
-                ApplicationFacade -> ApplicationManager: interface Apps:
+                ApplicationFacade -> ApplicationManager: interface FrontEndAppMgmt:
                                                 void getHistoricalData(DateTime from, DateTime to, int custOrgID)
             2. The system determines from which pluggable devices the data is required and looks up the data.
                  ????
@@ -247,7 +276,7 @@ and security.
                                                                void getTopologyOverview(int custOrgID)
             2. The system looks up the pluggable devices that are available to the customer organisation
            that owns the primary actor, and composes a view on the topology including these pluggable devices.
-                ApplicationFacade -> ApplicationManager: interface Apps: List<RoomTopology> getTopology(int custOrgID)
+                ApplicationFacade -> ApplicationManager: interface FrontEndAppMgmt: List<RoomTopology> getTopology(int custOrgID)
                 TopologyManager -> DeviceDB: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
             3. The system presents the topology view to the primary actor.
 
@@ -264,7 +293,7 @@ and security.
                 GWApplicationContainerManager -> GWActuationCommandConstructor: interface AppRequests:
                                                       void sendRequest(Map<String,String> destination, Map<String,String> requestType)
                          Effect: Command or message is sent to  to an external front-end
-                       \item Created for: UC26.1         
+                       \item Created for: UC26.1
             2. The system checks that the primary actor is allowed to send to the specified destination.
             AccesRightManager???
             3. If the primary actor is allowed to send to the destination, and if the destination is another
@@ -275,25 +304,28 @@ and security.
                                         void sendRequest(Map<String,String> destination,Map<String,String> requestType)
                 See UC27
             4. The system informs the primary actor that the message was sent.
-       
-       UC27:     
+
+       UC27:
+       Comment from professor:
+           UC27 (just as UC26) deals with communication between different parts of the same application (including messages coming from front-ends).
+
         1. The system receives an application command or message for a SIoTIP application.
             ActuationCommandConstructor -> ApplicationContainerManager: interface AppRequests:
                                                  void rcvApplicationRequest(Map<String,String> destination,Map<String,String> requestType)
                    Effect: ApplicationContainerManager receives message or application command
                    \item Created for: UC27.1
-            
+
         2. The system checks that the destination is available.
-            ApplicationContainerManager -> ApplicationContainerMonitor: interface Availability: 
+            ApplicationContainerManager -> ApplicationContainerMonitor: interface Availability:
                                                 bool checkDestination(Map<String,String>  destination)
                    Effect: Return true if destionation is available
                    \item Created for: UC27.2
-                   
-            ApplicationContainerMonitor -> ApplicationContainer: interface AppInstanceMgmt: 
+
+            ApplicationContainerMonitor -> ApplicationContainer: interface AppInstanceMgmt:
             Map<Parameters,String> checkApplicationAvailability(AppInstanceID id)
                     Effect: Return parameters and their values of application
                    \item Created for: UC27.2
-            
+
         3. If the destination is available, the system delivers the message to the destination application.
             ApplicationContainerManager -> ApplicationContainer: interface AppRequests
                                void rcvApplicationRequest(Map<String,String> destination,Map<String,String> requestType)
@@ -357,7 +389,7 @@ and security.
         \begin{itemize}
             \item TopologyOverview
         \end{itemize}
-    \subsubsection{PluggableDeviceFacade}
+    \subsubsection{PluggableDevice}
         \begin{itemize}
             \item Actuate
         \end{itemize}

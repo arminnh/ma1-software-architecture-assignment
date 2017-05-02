@@ -1,4 +1,4 @@
-%%% element catalog, generated on Tue May 02 10:42:18 CEST 2017
+%%% element catalog, generated on Tue May 02 13:13:41 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -90,7 +90,7 @@ updating access rights for customer organisations, etc.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerActuation}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayAppDeviceMgmt}}		
 	\end{description}
 \subsection{ApplicationClient}\label{comp:ApplicationClient}
 	\begin{description}[noitemsep,nolistsep]
@@ -113,7 +113,7 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~This component contains sanbox environments for application instances to execute in.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApps}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppInstanceMgmt}}		
 	\end{description}
 \subsection{ApplicationContainerMonitor}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}
@@ -132,13 +132,21 @@ updating access rights for customer organisations, etc.
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationFacadeAppData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationFacadeDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationFacadeTopologyOverview}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerActuation}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApps}}		
 	\end{description}
+\subsection{ApplicationLogic}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationLogic}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~None
+		\item[Required interfaces:]~None		
+	\end{description}
 \subsection{ApplicationManager}\label{comp:OnlineServiceOnlineServiceApplicationManager}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Responsible for activating/deactivating applications, setting pluggable device redundancy requirements on \vpett{\nameref{comp:GatewayGatewayDeviceManager}} components, and using \vpett{\nameref{comp:OnlineServiceOnlineServiceNotificationHandler}} to send notifications to customer organisations.
 		\item[Super-components:]~None
-		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}
+		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationLogic}}
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerActuation}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApps}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerForwardData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerIOAppMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInvoiceManagerInvoiceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerRequestData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInvoiceManagerInvoiceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerRequestData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{CustomerOgranisationClient}\label{comp:CustomerOgranisationClient}
 	\begin{description}[noitemsep,nolistsep]
@@ -183,26 +191,34 @@ updating access rights for customer organisations, etc.
 \subsection{DeviceManager}\label{comp:GatewayGatewayDeviceManager}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Monitors connected/operational devices on a gateway. Sends notifications in case of hardware failure. Can send a command to disable or reactivate applications when necessary.
-		\item[Super-components:]~None
+		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeDeviceMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceMgmt}}		
 	\end{description}
-\subsection{GatewayFacade}\label{comp:GatewayGatewayGatewayFacade}
+\subsection{Gateway}\label{comp:GatewayGateway}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Main component on the gateway that allows different components to work
 with each other. E.g. transmits heartbeats from motes to
 \vpett{\nameref{comp:GatewayGatewayDeviceManager}}, transmits commands to shut down applications,
 triggers notifications to be generated, ...
 		\item[Super-components:]~None
+		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGWApplicationContainerManager}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayHeartbeat}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataConverterDataConversion}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
+	\end{description}
+\subsection{GatewayLogic}\label{comp:GatewayGatewayGatewayLogic}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~Handles the main logic on the gateway and communication with other outside components.
+		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeHeartbeat}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataConverterDataConversion}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteFacadeDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayHeartbeat}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayClass}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteDeviceMgmt}}		
 	\end{description}
 \subsection{GWApplicationContainerManager}\label{comp:GatewayGatewayGWApplicationContainerManager}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
-		\item[Super-components:]~None
+		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}
 		\item[Required interfaces:]~None		
@@ -240,14 +256,14 @@ E.g. creating invoices.
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInvoiceManagerInvoiceMgmt}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBInvoiceMgmt}}		
 	\end{description}
-\subsection{MoteFacade}\label{comp:MoteMoteFacade}
+\subsection{Mote}\label{comp:MoteMote}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~Sends heartbeats to the \vpett{\nameref{comp:GatewayGatewayGatewayFacade}}. Includes a list
+		\item[Responsibility:]~Sends heartbeats to the GatewayFacade. Includes a list
 of connected pluggable devices in the heartbeats.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:MoteMoteFacadeDeviceData}}, \iconprovided{}~\vpett{\nameref{int:MoteMoteFacadeDeviceMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeActuate}}, \iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeConfig}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeDeviceData}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGatewayFacadeHeartbeat}}, \iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeRequestData}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:MoteMoteDeviceData}}, \iconprovided{}~\vpett{\nameref{int:MoteMoteDeviceMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceActuate}}, \iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceConfig}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceData}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayHeartbeat}}, \iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceRequestData}}		
 	\end{description}
 \subsection{NotificationDeliveryService}\label{comp:NotificationDeliveryServiceNodeNotificationDeliveryService}
 	\begin{description}[noitemsep,nolistsep]
@@ -281,13 +297,13 @@ of connected pluggable devices in the heartbeats.
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBDeviceData}}
 		\item[Required interfaces:]~None		
 	\end{description}
-\subsection{PluggableDeviceFacade}\label{comp:PuggableDevicePluggableDeviceFacade}
+\subsection{PluggableDevice}\label{comp:PuggableDevicePluggableDevice}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~Responsible for sending pluggable device data to \vpett{\nameref{comp:MoteMoteFacade}}. Needs to be initialised in order for the data to be used/stored.
+		\item[Responsibility:]~Responsible for sending pluggable device data to \vpett{\nameref{comp:MoteMote}}. Needs to be initialised in order for the data to be used/stored.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeActuate}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeConfig}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceFacadeRequestData}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:MoteMoteFacadeDeviceData}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceActuate}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceConfig}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceRequestData}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:MoteMoteDeviceData}}		
 	\end{description}
 \subsection{SubscriptionManager}\label{comp:OnlineServiceOnlineServiceSubscriptionManager}
 	\begin{description}[noitemsep,nolistsep]
@@ -384,10 +400,10 @@ of connected pluggable devices in the heartbeats.
     \end{description}
 
   %%%%%%%% Actuate
-  \subsection{Actuate}\label{int:PuggableDevicePluggableDeviceFacadeActuate}
+  \subsection{Actuate}\label{int:PuggableDevicePluggableDeviceActuate}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDeviceFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMoteFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDevice}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void sendActuationCommand(string commandName)}
@@ -416,9 +432,9 @@ of connected pluggable devices in the heartbeats.
     \end{description}
 
   %%%%%%%% AppDeviceMgmt
-  \subsection{AppDeviceMgmt}\label{int:GatewayGatewayGatewayFacadeAppDeviceMgmt}
+  \subsection{AppDeviceMgmt}\label{int:GatewayGatewayAppDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -511,40 +527,10 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% AppMgmt
-  \subsection{AppMgmt}\label{int:GatewayGatewayGatewayFacadeAppMgmt}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
-      \item[Operations:] ~
-    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{void activateApplicationInstance(int applicationInstanceID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Activates an ApplicationInstance that is running on the gateway.
-\item Created for: UC17.3, U2 - easy applications
-        \end{itemize}
-    \end{itemize}
-    \end{description}
-
-  %%%%%%%% AppMgmt
-  \subsection{AppMgmt}\label{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGWApplicationContainerManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
-      \item[Operations:] ~
-    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{void activateApplicationInstance(int applicationInstanceID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Activates an ApplicationInstance that is running on the gateway.
-\item Created for: UC17.3, U2 - easy applications
-        \end{itemize}
-    \end{itemize}
-    \end{description}
-
-  %%%%%%%% AppMgmt
   \subsection{AppMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void activateApplicationInstance(int applicationInstanceID)}
@@ -571,6 +557,21 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% AppMgmt
+  \subsection{AppMgmt}\label{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGWApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Operations:] ~
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{void activateApplicationInstanceaaaa(int applicationInstanceID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Activates an ApplicationInstance that is running on the gateway.
+\item Created for: UC17.3, U2 - easy applications
+        \end{itemize}
+    \end{itemize}
+    \end{description}
+
+  %%%%%%%% AppMgmt
   \subsection{AppMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManagerAppMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] None
@@ -582,7 +583,7 @@ TODO: update this with Relationship type?
   %%%%%%%% Apps
   \subsection{Apps}\label{int:OnlineServiceOnlineServiceApplicationManagerApps}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceSubscriptionManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -614,11 +615,20 @@ TODO: update this with Relationship type?
     \end{itemize}
     \end{description}
 
-  %%%%%%%% Config
-  \subsection{Config}\label{int:PuggableDevicePluggableDeviceFacadeConfig}
+  %%%%%%%% Class
+  \subsection{Class}\label{int:GatewayGatewayClass}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDeviceFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMoteFacade}}
+      \item[Provided by:] None
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% Config
+  \subsection{Config}\label{int:PuggableDevicePluggableDeviceConfig}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDevice}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{Map\textless{}String, String\textgreater{} getConfig()}
@@ -637,7 +647,7 @@ TODO: update this with Relationship type?
   \subsection{DataConversion}\label{int:OnlineServiceOnlineServiceDeviceDataConverterDataConversion}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceDeviceDataConverter}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{\ref{data:DataTypesDeviceData} convert(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesDeviceData} data, string type)}
@@ -684,10 +694,10 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% DeviceData
-  \subsection{DeviceData}\label{int:MoteMoteFacadeDeviceData}
+  \subsection{DeviceData}\label{int:MoteMoteDeviceData}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMoteFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDeviceFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDevice}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void rcvData()}
@@ -704,10 +714,10 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% DeviceData
-  \subsection{DeviceData}\label{int:GatewayGatewayGatewayFacadeDeviceData}
+  \subsection{DeviceData}\label{int:GatewayGatewayDeviceData}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMoteFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void rcvData(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesDeviceData} data)}
@@ -725,7 +735,7 @@ TODO: update this with Relationship type?
   \subsection{DeviceData}\label{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceDeviceDataScheduler}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void rcvData(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesDeviceData} data)}
@@ -737,10 +747,10 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% DeviceMgmt
-  \subsection{DeviceMgmt}\label{int:MoteMoteFacadeDeviceMgmt}
+  \subsection{DeviceMgmt}\label{int:MoteMoteDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMoteFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{List\textless{}\ref{data:DataTypesPluggableDeviceInfo}\textgreater{} getConnectedDevices()}
@@ -761,7 +771,7 @@ TODO: update this with Relationship type?
   \subsection{DeviceMgmt}\label{int:DeviceDatabaseDeviceDBDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDatabaseDeviceDB}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void addDevice(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesPluggableDeviceType} type, Map\textless{}string, string\textgreater{} configurations, int moteID)}
@@ -798,40 +808,9 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% DeviceMgmt
-  \subsection{DeviceMgmt}\label{int:GatewayGatewayDeviceManagerDeviceMgmt}
+  \subsection{DeviceMgmt}\label{int:GatewayGatewayDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
-      \item[Operations:] ~
-    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{bool areEssentialDevicesOperational(int applicationID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Returns true if all essential devices for the application with id "applicationID" are operational.
-\item Created for: UC18
-        \end{itemize}
-      \item \textsf{void heartbeat(int moteID, List\textless{}\ref{data:DataTypesPluggableDeviceInfo}\textgreater{} devicesmeter)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Sends a heartbeat from a mote to check/update timers for operational devices.
-\item Created for: UC14, Av3: failure detection
-        \end{itemize}
-      \item \textsf{bool isDeviceInitialised(\ref{data:DataTypesPluggableDeviceID} pID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Returns true if the device with id "pID" has been initialized.
-\item Created for: UC11: pluggable device needs to be initialised, M1: pluggable device must be able to be initialised
-\item TODO: need this check? is 'initialized' status stored in DB or on gateways? or both?
-        \end{itemize}
-      \item \textsf{void setPluggableDevicesRequirements(int applicationID, List\textless{}\ref{data:DataTypesPluggableDeviceInfo}\textgreater{} devices)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Sets an application's requirements for pluggable devices.
-\item Created for: Av3: "Application providers can design their applications such that they explicitly require redundancy in the available pluggable devices."
-        \end{itemize}
-    \end{itemize}
-    \end{description}
-
-  %%%%%%%% DeviceMgmt
-  \subsection{DeviceMgmt}\label{int:GatewayGatewayGatewayFacadeDeviceMgmt}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -919,6 +898,37 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
 % no operations
     \end{description}
 
+  %%%%%%%% DeviceMgmt
+  \subsection{DeviceMgmt}\label{int:GatewayGatewayDeviceManagerDeviceMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Operations:] ~
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{bool areEssentialDevicesOperational(int applicationID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns true if all essential devices for the application with id "applicationID" are operational.
+\item Created for: UC18
+        \end{itemize}
+      \item \textsf{void heartbeat(int moteID, List\textless{}\ref{data:DataTypesPluggableDeviceInfo}\textgreater{} devicesmeter)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Sends a heartbeat from a mote to check/update timers for operational devices.
+\item Created for: UC14, Av3: failure detection
+        \end{itemize}
+      \item \textsf{bool isDeviceInitialised(\ref{data:DataTypesPluggableDeviceID} pID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns true if the device with id "pID" has been initialized.
+\item Created for: UC11: pluggable device needs to be initialised, M1: pluggable device must be able to be initialised
+\item TODO: need this check? is 'initialized' status stored in DB or on gateways? or both?
+        \end{itemize}
+      \item \textsf{void setPluggableDevicesRequirements(int applicationID, List\textless{}\ref{data:DataTypesPluggableDeviceInfo}\textgreater{} devices)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Sets an application's requirements for pluggable devices.
+\item Created for: Av3: "Application providers can design their applications such that they explicitly require redundancy in the available pluggable devices."
+        \end{itemize}
+    \end{itemize}
+    \end{description}
+
   %%%%%%%% ForwardData
   \subsection{ForwardData}\label{int:OnlineServiceOnlineServiceApplicationManagerForwardData}
     \begin{description}[noitemsep,nolistsep]
@@ -940,10 +950,10 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
     \end{description}
 
   %%%%%%%% Heartbeat
-  \subsection{Heartbeat}\label{int:GatewayGatewayGatewayFacadeHeartbeat}
+  \subsection{Heartbeat}\label{int:GatewayGatewayHeartbeat}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMoteFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void heartbeat(Map\textless{}string, string\textgreater{} moteInfo, List\textless{}Tuple\textless{}\ref{data:DataTypesPluggableDeviceID}, \ref{data:DataTypesPluggableDeviceType}\textgreater{}\textgreater{} pds)}
@@ -1098,7 +1108,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
   \subsection{Notify}\label{int:OnlineServiceOnlineServiceNotificationHandlerNotify}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceNotificationHandler}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void notify(int userID, string message)}
@@ -1110,10 +1120,10 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
     \end{description}
 
   %%%%%%%% RequestData
-  \subsection{RequestData}\label{int:PuggableDevicePluggableDeviceFacadeRequestData}
+  \subsection{RequestData}\label{int:PuggableDevicePluggableDeviceRequestData}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDeviceFacade}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMoteFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:PuggableDevicePluggableDevice}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{\ref{data:DataTypesDeviceData} getData()}
@@ -1301,7 +1311,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
   \subsection{TopologyMgmt}\label{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceTopologyManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void addDevice(\ref{data:DataTypesPluggableDeviceID} id, int moteID)}

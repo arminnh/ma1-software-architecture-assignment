@@ -3,13 +3,10 @@ FOR PROJECT DEFENSE: best is 25/05 - 27/05,
 
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
-Decomp 3:
-    ApplicationManager -> ApplicationContainerManager: interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
-
 Need to do this somehwere, UC7 ??
     If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
 
-U2:
+DONE
     These conversions should be possible per application. For example, one application might be able to only use temperature measurement in degrees Celsius, whereas another application (also) uses degrees Fahrenheit.
     -> Let DeviceDataConverter be used by ApplicationManager or devicedataScheduler, not GatewayFacade
 
@@ -92,6 +89,12 @@ Where to create the actual db queries?
 How to make interface names transparent?
 
 Should we denote when methods should be sync/async?
+
+Av2: Failure of application execution components
+    => ApplicationExecutionSubsystemMonitor
+
+Av2: up time?
+
 
 How is hardware linked to Infrastructure owners?
     => 1 gateway <-> 1 infrastructure owner

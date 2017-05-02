@@ -77,6 +77,12 @@
             % GatewayFacade -> DeviceDB: interface DeviceMgmt: registerGateway(int gatewayID, IPAddress address)
             %     Effect: Sets a gateway's status to 'active' and updates its IP address
             %     \item Created for: U2 - gateway installation
+            TODO: gateway is added in the infrastructure owners topology as 'unplaced'.
+                  it will be visible to the infrastructure owner after the gateway connects and registers with the online service
+
+            We cannot link the gateway to an exact location for the infrastructure owner, because he might be managing multiple buildings
+            an IP addresses can be dynamic. If we let the IO choose for which building the gateway is, then this is bad for usability and
+            he has to configure anyways. Also in that case he cannot buy spare gateways, unless he buys spare gateways for every gateway in the building
 
 
     \paragraph{U2: Mote installation}
@@ -183,8 +189,8 @@
         %         * configures the pluggable device with the last known configuration:
         %             DeviceManager -> GatewayFacade:      interface DeviceMgmt: Map<string, string> getConfigDB(PluggableDeviceID id)
         %             GatewayFacade -> DeviceDB:           interface DeviceMgmt: Map<string, string> getConfigDB(PluggableDeviceID id)
-        %             DeviceManager -> MoteFacade:         interface DeviceMgmt: void setConfig(PluggableDeviceID device, Map<string, string> config)
-        %             MoteFacade -> PluggableDeviceFacade: interface Config:     void setConfig(Map<string, string> config)
+        %             DeviceManager -> Mote:         interface DeviceMgmt: void setConfig(PluggableDeviceID device, Map<string, string> config)
+        %             Mote -> PluggableDevice: interface Config:     void setConfig(Map<string, string> config)
         %
         %         ∗ checks and activates applications which can now execute again:
         %             RATIONALE: gateway sends id of IO instead of fetching customers of IO. the online service will do that extra work = less work for gateway.
@@ -297,13 +303,12 @@
         %         ApplicationManager -> GatewayFacade:               interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
         %             Effect: Activates an ApplicationInstance that is running on the gateway.
         %             \item Created for: UC17.3, U2 - easy applications
-        %         GatewayFacade -> GWApplicationContainerManager:    interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
+        %         GatewayFacade -> GW/ApplicationContainerManager:     interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
         %             Effect: Activates an ApplicationInstance that is running on the gateway.
         %             \item Created for: UC17.3, U2 - easy applications
-                TODO: propagate these changes to ApplicationContainerManager ? ? ?
-                ApplicationManager -> ApplicationContainerManager: interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
-                    Effect: Activates an ApplicationInstance that is running on the online service.
-                    \item Created for: UC17.3, U2 - easy applications
+        %         ApplicationManagementLogic -> ApplicationContainerManager: interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
+        %             Effect: Activates an ApplicationInstance that is running on the online service.
+        %             \item Created for: UC17.3, U2 - easy applications
         %
         %     4. The system marks the application as 'active' and updates the billing information.
         %         ApplicationManager -> OtherDataDB:    interface AppMgmt:     void activateApplication(int applicationInstanceID, string status)
@@ -365,7 +370,7 @@
         %             CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
         %                 Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
         %                 \item Created for: UC19.2, U2 - easy applications
-        %             SubscriptionManager -> ApplicationManager:            interface Apps:             List<Application> getApplications()
+        %             SubscriptionManager -> ApplicationManager:            interface FrontEndAppMgmt:             List<Application> getApplications()
         %                 Effect: Returns a list of applications in the system.
         %                 \item Created for: UC19.2, U2 - easy applications
         %             ApplicationManager -> OtherDataDB:                    interface AppMgmt:          List<Application> getApplications()
@@ -383,7 +388,7 @@
         %             CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: int subscribeToApplication(int custOrgID, int applicationID)
         %                 Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
         %                 \item Created for: UC19.4, U2 - easy applications
-        %             CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             int createNewApplicationInstance(int custOrgID, int applicationID)
+        %             CustomerOrganisationFacade -> ApplicationManager:         interface FrontEndAppMgmt:             int createNewApplicationInstance(int custOrgID, int applicationID)
         %                 Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
         %                 \item Created for: UC19.4, U2 - easy applications
         %             ApplicationManager -> OtherDataDB:                        interface AppMgmt:          int createNewApplicationInstance(int custOrgID, int applicationID)
@@ -393,7 +398,7 @@
         %     5. The system checks which topology configuration and selection of pluggable devices for the application are necessary
         %        (e.g., to indicate in which rooms a heating control application should run)
         %        and presents a topology allowing the primary actor to indicate their configuration.
-        %             CustomerOrganisationFacade -> ApplicationManager: interface Apps:         List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
+        %             CustomerOrganisationFacade -> ApplicationManager: interface FrontEndAppMgmt:         List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
         %                 Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
         %                 \item Created for: UC19.5, U2 - easy applications
         %             ApplicationManager -> OtherDataDB:                interface AppMgmt:      List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
@@ -411,7 +416,7 @@
         %             CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
         %                 Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
         %                 \item Created for: UC19.6, U2 - easy applications
-        %             CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+        %             CustomerOrganisationFacade -> ApplicationManager:         interface FrontEndAppMgmt:             void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
         %                 Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
         %                 \item Created for: UC19.6, U2 - easy applications
         %             ApplicationManager -> OtherDataDB:                        interface AppMgmt:          void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
@@ -466,7 +471,7 @@
         %             SubscriptionManager -> OtherDataDB:                       interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID)
         %                 Effect: Creates a subscription for a customer organisation to an ApplicationInstance. If the customer organisation is already subscribed to an older version of the the application, then the organisation is unsubscribed from that earlier version.
         %                 \item Created for: UC19.12-13, U2 - easy applications
-        %             CustomerOrganisationFacade -> ApplicationManager:         interface Apps:             void updateCriticality(int applicationInstanceID, bool isCritical)
+        %             CustomerOrganisationFacade -> ApplicationManager:         interface FrontEndAppMgmt:             void updateCriticality(int applicationInstanceID, bool isCritical)
         %                 Effect: Updates the criticality of an ApplicationInstance.
         %                 \item Created for: UC19.11, U2 - easy applications
         %             ApplicationManager -> OtherDataDB:                        interface AppMgmt:          void updateCriticality(int applicationInstanceID, bool isCritical)
@@ -478,7 +483,7 @@
         %             See step 12 method createSubscription
         %
         %     14. The system activates the application (Include: UC17 : Activate an application).
-        %             CustomerOrganisationFacade -> ApplicationManager: interface Apps: void activateApplication(int applicationInstanceID)
+        %             CustomerOrganisationFacade -> ApplicationManager: interface FrontEndAppMgmt: void activateApplication(int applicationInstanceID)
         %                 Effect: Activates an ApplicationInstance.
         %                 \item Created for: UC19.14, U2 - easy applications
 
@@ -498,7 +503,6 @@
         \item InfrastructureOwnerFacade: U2, UC9
         \item InfrastructureOwnerManager: U2, UC9
         \item InvoiceManager: U2, UC17
-        \item GWApplicationContainerManager: U2, UC17
         \item TopologyManager: U2, UC4, UC6, UC17
         \item SubscriptionManager: U2, UC19
         \item UserRolesManager: U2, UC17, UC19
@@ -522,7 +526,7 @@
 
     \subsubsection{ApplicationManager}
         \begin{itemize}
-            \item Apps
+            \item FrontEndAppMgmt
             \item IOAppMgmt
         \end{itemize}
 
@@ -552,11 +556,6 @@
     \subsubsection{InvoiceManager}
         \begin{itemize}
             \item InvoiceMgmt
-        \end{itemize}
-
-    \subsubsection{GWApplicationContainerManager}
-        \begin{itemize}
-            \item AppMgmt
         \end{itemize}
 
     \subsubsection{OtherDataDB}

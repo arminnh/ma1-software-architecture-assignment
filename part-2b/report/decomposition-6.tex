@@ -32,6 +32,15 @@
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
 
+    https://www.alertra.com/blog/2010/improve-availability-performance-using-database-replication
+    https://serverfault.com/questions/10781/what-are-the-performance-implications-for-using-sql-server-replication
+    "
+    Ik dacht aan misschien de meeste van de componenten gewoon duplicaten maar dan is de DB wel u bottleneck en dan moet ge zo'n systeem van distributed systems gebruiken om ook de databases juist te kunnen replicaten.
+    Maar daarnaast echt geen idee ivm performance. Ge kunt wel bullshit van de "tactics" in u rationale zetten zoals the developers have to "increase computation efficiency" and "reduce computational overhead".
+    Manage event rate en scheduling policy kunt ge misschien wel gebruiken om er voor te zorgen dat bepaalde taken gebeuren op een moment dat de load op de online service wat lager is maar ik weet Ni echt welke taken
+    "
+
+
     \paragraph{P1: Problem title}
         The SIoTIP Online Service replies to the service requests of the
         infrastructure owner and customer organisations.

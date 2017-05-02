@@ -92,7 +92,7 @@
         In order for this constraint to be satisfied, changes have to be made to
         the following elements:
         \begin{itemize}
-            \item \emph{PluggableDeviceFacade}: This component needs to be updated
+            \item \emph{PluggableDevice}: This component needs to be updated
                   so that the new type of device can be initialised and configured,
                   and thus so that the device's data can be sent to the system.
             \item \emph{DeviceData}: Depending on how this data type
@@ -118,7 +118,7 @@
         \item DeviceDataConverter: M1
         \item DeviceDataScheduler: P2
         \item PluggableDeviceDataDB: P2
-        \item PluggableDeviceFacade: UC11
+        \item PluggableDevice: UC11
     \end{itemize}
 
     \paragraph{Decomposition}
@@ -154,12 +154,12 @@
             \item ForwardData
         \end{itemize}
 
-    \subsubsection{MoteFacade}
+    \subsubsection{Mote}
         \begin{itemize}
             \item DeviceData
         \end{itemize}
 
-    \subsubsection{PluggableDeviceFacade}
+    \subsubsection{PluggableDevice}
         \begin{itemize}
             \item Actuate
         	\item Config
@@ -225,7 +225,7 @@
             \item \emph{U2}: Easy Installation: a, c, d
         \end{itemize}
 
-    \paragraph{MoteFacade}
+    \paragraph{Mote}
         \begin{itemize}
             \item \emph{U2}: Easy Installation: b, c, d
             \item \emph{UC04}: Install mote: 1, 2
@@ -279,7 +279,7 @@
             \item \emph{M2}: Big data analytics on pluggable data and/or application usage data: b
         \end{itemize}
 
-    \paragraph{PluggableDeviceFacade}
+    \paragraph{PluggableDevice}
         \begin{itemize}
         	\item \emph{U2}: Easy Installation: d
         \end{itemize}
