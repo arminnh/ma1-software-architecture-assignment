@@ -3,6 +3,12 @@ FOR PROJECT DEFENSE: best is 25/05 - 27/05,
 
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
+decomposition 4:
+    descriptions of all new components & datatypes in text (commit after this so we have history of it)
+    move descriptions to vpp model
+    move methods to vpp model
+
+
 Need to do this somehwere, UC7 ??
     If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
 
