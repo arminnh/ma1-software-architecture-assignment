@@ -95,6 +95,7 @@ Av2: Failure of application execution components
 
 Av2: up time?
 
+P1: for replication of components, do we need to add routing or can we just add this in the rationale?
 
 How is hardware linked to Infrastructure owners?
     => 1 gateway <-> 1 infrastructure owner

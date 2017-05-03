@@ -131,7 +131,6 @@
         If one of the components of the application execution subsystem fails,
         a SIoTIP system administrator is notified.
 
-
     \paragraph{Av2: Failures do not impact other applications or other functionality of the system}
         This does not affect other applications that are executing on the Online
         service or SIoTIP gateway. This does not affect the availability of
@@ -176,7 +175,7 @@
 
             1. An application indicates that it wants one or more pluggable devices to perform an actuation command
                 from client application:
-                    ApplicationClient -> ApplicationFacade:           interface AppDeviceMgmt:       void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+                    ApplicationClient -> ApplicationFacade:           interface AppDeviceMgmt: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
                         Effect: Sends a command for a list of actuators to ApplicationManagementLogic for construction of the actuation command messages.
                         \item Created for: UC12.1
                     ApplicationFacade -> ApplicationManagementLogic:  interface AppDeviceMgmt:  void sendActuationCommand(List<PluggableDeviceID> devices, string command)
@@ -296,7 +295,7 @@
                     DeviceManager -> Mote: interface DeviceMgmt: void setConfig(...)
 
             5. The system informs the primary actor that the reconfiguration was done successfully.
-
+                    We "forgot" this step
 
         UC24:
             1. The primary actor indicates that it wants to consult a specified collection of historical data in a specified timeframe.
@@ -339,79 +338,163 @@
             3. The system presents the primary actor with the requested historical overview, e.g. as a table.
                 Return value of first call.
 
+
         UC25:
-
-            use getTopology(custOrgID)
-            use getDevicesForApplication()
-
             1. The primary actor indicates that it wants an overview of the topology.
-                ApplicationClient -> ApplicationFacade: interface TopologyOverview
-                                                               void getTopologyOverview(int custOrgID)
-            2. The system looks up the pluggable devices that are available to the customer organisation
-           that owns the primary actor, and composes a view on   the topology including these pluggable devices.
-                ApplicationFacade -> ApplicationManager: interface FrontEndAppMgmt: List<RoomTopology> getTopology(int custOrgID)
-                TopologyManager -> DeviceDB: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+                applicationClient wants overview:
+                    ApplicationClient -> ApplicationFacade: interface AppMgmt: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+                        Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
+                        \item Created for: UC25.1
+                    ApplicationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+                        Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
+                        \item Created for: UC25.1
+
+                applicationContainer wants overview:
+                    ApplicationContainer -> ApplicationContainerManager: interface X: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+                        Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
+                        \item Created for: UC25.1
+                    ApplicationContainerManager -> ApplicationManagementLogic: interface X: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+                        Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
+                        \item Created for: UC25.1
+
+            2. The system looks up the pluggable devices that are available to the customer organisation that owns the primary actor,
+               and composes a view on the topology including these pluggable devices.
+                    ApplicationManagementLogic -> TopologyManager: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+                    TopologyManager -> DeviceDB: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+
+                    ApplicationManagementLogic -> OtherDataDB: interface AppMgmt: List<PluggableDeviceID> getDevicesForApplication(int applicationInstanceID)
+
             3. The system presents the topology view to the primary actor.
-
-        UC27:
-        Comment from professor:
-           UC27 (just as UC26) deals with communication between different parts of the same application (including messages coming from front-ends).
-
-        1. The system receives an application command or message for a SIoTIP application.
-            DeviceCommandConstructor -> ApplicationContainerManager: interface AppRequests:
-                                                 void rcvApplicationRequest(Map<string, string> destination,Map<string, string> requestType)
-                   Effect: ApplicationContainerManager receives message or application command
-                   \item Created for: UC27.1
-
-        2. The system checks that the destination is available.
-            ApplicationContainerManager -> ApplicationContainerMonitor: interface Availability:
-                                                bool checkDestination(Map<string, string>  destination)
-                   Effect: Return true if destionation is available
-                   \item Created for: UC27.2
-
-            ApplicationContainerMonitor -> ApplicationContainer: interface AppInstanceMgmt:
-            Map<Parameters,String> checkApplicationAvailability(AppInstanceID id)
-                    Effect: Return parameters and their values of application
-                   \item Created for: UC27.2
-
-        3. If the destination is available, the system delivers the message to the destination application.
-            ApplicationContainerManager -> ApplicationContainer: interface AppRequests
-                               void rcvApplicationRequest(Map<string, string> destination,Map<string, string> requestType)
-                   Effect: Receive message or application command
-                   \item Created for: UC27.3
+                    = return value of getTopologyOverview
 
         UC26:
+            AppDevelopers want to send a message to:
+                Gateway:   sendMessageToGateway(string message)
+                OS:        sendMessageToOnlineService(string message)
+                AppClient: sendMessageToExternalClient(string message, IPAddress host, int port)
 
            Some deployment rationale: ApplicationManagementLogic <--- HTTP ---> ApplicationClient
                                       ApplicationManagementLogic <---      ---> GW/ApplicationContainer
 
            TODO: somewhere we need to store on which gateways ApplicationContainers are running.
+                ApplicationManagementLogic -> OtherDataDB: void createApplicationInstance(int applicationInstance, IPAddress gatewayIPAddress)
+                    Effect: Stores on which gateway an ApplicationInstance is running.
+                    \item Created for: TODO
 
            Alternative 3b. NotAllowedException
 
-           1. The primary actor indicates it wants to send an application command or message to an external
+            1. The primary actor indicates it wants to send an application command or message to an external
                front-end and specifies the destination (e.g., as an application identifier for SIoTIP applications,
                or a hostname and port for external systems).
-               Map<string, string> destination = type of destination, value
-               Map<string, string> requestType = Message/Command, value
-               GWApplicationContainer -> GWApplicationContainerManager: interface AppRequests:
-                                                  void sendRequest(Map<string, string> destination, Map<string, string> requestType)
-                      Effect: Command or message is sent to  to an external front-end
-                      \item Created for: UC26.1
-               GWApplicationContainerManager -> GWDeviceCommandConstructor: interface AppRequests:
-                                                     void sendRequest(Map<string, string> destination, Map<string, string> requestType)
-                        Effect: Command or message is sent to  to an external front-end
-                      \item Created for: UC26.1
-           2. The system checks that the primary actor is allowed to send to the specified destination.
-           AccesRightManager???
-           3. If the primary actor is allowed to send to the destination, and if the destination is another
-               application, the system delivers the application command to that destination (Include: UC27:
-               Receive application command or message from external front-end).
-               TODO: add containers and monitor to gatewayfacade
-               GWDeviceCommandConstructor -> DeviceCommandConstructor: interaface Actuation
-                                       void sendRequest(Map<string, string> destination,Map<string, string> requestType)
-               See UC27
-           4. The system informs the primary actor that the message was sent.
+
+                FROM APP INSTANCE TO FRONT END:
+                     ApplicationContainer -> ApplicationContainerManager: interface AppRequests: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
+                        Effect: Sends a message from an ApplicationInstance to an external front end. The ApplicationInstance provides the hostname and port.
+                        \item Created for: UC26.1
+                     ApplicationContainerManager -> ApplicationManagementLogic: interface AppRequests: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
+                         Effect: Sends a message from an ApplicationInstance to an external front end. The ApplicationInstance provides the hostname and port.
+                         \item Created for: UC26.1
+
+                FROM APP INSTANCE TO APP INSTANCE:
+                     ApplicationContainer -> ApplicationContainerManager: interface AppRequests: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+                        Effect: Sends a command from an ApplicationInstance to another part of the same application that is running on another location in the system.
+                        \item Created for: UC26.1
+                     ApplicationContainerManager -> ApplicationManagementLogic: interface AppRequests: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+                         Effect: Sends a command from an ApplicationInstance to another part of the same application that is running on another location in the system.
+                         \item Created for: UC26.1
+
+                FROM FRONT END TO APP INSTANCE:
+                    ApplicationClient -> ApplicationFacade: interface AppMgmt: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+                        Effect: Sends a command from an external front-end to an ApplicationInstance.
+                        \item Created for: UC26.1
+                    ApplicationFacade -> ApplicationManagementLogic: interface AppMgmt: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+                        Effect: Sends a command from an external front-end to an ApplicationInstance.
+                        \item Created for: UC26.1
+
+            2. The system checks that the primary actor is allowed to send to the specified destination.
+                    THE MESSAGE HAS ARRIVED IN ApplicationManagementLogic
+
+                    Don't need to check, since an application can only send commands to another part of the same application.
+                    If the command comes from a gateway -> send it to the online service instance
+                    If the command comes from the online service -> send it to the gateway instance
+                    If the command is for an external front end -> just send the message to the hostname and port
+
+                    Maybe a check can be done here to do some kind of rate limiting, if developers want to send
+                    more requests, they pay more \$\$\$
+
+            3. If the primary actor is allowed to send to the destination, and if the destination is another application,
+               the system delivers the application command to that destination
+                    (Include: UC27: Receive application command or message from external front-end).
+
+            4. The system informs the primary actor that the message was sent.
+                    We "forgot" this step
+
+        UC27:
+            Comment from professor:
+               UC27 (just as UC26) deals with communication between different parts of the same application (including messages coming from front-ends).
+
+            1. The system receives an application command or message for a SIoTIP application.
+                ApplicationManagementLogic has received an application command (SEE UC26)
+
+            2. The system checks that the destination is available.
+                message is for Gateway/ApplicationContainer:
+                    Destination = GW/ApplicationContainer
+                    find where the application container is, -> OtherDataDB: gatewayOfApplicationContainer
+                    then send it to the correct GW/ApplicationContainerManager
+                    the applicationContainerMAnager will send the message to the correct ApplicationContainer
+                    ApplicationContainerManagers keep track of ApplicationContainer IDs
+
+                    ApplicationManagementLogic -> OtherDataDB: interface AppMgmt: Gateway getGatewayForApplicationInstance(int applicationInstanceID)
+                        Effect: Returns information about a gateway for a certain application instance running on a gateway. Returns null if there is no application instance with the given id running on any gateway.
+                        \item Created for: UC27.2
+
+                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+                        Effect: Returns true if a certain ApplicationInstance is available.
+                        \item Created for: UC27.2
+
+                    GW/ApplicationContainerManager -> GW/ApplicationContainerMonitor: interface Monitoring: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+                        Effect: Returns true if a certain ApplicationInstance is available.
+                        \item Created for: UC27.2
+
+
+                message is for ApplicationContainer:
+                    The same, but on Online Service, so you don't need to search for the gateway
+                    just send the message to the OS ApplicationContainerManager, it will do the rest
+
+                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+                        Effect: Returns true if a certain ApplicationInstance is available.
+                        \item Created for: UC27.2
+
+                    ApplicationContainerManager -> ApplicationContainerMonitor: interface Monitoring: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+                        Effect: Returns true if a certain ApplicationInstance is available.
+                        \item Created for: UC27.2
+
+
+                message is for ApplicationClient:
+                    just PING the hostname and port, if the ping succeeds, send the message
+                        ApplicationManagementLogic -> ExternalFrontEndClient: ping the (host, port) and check reply
+
+            3. If the destination is available, the system delivers the message to the destination application.
+                message = string
+
+                message is for Gateway/ApplicationContainer:
+                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                        Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
+                        \item Created for UC26, UC27
+                    GW/ApplicationContainerManager -> GW/ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                        Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
+                        \item Created for UC26, UC27
+
+                message is for ApplicationContainer:
+                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                        Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
+                        \item Created for UC26, UC27
+                    ApplicationContainerManager -> ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                        Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
+                        \item Created for UC26, UC27
+
+                message is for ApplicationClient:
+                    ApplicationManagementLogic -> ExternalFrontEndClient: Open socket (host and port are given) -> send message -> close socket
 
 \subsection{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions
@@ -426,10 +509,6 @@
         \item Component: ApplicationContainer
         \item Component: ApplicationContainerManager
         \item Component: ApplicationContainerMonitor
-        \item Component: GWDeviceCommandConstructor
-        \item Component: GWApplicationContainer
-        \item Component: GWApplicationContainerManager
-        \item Component: GWApplicationContainerMonitor
     \end{itemize}
 
 
@@ -441,11 +520,6 @@
     \subsubsection{DeviceCommandConstructor}
         \begin{itemize}
             \item Actuation
-        \end{itemize}
-
-    \subsubsection{GWDeviceCommandConstructor}
-        \begin{itemize}
-            \item AppRequests
         \end{itemize}
 
    \subsubsection{ApplicationContainer}
