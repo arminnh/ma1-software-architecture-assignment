@@ -176,7 +176,7 @@
 
             1. An application indicates that it wants one or more pluggable devices to perform an actuation command
                 from client application:
-                    ApplicationClient -> ApplicationFacade:           interface DeviceMgmt:       void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+                    ApplicationClient -> ApplicationFacade:           interface AppDeviceMgmt:       void sendActuationCommand(List<PluggableDeviceID> devices, string command)
                         Effect: Sends a command for a list of actuators to ApplicationManagementLogic for construction of the actuation command messages.
                         \item Created for: UC12.1
                     ApplicationFacade -> ApplicationManagementLogic:  interface AppDeviceMgmt:  void sendActuationCommand(List<PluggableDeviceID> devices, string command)
@@ -232,7 +232,7 @@
             1. The primary actor specifies that it wants to set a configuration parameter of a pluggable device.
 
                 from client application:
-                    ApplicationClient -> ApplicationFacade:           interface DeviceMgmt:       void setConfiguration(PluggableDevideID pID, Map<string, string> config)
+                    ApplicationClient -> ApplicationFacade:           interface AppDeviceMgmt:       void setConfiguration(PluggableDevideID pID, Map<string, string> config)
                         Effect: Sets configuration parameters of a pluggable device.
                         \item Created for: UC13.1
                     ApplicationFacade -> ApplicationManagementLogic:  interface AppDeviceMgmt:  void setConfiguration(PluggableDevideID pID, Map<string, string> config)
@@ -299,26 +299,52 @@
 
 
         UC24:
-            1. The primary actor indicates that it wants to consult a specified collection of historical data in
-                a specified timeframe.
-                ApplicationClient -> ApplicationFacade: interface AppData:
-                                                void getHistoricalData(DateTime from, DateTime to, int custOrgID)
-                ApplicationFacade -> ApplicationManager: interface FrontEndAppMgmt:
-                                                void getHistoricalData(DateTime from, DateTime to, int custOrgID)
+            1. The primary actor indicates that it wants to consult a specified collection of historical data in a specified timeframe.
+                from client application:
+                    ApplicationClient -> ApplicationFacade: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                        Effect: Returns DeviceData of pluggable devices over a specified time period.
+                        \item Created for: UC24.1
+                    ApplicationClient -> ApplicationFacade: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+                        Effect: Returns DeviceData of pluggable devices in a room over a specified time period.
+                        \item Created for: UC24.1
+
+                    ApplicationFacade -> ApplicationManagementLogic: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                        Effect: Returns DeviceData of pluggable devices over a specified time period.
+                        \item Created for: UC24.1
+                    ApplicationClient -> ApplicationFacade: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+                        Effect: Returns DeviceData of pluggable devices in a room over a specified time period.
+                        \item Created for: UC24.1
+
+                from application on online service:
+                    ApplicationContainer -> ApplicationManagementLogic: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                        Effect: Returns DeviceData of pluggable devices over a specified time period.
+                        \item Created for: UC24.1
+                    ApplicationContainer -> ApplicationManagementLogic: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+                        Effect: Returns DeviceData of pluggable devices in a room over a specified time period.
+                        \item Created for: UC24.1
+
+                from application on gateway:
+                    GW/ApplicationContainer -> DeviceDataScheduler: interface RequestData: list<DeviceData> getData(pID, from, to)
+
             2. The system determines from which pluggable devices the data is required and looks up the data.
-                 ????
+                ApplicationManagementLogic parses the RoomTopology object and uses the PluggableDeviceIDs in the RoomTopology
+
+                    ApplicationManagementLogic -> DeviceDataScheduler: interface RequestData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                        Effect: Returns DeviceData of pluggable devices over a specified time period.
+                        \item Created for: UC24.2
+                    DeviceDataScheduler -> PluggableDeviceDB: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                        Effect: Returns DeviceData of pluggable devices over a specified time period.
+                        \item Created for: UC24.2
+
             3. The system presents the primary actor with the requested historical overview, e.g. as a table.
-                ApplicationManager -> DeviceDataScheduler: interface RequestData:
-                                      HistoricalData getHistoricalData(List<PluggableDeviceID> id,DateTime from, DateTime to)
-                DeviceDataScheduler -> PluggableDeviceDB: interface DeviceData:
-                                      HistoricalData getHistoricalData(List<PluggableDeviceID> id,DateTime from, DateTime to)
+                Return value of first call.
 
         UC25:
             1. The primary actor indicates that it wants an overview of the topology.
                 ApplicationClient -> ApplicationFacade: interface TopologyOverview
                                                                void getTopologyOverview(int custOrgID)
             2. The system looks up the pluggable devices that are available to the customer organisation
-           that owns the primary actor, and composes a view on the topology including these pluggable devices.
+           that owns the primary actor, and composes a view on   the topology including these pluggable devices.
                 ApplicationFacade -> ApplicationManager: interface FrontEndAppMgmt: List<RoomTopology> getTopology(int custOrgID)
                 TopologyManager -> DeviceDB: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
             3. The system presents the topology view to the primary actor.
