@@ -1,4 +1,4 @@
-%%% element catalog, generated on Tue May 02 13:13:41 CEST 2017
+%%% element catalog, generated on Wed May 03 10:02:06 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -89,8 +89,8 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerActuation}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayAppDeviceMgmt}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructorActuation}}
+		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{ApplicationClient}\label{comp:ApplicationClient}
 	\begin{description}[noitemsep,nolistsep]
@@ -105,24 +105,32 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~This component contains sanbox environments for application instances to execute in.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppInstanceMgmt}}
-		\item[Required interfaces:]~None		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMonitoring}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverterDataConversion}}		
 	\end{description}
 \subsection{ApplicationContainerManager}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~This component contains sanbox environments for application instances to execute in.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApps}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppInstanceMgmt}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:AppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerMonitoring}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AppInstanceMgmt}}		
 	\end{description}
 \subsection{ApplicationContainerMonitor}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerMonitoring}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMonitoring}}		
+	\end{description}
+\subsection{ApplicationExecutionSubsystemMonitor}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitor}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+		\item[Sub-components:]~None
 		\item[Provided interfaces:]~None
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppInstanceMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerMonitoring}}		
 	\end{description}
 \subsection{ApplicationFacade}\label{comp:OnlineServiceOnlineServiceApplicationFacade}
 	\begin{description}[noitemsep,nolistsep]
@@ -130,23 +138,23 @@ updating access rights for customer organisations, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationFacadeAppData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationFacadeDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationFacadeTopologyOverview}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerActuation}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApps}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppMgmt}}		
 	\end{description}
-\subsection{ApplicationLogic}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationLogic}
+\subsection{ApplicationManagementLogic}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~None
-		\item[Required interfaces:]~None		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicForwardData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicIOAppMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructorActuation}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:AppInstanceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInvoiceManagerInvoiceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerRequestData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{ApplicationManager}\label{comp:OnlineServiceOnlineServiceApplicationManager}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Responsible for activating/deactivating applications, setting pluggable device redundancy requirements on \vpett{\nameref{comp:GatewayGatewayDeviceManager}} components, and using \vpett{\nameref{comp:OnlineServiceOnlineServiceNotificationHandler}} to send notifications to customer organisations.
 		\item[Super-components:]~None
-		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationLogic}}
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerActuation}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApps}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerForwardData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerIOAppMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInvoiceManagerInvoiceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerRequestData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
+		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverter}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicForwardData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicIOAppMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:AppInstanceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInvoiceManagerInvoiceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerRequestData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{CustomerOgranisationClient}\label{comp:CustomerOgranisationClient}
 	\begin{description}[noitemsep,nolistsep]
@@ -162,14 +170,14 @@ updating access rights for customer organisations, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeSubscriptionMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApps}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceSubscriptionManagerSubscriptionMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserRolesManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceSubscriptionManagerSubscriptionMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
-\subsection{DeviceDataConverter}\label{comp:OnlineServiceOnlineServiceDeviceDataConverter}
+\subsection{DeviceDataConverter}\label{comp:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverter}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~The \vpett{\nameref{comp:OnlineServiceOnlineServiceDeviceDataConverter}} is resposible for converting pluggable device data in the data processing subsystem.
-		\item[Super-components:]~None
+		\item[Responsibility:]~The \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverter}} is responsible for conversions pluggable device data for applications. There is one in the Online Service for application instances running in the Online Service and one in Gateways for application instances running on gateways.
+		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataConverterDataConversion}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverterDataConversion}}
 		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{DeviceDataScheduler}\label{comp:OnlineServiceOnlineServiceDeviceDataScheduler}
@@ -178,7 +186,7 @@ updating access rights for customer organisations, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerRequestData}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBDeviceData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerForwardData}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBDeviceData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicForwardData}}		
 	\end{description}
 \subsection{DeviceDB}\label{comp:DeviceDatabaseDeviceDB}
 	\begin{description}[noitemsep,nolistsep]
@@ -193,8 +201,8 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~Monitors connected/operational devices on a gateway. Sends notifications in case of hardware failure. Can send a command to disable or reactivate applications when necessary.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceMgmt}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerHeartbeat}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:AppInstanceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{Gateway}\label{comp:GatewayGateway}
 	\begin{description}[noitemsep,nolistsep]
@@ -203,25 +211,9 @@ with each other. E.g. transmits heartbeats from motes to
 \vpett{\nameref{comp:GatewayGatewayDeviceManager}}, transmits commands to shut down applications,
 triggers notifications to be generated, ...
 		\item[Super-components:]~None
-		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGWApplicationContainerManager}}
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayHeartbeat}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataConverterDataConversion}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
-	\end{description}
-\subsection{GatewayLogic}\label{comp:GatewayGatewayGatewayLogic}
-	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~Handles the main logic on the gateway and communication with other outside components.
-		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
-		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayHeartbeat}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayClass}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteDeviceMgmt}}		
-	\end{description}
-\subsection{GWApplicationContainerManager}\label{comp:GatewayGatewayGWApplicationContainerManager}
-	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
-		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
-		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}}
-		\item[Required interfaces:]~None		
+		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:AppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerHeartbeat}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:MoteMoteDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{InfrastructreOwnerClient}\label{comp:InfrastructreOwnerClient}
 	\begin{description}[noitemsep,nolistsep]
@@ -237,7 +229,7 @@ triggers notifications to be generated, ...
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeAccessRights}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAccessRightsManagerAccessRightsMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerIOAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerManagerIOMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAccessRightsManagerAccessRightsMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicIOAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerManagerIOMgmt}}		
 	\end{description}
 \subsection{InfrastructureOwnerManager}\label{comp:OnlineServiceOnlineServiceInfrastructureOwnerManager}
 	\begin{description}[noitemsep,nolistsep]
@@ -263,7 +255,7 @@ of connected pluggable devices in the heartbeats.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:MoteMoteDeviceData}}, \iconprovided{}~\vpett{\nameref{int:MoteMoteDeviceMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceActuate}}, \iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceConfig}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceData}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayHeartbeat}}, \iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceRequestData}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceActuate}}, \iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceConfig}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceData}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerHeartbeat}}, \iconrequired{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceRequestData}}		
 	\end{description}
 \subsection{NotificationDeliveryService}\label{comp:NotificationDeliveryServiceNodeNotificationDeliveryService}
 	\begin{description}[noitemsep,nolistsep]
@@ -289,6 +281,14 @@ of connected pluggable devices in the heartbeats.
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBAppMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBInvoiceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBIOMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBNotificationMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBSubscriptionMgmt}}, \iconprovided{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBUserRoleMgmt}}
 		\item[Required interfaces:]~None		
 	\end{description}
+\subsection{PluggableDevice}\label{comp:PuggableDevicePluggableDevice}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~Responsible for sending pluggable device data to MoteFacade. Needs to be initialised in order for the data to be used/stored.
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceActuate}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceConfig}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceRequestData}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:MoteMoteDeviceData}}		
+	\end{description}
 \subsection{PluggableDeviceDataDB}\label{comp:PluggableDeviceDatabasePluggableDeviceDataDB}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Database dedicated to pluggable device data only.
@@ -297,21 +297,13 @@ of connected pluggable devices in the heartbeats.
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PluggableDeviceDatabasePluggableDeviceDataDBDeviceData}}
 		\item[Required interfaces:]~None		
 	\end{description}
-\subsection{PluggableDevice}\label{comp:PuggableDevicePluggableDevice}
-	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~Responsible for sending pluggable device data to \vpett{\nameref{comp:MoteMote}}. Needs to be initialised in order for the data to be used/stored.
-		\item[Super-components:]~None
-		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceActuate}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceConfig}}, \iconprovided{}~\vpett{\nameref{int:PuggableDevicePluggableDeviceRequestData}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:MoteMoteDeviceData}}		
-	\end{description}
 \subsection{SubscriptionManager}\label{comp:OnlineServiceOnlineServiceSubscriptionManager}
 	\begin{description}[noitemsep,nolistsep]
 		\item[Responsibility:]~Responsible for all functionality related to access rights to subscriptions. E.g. retrieving the applications that a customer organisation can subscribe to, creating new subscriptions to ApplicationInstances, etc.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceSubscriptionManagerSubscriptionMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApps}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBSubscriptionMgmt}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppMgmt}}, \iconrequired{}~\vpett{\nameref{int:OtherDataDatabaseOtherDataDBSubscriptionMgmt}}		
 	\end{description}
 \subsection{TopologyManager}\label{comp:OnlineServiceOnlineServiceTopologyManager}
 	\begin{description}[noitemsep,nolistsep]
@@ -414,10 +406,10 @@ of connected pluggable devices in the heartbeats.
     \end{description}
 
   %%%%%%%% Actuation
-  \subsection{Actuation}\label{int:OnlineServiceOnlineServiceApplicationManagerActuation}
+  \subsection{Actuation}\label{int:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructorActuation}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructor}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -432,10 +424,10 @@ of connected pluggable devices in the heartbeats.
     \end{description}
 
   %%%%%%%% AppDeviceMgmt
-  \subsection{AppDeviceMgmt}\label{int:GatewayGatewayAppDeviceMgmt}
+  \subsection{AppDeviceMgmt}\label{int:GatewayGatewayDeviceManagerAppDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerActuationCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{bool areEssentialDevicesOperational(int applicationID)}
@@ -452,20 +444,35 @@ TODO: update this with Relationship type?
     \end{itemize}
     \end{description}
 
-  %%%%%%%% AppInstanceMgmt
-  \subsection{AppInstanceMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerAppInstanceMgmt}
+  %%%%%%%% AppDeviceMgmt
+  \subsection{AppDeviceMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}
       \item[Operations:] ~
 % no operations
+    \end{description}
+
+  %%%%%%%% AppInstanceMgmt
+  \subsection{AppInstanceMgmt}\label{int:AppInstanceMgmt}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}
+      \item[Operations:] ~
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{void activateApplicationInstance(int applicationInstanceID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Activates an ApplicationInstance that is running on the gateway.
+\item Created for: UC17.3, U2 - easy applications
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% AppMgmt
   \subsection{AppMgmt}\label{int:OtherDataDatabaseOtherDataDBAppMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OtherDataDatabaseOtherDataDB}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void activateApplication(int applicationInstanceID, string status)}
@@ -527,10 +534,10 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% AppMgmt
-  \subsection{AppMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerAppMgmt}
+  \subsection{AppMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void activateApplicationInstance(int applicationInstanceID)}
@@ -548,78 +555,14 @@ TODO: update this with Relationship type?
            \item Effect: Deactivates a running instance of an application.
 \item Created for: UC18, Av3: automatic suspension/reactivation of applications.
         \end{itemize}
-      \item \textsf{void updateApplicationDevicesSettings(int applicationInstanceID, List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices, List\textless{}\ref{data:DataTypesRelationship}\textgreater{} relationships)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
-\item Created for: UC19.6, U2 - easy applications
-        \end{itemize}
     \end{itemize}
     \end{description}
 
-  %%%%%%%% AppMgmt
-  \subsection{AppMgmt}\label{int:GatewayGatewayGWApplicationContainerManagerAppMgmt}
+  %%%%%%%% AppMonitoring
+  \subsection{AppMonitoring}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMonitoring}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGWApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
-      \item[Operations:] ~
-    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{void activateApplicationInstanceaaaa(int applicationInstanceID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Activates an ApplicationInstance that is running on the gateway.
-\item Created for: UC17.3, U2 - easy applications
-        \end{itemize}
-    \end{itemize}
-    \end{description}
-
-  %%%%%%%% AppMgmt
-  \subsection{AppMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManagerAppMgmt}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] None
-      \item[Required by:] None
-      \item[Operations:] ~
-% no operations
-    \end{description}
-
-  %%%%%%%% Apps
-  \subsection{Apps}\label{int:OnlineServiceOnlineServiceApplicationManagerApps}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceSubscriptionManager}}
-      \item[Operations:] ~
-    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{void activateApplication(int applicationInstanceID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Activates an ApplicationInstance.
-\item Created for: UC19.14, U2 - easy applications
-        \end{itemize}
-      \item \textsf{int createNewApplicationInstance(int custOrgID, int applicationID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
-\item Created for: UC19.4, U2 - easy applications
-        \end{itemize}
-      \item \textsf{List\textless{}\ref{data:DataTypesApplication}\textgreater{} getApplications()}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Returns a list of applications in the system.
-\item Created for: UC19.2, U2 - easy applications
-        \end{itemize}
-      \item \textsf{List\textless{}\ref{data:DataTypesRoomTopology}\textgreater{} getNecessaryDevicesAndTopologyConfigurations(int applicationID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
-\item Created for: UC19.5, U2 - easy applications
-        \end{itemize}
-      \item \textsf{void updateCriticality(int applicationInstanceID, boolean isCritical)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Updates the criticality of an ApplicationInstance.
-\item Created for: UC19.11, U2 - easy applications
-        \end{itemize}
-    \end{itemize}
-    \end{description}
-
-  %%%%%%%% Class
-  \subsection{Class}\label{int:GatewayGatewayClass}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] None
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}
       \item[Operations:] ~
 % no operations
     \end{description}
@@ -644,15 +587,15 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% DataConversion
-  \subsection{DataConversion}\label{int:OnlineServiceOnlineServiceDeviceDataConverterDataConversion}
+  \subsection{DataConversion}\label{int:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverterDataConversion}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceDeviceDataConverter}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverter}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{\ref{data:DataTypesDeviceData} convert(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesDeviceData} data, string type)}
+      \item \textsf{\ref{data:DataTypesDeviceData} convert(\ref{data:DataTypesDeviceData} data, string targetType)}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Converts pluggable device data into other pluggable device data that contains the same information in a different type.
+           \item Effect: Converts pluggable device data into other pluggable device data that contains the same information in a different measurement type.
 \item Created for: M1: data processing subsystem should be extended with relevant data conversions
         \end{itemize}
     \end{itemize}
@@ -716,7 +659,7 @@ TODO: update this with Relationship type?
   %%%%%%%% DeviceData
   \subsection{DeviceData}\label{int:GatewayGatewayDeviceData}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -735,7 +678,7 @@ TODO: update this with Relationship type?
   \subsection{DeviceData}\label{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceDeviceDataScheduler}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void rcvData(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesDeviceData} data)}
@@ -750,7 +693,7 @@ TODO: update this with Relationship type?
   \subsection{DeviceMgmt}\label{int:MoteMoteDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{List\textless{}\ref{data:DataTypesPluggableDeviceInfo}\textgreater{} getConnectedDevices()}
@@ -761,7 +704,7 @@ TODO: update this with Relationship type?
         \end{itemize}
       \item \textsf{void setConfig(\ref{data:DataTypesPluggableDeviceID} pID, Map\textless{}String, String\textgreater{} config)}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Set the given configuration parameters of a PluggableDevice to the given values. Setting unknown parameters on a PluggableDevice has no effect. \\
+           \item Effect: Set the given configuration parameters of a \vpett{\nameref{comp:PuggableDevicePluggableDevice}} to the given values. Setting unknown parameters on a \vpett{\nameref{comp:PuggableDevicePluggableDevice}} has no effect. \\
 \item Created for: UC11: pluggable device needs to be initialised, M1: pluggable device must be able to be initialised
         \end{itemize}
     \end{itemize}
@@ -771,7 +714,7 @@ TODO: update this with Relationship type?
   \subsection{DeviceMgmt}\label{int:DeviceDatabaseDeviceDBDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:DeviceDatabaseDeviceDB}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void addDevice(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesPluggableDeviceType} type, Map\textless{}string, string\textgreater{} configurations, int moteID)}
@@ -808,88 +751,6 @@ TODO: update this with Relationship type?
     \end{description}
 
   %%%%%%%% DeviceMgmt
-  \subsection{DeviceMgmt}\label{int:GatewayGatewayDeviceMgmt}
-    \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}
-      \item[Operations:] ~
-    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{void addDevice(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesPluggableDeviceType} type, Map\textless{}string, string\textgreater{} configurations, int moteID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Adds a new pluggable device in the \vpett{\nameref{comp:DeviceDatabaseDeviceDB}} and adds a reference to a mote. The device's status is 'uninitialised' by default and it's current configurations (which are now the default configurations) are stored as well. If the device already exists, removes the data first (in case the device is plugged into a different mote or on a different network). \\
-Adds a new pluggable device to the topology of the infrastructure owner and links it to a mote. The device gets the mote's location by default. If the device is already linked to another mote, overwrites that link. \\
-Notifies the infrastructure owner that owns the gateway that the pluggable device was detected.
-\item Created for: UC6.3, U2 - easy pluggable device installation
-        \end{itemize}
-      \item \textsf{int addMote(\ref{data:DataTypesMoteInfo} mote, int gatewayID, \ref{data:DataTypesIPAddress} moteIPAddress)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Adds a new mote in the \vpett{\nameref{comp:DeviceDatabaseDeviceDB}} along with an IP address and a reference to a gateway. Returns the DB id for the mote. \\
-Adds a new mote to the topology of the infrastructure owner. The mote is linked to a gateway and gets status 'unplaced' by default. \\
-Notifies the infrastructure owner that owns the gateway that a new mote is available for conguration in the topology.
-\item Created for: UC4.3, U2 - easy mote installation
-        \end{itemize}
-      \item \textsf{void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Checks and activates applications which can now execute again. The applications checked are those that are subscribed to by customers organisations associated to the given infrastructure owner.
-\item Created for: UC17, UC6.3 - reintroduced device
-        \end{itemize}
-      \item \textsf{void deactivateApplicationInstance(int applicationInstanceID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Deactivates a certain application. This could happen when mandatory pluggable devices for the application are missing.
-\item Created for: Av3: automatic suspension/reactivation of applications.
-        \end{itemize}
-      \item \textsf{Map\textless{}string, string\textgreater{} getConfigDB(\ref{data:DataTypesPluggableDeviceID} pID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Gets the last set configurations of a pluggable device from the \vpett{\nameref{comp:DeviceDatabaseDeviceDB}}.
-\item Created for: UC6.3 - reintroduced device
-        \end{itemize}
-      \item \textsf{List\textless{}\ref{data:DataTypesPluggableDeviceInfo}\textgreater{} getConnectedDevices()}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Returns a list of information about devices that are connected to the gateway.
-\item Created for: UC18
-\item Tradeoff: send PluggableDeviceID instead of DeviceInfo. If you send DeviceInfo, then \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}} does not have to fetch this info. If you send PluggableDeviceID's, then less bandwidth is used and the Gateways do less work.
-        \end{itemize}
-      \item \textsf{void pluggableDevicePersisentFailure()}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Lets the gateway know that a timer for pluggable device or mote has expired. This will generate a notification for an infrastructure owner.
-\item Created for: Av3: The infrastructure owner should be notified of any persistent pluggable device or mote failures.
-        \end{itemize}
-      \item \textsf{void pluggableDevicePluggedIn(Map\textless{}string, string\textgreater{} mInfo, \ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesPluggableDeviceType} type)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Notifies the gateway that a new pluggable device of the given type is connected to the mote.
-        \end{itemize}
-      \item \textsf{void pluggableDeviceRemoved(\ref{data:DataTypesPluggableDeviceID} pID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Notifies the gateway that a pluggable device is removed.
-        \end{itemize}
-      \item \textsf{void reactivateApplicationInstance(int applicationInstanceID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Reactivate an application instance. This could happen automatically after a broken sensor has been replaced.
-\item Created for: Av3: automatic suspension/reactivation of applications.
-        \end{itemize}
-      \item \textsf{void reactivateDevice(\ref{data:DataTypesPluggableDeviceID} pID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Changes the status of a pluggable device to 'active'. \\
-Changes the status of a pluggable device in the topology to 'placed'. \\
-Notifies the infrastructure owner that owns the gateway that the pluggable device was detected and reactivated.
-\item Created for: UC6.3 - reintroduced device
-        \end{itemize}
-      \item \textsf{void reactivateMote(int moteID)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Changes the status of the mote with DB id 'moteID' to 'active'. \\
-Changes the status of the mote in the topology to 'placed'. \\
-Notifies the infrastructure owner that owns the gateway that the mote was detected and reactivated.
-\item Created for: U2 - Reintroducing a previously known mote should not require any conguration.
-        \end{itemize}
-      \item \textsf{void setConfig(\ref{data:DataTypesPluggableDeviceID} pID, Map\textless{}String, String\textgreater{} config)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Set the given configuration parameters of a PluggableDevice to the given values. Setting unknown parameters on a PluggableDevice has no effect. \\
-\item Created for: UC11: pluggable device needs to be initialised, M1: pluggable device must be able to be initialised
-        \end{itemize}
-    \end{itemize}
-    \end{description}
-
-  %%%%%%%% DeviceMgmt
   \subsection{DeviceMgmt}\label{int:OnlineServiceOnlineServiceApplicationFacadeDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationFacade}}
@@ -902,7 +763,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
   \subsection{DeviceMgmt}\label{int:GatewayGatewayDeviceManagerDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{bool areEssentialDevicesOperational(int applicationID)}
@@ -921,6 +782,15 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
 \item Created for: UC11: pluggable device needs to be initialised, M1: pluggable device must be able to be initialised
 \item TODO: need this check? is 'initialized' status stored in DB or on gateways? or both?
         \end{itemize}
+      \item \textsf{void pluggableDevicePluggedIn(\ref{data:DataTypesMoteInfo} mInfo, \ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesPluggableDeviceType} type)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Notify the gateway that a new \vpett{\nameref{comp:PuggableDevicePluggableDevice}} of the given type is connected
+to the mote.
+        \end{itemize}
+      \item \textsf{void pluggableDeviceRemoved(\ref{data:DataTypesPluggableDeviceID} pID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Notify the gateway that a \vpett{\nameref{comp:PuggableDevicePluggableDevice}} is removed.
+        \end{itemize}
       \item \textsf{void setPluggableDevicesRequirements(int applicationID, List\textless{}\ref{data:DataTypesPluggableDeviceInfo}\textgreater{} devices)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Sets an application's requirements for pluggable devices.
@@ -930,9 +800,9 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
     \end{description}
 
   %%%%%%%% ForwardData
-  \subsection{ForwardData}\label{int:OnlineServiceOnlineServiceApplicationManagerForwardData}
+  \subsection{ForwardData}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicForwardData}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceDeviceDataScheduler}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -949,10 +819,50 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
     \end{itemize}
     \end{description}
 
-  %%%%%%%% Heartbeat
-  \subsection{Heartbeat}\label{int:GatewayGatewayHeartbeat}
+  %%%%%%%% FrontEndAppMgmt
+  \subsection{FrontEndAppMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayGatewayLogic}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceSubscriptionManager}}
+      \item[Operations:] ~
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{void activateApplication(int applicationInstanceID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Activates an ApplicationInstance.
+\item Created for: UC19.14, U2 - easy applications
+        \end{itemize}
+      \item \textsf{int createNewApplicationInstance(int custOrgID, int applicationID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
+\item Created for: UC19.4, U2 - easy applications
+        \end{itemize}
+      \item \textsf{List\textless{}\ref{data:DataTypesApplication}\textgreater{} getApplications()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns a list of applications in the system.
+\item Created for: UC19.2, U2 - easy applications
+        \end{itemize}
+      \item \textsf{List\textless{}\ref{data:DataTypesRoomTopology}\textgreater{} getNecessaryDevicesAndTopologyConfigurations(int applicationID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
+\item Created for: UC19.5, U2 - easy applications
+        \end{itemize}
+      \item \textsf{void updateApplicationDevicesSettings(int applicationInstanceID, List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices, List\textless{}{\colorbox{red!30}{\underline{Relationships}}}\textgreater{} relationships)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
+\item Created for: UC19.6, U2 - easy applications
+        \end{itemize}
+      \item \textsf{void updateCriticality(int applicationInstanceID, boolean isCritical)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Updates the criticality of an ApplicationInstance.
+\item Created for: UC19.11, U2 - easy applications
+        \end{itemize}
+    \end{itemize}
+    \end{description}
+
+  %%%%%%%% Heartbeat
+  \subsection{Heartbeat}\label{int:GatewayGatewayDeviceManagerHeartbeat}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:MoteMote}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -983,7 +893,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
   \subsection{InvoiceMgmt}\label{int:OnlineServiceOnlineServiceInvoiceManagerInvoiceMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceInvoiceManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void markActivatedApplication(int applicationInstanceID, int custOrgID, \ref{data:DataTypesDateTime} date)}
@@ -995,9 +905,9 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
     \end{description}
 
   %%%%%%%% IOAppMgmt
-  \subsection{IOAppMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerIOAppMgmt}
+  \subsection{IOAppMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicIOAppMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceInfrastructureOwnerFacade}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -1064,6 +974,15 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
     \end{itemize}
     \end{description}
 
+  %%%%%%%% Monitoring
+  \subsection{Monitoring}\label{int:OnlineServiceOnlineServiceApplicationManagerMonitoring}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitor}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
   %%%%%%%% NotificationDeliveryMgmt
   \subsection{NotificationDeliveryMgmt}\label{int:NotificationDeliveryServiceNodeNotificationDeliveryServiceNotificationDeliveryMgmt}
     \begin{description}[noitemsep,nolistsep]
@@ -1108,7 +1027,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
   \subsection{Notify}\label{int:OnlineServiceOnlineServiceNotificationHandlerNotify}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceNotificationHandler}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void notify(int userID, string message)}
@@ -1141,7 +1060,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
   \subsection{RequestData}\label{int:OnlineServiceOnlineServiceDeviceDataSchedulerRequestData}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceDeviceDataScheduler}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{List\textless{}\ref{data:DataTypesDeviceData}\textgreater{} getData(int applicationID, \ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesDateTime} from, \ref{data:DataTypesDateTime} to)}
@@ -1156,7 +1075,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
   \subsection{RoleMgmt}\label{int:OnlineServiceOnlineServiceUserRolesManagerRoleMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceUserRolesManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{boolean areMandatoryUserRolesAssigned(int applicationInstanceID)}
@@ -1311,7 +1230,7 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
   \subsection{TopologyMgmt}\label{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceTopologyManager}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void addDevice(\ref{data:DataTypesPluggableDeviceID} id, int moteID)}
@@ -1455,8 +1374,9 @@ Notifies the infrastructure owner that owns the gateway that the mote was detect
 \end{itemize}
 \item \vpedatatype{data:DataTypesPluggableDeviceType}{PluggableDeviceType}: 
 \begin{itemize}[noitemsep,nolistsep]
-
-\item[] Denotes the type of a pluggable device.
+\item[] Attributes: int manufacturerID, int productID, int type, int measurementUnits
+\item[] Denotes the type of a pluggable device. It specifies the manufacturer, a model identifier (if any) of the pluggable (e.g. heat-o sensor 5000), the type of pluggable device (e.g. temperature sensor or power socket actuator) and the used measurement units (e.g. degrees Celsius, degrees Fahrenheit or decibel). Within MicroPnP this information is also used to retrieve and install the correct drivers (this is outside the scope of the system), \\
+This description is taken from the Discussion Board on Toledo.
 \end{itemize}
 \item \vpedatatype{data:DataTypesRelationship}{Relationship}: 
 \begin{itemize}[noitemsep,nolistsep]
