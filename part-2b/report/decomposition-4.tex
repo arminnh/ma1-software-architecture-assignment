@@ -509,6 +509,9 @@
         \item Component: ApplicationContainer
         \item Component: ApplicationContainerManager
         \item Component: ApplicationContainerMonitor
+        \item Component: DeviceCommandConstructor
+        \item Component: ApplicationManagementLogic
+        \item Component: ApplicationExecutionSubsystemMonitor
     \end{itemize}
 
 
@@ -519,31 +522,35 @@
 
     \subsubsection{DeviceCommandConstructor}
         \begin{itemize}
-            \item Actuation
+            \item Commands
         \end{itemize}
 
    \subsubsection{ApplicationContainer}
         \begin{itemize}
-            \item AppRequests
+            \item AppInstanceMgmt
+            \item AppMonitoring
         \end{itemize}
 
     \subsubsection{ApplicationContainerManager}
         \begin{itemize}
-            \item AppRequests
+            \item AppInstanceMgmt
+            \item Monitoring
+            \item AppInstanceMessages
         \end{itemize}
-
-    \subsubsection{ApplicationFacade}
+    
+    \subsubsection{ApplicationManagementLogic}
         \begin{itemize}
+            \item FrontEndAppRequests
+            \item AppDeviceManagement
             \item AppMgmt
+            \item AppInstanceMessages
         \end{itemize}
+
 
     \subsubsection{ApplicationFacade}
         \begin{itemize}
-            \item DeviceMgmt
-        \end{itemize}
-
-    \subsubsection{ApplicationFacade}
-        \begin{itemize}
+            \item AppData
+            \item AppDeviceMgmt
             \item TopologyOverview
         \end{itemize}
 
