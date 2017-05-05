@@ -1,4 +1,4 @@
-\section{Decomposition 5: Av1 (Elements/Subsystem to decompose/expand)}
+\section{Decomposition 5: Av1 (Gateway - Online Service communication subsystem)}
 
 
 \subsection{Selected architectural drivers}
@@ -12,64 +12,222 @@
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
 
-    \paragraph{Av1: Problem title}
-        Short description of the problem.\\
-        Solution for the problem.
+    \paragraph{Av1: New Gateway responsibilities}
+        The SIoTIP gateway is able to autonomously detect failures of its individual internal communication components.\\
+        The Online Service should acknowledge each message sent by the SIoTIP gateway so that the gateway can detect failures.\\
+        If an internal SIoTIP gateway component fails, the gateway first tries to restart the affected component.
+        If the failure persists, the SIoTIP gateway reboots itself entirely. Note that the SIoTIP gateway,
+        due to the occurred failure, cannot contact a system administrator itself.\\
+        If (an internal communication component of) the Online Service or the communication
+        channel has failed, the SIoTIP gateway will temporarily store all incoming pluggable data
+        and any issued application commands internally.\\
+        If the Online Service becomes unreachable, application parts running locally on the SIoTIP
+        gateway continue to operate normally.\\
+        The SIoTIP gateway will start synchronising with the Online service within 1 minute after the
+        communication channel becomes available.\\
+        The SIoTIP gateway can store at least 3 days of pluggable data before old data has to be overwritten. \\
 
-    Communication pattern: broker ?
+        OnlineServiceBroker: Isolates communication-related concerns between Gateways and the Online Service along with GatewayBroker on the Online Service.
+                             Forwards requests from one party to the other and transmits results and possible exceptions.
 
-    Prevention:
-        *) SLA 99.9\% availability, can't model this
-        *) Local networks 90\% availability
+        OnlineServiceBrokerMonitor: Monitors the communication component on Gateways. If the communication component fails, the monitor
+                                    tries to restart it. If the failure persists, the gateway reboots itself entirely.
 
-    Detection:
-        *) Online Service can detect failures of its individual internal
-           communication components:
-           Ping/Echo, Monitor, Heartbeat, Timestamp
-           The failure of an internal SIoTIP Online Service component is
-           detected within 30 seconds.
+        In OnlineServiceBroker:
+            BrokerLogic: Handles all functionality related to communication.
+            RequestStore: Temporarily stores all pluggable data and issues application commands until they can be deleted (= until an acknowledgement has been received for the request by the Online Service). Can store at least 3 days of pluggable data before old data has to be overwritten.
+            OnlineServiceMonitor: Monitors the Gateway's connectivity to the Online Service. If the Online Service or the communication channel has failed, all requests to the Online Service will be stopped and stored in the RequestStore. An explicit command for this is not necessary,
+                                  because the requests in the RequestStore will not be deleted, since no acknowledgements are received anymore from the Online Service. After the monitor detects that a connection to the Online Service is possible again, it makes the gateway start
+                                  synchronising again. When the Online Service is unreachable, application parts running locally on the SIoTIP gateway continue to operate normally.
 
-        *) SIoTIP gateway can detect failures of its individual internal
-           communication components:
-           Ping/Echo, Monitor, Heartbeat, Timestamp
+        INTERFACES:
+            OnlineServiceBroker:
+                HAS ALL INTERFACES PROVIDED BY COMPONENTS INSIDE OF IT
 
-        *) Online service can detect that a SIoTIP gateway is not sending
-           data anymore based on the expected synchronisation interval:
-           Monitor: GWMonitor
-           An outage is defined as 3 consecutive expected synchronisations
-           that do not arrive within 1 minute of their expected arrival time.
+                interface CommunicationComponentMonitoring used by OnlineServiceBrokerMonitor:
+                    boolean check()
+                        Effect: Returns true if everything with the monitored component is in order.
+                        \item Created for: Av1 - SIoTIP gateway autonomously detects failures of its individual internal communication components.
 
-        *) Online Service should acknowledge each message sent by the SIoTIP
-           gateway so that the gateway can detect failures.
+                    void restart()
+                        Effect: Returns true if everything with the monitored component is in order.
+                        \item Created for: Av1 - If an internal SIoTIP gateway component fails, the gateway first tries to restart the affected component.
 
-           CommunicationModule on gateway and Online Service.
-           Sends all messages to Online Service and waits for
-           acknowlegdements for all sent messages. If no acknowledgement
-           within X seconds -> Online Service failure
+            BrokerLogic:
+                interface Communication used by RequestStore:
+                    void send(...)
+                    void receive(...)
 
-    Resolution:
-        *) gateway outage (= complete failure) detected
-           -> notify IO and SIoTIP system administrator
-           The infrastructure owner is notified within 5 minutes after
-           the detection of an outage of their gateway. A SIoTIP system administrator
-           should be notified within 1 minute after the detection of a simultaneous
-           outage of more than 1\% of the registered gateways.
+                interface OSCommunication used by Online Service:
+                    void acknowledgement(int requestID)
+                        Effect: Sends an acknowledgement for a message sent by the SIoTIP gateway.
+                        \item Created for: Av1 - The Online Service should acknowledge each message sent by the SIoTIP gateway so that the gateway can detect failures.
 
-        *) gateway component failure detected
-           -> first, restart component. If still fails, reboot gateway entirely.
+                    void send(...)
+                    void receive(...)
 
-        *) Online Service / communication channel failure detected ->
-           -> temporarily store all incoming pluggable data and issued
-              application commands internally
-           The SIoTIP gateway can store at least 3 days of pluggable data before
-           old data has to be overwritten.
+                interface OSMonitoring used by OnlineServiceMonitor:
+                    Echo pingOnlineService()
+                        Effect: Makes the BrokerLogic send a ping to the Online Service.
+                        \item Created for: The SIoTIP gateway will start synchronising with the Online service within 1 minute after the communication channel becomes available.
 
-        *) When Online Service = unreachable, applications on SIoTIP gateway
-           can still operate normally, TODO ask
+                    void synchroniseWithOnlineService()
+                        Effect: Makes the BrokerLogic fetch all pluggable data and application commands as new requests to start sending to the Online Service again.
+                        \item Created for: Av1 - The SIoTIP gateway will start synchronising with the Online service within 1 minute after the communication channel becomes available.
 
-    Response Measure:
-        *) The SIoTIP gateway will start synchronising with the Online service
-           within 1 minute after the communication channel becomes available.
+            RequestStore:
+                All interfaces that are going to the online service now go to the broker
+                All requests come in here and are stored
+                The requests are then forwarded to BrokerLogic containing a unique requestID
+
+                Interface Communication used by BrokerLogic:
+                    void deleteRequest(int requestID)
+                        Effect: Deletes a request that is stored in the RequestStore. This is called after an acknowledgement is received from the Online Service.
+                        \item Created for: Av1 - the SIoTIP gateway will temporarily store all incoming pluggable data and any issued application commands internally
+
+                    List<Object> getNewRequestsForSynchronisation()
+                        Effect: Returns pluggable data and application commands as new requests to start sending to the Online Service again.
+                        \item Created for: Av1 - The SIoTIP gateway will start synchronising with the Online service within 1 minute after the communication channel becomes available.
+
+            OnlineServiceMonitor:
+                Online service keeps track of connection to Online Service.
+                If the Online Service becomes unreachable (= does not send ACKs anymore), then start pinging the Online Service
+
+                Interface OSMonitoring used by BrokerLogic:
+                    void onlineServiceUpdate()
+                        Effect: Lets the OnlineServiceMonitor know that a message has been received from the Online Service
+                        \item Created for: Av1 - The Online Service should acknowledge each message sent by the SIoTIP gateway so that the gateway can detect failures.
+
+
+    \paragraph{Av1: New Online Service responsibilities}
+        The Online Service is able to autonomously detect failures of its individual internal communication components.\\
+        The Online Service is able to detect that a SIoTIP gateway is not sending data anymore based on the expected synchronisation interval.\\
+        The Online Service notifies the infrastructure manager and a SIoTIP system administrator when the outage of a SIoTIP gateway is detected.\\
+        The failure of an internal SIoTIP Online Service component is detected within 30 seconds.\\
+        The detection time for a failed SIoTIP gateway or channel depends on the transmission rate
+        of the gateway. An outage is dened as 3 consecutive expected synchronisations that do not
+        arrive within 1 minute of their expected arrival time.\\
+        The infrastructure owner is notied within 5 minutes after the detection of an outage of their gateway.\\
+        A SIoTIP system administrator should be notied within 1 minute after the detection
+        of a simultaneous outage of more than 1\% of the registered gateways.\\
+
+        GatewayBroker: Isolates communication-related concerns between the Online Service Gateways and along with OnlineServiceBroker on Gateways.
+                       Forwards requests from one party to the other and transmits results and possible exceptions. \\
+                       Sends acknowledgements for all messages sent by Gateways so that they can detect failures.
+        GatewayBrokerMonitor: Monitor the communication component for communication with gateways on the Online Service.
+
+        In GatewayBroker:
+            BrokerLogic: Handles all functionality related to communication.
+            GatewayMonitor: Monitors the connectivity status all gateways. Can detect that a gateway is not sending data anymore based on the expected synchronisation interval. If 3 consecutive expected synchronisations do not arrive within 1 minute of their expected arrival time,
+                            this is detected as a gateway outage. When outages of gateways are detected, the infrastructure owners that own the gateways and a SIoTIP system administrator are notified.
+                            When the connectivity status change of a Gateway is detected, this is saved in the DeviceDB.
+
+        INTERFACES:
+            GatewayBroker:
+                HAS ALL INTERFACES PROVIDED BY COMPONENTS INSIDE OF IT
+
+                interface CommunicationComponentMonitoring used by GatewayBrokerMonitor:
+                    boolean check()
+                    Effect: Returns true if everything with the monitored component is in order. The failure of an internal SIoTIP Online Service component must be detected within 30 seconds.
+                    \item Created for: Av1 - The Online Service is able to autonomously detect failures of its individual internal communication components.
+
+
+            BrokerLogic:
+                ALL INTERFACES FROM OS TO GATEWAY ARE NOW TO THIS COMPONENT
+
+                interface GWCommunication used by Gateway/BrokerLogic:
+                    void send(...)
+                    void receive(...)
+
+            GatewayMonitor:
+                % table(int id, int countSynchronisationsMissed, DateTime nextSyncPeriod)
+                %       32 bit, 4 bit, 64 bit
+                %     5000 gateways
+                %     5000*(32+4+64)/8/1024 kilobyte ~~ 64 kb
+
+                interface GatewayUpdates used by BrokerLogic:
+                    void gatewayUpdate(int gatewayID, DateTime time)
+                        Effect: Lets the GatewayMonitor know that data has been received from a certain Gateway. Is called after a synchronisation of the gateway.
+                                When 3 consecutive expected synchronisations that do not arrive within 1 minute of their expected arrival time, a gateway outage is declared.
+                        \item Created for: Av1 - The Online Service is able to detect that a SIoTIP gateway is not sending data anymore based on the expected synchronisation interval.
+
+            NotificationHandler:
+                Interface Notify used by GatewayMonitor
+
+            DeviceDB:
+                Interface DeviceMgmt used by GatewayMonitor:
+                    void setGatewayUnreachable()
+                        Effect: Changes a gateway's status to 'unreachable'.
+                        \item Created for: Av1 - Connectivity of gateways
+
+                    void getPercentageOfUnreachableGateways()
+                        Effect: Returns the percentage of deployed gateways that have status 'unreachable'.
+                        \item Created for: Av1 - A SIoTIP system administrator should be notified of a simultaneous outage of more than 1\% of the registered gateways.
+
+
+    In BROKER, many clients can make remote method invocations on
+    specific remote component objects hosted by a server. Clients thus
+    communicate with the server objects in a many-to-one fashion, and
+    their functional interfaces are often statically typed. The remote
+    method invocation style of communication provided by B ROKER is
+    best suited for systems that try to hide the presence of the network.
+
+    MESSAGING relaxes this coupling and typing: clients send dynamically
+    typed messages to specific remote services that reside at commu-
+    nication endpoints, not (necessarily) to specific methods. M ESSAGING
+    thus enables many-to-one communication without statically pre-
+    defining the interface dependencies of clients to services.Distribution Infrastructure
+
+    PUBLISHER-SUBSCRIBER decouples an application’s components even
+    more: they can exchange events in a one-to-many manner with-
+    out knowing one another’s identity explicitly, and without having
+    to make a request each time new events are available. P UBLISHER -
+    S UBSCRIBER middleware is therefore responsible for tracking which
+    subscribers receive specific events sent asynchronously by pub-
+    lishers. Subscribers react when receiving an event by performing
+    some action, but publishers do not directly initiate the execution of
+    a specific method on the subscribers.
+
+    BROKER makes invocations
+    on remote component objects look and act as much as possible
+    like invocations on component objects in the same address space
+    as their clients. MESSAGING and PUBLISHER-SUBSCRIBER are most appropriate
+    for integration scenarios in which multiple, independently
+    developed and self-contained services or applications must collaborate
+    and form a coherent software system.
+
+    A message channel does not come without cost, however, since it
+    needs memory, networking resources, and persistent storage to support
+    GUARANTEED DELIVERY [HoWo03]. Developers must therefore plan
+    and configure the number and types of message channels explicitly
+    and thoughtfully to ensure the desired quality of service in a given
+    system deployment. A well-designed set of message channels forms a
+    MESSAGE BUS [HoWo03] that acts like a messaging API for the clients
+    and services in the distributed system.
+
+    Employed tactics and patterns: broker, heartbeat, ping/echo
+
+    DEPLOYMENT RATIONALE:
+        OnlineServiceBroker
+        OnlineServiceBrokerMonitor
+
+        GatewayBroker
+        GatewayBrokerMonitor
+
+        For both the Online Service and Gateways, the components used for communication
+        (\texttt{OnlineServiceBroker}, \texttt{GatewayBroker}) are to be deployed on different nodes than
+        their monitoring components (\texttt{OnlineServiceBrokerMonitor}, \texttt{GatewayBrokerMonitor}).
+        Otherwise, if the node of a communication
+        component fails, its monitoring component would also fail and thus
+        nothing would be detected.
+
+    Alternative for monitoring of gateways:
+        Gateway updated come to GatewayMonitor
+        We could make GatewayMonitor ping all the gateways
+        However, this would increase traffic on the network
+
+    Alternative for communication:
+        Messaging, Publishher Subscriber
 
 
 \subsection{Instantiation and allocation of functionality}
@@ -79,7 +237,14 @@
     the components can be found under chapter \ref{ch:elements-datatypes}. \\
 
     \begin{itemize}
-        \item Component: (Av1 or UC)
+        \item BrokerLogic: Av1
+        \item OnlineServiceBroker: Av1
+        \item OnlineServiceBrokerMonitor: Av1
+        \item GatewayBroker: Av1
+        \item GatewayBrokerMonitor: Av1
+        \item RequestStore: Av1
+        \item GatewayMonitor: Av1
+        \item OnlineServiceMonitor: Av1
     \end{itemize}
 
 
@@ -88,14 +253,42 @@
     in the section above. Detailed information about each interface and
     its methods can be found under chapter \ref{ch:elements-datatypes}. \\
 
-    \subsubsection{Component}
+    \subsubsection{BrokerLogic}
         \begin{itemize}
-            \item Interface
+            \item Communication
+            \item OSCommunication
+            \item GWCommunication
+            \item OSMonitoring
+        \end{itemize}
+
+    \subsubsection{OnlineServiceBroker}
+        \begin{itemize}
+            \item CommunicationComponentMonitoring
+        \end{itemize}
+
+    \subsubsection{GatewayBroker}
+        \begin{itemize}
+            \item CommunicationComponentMonitoring
+        \end{itemize}
+
+    \subsubsection{RequestStore}
+        \begin{itemize}
+            \item Communication
+        \end{itemize}
+
+    \subsubsection{GatewayMonitor}
+        \begin{itemize}
+            \item GatewayUpdates
+        \end{itemize}
+
+    \subsubsection{OnlineServiceMonitor}
+        \begin{itemize}
+            \item OSMonitoring
         \end{itemize}
 
 \subsection{Data type definitions}
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}
-        \item DateTime: Represents an instant in time, typically expressed as a date and time of day.
+        \item None
     \end{itemize}

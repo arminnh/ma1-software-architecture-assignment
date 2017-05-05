@@ -1,6 +1,9 @@
 FOR PROJECT DEFENSE: best is 25/05 - 27/05,
                      24/05 armin exam and monika project deadline
 
+AFTER DEADLINE, BEFORE PROJECT DEFENSE:
+    create use case log to print
+
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
 decomposition 4:
@@ -8,13 +11,12 @@ decomposition 4:
     move descriptions to vpp model
     move methods to vpp model
 
+decomposition 5:
+    create components and interfaces in vpp
+    move all methods to vpp
 
 Need to do this somehwere, UC7 ??
     If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
-
-DONE
-    These conversions should be possible per application. For example, one application might be able to only use temperature measurement in degrees Celsius, whereas another application (also) uses degrees Fahrenheit.
-    -> Let DeviceDataConverter be used by ApplicationManager or devicedataScheduler, not GatewayFacade
 
 ==========================================================================
 ================================ REPORT ==================================
@@ -50,30 +52,21 @@ DONE
 ================================== BOOK ==================================
 ==========================================================================
 
-    76 separating user interfaces
-    79 distributing functionality
     130 warehouse topology baseline
     153 summary
-    221 messaging
-    224 message channel
-    237 broker
-    246 client request handler
+
     294 facade
+
     305 component partioning
     329 application control
     351 authorization
+
     371 Synchronisation
     394 copied value
+
     410 mediator
     418 data transfer object
     420 message
-    For Av2:
-        473 resource management
-        488 CONTAINER
-        490 component configurator
-        492 object manager
-        501 task coordinator
-        503 resource pool
 
 ==========================================================================
 ================================ QUESTIONS ===============================
@@ -94,14 +87,16 @@ Where to create the actual db queries?
 
 How to make interface names transparent?
 
-Should we denote when methods should be sync/async?
-
 Av2: Failure of application execution components
     => ApplicationExecutionSubsystemMonitor
 
 Av2: up time?
 
 P1: for replication of components, do we need to add routing or can we just add this in the rationale?
+
+Av1: Interfaces between brokers?
+     send/receive?
+     p274
 
 How is hardware linked to Infrastructure owners?
     => 1 gateway <-> 1 infrastructure owner
