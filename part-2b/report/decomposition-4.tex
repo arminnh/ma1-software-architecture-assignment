@@ -350,10 +350,10 @@
                         \item Created for: UC25.1
 
                 applicationContainer wants overview:
-                    ApplicationContainer -> ApplicationContainerManager: interface X: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+                    ApplicationContainer -> ApplicationContainerManager: interface AppInstanceMessages: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
                         Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
                         \item Created for: UC25.1
-                    ApplicationContainerManager -> ApplicationManagementLogic: interface X: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+                    ApplicationContainerManager -> ApplicationManagementLogic: interface AppDeviceMgmt: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
                         Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
                         \item Created for: UC25.1
 
@@ -448,7 +448,7 @@
                         Effect: Returns information about a gateway for a certain application instance running on a gateway. Returns null if there is no application instance with the given id running on any gateway.
                         \item Created for: UC27.2
 
-                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceMgmt: boolean isApplicationInstanceAvailable(int applicationInstanceID)
                         Effect: Returns true if a certain ApplicationInstance is available.
                         \item Created for: UC27.2
 
@@ -461,7 +461,7 @@
                     The same, but on Online Service, so you don't need to search for the gateway
                     just send the message to the OS ApplicationContainerManager, it will do the rest
 
-                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: boolean isApplicationInstanceAvailable(int applicationInstanceID)
                         Effect: Returns true if a certain ApplicationInstance is available.
                         \item Created for: UC27.2
 
@@ -478,18 +478,18 @@
                 message = string
 
                 message is for Gateway/ApplicationContainer:
-                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceMgmt: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
                         Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
                         \item Created for UC26, UC27
-                    GW/ApplicationContainerManager -> GW/ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                    GW/ApplicationContainerManager -> GW/ApplicationContainer: interface AppInstanceMgmt: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
                         Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
                         \item Created for UC26, UC27
 
                 message is for ApplicationContainer:
-                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
                         Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
                         \item Created for UC26, UC27
-                    ApplicationContainerManager -> ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                    ApplicationContainerManager -> ApplicationContainer: interface AppInstanceMgmt: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
                         Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
                         \item Created for UC26, UC27
 
@@ -504,14 +504,26 @@
 
     \begin{itemize}
         \item Component: ApplicationClient
+                Effect: Represents the client for an application.
         \item Component: ApplicationFacade
-        \item Component: DeviceCommandConstructor
+                Effect: Acts as an access point for ApplicationClients and handles a 
+                        functionality that can be done by applications, 
+                        that are not running on the Online Service or on the Gateway.
         \item Component: ApplicationContainer
+                Effect: executes applications.
         \item Component: ApplicationContainerManager
+                Effect: Responsible for a functionality related to applications in containers.
+                        E.g. sending commands and messages to and from applications, restarting and
+                        suspending the application instances, notifying other parts of the application instance.
         \item Component: ApplicationContainerMonitor
+                Effect:  Monitors applications and application containers.
         \item Component: DeviceCommandConstructor
+                Effect: is responsible for constracting and sending commands from applications to pluggable devices.   
         \item Component: ApplicationManagementLogic
+                         Responsible for a functionality related to applications and connects related components to applications.
         \item Component: ApplicationExecutionSubsystemMonitor
+                Effect: monitors application execution subsytem like the ApplicationContainerMonitor and the ApplicationContainerManager
+        \item Component: ExternalFrontEndClient
     \end{itemize}
 
 
@@ -536,14 +548,16 @@
             \item AppInstanceMgmt
             \item Monitoring
             \item AppInstanceMessages
+            \item AppRequests
         \end{itemize}
 
     \subsubsection{ApplicationManagementLogic}
         \begin{itemize}
             \item FrontEndAppRequests
-            \item AppDeviceManagement
+            \item AppDeviceMgmt
             \item AppMgmt
             \item AppInstanceMessages
+            \item AppRequests
         \end{itemize}
 
 
@@ -553,11 +567,21 @@
             \item AppDeviceMgmt
             \item TopologyOverview
         \end{itemize}
+        
+    \subsubsection{DeviceManager}
+        \begin{itemize}
+            \item DeviceCommands
+        \end
+        
+    \subsubsection{DeviceDB}
+        \begin{itemize}
+            \item AppDeviceMgmt
+        \end
 
 
 \subsection{Data type definitions}
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}
-        \item Echo
+        \item Echo the response to a ping message
     \end{itemize}
