@@ -10,23 +10,20 @@
     The related functional drivers are:
     \begin{itemize}
         \item \emph{UC4}: Install mote \\
-              Short description
         \item \emph{UC6}: Insert a pluggable device into a mote \\
-              Short description
         \item \emph{UC9}: Configure pluggable device access rights \\
-              Short description
         \item \emph{UC10}: Consult and configure topology \\
-              Short description
         \item \emph{UC17}: Activate an application \\
-              Short description
         \item \emph{UC19}: Subscribe to application \\
-              Short description
     \end{itemize}
 
 
 \subsection{Architectural design}
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
+
+    Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life... He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful... the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself.
+
 
     % Some dabatase tables text we wrote:
     %     pluggable\_devices
@@ -174,7 +171,7 @@
         %         For default configurations: when it is a new device, we assume that the defaults are turned on by default so we don't have to do anything here
         %
         %     if the device is a known previously active device (ON THE SAME MOTE):
-        %         ∗ marks the pluggable device as ‘active’:
+        %         ∗ marks the pluggable device as ‘active':
         %             DeviceManager -> GatewayFacade: interface DeviceMgmt: void reactivateDevice(PluggableDeviceID id)
         %             GatewayFacade -> DeviceDB:      interface DeviceMgmt: void reactivateDevice(PluggableDeviceID id)
         %
