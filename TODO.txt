@@ -6,11 +6,6 @@ AFTER DEADLINE, BEFORE PROJECT DEFENSE:
 
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
-decomposition 4:
-    descriptions of all new components & datatypes in text (commit after this so we have history of it)
-    move descriptions to vpp model
-    move methods to vpp model
-
 decomposition 5:
     create components and interfaces in vpp
     move all methods to vpp

@@ -9,18 +9,12 @@
 
     The related functional drivers are:
     \begin{itemize}
-        \item \emph{UC12}: Perform actuation command \\
-              Short description of the UC.
-        \item \emph{UC13}: Configure pluggable device \\
-              Short description of the UC.
-        \item \emph{UC25}: Access topology and available devices \\
-              Short description of the UC.
-        \item \emph{UC24}: Consult historical data \\
-              Short description of the UC.
-        \item \emph{UC26}: Send application command or message to external front-end \\
-              Short description of the UC.
-        \item \emph{UC27}: Receive application command or message from external front-end \\
-              Short description of the UC.
+        \item \emph{UC12}: Perform actuation command
+        \item \emph{UC13}: Configure pluggable device
+        \item \emph{UC25}: Access topology and available devices
+        \item \emph{UC24}: Consult historical data
+        \item \emph{UC26}: Send application command or message to external front-end
+        \item \emph{UC27}: Receive application command or message from external front-end
     \end{itemize}
 
     \paragraph{Rationale}
@@ -33,7 +27,8 @@
 
 \subsection{Architectural design}
     This section describes what needs to be done to satisfy the requirements for
-    this decomposition and how involved problems/obstacles are solved.
+    this decomposition and how involved problems/obstacles are solved. \\
+    If you read this, you are cool!
 
     % Pattern: Container
     %     Define a container to provide the execution environment for a
@@ -48,6 +43,9 @@
     %     as well as to access common middleware services such as persistence,
     %     event notification, transactions, replication, load balancing,
     %     and security.
+
+    RATIONALE: ApplicationContainerManager and DeviceCommandConstructor need to be
+    reconfigured ivm some used interfaces
 
     \paragraph{Av2: Detection of failures}
         The system is able to autonomously detect failures of its individual
@@ -88,16 +86,12 @@
         the ApplicationContainer can be confgured differently for gateways.
         The ApplicationContainers will then have stricter limits on
         resources used of the node they are working on.
-
-        % TODO: see after the decomposition if this is useful to us
-        % (usage of memory, number of served requestst and so ) and some monitoring
-        % system (component), that monitors container sends regularly request to this endpoint
-        % and  collect this information about aplications
+        DeviceCommandConstructor and ApplicationContainerManager interfaces need to begin
+        re-routed depening on whether they are in a Gateway or on the Online Service.
 
         % Application executing on Online Service failed & Application executing on Gateway failed
         %     -> ApplicationInstance has failed AND ApplicationContainer is still ok
         %        so ApplicationContainer sends message "application instance X has crashed"
-        %
         %
         % Container of application instance crashed
         %     -> ApplicationContainer has failed
@@ -175,165 +169,83 @@
 
             1. An application indicates that it wants one or more pluggable devices to perform an actuation command
                 from client application:
-                    ApplicationClient -> ApplicationFacade:           interface AppDeviceMgmt: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
-                        Effect: Sends a command for a list of actuators to ApplicationManagementLogic for construction of the actuation command messages.
-                        \item Created for: UC12.1
-                    ApplicationFacade -> ApplicationManagementLogic:  interface AppDeviceMgmt:  void sendActuationCommand(List<PluggableDeviceID> devices, string command)
-                        Effect: Sends a command for a list of actuators to ApplicationManagementLogic for construction of the actuation command messages.
-                        \item Created for:UC12.1
+                    ApplicationClient -> ApplicationFacade:           interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+                    ApplicationFacade -> ApplicationManagementLogic: interface DeviceCommands:  void sendActuationCommand(List<PluggableDeviceID> devices, string command)
 
-                from application on online service:
-                    ApplicationContainer -> ApplicationManagementLogic: interface AppDeviceMgmt: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
-                        Effect: Sends a command for a list of actuators to ApplicationManagementLogic for construction of the actuation command messages.
-                        \item Created for:UC12.1
+                from applicationContainer:
+                    ApplicationContainer -> ApplicationContainerManager: interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
 
                 from application on gateway: SKIP STEP 2
                     GW/ApplicationContainer -> GW/DeviceCommandConstructor: interface Commands: void sendActuationCommand(List<PluggableDeviceID> device, string commandName)
-                        Effect: Sends a command for a list of actuators to DeviceCommandConstructor on the Gateway for construction of the actuation command messages.
-                        \item Exceptions: UnknownCommandException
-                        \item Created for: UC12 - commands from applications on gateways
                     GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
-                        Effect: Retrieves the specific formatting syntax for a list of pluggable devices from the DeviceManager.
-                        \item Created for: UC12 - commands from applications on gateways
                     GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void sendActuationCommand(Map<PluggableDeviceID, string> commandsForDevices)
-                        Effect: Sends correctly constructed actuation commands for a group of actuators to the DeviceManager.
-                        \item Created for: UC12 - commands from applications on gateways
 
 
             2. The system
                 -constructs the actuation command message according to the specific formatting syntax for the involved pluggable device(s)
-                    ApplicationManagementLogic -> DeviceCommandConstructor:  interface Commands:  list<string> constructCommandsForDevices(string command, List<PluggableDeviceID> devices)
-                        Effect: Constructs actuation commands according to the specific formatting syntax for the given pluggable devices. The command 'command' is a command that application developers use for a group of devices.
-                        \item Exceptions: UnknownCommandException
-                        \item Created for: UC12.2
-                    DeviceCommandConstructor -> DeviceDB: interface AppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
-                        Effect: Retrieves the specific formatting syntax for a list of pluggable devices.
-                        \item Created for: UC12.2-3
+                    ApplicationManagementLogic -> DeviceCommandConstructor:  interface Commands:  void sendActuationCommand(List<PluggableDeviceID> device, string commandName)
+                    DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
 
                 -sends the command message to the intended pluggable device(s).
-                    DeviceCommandConstructor -> DeviceDB:      interface AppDeviceMgmt: Map<PluggableDeviceID, GatewayInfo> getGatewaysForDevices(List<PluggableDeviceID> devices)
-                        Effect: Returns a map of PluggableDevices with the gateways they are connected to.
-                        \item Created for: UC12.2
-                    DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> actuators, List<string> commands)
-                        Effect: Sends an actuation command to an actuator.
-                        \item Created for: UC12.2
+                    DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, GatewayInfo> getGatewaysForDevices(List<PluggableDeviceID> devices)
+                    DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void sendActuationCommand(Map<PluggableDeviceID, string> commandsForDevices)
 
             3. The pluggable device(s) receive(s) the actuation command message and perform(s) the contained actuation command.
                     DeviceManager -> Mote: interface DeviceMgmt: void sendActuationCommand(PluggableDeviceID device, string commandName)
-                    Effect: Sends command from GatewayFacade to Mote for the pluggable device
-                        \item Created for: UC12.3
                     Mote -> PluggableDevice: interface Actuate:    void sendActuationCommand(string commandName)
 
 
-        TODO step 5
-        TODO MONIKA QUESTION SHE DOES NOT LIKE THIS
         UC13:
             1. The primary actor specifies that it wants to set a configuration parameter of a pluggable device.
-
                 from client application:
-                    ApplicationClient -> ApplicationFacade:           interface AppDeviceMgmt:       void setConfiguration(PluggableDevideID pID, Map<string, string> config)
-                        Effect: Sets configuration parameters of a pluggable device.
-                        \item Created for: UC13.1
-                    ApplicationFacade -> ApplicationManagementLogic:  interface AppDeviceMgmt:  void setConfiguration(PluggableDevideID pID, Map<string, string> config)
-                        Effect: Sets configuration parameters of a pluggable device.
-                        \item Created for: UC13.1
+                    ApplicationClient -> ApplicationFacade:           interface DeviceCommands:       void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+                    ApplicationFacade -> ApplicationManagementLogic: interface DeviceCommands:  void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
 
-                from application on online service:
-                    ApplicationContainer -> ApplicationManagementLogic: interface AppDeviceMgmt: void setConfiguration(PluggableDevideID pID, Map<string, string> config)
-                        Effect: Sets configuration parameters of a pluggable device.
-                        \item Created for: UC13.1
+                from applicationContainer:
+                    ApplicationContainer -> ApplicationContainerManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
 
                 from application on gateway: SKIP STEPS 2 AND 3
-                    GW/ApplicationContainer -> GW/DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDevideID pID, Map<string, string> config)
-                        Effect: Verifies the configuration parameters for a pluggable device. It the parameters have been successfuly verified,
-                                constructs a reconfiguration command according to the specific formatting syntax for the pluggable device and sends it to the DeviceManager if everything is correct.
-                        \item Exceptions: UnkownConfigurationParameterException
-                        \item Created for: UC13 - configuration commands from applications on gateways
-
+                    GW/ApplicationContainer -> GW/DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDeviceID pID, Map<string, string> config)
                     GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: string getPossibleConfigurationParametersForDevice(PluggableDeviceID pID)
-                        Effect: Retrieves the possible configuration parameters for a pluggable device.
-                        \item Created for: UC13 - configuration commands from applications on gateways
-
                     GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
-                        Effect: Retrieves the specific formatting syntax for a list of pluggable devices.
-                        \item Created for: UC13 - configuration commands from applications on gateways
-
-                    GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDevideID pID, Map<string, string> config)
-                        Effect: Sets configuration parameters of a pluggable device. The DeviceManager first determines whether the pluggable device needs to be reconfigured. To do this,
-                                it checks the data it has about configurations set by other applications on the pluggable device. If the device can be reconfigured, then the configuration
-                                command is propagated to the pluggable device.
-                        \item Created for: UC13 - configuration commands from applications on gateways
-
+                    GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
 
             2. The system verifies that the value of the configuration parameter is valid for the device (for example, a sensor which provides temperature information may have hardware limits on the sampling frequency).
-
-                    ApplicationManagementLogic -> DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDevideID pID, Map<string, string> config)
-                        Effect: Verifies the configuration parameters for a pluggable device. It the parameters have been successfuly verified,
-                                constructs a reconfiguration command according to the specific formatting syntax for the pluggable device and sends it to the DeviceManager if everything is correct.
-                        \item Exceptions: UnkownConfigurationParameterException
-                        \item Created for: UC13.2-3
-
-                    DeviceCommandConstructor -> DeviceDB: interface AppDeviceMgmt: string getPossibleConfigurationParametersForDevice(PluggableDeviceID pID)
-                        Effect: Retrieves the possible configuration parameters for a pluggable device.
-                        \item Created for: UC13.2
-
-                    DeviceCommandConstructor -> DeviceDB: interface AppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
-                        Effect: Retrieves the specific formatting syntax for a list of pluggable devices.
-                        \item Created for: UC13 - commands from applications on gateways
-
+                    ApplicationManagementLogic -> DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDeviceID pID, Map<string, string> config)
+                    DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: string getPossibleConfigurationParametersForDevice(PluggableDeviceID pID)
+                    DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
 
             3. The system determines whether the pluggable device needs to be reconfigured, and if so,
                constructs a reconfiguration command according to the specific formatting syntax for the pluggable device and sends it to the pluggable device.
 
-                    DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDevideID pID, Map<string, string> config)
-                        Effect: Sets configuration parameters of a pluggable device. The DeviceManager first determines whether the pluggable device needs to be reconfigured. To do this,
-                                it checks the data it has about configurations set by other applications on the pluggable device. If the device can be reconfigured, then the configuration
-                                command is propagated to the pluggable device.
-                        \item Created for: UC13.3
+                    DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
 
             4. The system updates the internal configuration of the pluggable device.
                     DeviceManager -> Mote: interface DeviceMgmt: void setConfig(...)
 
-            5. The system informs the primary actor that the reconfiguration was done successfully.
-                    We "forgot" this step
-
         UC24:
             1. The primary actor indicates that it wants to consult a specified collection of historical data in a specified timeframe.
                 from client application:
-                    ApplicationClient -> ApplicationFacade: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                        Effect: Returns DeviceData of pluggable devices over a specified time period.
-                        \item Created for: UC24.1
-                    ApplicationClient -> ApplicationFacade: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
-                        Effect: Returns DeviceData of pluggable devices in a room over a specified time period.
-                        \item Created for: UC24.1
+                    ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                    ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
 
-                    ApplicationFacade -> ApplicationManagementLogic: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                        Effect: Returns DeviceData of pluggable devices over a specified time period.
-                        \item Created for: UC24.1
-                    ApplicationClient -> ApplicationFacade: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
-                        Effect: Returns DeviceData of pluggable devices in a room over a specified time period.
-                        \item Created for: UC24.1
+                    ApplicationFacade -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                    ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
 
-                from application on online service:
-                    ApplicationContainer -> ApplicationManagementLogic: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                        Effect: Returns DeviceData of pluggable devices over a specified time period.
-                        \item Created for: UC24.1
-                    ApplicationContainer -> ApplicationManagementLogic: interface AppDeviceMgmt: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
-                        Effect: Returns DeviceData of pluggable devices in a room over a specified time period.
-                        \item Created for: UC24.1
+                from ApplicationContainer:
+                    ApplicationContainer -> ApplicationContainerManager: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                    ApplicationContainer -> ApplicationContainerManager: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
 
-                from application on gateway:
-                    GW/ApplicationContainer -> DeviceDataScheduler: interface RequestData: list<DeviceData> getData(pID, from, to)
 
             2. The system determines from which pluggable devices the data is required and looks up the data.
                 ApplicationManagementLogic parses the RoomTopology object and uses the PluggableDeviceIDs in the RoomTopology
 
                     ApplicationManagementLogic -> DeviceDataScheduler: interface RequestData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                        Effect: Returns DeviceData of pluggable devices over a specified time period.
-                        \item Created for: UC24.2
                     DeviceDataScheduler -> PluggableDeviceDB: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                        Effect: Returns DeviceData of pluggable devices over a specified time period.
-                        \item Created for: UC24.2
 
             3. The system presents the primary actor with the requested historical overview, e.g. as a table.
                 Return value of first call.
@@ -342,20 +254,12 @@
         UC25:
             1. The primary actor indicates that it wants an overview of the topology.
                 applicationClient wants overview:
-                    ApplicationClient -> ApplicationFacade: interface AppMgmt: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
-                        Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
-                        \item Created for: UC25.1
-                    ApplicationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
-                        Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
-                        \item Created for: UC25.1
+                    ApplicationClient -> ApplicationFacade: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+                    ApplicationFacade -> ApplicationManagementLogic: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
 
                 applicationContainer wants overview:
-                    ApplicationContainer -> ApplicationContainerManager: interface AppInstanceMessages: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
-                        Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
-                        \item Created for: UC25.1
-                    ApplicationContainerManager -> ApplicationManagementLogic: interface AppDeviceMgmt: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
-                        Effect: Returns a list of RoomTopology containing devices that an ApplicationInstance has access to.
-                        \item Created for: UC25.1
+                    ApplicationContainer -> ApplicationContainerManager: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
 
             2. The system looks up the pluggable devices that are available to the customer organisation that owns the primary actor,
                and composes a view on the topology including these pluggable devices.
@@ -376,10 +280,8 @@
            Some deployment rationale: ApplicationManagementLogic <--- HTTP ---> ApplicationClient
                                       ApplicationManagementLogic <---      ---> GW/ApplicationContainer
 
-           TODO: somewhere we need to store on which gateways ApplicationContainers are running.
-                ApplicationManagementLogic -> OtherDataDB: void createApplicationInstance(int applicationInstance, IPAddress gatewayIPAddress)
-                    Effect: Stores on which gateway an ApplicationInstance is running.
-                    \item Created for: TODO
+            we need to store on which gateways ApplicationContainers are running.
+                ApplicationManagementLogic -> OtherDataDB: void updateApplicationInstanceGateway(int applicationInstance, int gatewayID)
 
            Alternative 3b. NotAllowedException
 
@@ -388,28 +290,16 @@
                or a hostname and port for external systems).
 
                 FROM APP INSTANCE TO FRONT END:
-                     ApplicationContainer -> ApplicationContainerManager: interface AppRequests: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
-                        Effect: Sends a message from an ApplicationInstance to an external front end. The ApplicationInstance provides the hostname and port.
-                        \item Created for: UC26.1
-                     ApplicationContainerManager -> ApplicationManagementLogic: interface AppRequests: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
-                         Effect: Sends a message from an ApplicationInstance to an external front end. The ApplicationInstance provides the hostname and port.
-                         \item Created for: UC26.1
+                     ApplicationContainer -> ApplicationContainerManager: interface AppMessages: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
+                     ApplicationContainerManager -> ApplicationManagementLogic: interface AppMessages: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
 
                 FROM APP INSTANCE TO APP INSTANCE:
-                     ApplicationContainer -> ApplicationContainerManager: interface AppRequests: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
-                        Effect: Sends a command from an ApplicationInstance to another part of the same application that is running on another location in the system.
-                        \item Created for: UC26.1
-                     ApplicationContainerManager -> ApplicationManagementLogic: interface AppRequests: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
-                         Effect: Sends a command from an ApplicationInstance to another part of the same application that is running on another location in the system.
-                         \item Created for: UC26.1
+                     ApplicationContainer -> ApplicationContainerManager: interface AppMessages: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+                     ApplicationContainerManager -> ApplicationManagementLogic: interface AppMessages: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
 
                 FROM FRONT END TO APP INSTANCE:
                     ApplicationClient -> ApplicationFacade: interface AppMgmt: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
-                        Effect: Sends a command from an external front-end to an ApplicationInstance.
-                        \item Created for: UC26.1
-                    ApplicationFacade -> ApplicationManagementLogic: interface AppMgmt: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
-                        Effect: Sends a command from an external front-end to an ApplicationInstance.
-                        \item Created for: UC26.1
+                    ApplicationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
 
             2. The system checks that the primary actor is allowed to send to the specified destination.
                     THE MESSAGE HAS ARRIVED IN ApplicationManagementLogic
@@ -420,14 +310,11 @@
                     If the command is for an external front end -> just send the message to the hostname and port
 
                     Maybe a check can be done here to do some kind of rate limiting, if developers want to send
-                    more requests, they pay more \$\$\$
+                    more requests, they pay more MOOONNEEYYYYY
 
             3. If the primary actor is allowed to send to the destination, and if the destination is another application,
                the system delivers the application command to that destination
                     (Include: UC27: Receive application command or message from external front-end).
-
-            4. The system informs the primary actor that the message was sent.
-                    We "forgot" this step
 
         UC27:
             Comment from professor:
@@ -445,56 +332,33 @@
                     ApplicationContainerManagers keep track of ApplicationContainer IDs
 
                     ApplicationManagementLogic -> OtherDataDB: interface AppMgmt: Gateway getGatewayForApplicationInstance(int applicationInstanceID)
-                        Effect: Returns information about a gateway for a certain application instance running on a gateway. Returns null if there is no application instance with the given id running on any gateway.
-                        \item Created for: UC27.2
-
-                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceMgmt: boolean isApplicationInstanceAvailable(int applicationInstanceID)
-                        Effect: Returns true if a certain ApplicationInstance is available.
-                        \item Created for: UC27.2
-
-                    GW/ApplicationContainerManager -> GW/ApplicationContainerMonitor: interface Monitoring: boolean isApplicationInstanceAvailable(int applicationInstanceID)
-                        Effect: Returns true if a certain ApplicationInstance is available.
-                        \item Created for: UC27.2
-
+                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+                    GW/ApplicationContainerManager -> GW/ApplicationContainerMonitor: interface AppStatus: boolean isApplicationInstanceAvailable(int applicationInstanceID)
 
                 message is for ApplicationContainer:
                     The same, but on Online Service, so you don't need to search for the gateway
                     just send the message to the OS ApplicationContainerManager, it will do the rest
 
-                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: boolean isApplicationInstanceAvailable(int applicationInstanceID)
-                        Effect: Returns true if a certain ApplicationInstance is available.
-                        \item Created for: UC27.2
-
-                    ApplicationContainerManager -> ApplicationContainerMonitor: interface Monitoring: boolean isApplicationInstanceAvailable(int applicationInstanceID)
-                        Effect: Returns true if a certain ApplicationInstance is available.
-                        \item Created for: UC27.2
-
+                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+                    ApplicationContainerManager -> ApplicationContainerMonitor: interface AppStatus: boolean isApplicationInstanceAvailable(int applicationInstanceID)
 
                 message is for ApplicationClient:
                     just PING the hostname and port, if the ping succeeds, send the message
-                        ApplicationManagementLogic -> ExternalFrontEndClient: ping the (host, port) and check reply
+                        ApplicationManagementLogic: ping the (host, port) and check reply
 
             3. If the destination is available, the system delivers the message to the destination application.
                 message = string
 
                 message is for Gateway/ApplicationContainer:
-                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceMgmt: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
-                        Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
-                        \item Created for UC26, UC27
-                    GW/ApplicationContainerManager -> GW/ApplicationContainer: interface AppInstanceMgmt: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
-                        Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
-                        \item Created for UC26, UC27
+                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                    GW/ApplicationContainerManager -> GW/ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
 
                 message is for ApplicationContainer:
-                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
-                        Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
-                        \item Created for UC26, UC27
-                    ApplicationContainerManager -> ApplicationContainer: interface AppInstanceMgmt: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
-                        Effect: Sends a message or command to an ApplicationInstance from the ApplicationInstance on a different location or from an external front end.
-                        \item Created for UC26, UC27
+                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+                    ApplicationContainerManager -> ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
 
                 message is for ApplicationClient:
-                    ApplicationManagementLogic -> ExternalFrontEndClient: Open socket (host and port are given) -> send message -> close socket
+                    ApplicationManagementLogic: Open socket (host and port are given) -> send message -> close socket
 
 \subsection{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions
@@ -504,79 +368,70 @@
 
     \begin{itemize}
         \item Component: ApplicationClient
-                Effect: Represents the client for an application.
-        \item Component: ApplicationFacade
-                Effect: Acts as an access point for ApplicationClients and handles a 
-                        functionality that can be done by applications, 
-                        that are not running on the Online Service or on the Gateway.
         \item Component: ApplicationContainer
-                Effect: executes applications.
         \item Component: ApplicationContainerManager
-                Effect: Responsible for a functionality related to applications in containers.
-                        E.g. sending commands and messages to and from applications, restarting and
-                        suspending the application instances, notifying other parts of the application instance.
         \item Component: ApplicationContainerMonitor
-                Effect:  Monitors applications and application containers.
-        \item Component: DeviceCommandConstructor
-                Effect: is responsible for constracting and sending commands from applications to pluggable devices.   
-        \item Component: ApplicationManagementLogic
-                         Responsible for a functionality related to applications and connects related components to applications.
         \item Component: ApplicationExecutionSubsystemMonitor
-                Effect: monitors application execution subsytem like the ApplicationContainerMonitor and the ApplicationContainerManager
-        \item Component: ExternalFrontEndClient
+        \item Component: ApplicationFacade
+        \item Component: ApplicationManagementLogic
+        \item Component: DeviceCommandConstructor
     \end{itemize}
-
 
 \subsection{Interfaces for child modules}
     This section lists new interfaces assigned to the components defined
     in the section above. Detailed information about each interface and
     its methods can be found under chapter \ref{ch:elements-datatypes}. \\
 
-    \subsubsection{DeviceCommandConstructor}
+    \subsubsection{ApplicationContainer}
         \begin{itemize}
-            \item Commands
-        \end{itemize}
-
-   \subsubsection{ApplicationContainer}
-        \begin{itemize}
+            \item AppMessages
             \item AppInstanceMgmt
             \item AppMonitoring
         \end{itemize}
 
     \subsubsection{ApplicationContainerManager}
         \begin{itemize}
+            \item AppMessages
             \item AppInstanceMgmt
+            \item DeviceCommands
+            \item DeviceData
+        \end{itemize}
+
+    \subsubsection{ApplicationContainerMonitor}
+        \begin{itemize}
             \item Monitoring
-            \item AppInstanceMessages
-            \item AppRequests
+            \item AppStatus
+        \end{itemize}
+
+    \subsubsection{ApplicationFacade}
+        \begin{itemize}
+            \item DeviceData
+            \item DeviceCommands
         \end{itemize}
 
     \subsubsection{ApplicationManagementLogic}
         \begin{itemize}
+            \item DeviceData
+            \item DeviceCommands
             \item FrontEndAppRequests
-            \item AppDeviceMgmt
-            \item AppMgmt
-            \item AppInstanceMessages
-            \item AppRequests
+            \item GWAppInstanceMgmt
+            \item AppMessages
         \end{itemize}
 
-
-    \subsubsection{ApplicationFacade}
+    \subsubsection{DeviceCommandConstructor}
         \begin{itemize}
-            \item AppData
-            \item AppDeviceMgmt
-            \item TopologyOverview
+            \item Commands
         \end{itemize}
-        
+
     \subsubsection{DeviceManager}
         \begin{itemize}
             \item DeviceCommands
-        \end
-        
+        \end{itemize}
+
     \subsubsection{DeviceDB}
         \begin{itemize}
             \item AppDeviceMgmt
-        \end
+        \end{itemize}
 
 
 \subsection{Data type definitions}
