@@ -9,6 +9,18 @@ In decompositions 1, 2, and 3, check decisions important for deployment and add 
 Need to do this somehwere, UC7 ??
     If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
 
+ThirdPartyInvoicingService
+ThirdPartyNotificationDeliveryService
+
+ApplicationProviderClient
+ApplicationProviderFacade
+
+RegisteredUserClient
+RegisteredUserFacade
+
+UnregisteredUserClient
+UnregisteredUserFacade
+
 
 In rationale somehwere:
     How is hardware linked to Infrastructure owners?
