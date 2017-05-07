@@ -35,7 +35,7 @@
 
         In OnlineServiceBroker:
             BrokerLogic: Handles all functionality related to communication.
-            RequestStore: Temporarily stores all pluggable data and issues application commands until they can be deleted (= until an acknowledgement has been received for the request by the Online Service). Can store at least 3 days of pluggable data before old data has to be overwritten.
+            RequestStore: Temporarily stores all pluggable data and issued application commands until they can be deleted (= until an acknowledgement has been received for the request by the Online Service). Can store at least 3 days of pluggable data before old data has to be overwritten.
             OnlineServiceMonitor: Monitors the Gateway's connectivity to the Online Service. If the Online Service or the communication channel has failed, all requests to the Online Service will be stopped and stored in the RequestStore. An explicit command for this is not necessary,
                                   because the requests in the RequestStore will not be deleted, since no acknowledgements are received anymore from the Online Service. After the monitor detects that a connection to the Online Service is possible again, it makes the gateway start
                                   synchronising again. When the Online Service is unreachable, application parts running locally on the SIoTIP gateway continue to operate normally.
@@ -93,7 +93,7 @@
                 Online service keeps track of connection to Online Service.
                 If the Online Service becomes unreachable (= does not send ACKs anymore), then start pinging the Online Service
 
-                Interface OSMonitoring used by BrokerLogic:
+                Interface OSUpdates used by BrokerLogic:
                     void onlineServiceUpdate()
                         Effect: Lets the OnlineServiceMonitor know that a message has been received from the Online Service
                         \item Created for: Av1 - The Online Service should acknowledge each message sent by the SIoTIP gateway so that the gateway can detect failures.
