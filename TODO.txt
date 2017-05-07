@@ -10,10 +10,6 @@ decomposition 5:
     create components and interfaces in vpp
     move all methods to vpp
 
-report:
-    check exceptions
-    check data types
-
 Need to do this somehwere, UC7 ??
     If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
 
