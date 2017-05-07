@@ -6,12 +6,14 @@ AFTER DEADLINE, BEFORE PROJECT DEFENSE:
 
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
-decomposition 5:
-    create components and interfaces in vpp
-    move all methods to vpp
-
 Need to do this somehwere, UC7 ??
     If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
+
+
+In rationale somehwere:
+    How is hardware linked to Infrastructure owners?
+        => 1 gateway <-> 1 infrastructure owner
+        => when an IO buys/orders hardware, then that hardware is linked to the IO after the order is completed.
 
 ==========================================================================
 ================================ REPORT ==================================
@@ -48,7 +50,6 @@ Need to do this somehwere, UC7 ??
 ==========================================================================
 
 Interfaces: What's the point of exceptions? Do we use them for alternative scenario's? Like "not found exception"
-    -> if we good designed system then we don't need exceptions
     -> not mandatory, but data flow should be clear for the alternative scenarios in use cases
 
 Package or component in diagram for Gateway, Online Service, ...?
@@ -60,11 +61,6 @@ Where to create the actual db queries?
        it clear what you want from the query. In the actual implementation, the query
        will probably be formed before it reached the DB.
 
-How to make interface names transparent?
-
-Av2: Failure of application execution components
-    => ApplicationExecutionSubsystemMonitor
-
 Av2: up time?
 
 P1: for replication of components, do we need to add routing or can we just add this in the rationale?
@@ -73,6 +69,5 @@ Av1: Interfaces between brokers?
      send/receive?
      p274
 
-How is hardware linked to Infrastructure owners?
-    => 1 gateway <-> 1 infrastructure owner
-    => when an IO buys/orders hardware, then that hardware is linked to the IO after the order is completed.
+How to rotate page for image in latex.
+How to make interface names transparent?
