@@ -68,20 +68,23 @@
 
     UC1:
         1. The primary actor requests the (infrastructure owner-specific) registration form.
+            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean getRequestForRegistration(int infrastructureOwnerID, string randomHash)
+                Effect: Returns true if the infrastructure owner with infrastructureOwnerID exists.
+                \item Created for: UC1.1
 
-            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration:
-                                             ??? getRequestForRegistration(int infrOwnerID)
-                Effect: Returns necessary data?
-                        Returns true if infrOwnerID exists?
-                        Unregistered user request fo registration for the specific infrastructure owner.
+            UnregisteredUserFacade -> UserManager: interface UserMgmt: boolean infrastructureOwnerExists(int infrastructureOwnerID)
+                Effect: Returns true if the infrastructure owner with infrastructureOwnerID exists.
+                \item Created for: UC1.1
+
+            UserManager -> OtherDataDB: interface UserMgmt: boolean infrastructureOwnerExists(int infrastructureOwnerID)
+                Effect: Returns true if the infrastructure owner with infrastructureOwnerID exists.
                 \item Created for: UC1.1
 
         2. The system asks the primary actor for an e-mail address.
 
         3. The primary actor enters a company e-mail address.
 
-            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration:
-                                        boolean enterEmailForRegistration(string emailAddress, int infrOwnerID)
+            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean enterEmailForRegistration(string emailAddress, int infrastructureOwnerID)
                 Effect: Returns true if e-mail address is valid and if a confirmation e-mail was sent to the entered e-mail address.
                 \item Created for: UC1.3-4
 
@@ -89,16 +92,14 @@
           informs the primary actor that a confirmation e-mail was sent to the entered e-mail address
           with further instructions.
 
-            UnregisteredUserFacade -> UnregisteredUserManager: interface Registration:
-                                      boolean checkEmail(string emailAddress, int infrOwnerID)
-                Effect: Returns true if e-mail adrress is valid and sends confirmation e-mail.
+            UnregisteredUserFacade -> UnregisteredUserManager: interface Registration: boolean checkEmail(string emailAddress, int infrastructureOwnerID)
+                Effect: Returns true if e-mail adrress is valid and sends confirmation e-mail. TODO
                 Exceptions: EmailAddressAlreadyExistsException, EmailAddressInvalidException
                 \item Created for: UC1.4
 
-            UnregisteredUserManager -> OtherDataDB: interface Registration:
-                                       boolean createEmailAddress(string emailAddress, int infrOwnerID)
+            UnregisteredUserManager -> OtherDataDB: interface Registration: boolean createEmailAddress(string emailAddress, int infrastructureOwnerID)
                 Effect: If the given e-mail address is valid and not yet in the database, saves the e-mail address
-                        in the database with status 'processing', a unique random string for the confirmation e-mail,
+                        in the database, links it to the infrastructure owner, a unique random string for the confirmation e-mail,
                         and the current timestamp. Then, returns true. \\
                         Otherwise, returns false.
                 Exceptions: EmailAddressAlreadyExistsException, EmailAddressInvalidException
@@ -106,20 +107,17 @@
 
         5. The primary actor confirms his or her e-mail address by following the link in the received e-mail.
 
-            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration:
-                                      boolean confirmEmail(string emailAddress, string randomString)
+            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean confirmEmail(string emailAddress, string randomString)
                 Effect: Return true if the given e-mail and randomString match in the database. \\
                         Returns false if user did not click the link in the received e-mail within 30 minutes.
                 \item Created for: UC1.5
 
-            UnregisteredUserFacade -> UnregisteredUserManager: interface Registration:
-                                      boolean confirmEmail(string emailAddress, string randomString)
+            UnregisteredUserFacade -> UnregisteredUserManager: interface Registration: boolean confirmEmail(string emailAddress, string randomString)
                 Effect: Return true if the given e-mail and randomString match in the database. \\
                         Returns false if user did not click the link in the received e-mail within 30 minutes.
                 \item Created for: UC1.5
 
-            UnregisteredUserManager -> OtherDataDB: interface Registration:
-                                       boolean checkEmail(string emailAddress, string randomString)
+            UnregisteredUserManager -> OtherDataDB: interface Registration: boolean checkEmail(string emailAddress, string randomString)
                 Effect: Return true if the given e-mail and randomString match in the database. \\
                         Returns false if user did not click the link in the received e-mail within 30 minutes.
                 \item Created for: UC1.5
@@ -154,61 +152,72 @@
         9. The system notifies the primary actor that the registration is successful.
             => return value of step 7
 
+        TODO: check if linked to IO
+
 
     UC2:
         1. The primary actor indicates to the system that he or she wants to register an end-user.
-            CustomerOrganisationClient -> CustomerOrganisationFacade: interface EndUserMgmt: void registerEndUser()
+            IN CustomerOrganisationClient
 
         2. The system asks the primary actor for details about the end-user to be registered:
-            - Name
-            - Phone number (for SMS) and/or e-mail address
+           Name, Phone number (for SMS) and/or e-mail address
+           IN CustomerOrganisationClient
 
         3. The primary actor supplies the requested information.
-            CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt: void registerEndUser(string Name, Map<string,string> contacts)
-            Exception: InvalidNumberOrEmailAddress
+            CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: boolean createEndUser(int customerOrganisationID, Map<string, string> data)
+                Effect: Verifies provided data for a new end-user, checks that the end-user does not exist in the system already, and then stores the end-user information
+                        and associates it with the customer organisation. Returns true if everything succeeded.
+                Exception: EmailAddressAlreadyExistsException, EmailAddressInvalidException, PhoneNumberInvalidException, EndUserAlreadyExistsException
+                \item Created for: UC2.3-4
 
         4. The system verifies the provided e-mail address or phone number, and checks that the end-user
             does not exist in the system already. If the provided information is valid, the system stores
             the end-user information and associates it with the primary actor.
 
-                UserRoleManager -> OtherDataDB: interface UserRoleMgmt: void registerEndUser(string Name, Map<string,string> contacts)
-                Exception: EndUserAlreadyExists
-        5. The system informs the primary actor that the end-user was registered successfully.
-                Notify()
+            CustomerOrganisationFacade -> UserManager: interface UserMgmt: boolean createEndUser(int customerOrganisationID, Map<string, string> data)
+                Effect: Verifies provided data for a new end-user, checks that the end-user does not exist in the system already, and then stores the end-user information
+                        and associates it with the customer organisation. Returns true if everything succeeded.
+                Exception: EmailAddressAlreadyExistsException, EmailAddressInvalidException, PhoneNumberInvalidException, EndUserAlreadyExistsException
+                \item Created for: UC2.3-4
 
-        4a. If the provided phone number or e-mail address is not valid, e.g. badly formatted, or if the
-            end-user for which details were provided already exists in the system, the system informs the
-            primary actor of this error. Continue from step 2.
+            UserManager -> OtherDataDB: interface UserMgmt: boolean createEndUser(int customerOrganisationID, Map<string, string> data)
+                Effect: Verifies provided data for a new end-user, checks that the end-user does not exist in the system already, and then stores the end-user information
+                        and associates it with the customer organisation. Returns true if everything succeeded.
+                Exception: EmailAddressAlreadyExistsException, EmailAddressInvalidException, PhoneNumberInvalidException, EndUserAlreadyExistsException
+                \item Created for: UC2.3-4
+
+        5. The system informs the primary actor that the end-user was registered successfully.
+            => return value of createEndUser
 
     UC3:
         1. The primary actor indicates to the system that they want to unregister an end-user.
             CustomerOrganisationClient -> CustomerOrganisationFacade: interface EndUserMgmt
-                                            void unregisterEndUser()
+                                            void uncreateEndUser()
             Effect: unregister end-user
             \item Created for: UC3.1
         2. The system retrieves all end-users associated with the primary actor and presents this list to
             the primary actor.
-            CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:
+            CustomerOrganisationFacade -> UserManager: interface UserMgmt:
                                                 void getRelatedEndUsers(int custOrgID)
             Effect: Customer organisation has a list of all related end-users
             \item Created for: UC3.2
 
         3. The primary actor indicates which end-user she wants to unregister.
-             CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:
-                                                void unregisterEndUser(int endUserID)
+             CustomerOrganisationFacade -> UserManager: interface UserMgmt:
+                                                void uncreateEndUser(int endUserID)
 
             Effect: unregister end-user
             \item Created for: UC3.3
 
         4. The system marks the profile of the end-user as `inactive'
-            UserRolesManager -> OtherDataDb: interface UserRoleMgmt:
-                                                void unregisterEndUser(int endUserID)
+            UserManager -> OtherDataDb: interface UserUserMgmt:
+                                                void uncreateEndUser(int endUserID)
             Effect: sets end-user as 'inactive'
             \item Created for UC3.4
 
         5. The system checks if any applications should be deactivated because of end-user assignment
             to mandatory roles (Include: UC18: Check and deactivate applications).
-            UserRolesManager -> ApplicationManager: interface ??? UC18
+            UserManager -> ApplicationManager: interface ??? UC18
         6. The system informs the primary actor that the end-user is now unregistered from SIoTIP.
             Notify()
 
