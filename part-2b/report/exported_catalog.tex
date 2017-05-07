@@ -1,4 +1,4 @@
-%%% element catalog, generated on Sun May 07 04:39:09 CEST 2017
+%%% element catalog, generated on Sun May 07 14:43:05 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -153,16 +153,16 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceCommands}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceGatewayBrokerBrokerLogicGWCommunication}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppDeviceData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceGatewayBrokerGatewayUpdates}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicGWAppInstanceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerBrokerLogicOSCommunication}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDBDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceCommands}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceGatewayBrokerBrokerLogicGWCommunication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppDeviceData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceGatewayBrokerGatewayMonitorGatewayUpdates}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicGWAppInstanceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerBrokerLogicOSCommunication}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{BrokerLogic}\label{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Handles all actual functionality related to communication. When a message comes in from the Online Service, lets the OnlineServiceMonitor know that a message has been received. When an acknowledgements for requests are received from the Online Service, notifies the RequestStore of this so that it can delete the request from its storage.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}} $\triangleright$ \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppDeviceData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDBDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicGWAppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerBrokerLogicOSCommunication}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerOSMonitoring}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppInstanceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceCommands}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceGatewayBrokerBrokerLogicGWCommunication}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerOSUpdates}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerRequests}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppDeviceData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDBDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicGWAppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerBrokerLogicOSCommunication}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerBrokerLogicOSMonitoring}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppInstanceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceCommands}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceGatewayBrokerBrokerLogicGWCommunication}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerOnlineServiceMonitorOSUpdates}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerRequestStoreRequests}}		
 	\end{description}
 \subsection{CustomerOgranisationClient}\label{comp:CustomerOgranisationClient}
 	\begin{description}[noitemsep,nolistsep]
@@ -234,7 +234,8 @@ triggers notifications to be generated, ...
 	\end{description}
 \subsection{GatewayBroker}\label{comp:OnlineServiceOnlineServiceGatewayBroker}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Isolates communication-related concerns between the Online Service Gateways and along with OnlineServiceBroker on Gateways. Forwards requests from one party to the other and transmits results and possible exceptions. \\
+Sends acknowledgements for all messages sent by Gateways so that they can detect failures.
 		\item[Super-components:]~None
 		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerGatewayMonitor}}
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerAppDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceCommands}}, \iconprovided{}~\vpett{\nameref{int:GWBrokerMonitoring}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceGatewayBrokerBrokerLogicGWCommunication}}
@@ -242,7 +243,7 @@ triggers notifications to be generated, ...
 	\end{description}
 \subsection{GatewayBrokerMonitor}\label{comp:GatewayBrokerMonitor}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Monitors the communication component on the Online Service for communication with Gateways on the Online Service. Notifies SIoTIP system administrators in case of failures.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~None
@@ -253,8 +254,8 @@ triggers notifications to be generated, ...
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceGatewayBrokerGatewayUpdates}}
-		\item[Required interfaces:]~None		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceGatewayBrokerGatewayMonitorGatewayUpdates}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDBDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}		
 	\end{description}
 \subsection{InfrastructreOwnerClient}\label{comp:InfrastructreOwnerClient}
 	\begin{description}[noitemsep,nolistsep]
@@ -316,7 +317,9 @@ of connected pluggable devices in the heartbeats.
 	\end{description}
 \subsection{OnlineServiceBroker}\label{comp:GatewayGatewayOnlineServiceBroker}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Isolates communication-related concerns between Gateways and the Online Service along with GatewayBroker on the Online Service. Forwards requests from one party to the other and transmits results and possible exceptions. \\
+Keeps track of reachability status of the Online Service. \\
+Can store at least 3 days of pluggable data and application commands before old data has to be overwritten.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
 		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerOnlineServiceMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerRequestStore}}
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicAppDeviceData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDBDeviceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicGWAppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotify}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerMonitorOSBrokerMonitoring}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerBrokerLogicOSCommunication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}
@@ -324,7 +327,7 @@ of connected pluggable devices in the heartbeats.
 	\end{description}
 \subsection{OnlineServiceBrokerMonitor}\label{comp:GatewayGatewayOnlineServiceBrokerMonitor}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Monitors the communication component on Gateways. If the communication component fails, the monitor tries to restart it. If the failure persists, makes the gateway reboots itself entirely.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~None
@@ -332,11 +335,14 @@ of connected pluggable devices in the heartbeats.
 	\end{description}
 \subsection{OnlineServiceMonitor}\label{comp:GatewayGatewayOnlineServiceBrokerOnlineServiceMonitor}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Monitors the Gateway's connectivity to the Online Service. \\
+If the Online Service or the communication channel has failed, all requests to the Online Service will be stopped and stay stored in the RequestStore. An explicit command for this is not necessary, because the requests in the RequestStore will not be deleted, since no acknowledgements are received anymore from the Online Service.\\
+After the monitor detects that a connection to the Online Service is possible again, it makes the gateway start synchronising again. \\
+When the Online Service is unreachable, application parts running locally on the SIoTIP gateway continue to operate normally.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}} $\triangleright$ \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerOSUpdates}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerOSMonitoring}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerOnlineServiceMonitorOSUpdates}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerBrokerLogicOSMonitoring}}		
 	\end{description}
 \subsection{OtherDataDB}\label{comp:OtherDataDatabaseOtherDataDB}
 	\begin{description}[noitemsep,nolistsep]
@@ -364,10 +370,10 @@ of connected pluggable devices in the heartbeats.
 	\end{description}
 \subsection{RequestStore}\label{comp:GatewayGatewayOnlineServiceBrokerRequestStore}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Temporarily stores all pluggable data and issued application commands until they can be deleted (= until an acknowledgement has been received for the request by the Online Service). Passes all requests along to the BrokerLogic and includes a unique requestID in them, so that the Online Service can send an acknowledgement for those messages. Can store at least 3 days of pluggable data before old data has to be overwritten.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}} $\triangleright$ \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerRequests}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerRequestStoreRequests}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}		
 	\end{description}
 \subsection{SubscriptionManager}\label{comp:OnlineServiceOnlineServiceSubscriptionManager}
@@ -799,8 +805,8 @@ TODO: update this with Relationship type?
   %%%%%%%% DBDeviceMgmt
   \subsection{DBDeviceMgmt}\label{int:DeviceDatabaseDeviceDBDBDeviceMgmt}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:DeviceDatabaseDeviceDB}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayBrokerMonitor}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:DeviceDatabaseDeviceDB}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayBrokerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerGatewayMonitor}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void addDevice(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesPluggableDeviceType} type, Map\textless{}string, string\textgreater{} configurations, int moteID)}
@@ -817,6 +823,11 @@ TODO: update this with Relationship type?
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Gets the last set configurations of a pluggable device from the DeviceDB.
 \item Created for: UC6.3 - reintroduced device
+        \end{itemize}
+      \item \textsf{double getPercentageOfGatewaysUnreachable()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns the percentage of deployed gateways that have status 'unreachable'.
+\item Created for: Av1 - A SIoTIP system administrator should be notified of a simultaneous outage of more than 1\% of the registered gateways.
         \end{itemize}
       \item \textsf{Map\textless{}string, string\textgreater{} getPluggableDeviceData(\ref{data:DataTypesPluggableDeviceID} pID)}
         \begin{itemize}[noitemsep,nolistsep]
@@ -837,6 +848,11 @@ TODO: update this with Relationship type?
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Sets a gateway's status to 'active' and updates its IP address.
 \item Created for: U2 - gateway installation
+        \end{itemize}
+      \item \textsf{void updateGatewayStatus(int gatewayID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Changes a gateway's status.
+\item Created for: Av1 - Connectivity of gateways
         \end{itemize}
     \end{itemize}
     \end{description}
@@ -1266,12 +1282,18 @@ to the mote.
     \end{description}
 
   %%%%%%%% GatewayUpdates
-  \subsection{GatewayUpdates}\label{int:OnlineServiceOnlineServiceGatewayBrokerGatewayUpdates}
+  \subsection{GatewayUpdates}\label{int:OnlineServiceOnlineServiceGatewayBrokerGatewayMonitorGatewayUpdates}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerGatewayMonitor}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}
       \item[Operations:] ~
-% no operations
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{void gatewayUpdate(int gatewayID, \ref{data:DataTypesDateTime} time)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Lets the GatewayMonitor know that data has been received from a certain Gateway. Is called after a synchronisation of the gateway. When 3 consecutive expected synchronisations that do not arrive within 1 minute of their expected arrival time, a gateway outage is detected by the monitor.
+\item Created for: Av1 - The Online Service is able to detect that a SIoTIP gateway is not sending data anymore based on the expected synchronisation interval.
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% GWAppInstanceMgmt
@@ -1305,7 +1327,13 @@ to the mote.
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayBrokerMonitor}}
       \item[Operations:] ~
-% no operations
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{\ref{data:DataTypesEcho} ping()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Sends a ping request to a component. The component should respond with an Echo reply. The monitor uses this to check whether or not the component is still available.
+\item Created for: Av1 - The Online Service is able to autonomously detect failures of its individual internal communication components.
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% GWCommunication
@@ -1314,7 +1342,16 @@ to the mote.
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}}
       \item[Operations:] ~
-% no operations
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{void receive(void ...)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: {\colorbox{red!30}{\underline{Undefined}}}
+        \end{itemize}
+      \item \textsf{void send(void ...)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: {\colorbox{red!30}{\underline{Undefined}}}
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% Heartbeat
@@ -1400,8 +1437,8 @@ to the mote.
   %%%%%%%% Notify
   \subsection{Notify}\label{int:OnlineServiceOnlineServiceNotificationHandlerNotify}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceNotificationHandler}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayBrokerMonitor}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceNotificationHandler}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayBrokerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerGatewayMonitor}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void notify(int userID, string message)}
@@ -1422,7 +1459,18 @@ to the mote.
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerMonitor}}
       \item[Operations:] ~
-% no operations
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{\ref{data:DataTypesEcho} ping()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Sends a ping request to a component. The component should respond with an Echo reply. The monitor uses this to check whether or not the component is still available.
+\item Created for: Av1 - The SIoTIP gateway is able to autonomously detect failures of its individual internal communication components.
+        \end{itemize}
+      \item \textsf{void restart()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Restarts the Gateways' communication component.
+\item Created for: Av1 - If an internal SIoTIP gateway component fails, the gateway first tries to restart the affected component.
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% OSCommunication
@@ -1431,25 +1479,56 @@ to the mote.
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBroker}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}
       \item[Operations:] ~
-% no operations
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{void acknowledgement(int requestID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Sends an acknowledgement for a request sent by the SIoTIP gateway.
+\item Created for: Av1 - The Online Service should acknowledge each message sent by the SIoTIP gateway so that the gateway can detect failures.
+        \end{itemize}
+      \item \textsf{void receive(void ...)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: {\colorbox{red!30}{\underline{Undefined}}}
+        \end{itemize}
+      \item \textsf{void send(void ...)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: {\colorbox{red!30}{\underline{Undefined}}}
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% OSMonitoring
-  \subsection{OSMonitoring}\label{int:GatewayGatewayOnlineServiceBrokerOSMonitoring}
+  \subsection{OSMonitoring}\label{int:GatewayGatewayOnlineServiceBrokerBrokerLogicOSMonitoring}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerOnlineServiceMonitor}}
       \item[Operations:] ~
-% no operations
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{\ref{data:DataTypesEcho} pingOnlineService()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Makes the BrokerLogic send a ping to the Online Service. The Online Service should respond with an Echo reply. The monitor uses this to check whether or not the component is still available.
+\item Created for: The SIoTIP gateway will start synchronising with the Online service within 1 minute after the communication channel becomes available.
+        \end{itemize}
+      \item \textsf{void synchroniseWithOnlineService()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Makes the BrokerLogic fetch all pluggable data and application commands as new requests to start sending to the Online Service again.
+\item Created for: Av1 - The SIoTIP gateway will start synchronising with the Online service within 1 minute after the communication channel becomes available.
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% OSUpdates
-  \subsection{OSUpdates}\label{int:GatewayGatewayOnlineServiceBrokerOSUpdates}
+  \subsection{OSUpdates}\label{int:GatewayGatewayOnlineServiceBrokerOnlineServiceMonitorOSUpdates}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerOnlineServiceMonitor}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}
       \item[Operations:] ~
-% no operations
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{void onlineServiceUpdate()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Lets the OnlineServiceMonitor know that a message has been received from the Online Service
+\item Created for: Av1 - The Online Service should acknowledge each message sent by the SIoTIP gateway so that the gateway can detect failures.
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% RequestData
@@ -1491,12 +1570,23 @@ to the mote.
     \end{description}
 
   %%%%%%%% Requests
-  \subsection{Requests}\label{int:GatewayGatewayOnlineServiceBrokerRequests}
+  \subsection{Requests}\label{int:GatewayGatewayOnlineServiceBrokerRequestStoreRequests}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerRequestStore}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceBrokerBrokerLogic}}
       \item[Operations:] ~
-% no operations
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{void acknowledgement(int requestID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Sends an acknowledgement for a request sent by the SIoTIP gateway. Deletes a request that is stored in the RequestStore.
+\item Created for: Av1 - the SIoTIP gateway will temporarily store all incoming pluggable data and any issued application commands internally
+        \end{itemize}
+      \item \textsf{List\textless{}{\colorbox{red!30}{\underline{Object}}}\textgreater{} getNewRequestsForSynchronisation()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns pluggable data and application commands as new requests to start sending to the Online Service again.
+\item Created for: Av1 - The SIoTIP gateway will start synchronising with the Online service within 1 minute after the communication channel becomes available.
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% RoleMgmt

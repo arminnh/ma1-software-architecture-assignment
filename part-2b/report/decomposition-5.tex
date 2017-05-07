@@ -46,34 +46,18 @@
 
                 interface CommunicationComponentMonitoring used by OnlineServiceBrokerMonitor:
                     boolean check()
-                        Effect: Returns true if everything with the monitored component is in order.
-                        \item Created for: Av1 - SIoTIP gateway autonomously detects failures of its individual internal communication components.
-
                     void restart()
-                        Effect: Returns true if everything with the monitored component is in order.
-                        \item Created for: Av1 - If an internal SIoTIP gateway component fails, the gateway first tries to restart the affected component.
 
             BrokerLogic:
-                interface Communication used by RequestStore:
-                    void send(...)
-                    void receive(...)
-
                 interface OSCommunication used by Online Service:
                     void acknowledgement(int requestID)
-                        Effect: Sends an acknowledgement for a message sent by the SIoTIP gateway.
-                        \item Created for: Av1 - The Online Service should acknowledge each message sent by the SIoTIP gateway so that the gateway can detect failures.
 
                     void send(...)
                     void receive(...)
 
                 interface OSMonitoring used by OnlineServiceMonitor:
                     Echo pingOnlineService()
-                        Effect: Makes the BrokerLogic send a ping to the Online Service.
-                        \item Created for: The SIoTIP gateway will start synchronising with the Online service within 1 minute after the communication channel becomes available.
-
                     void synchroniseWithOnlineService()
-                        Effect: Makes the BrokerLogic fetch all pluggable data and application commands as new requests to start sending to the Online Service again.
-                        \item Created for: Av1 - The SIoTIP gateway will start synchronising with the Online service within 1 minute after the communication channel becomes available.
 
             RequestStore:
                 All interfaces that are going to the online service now go to the broker
@@ -82,12 +66,7 @@
 
                 Interface Communication used by BrokerLogic:
                     void deleteRequest(int requestID)
-                        Effect: Deletes a request that is stored in the RequestStore. This is called after an acknowledgement is received from the Online Service.
-                        \item Created for: Av1 - the SIoTIP gateway will temporarily store all incoming pluggable data and any issued application commands internally
-
                     List<Object> getNewRequestsForSynchronisation()
-                        Effect: Returns pluggable data and application commands as new requests to start sending to the Online Service again.
-                        \item Created for: Av1 - The SIoTIP gateway will start synchronising with the Online service within 1 minute after the communication channel becomes available.
 
             OnlineServiceMonitor:
                 Online service keeps track of connection to Online Service.
@@ -95,8 +74,6 @@
 
                 Interface OSUpdates used by BrokerLogic:
                     void onlineServiceUpdate()
-                        Effect: Lets the OnlineServiceMonitor know that a message has been received from the Online Service
-                        \item Created for: Av1 - The Online Service should acknowledge each message sent by the SIoTIP gateway so that the gateway can detect failures.
 
 
     \paragraph{Av1: New Online Service responsibilities}
@@ -128,16 +105,12 @@
 
                 interface CommunicationComponentMonitoring used by GatewayBrokerMonitor:
                     boolean check()
-                    Effect: Returns true if everything with the monitored component is in order. The failure of an internal SIoTIP Online Service component must be detected within 30 seconds.
-                    \item Created for: Av1 - The Online Service is able to autonomously detect failures of its individual internal communication components.
 
 
             BrokerLogic:
                 ALL INTERFACES FROM OS TO GATEWAY ARE NOW TO THIS COMPONENT
 
                 interface GWCommunication used by Gateway/BrokerLogic:
-                    void send(...)
-                    void receive(...)
 
             GatewayMonitor:
                 % table(int id, int countSynchronisationsMissed, DateTime nextSyncPeriod)
@@ -147,9 +120,6 @@
 
                 interface GatewayUpdates used by BrokerLogic:
                     void gatewayUpdate(int gatewayID, DateTime time)
-                        Effect: Lets the GatewayMonitor know that data has been received from a certain Gateway. Is called after a synchronisation of the gateway.
-                                When 3 consecutive expected synchronisations that do not arrive within 1 minute of their expected arrival time, a gateway outage is declared.
-                        \item Created for: Av1 - The Online Service is able to detect that a SIoTIP gateway is not sending data anymore based on the expected synchronisation interval.
 
             NotificationHandler:
                 Interface Notify used by GatewayMonitor
@@ -157,12 +127,7 @@
             DeviceDB:
                 Interface DeviceMgmt used by GatewayMonitor:
                     void setGatewayUnreachable()
-                        Effect: Changes a gateway's status to 'unreachable'.
-                        \item Created for: Av1 - Connectivity of gateways
-
                     void getPercentageOfUnreachableGateways()
-                        Effect: Returns the percentage of deployed gateways that have status 'unreachable'.
-                        \item Created for: Av1 - A SIoTIP system administrator should be notified of a simultaneous outage of more than 1\% of the registered gateways.
 
 
     In BROKER, many clients can make remote method invocations on
