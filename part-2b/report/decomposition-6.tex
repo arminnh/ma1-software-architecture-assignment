@@ -67,7 +67,212 @@
         i.e. it should not require proportionally more resources (machines, etc.)
         than the initial amount of resources provisioned per customer
         organisation/infrastructure owner and per gateway.
+        
+        
+    UC1:
+    1. The primary actor requests the (infrastructure owner-specific) registration form.
+        UnregisteredUserClient -> UnregisteredUserFacade: interface Registration:
+                                         void requestForRegistration(int infrOwnerID)
+            Effect: Unregistered user request fo registration for the specific infrastructure owner.
+            \item Created for: UC1.1
+    2. The system asks the primary actor for an e-mail address.
+    3. The primary actor enters a company e-mail address.
+        
+        UnregisteredUserClient -> UnregisteredUserFacade: interface Registration:
+                                         boolean controlEmail(string email,int infrOwnerID)
+            Effect: Returns true if email adress is correct and sends confirmation email.
+            \item Created for: UC1.3
+            
+        UnregisteredUserFacade -> UnregisteredUserManager: interface Registration:
+                                  boolean controlEmail(string email,int infrOwnerID)
+             Effect: Returns true if email adrress is correct.
+            \item Created for: UC1.3
+            
+        UnregisteredUserFacade -> UnregisteredUserManager: interface Registration:
+                                  boolean controlEmail(string email, int infrOwnerID)
+             Effect: Returns true if email adrress is correct and sends confirmation email.
+            \item Created for: UC1.3
+            
+ 
+            
+   4. The system verifies the provided e-mail address, and if the e-mail address is valid, the system
+    informs the primary actor that a confirmation e-mail was sent to the entered e-mail address
+    with further instructions.
+           UnregisteredUserManager -> OtherDataDB: interface Registration:
+                                  boolean controlEmail(string email, int infrOwnerID)
+             Effect: Returns true if email address doesnt't exist in database and save email with status "processed" and timestamp.
+                     Returns true if email address exists in database.
+            \item Created for: UC1.4
 
+    5. The primary actor confirms his or her e-mail address by following the link in the received
+    e-mail.
+    UnregisteredUserClient -> UnregisteredUserFacade: interface Registration:
+                                         boolean confirmEmail(string email)
+            Effect: Return true if email was confirmed. Return false if user missed deadline(30 min.)
+            \item Created for: UC1.5
+        
+        UnregisteredUserFacade -> UnregisteredUserManager: interface Registration:
+                                   boolean confirmEmail(string email)
+             Effect: Return true if email was confirmed. Return false if user missed deadline(30 min.)
+            \item Created for: UC1.5
+            
+        UnregisteredUserManager -> OtherDataDB: interface Registration:
+                                  boolean controlEmail(string email, int infrOwnerID)
+             Effect: Return true if email was confirmed. Return false if user missed deadline(30 min.)
+            \item Created for: UC1.5
+    
+    6. The system asks the primary actor for the remaining information:
+    (a) Credentials (e.g., unique username and password)
+    (b) Full name of the company and primary address
+    (c) Billing and payment information (e.g. credit card information or bank account number,
+        and, optionally, invoicing address)
+    (d) Contact phone number
+    (e) Notification preferences: SMS and/or e-mail.            
+    
+    7. The primary actor provides the requested information.
+        Map<String,boolean> preferences = type of preference, true/false
+     UnregisteredUserClient -> UnregisteredUserFacade: interface Registration:
+                                 int saveCustomerOrganisation(string userName, string password, Address adddress, string company, string 
+                                 email, string phone, Map<String,boolean> preferences)
+            Effect: Returns customer organisation id.
+            \item Created for: UC1.7
+    
+    8. The system verifies the provided information, and, if the provided information is correct, the
+    system creates a new customer organisation profile.
+
+            
+        UnregisteredUserFacade -> UnregisteredUserManager: interface Registration:
+                                  int saveCustomerOrganisation(string userName, string password, Address adddress, string company,string    
+                                  email, string phone, Map<String,boolean> preferences)
+             Effect: Returns customer organisation id.
+            \item Created for: UC1.8
+            
+            
+        UnregisteredUserManager -> OtherDataDB: interface Registration:
+                                  int saveCustomerOrganisation(string userName, string password, Address adddress, string company,string    
+                                  email, string phone, Map<String,boolean> preferences)
+             Effect: Creates new customer organisation, saves information and returns customer organisation id, if information is correct.
+             Exception: EmailAlreadyExists
+            \item Created for: UC1.8
+            
+    9. The system notifies the primary actor that the registration is successful.
+           
+        UnregisteredUserManager -> NotificationHandler: interface Notify 
+        
+    If the primary actor does not click the link in the received e-mail within 30 minutes, the use
+    case is aborted.
+
+
+    8a. If the chosen user name already exists, the system asks the primary actor for a different user
+        name. Continue from step 6.
+
+    8b. If the provided primary company address or invoicing address is not valid, e.g. the provided
+        city and postcode do not match, the system asks the primary actor to correct this. Continue
+        from step 6.
+    8c. If the provided payment information is not correct, e.g. incorrect credit card number, the
+        system informs the primary actor of the encountered error. Continue from step 6.
+        
+    A customer organisation can also be unregistered (triggered by the customer organisation
+    itself, or by the associated infrastructure owner). This process involves unsubscribing from all
+    applications (cf. UC20: Unsubscribe from application). For simplicity, no explicit use case is
+    provided for this scenario.
+
+    UC2: 
+        1. The primary actor indicates to the system that he or she wants to register an end-user.
+            CustomerOrganisationClient -> CustomerOrganisationFacade: interface EndUserMgmt
+                                            void registerEndUser()
+
+        2. The system asks the primary actor for details about the end-user to be registered:
+            - Name
+            - Phone number (for SMS) and/or e-mail address
+       
+        3. The primary actor supplies the requested information.
+            CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:
+                                                void registerEndUser(string Name, Map<string,string> contacts)
+            Exception: InvalidNumberOrEmailAddress
+        4. The system verifies the provided e-mail address or phone number, and checks that the end-user
+            does not exist in the system already. If the provided information is valid, the system stores
+            the end-user information and associates it with the primary actor.
+        
+                UserRoleManager -> OtherDataDB: interface UserRoleMgmt:
+                                    void registerEndUser(string Name, Map<string,string> contacts)
+                Exception: EndUserAlreadyExists
+        5. The system informs the primary actor that the end-user was registered successfully.
+                Notify()
+        
+        4a. If the provided phone number or e-mail address is not valid, e.g. badly formatted, or if the
+            end-user for which details were provided already exists in the system, the system informs the
+            primary actor of this error. Continue from step 2.
+        
+    UC3: 
+        1. The primary actor indicates to the system that they want to unregister an end-user.
+            CustomerOrganisationClient -> CustomerOrganisationFacade: interface EndUserMgmt
+                                            void unregisterEndUser()
+            Effect: unregister end-user
+            \item Created for: UC3.1
+        2. The system retrieves all end-users associated with the primary actor and presents this list to
+            the primary actor.
+            CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:
+                                                void getRelatedEndUsers(int custOrgID)
+            Effect: Customer organisation has a list of all related end-users
+            \item Created for: UC3.2
+            
+        3. The primary actor indicates which end-user she wants to unregister.
+             CustomerOrganisationFacade -> UserRolesManager: interface RoleMgmt:
+                                                void unregisterEndUser(int endUserID)
+            
+            Effect: unregister end-user
+            \item Created for: UC3.3
+              
+        4. The system marks the profile of the end-user as `inactive'
+            UserRolesManager -> OtherDataDb: interface UserRoleMgmt:
+                                                void unregisterEndUser(int endUserID)
+            Effect: sets end-user as 'inactive' 
+            \item Created for UC3.4
+               
+        5. The system checks if any applications should be deactivated because of end-user assignment
+            to mandatory roles (Include: UC18: Check and deactivate applications).
+            UserRolesManager -> ApplicationManager: interface ??? UC18
+        6. The system informs the primary actor that the end-user is now unregistered from SIoTIP.
+            Notify()
+            
+    UC5:
+        1. The primary actor physically stops the mote (by unplugging, powering off, or taking it out of
+            the vicinity of the network).
+        2. When the system no longer receives heartbeat messages,
+            -it marks the mote as `inactive' in the topology.
+            -it looks up the pluggable devices that were attached to the affected mote and marks these
+                as `inactive' in the topology.
+            -it checks for and deactivates applications that are affected by the unavailability of the
+                pluggable devices (Include: UC18: Check and deactivate applications).
+            -It sends a notification to the primary actor (Include: UC15: Send notification).
+        
+        We already have fucntions for this somewhere.
+        
+     UC7:
+        1. The primary actor unplugs the pluggable device from its mote.
+        2. A message is sent from the mote from which the pluggable device was removed to the system,
+            containing the identier of the removed pluggable device.
+        3. The system
+        { marks the pluggable device as `inactive',
+        { updates the topology,
+        { it checks and deactivates applications for which the pluggable device was essential
+        (Include: UC18: Check and deactivate applications).
+        
+     UC8:
+        1. The primary actor indicates that they want to initialise the newly attached pluggable for use.
+            InfrastructreOwnerClient -> InfrastructreOwnerFacade: interface DeviceMgmt
+                                void initialisePluggableDevice()
+                                        
+        2. The system allows the primary actor to configure the pluggable device in the topology
+            (Include: UC10: Consult and configure the topology), e.g. to set its physical location.
+             See UC10
+        3. The system marks the pluggable device as `active', and informs the primary actor that the
+            pluggable is ready for use.
+            TopologyManager - we have function for reactivateDevice()
+        4. The system allows the primary actor to configure the access rights for the pluggable device
+            (Include: UC9: Configure pluggable device access rights).
+            See UC9
 
 \subsection{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions
@@ -76,7 +281,10 @@
     the components can be found under chapter \ref{ch:elements-datatypes}. \\
 
     \begin{itemize}
-        \item Component: (P1 or UC)
+        \item Component: UnregisteredUserClient
+              Effect: Represents the client for an unregistered user.
+        \item Component: UnregisteredUserFacade
+        \item Component: UnregisteredUserManager
     \end{itemize}
 
 
@@ -85,14 +293,26 @@
     in the section above. Detailed information about each interface and
     its methods can be found under chapter \ref{ch:elements-datatypes}. \\
 
-    \subsubsection{Component}
+    \subsubsection{OtherDataDB}
         \begin{itemize}
-            \item Interface
+            \item Registration
+        \end{itemize}
+    \subsubsection{UnregisteredUserClient}
+        \begin{itemize}
+            \item Registration
+        \end{itemize}
+    \subsubsection{UnregisteredUserFacade}
+        \begin{itemize}
+            \item Registration
+        \end{itemize}
+    \subsubsection{CustomerOrganisationFacade}
+        \begin{itemize}
+            \item EndUserMgmt
         \end{itemize}
 
 \subsection{Data type definitions}
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}
-        \item DateTime: Represents an instant in time, typically expressed as a date and time of day.
+        \item Address: Represents an address of customer organisation.
     \end{itemize}
