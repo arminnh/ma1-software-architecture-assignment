@@ -12,9 +12,21 @@
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved.
 
-    \paragraph{UC: Problem title}
+    \paragraph{UC21: Send invoice}
         Short description of the problem.\\
         Solution for the problem.
+        
+        1. The system constructs an invoice containing:
+            { the provided service or product (e.g. monthly subscription fee for applications or purchased
+            hardware),
+            { the amount to be paid,
+            { the date the payment is due and
+            { the contact details of the primary actor (e.g. Zoomit identifier or credit card data)
+                SubscriptionManager -> InvoiceManager: constructInvoice(Map<string,string>)
+        2. The system sends the invoice to the third-party invoicing service.
+           InvoiceManager -> InvoicingService: interface Invoices
+                                boolean sendInvoice(Map<string,string>)
+           Effect: Returns true if the ivoice was sent successfully.
 
 
 \subsection{Instantiation and allocation of functionality}

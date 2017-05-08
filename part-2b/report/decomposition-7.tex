@@ -27,6 +27,34 @@
         PMS: store sessionID in sessionDB
         Check what is better for us
         http://shiflett.org/articles/storing-sessions-in-a-database
+        
+        UC28 
+        1. The primary actor indicates he or she want to log in to the system and provides authentication
+            credentials, for example a user name and password.
+            Clients -> UserFacade: interface Authentification:
+                            login()
+            UserFacade -> AuthentificationManager: inteface  Authentification:
+                            login(string name, string passwod)               
+        2. The system veries the provided authentication credentials.
+            AuthentificationManager -> SessionDB: interface Authentification:
+                                    controlCredentials(string name, string passwod)
+        3. If the provided credentials are correct, the system conrms successful login to the primary
+            actor and logs him or her in.
+            
+         3a. If the provided credentials are incorrect, the system noties the primary actor of this. Continue
+            from step 1.
+            
+            { This use case abstracts the used method of authentication. For example, authentication can
+               be done using techniques such as username-password, security tokens, cryptographic keys, etc.
+               The employed method depends, among others, on the type of primary actor.
+            { Registration of customer organisation and end-users is described in UC1. Registration of
+               infrastructure owners, SysAdmins, and application providers is done out-of-band, and hence
+               not described in use cases.
+               
+               
+         UC29:
+            1. The primary actor indicates he or she wants to log out of the system.
+            2. The system logs the primary actor out and indicates success to the primary actor.
 
 
 \subsection{Instantiation and allocation of functionality}
