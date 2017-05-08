@@ -2,123 +2,18 @@
 
 % Delete the command below to remove the hints and instructions
 \showdecisionsnotes{}
-
-\section{Av3: Pluggable device or mote failure}
-    \todoinline{Use this section structure for each requirement}
-    \subsection*{Key Decisions}
-    \todoinline{
-    	Briefly list your key architectural decisions.
-    	Pay attention to the solutions that you employed (in your own terms or using tactics and/or patterns).}
-    \begin{itemize}
-    	\item \texttt{DeviceManager} monitors connected/operational devices on a gateway.
-    	\item \ldots
-    \end{itemize}
-    \emph{Employed tactics and patterns:} \ldots
-
-    \subsection*{Rationale}
-        \paragraph{Av3: Failure detection}
-            Gateway need to be able to autonomously detect failure of one of its
-            connected motes and pluggable devices. This is achieved by making motes
-            send heartbeats to their connected gateways. The gateways can
-            then monitor their connected devices. The heartbeats contain a list
-            of devices that are connected/operational at the moment the mote sends
-            the heartbeat. Each gateway makes use of a \texttt{DeviceManager}
-            component to monitor the devices. This component uses timers to keep track
-            of how long it has been since a device has sent a heartbeat or occured in
-            a list of connected devices. Once a timer expires, this is treated as
-            a failure. \\
-
-            A mote has failed when 3 consecutive heartbeats do not arrive within 1
-            second of their expected arrival time. \\
-            A pluggable device has failed when it does not occur in a heartbeat of the
-            mote in which it is expected to be in. This is is detected within 2
-            seconds after the arrival of the heartbeat.
-            
-        \paragraph{Av3: Automatic application deactivation and redundancy settings}
-            Applications should be automatically suspended when they can no longer
-            operate due to failure of a pluggable device or mote and reactivated
-            once the failure is resolved. Application providers can design their
-            applications such that they explicitly require redundancy in
-            the available pluggable devices. \\
-            This problem is tackled by the \texttt{DeviceManager}. It
-            stores the requirements for pluggable devices set by applications for all
-            applications that use the gateway that the the \texttt{DeviceManager}
-            runs on. When it detects that an application can no longer operate
-            due to failures, it will send a command to the \texttt{ApplicationManager}
-            (via the \texttt{GatewayFacade})
-            to suspend that application. When the required devices are operational
-            again, the \texttt{DeviceManager} detects this and sends a
-            command to reactivate the application. \\
-
-            Applications are suspended within 1 minute after detecting
-            the failure of an essential pluggable device. \\
-            Application are reactivated within 1 minute after the failure is resolved.
-
-        \paragraph{Av3: Notifications}
-            The infrastructure owner should be notified of any persistent
-            pluggable device or mote failures. Customer organisations should be
-            notified if one or more of their applications is suspended or
-            reactivated. Applications using a failed pluggable device or any device
-            on a failed mote should be notified. \\
-            The \texttt{NotificationHandler} was put in place to deal with
-            notifications. Other components can use it to generate notifications for
-            certain users in the system. The \texttt{NotificationHandler} will then
-            insert information relevant to the notification in the database (message,
-            status, date and time, source, ...), and use an external delivery
-            service to deliver the notification to users. The used delivery medium
-            is based on the user's preferences. \\
-            Since they are stored in the database, users can always view
-            their notifications via their dashboard. However, this funcionality is not
-            expanded on in this decomposition yet. \\
-
-            Infrastructure owners are notified within 1 minute after detecting a mote outage lasting at
-            least 10 seconds. \\
-            Infrastructure owners are notified within 1 minute after the detection of the unavailability of
-            a pluggable device for 30 seconds. \\
-            Applications are notified of the failure of relevant pluggable devices within 10 seconds.
-
-        
-
-    \subsection*{Considered Alternatives}
-        \paragraph{Alternative for failure detection}
-            An alternative would have been to move the \texttt{DeviceManager}
-            component from gateways to the Online Service. This solution would make the
-            gateways do less work, but would be very unscalable. The reason is
-            that as the customer base (and thus the amount of devices) increases,
-            the Online Service would need to keep track of huge amounts of devices.
-            This would also flood the network to the Online Service with heartbeats.
-
-        \paragraph{Alternative for Failure detection}
-            Another alternative for failure detection could have been the use of
-            a Ping/Echo mechanism instead of Heartbeats. Pings could then be used
-            to check if a device is currently operational. However, as a device could
-            not be operational for a moment because of e.g. interference, timers
-            would still be necessary to keep track of operational devices. We opted
-            to use heartbeats, as this would reduce the amount of data sent over
-            the network used by the motes, and as motes would have to do slightly
-            more work to process each Ping request in order to generate a reply.
-
-        \paragraph{Av3: Notifications}
-            Reliable and quick delivery of notifications is crucial to the
-            system in order to solve problems should things go wrong. Currently,
-            the solution is to use a third party service for delivery of
-            notifications. In the case that no external services are found
-            satisfactory, or if this dependency on an external service is
-            unwanted, it is possible to build an internal solution for this.
-            For example, a \texttt{NotificationSender} component could make use
-            of the \texttt{Factory pattern} for different message channels for
-            different delivery methods (each with their own sendNotification method).
-            This solution allows us to easily add new message channels in the
-            future with little effort. The disadvantage of this is that an
-            internal solution takes a lot more time to implement.
-
-
-    \subsection*{Deployment Decisions}
-    \ldots
-
-    \subsection*{Considered Deployment Alternatives}
-    \ldots
-
+    \input{decision-av3}
+    \newpage
+    \input{decision-m1}
+    \newpage
+    \input{decision-u2}
+    \newpage
+    \input{decision-av2}
+    \newpage
+    \input{decision-av1}
+    \newpage
+    \input{decision-p1}
+    
 \section{Other decisions}
     \todoinline{\emph{Optional} If you have made any other important architectural decisions that do not directly fit in the sections of the other qualities you can mention them here.
 
