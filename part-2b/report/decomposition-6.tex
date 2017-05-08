@@ -9,15 +9,15 @@
 
     The related functional drivers are:
     \begin{itemize}
-        \item \emph{UC1}: Register a customer organisation \\
-        \item \emph{UC2}: Register an end-user \\
-        \item \emph{UC3}: Unregister an end-user \\
-        \item \emph{UC5}: Uninstall mote \\
-        \item \emph{UC7}: Remove a pluggable device from its mote \\
-        \item \emph{UC8}: Initialise a pluggable device \\
-        \item \emph{UC10}: Consult and configure the topology \\
-        \item \emph{UC16}: Consult notification message \\
-        \item \emph{UC20}: Unsubscribe from application \\
+        \item \emph{UC1}: Register a customer organisation
+        \item \emph{UC2}: Register an end-user
+        \item \emph{UC3}: Unregister an end-user
+        \item \emph{UC5}: Uninstall mote
+        \item \emph{UC7}: Remove a pluggable device from its mote
+        \item \emph{UC8}: Initialise a pluggable device
+        \item \emph{UC10}: Consult and configure the topology
+        \item \emph{UC16}: Consult notification message
+        \item \emph{UC20}: Unsubscribe from application
     \end{itemize}
 
 
@@ -67,283 +67,281 @@
         organisation/infrastructure owner and per gateway.
 
 
-    UC1:
-        1. The primary actor requests the (infrastructure owner-specific) registration form.
-            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean canCustomerOrganisationRegister(int infrastructureOwnerID, string hash)
-            UnregisteredUserFacade -> UserManager: interface UserMgmt: boolean canCustomerOrganisationRegister(int infrastructureOwnerID, string hash)
-            UserManager -> OtherDataDB: interface UserMgmt: boolean canCustomerOrganisationRegister(int infrastructureOwnerID, string hash)
-
-        2. The system asks the primary actor for an e-mail address.
-
-        3. The primary actor enters a company e-mail address.
-
-            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID)
-
-        4. The system verifies the provided e-mail address, and if the e-mail address is valid, the system
-           informs the primary actor that a confirmation e-mail was sent to the entered e-mail address
-           with further instructions.
-
-            UnregisteredUserFacade -> UserManager: interface Registration: boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID)
-            UserManager -> OtherDataDB: interface Registration: boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID)
-
-        5. The primary actor confirms his or her e-mail address by following the link in the received e-mail.
-
-            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean confirmEmail(string emailAddress, string randomString)
-            UnregisteredUserFacade -> UserManager: interface Registration: boolean confirmEmail(string emailAddress, string randomString)
-            UserManager -> OtherDataDB: interface Registration: boolean confirmEmail(string emailAddress, string randomString)
-
-        6. The system asks the primary actor for the remaining information:
-           (a) Credentials (e.g., unique username and password)
-           (b) Full name of the company and primary address
-           (c) Billing and payment information (e.g. credit card information or bank account number,
-               and, optionally, invoicing address)
-           (d) Contact phone number
-           (e) Notification preferences: SMS and/or e-mail.
-
-        7. The primary actor provides the requested information.
-            UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: int createCustomerOrganisation(Map<string, string> data)
-
-        8. The system verifies the provided information, and, if the provided information is correct, the
-           system creates a new customer organisation profile.
-
-            UnregisteredUserFacade -> UserManager: interface Registration: int createCustomerOrganisation(Map<string, string> data)
-            UserManager -> OtherDataDB: interface Registration: int createCustomerOrganisation(Map<string, string> data)
-
-        9. The system notifies the primary actor that the registration is successful.
-            => return value of step 7
-
-        TODO: check if linked to IO
-
-
-    UC2:
-        1. The primary actor indicates to the system that he or she wants to register an end-user.
-            IN CustomerOrganisationClient
-
-        2. The system asks the primary actor for details about the end-user to be registered:
-           Name, Phone number (for SMS) and/or e-mail address
-           IN CustomerOrganisationClient
-
-        3. The primary actor supplies the requested information.
-            CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: boolean registerEndUser(int customerOrganisationID, Map<string, string> data)
-
-        4. The system verifies the provided e-mail address or phone number, and checks that the end-user
-            does not exist in the system already. If the provided information is valid, the system stores
-            the end-user information and associates it with the primary actor.
-
-            CustomerOrganisationFacade -> UserManager: interface UserMgmt: boolean createEndUser(int customerOrganisationID, Map<string, string> data)
-            UserManager -> OtherDataDB: interface UserMgmt: boolean createEndUser(int customerOrganisationID, Map<string, string> data)
-
-        5. The system informs the primary actor that the end-user was registered successfully.
-            => return value of createEndUser
-
-
-    UC3:
-        1. The primary actor indicates to the system that they want to unregister an end-user.
-            CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID)
-
-        2. The system retrieves all end-users associated with the primary actor and presents this list to the primary actor.
-
-            CustomerOrganisationFacade -> UserManager: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID) ALREADY HAVE THIS?
-            UserManager -> OtherDataDB: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID) ALREADY HAVE THIS?
-
-        3. The primary actor indicates which end-user she wants to unregister.
-            CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: void unregisterEndUser(int customerOrganisationID, int userID)
-
-        4. The system marks the profile of the end-user as 'inactive'
-
-            CustomerOrganisationFacade -> UserManager: interface UserMgmt: void softDeleteEndUser(int customerOrganisationID, int userID)
-            UserManager -> OtherDataDb: interface UserUserMgmt: void softDeleteEndUser(int customerOrganisationID, int userID)
-
-        5. The system checks if any applications should be deactivated because of end-user assignment to mandatory roles (Include: UC18: Check and deactivate applications).
-            CustomerOrganisationFacade -> ApplicationManagementLogic: interface FrontEndAppReuqestss: checkApplicationsForDeactivationForCustomerOrganisations(List<int> IDs)
-
-        6. The system informs the primary actor that the end-user is now unregistered from SIoTIP.
-            => return value of unregisterEndUser
-
-
-    UC5:
-        1. The primary actor physically stops the mote (by unplugging, powering off, or taking it out of the vicinity of the network).
-
-        2. When the system no longer receives heartbeat messages,
-            Already done: Mote -> DeviceManager: interface Heartbeat
-            Use case starts with DeviceManager noticing that a mote is not sending heatbeats anymore.
-
-            -it marks the mote as 'inactive' in the topology.
-                DeviceManager -> TopologyManager: interface TopologyMgmt: void deactivateMote(int moteID)
-                TopologyManager -> DeviceDB: interface DBTopologyMgmt: void deactivateMote(int moteID)
-                DeviceManager -> DeviceDB: interface DBDeviceMgmt: void deactivateMote(int moteID)
-
-            -it looks up the pluggable devices that were attached to the affected mote and marks these as 'inactive' in the topology.
-                DeviceManager -> TopologyManager: interface TopologyMgmt: void deactivatePluggableDevices(List<PluggableDeviceID> pIDs)
-                TopologyManager -> DeviceDB: interface DBTopologyMgmt: void deactivatePluggableDevices(List<PluggableDeviceID> pIDs)
-                DeviceManager -> DeviceDB: interface DBDeviceMgmt: void deactivatePluggableDevices(List<PluggableDeviceID> pIDs)
-
-            -it checks for and deactivates applications that are affected by the unavailability of the pluggable devices (Include: UC18: Check and deactivate applications).
-                DeviceManager -> ApplicationManagementLogic: interface GWAppInstanceMgmt: void checkApplicationsForDeactivationForPluggableDevices(List<PluggableDeviceID> pIDs)
-
-            -It sends a notification to the primary actor (Include: UC15: Send notification).
-                DeviceManager -> NotificationHandler: interface Notify: notifyMoteUninstalled()
-
-
-    UC7:
-        1. The primary actor unplugs the pluggable device from its mote.
-
-        2. A message is sent from the mote from which the pluggable device was removed to the system, containing the identifier of the removed pluggable device.
-            Mote -> DeviceManager: interface DeviceManagement: void pluggableDeviceRemoved(PluggableDeviceID pID)
-            (SAME FOR UC6: pluggableDevicePluggedIn(moteInfo, pID))
-
-        3. The system
-           { marks the pluggable device as 'inactive',
-            DeviceManager -> DeviceDB: interface DBDeviceMgmt: void deactivatePluggableDevice(PluggableDeviceID pID)
-
-           { updates the topology,
-            DeviceManager -> TopologyManager: interface TopologyMgmt: void deactivatePluggableDevice(PluggableDeviceID pID)
-            TopologyManager -> DeviceDB: interface DBTopologyMgmt: void deactivatePluggableDevice(PluggableDeviceID pID)
-
-           { it checks and deactivates applications for which the pluggable device was essential (Include: UC18: Check and deactivate applications).
-            DeviceManager -> ApplicationManagementLogic: interface GWAppInstanceMgmt: void checkApplicationsForDeactivationForPluggableDevice(PluggableDeviceID pID)
-
-
-    UC8:
-        1. The primary actor indicates that they want to initialise the newly attached pluggable for use.
-            Client goes to UC10
-
-        2. The system allows the primary actor to configure the pluggable device in the topology (Include: UC10), e.g. to set its physical location.
-
-            See and create UC10
-
-        3. The system marks the pluggable device as 'active', and informs the primary actor that the pluggable is ready for use.
-
-            InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt: void initialisePluggableDevice(PluggableDeviceID pID)
-            InfrastructureOwnerManager -> DeviceDB: interface DBIODeviceMgmt: void initialisePluggableDevice(PluggableDeviceID pID)
-            InfrastructureOwnerManager -> DeviceManager: interface DBIODeviceMgmt: void initialisePluggableDevice(PluggableDeviceID pID)
-            DeviceManager -> DeviceManager: interface GWAppInstanceMgmt: void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
-
-        4. The system allows the primary actor to configure the access rights for the pluggable device (Include: UC9: Configure pluggable device access rights).
-
-            See UC9
-            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights
-
-
-    UC10: Consult and configure the topology
-        1. The primary actor indicates that they want to manage the topology.
-
-            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<RoomTopology> getTopologyOfInfrastructureOwner(int infrastructureOwnerID)
-
-        2. The system presents the topology for the primary actor.
-           { The topology shows a representation of the gateways, and the motes and pluggable devices associated with each gateway,
-           and specifies key relationships between these devices, for example physical location information,
-           or whether pluggable device X and pluggable device Y are interchangeable.
-
-            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<RoomTopology> getTopologyOfInfrastructureOwner(int infrastructureOwnerID)
-            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<RoomTopology> getTopologyOfInfrastructureOwner(int infrastructureOwnerID)
-
-           { New motes and pluggable devices that are not yet included are presented on the side.
-
-            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
-            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
-
-            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
-            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
-
-        3. The primary actor updates the topology.
-           { This could involve changing the location of or relations between motes and pluggable devices,
-           or extending the topology with motes and pluggable devices that were not yet included.
-
-            FOR INSIDE CLIENT
-
-        4. The primary actor indicates that they are done updating the topology.
-
-            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
-
-        5. The system
-           { stores the reconfigured topology and informs the primary actor that the reconfigured topology is now being used.
-
-            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
-            TopologyManager -> DeviceDB: interface DBTopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
-
-           { activates 'inactive' applications (Include: UC17 : Activate an application).
-            InfrastructureOwnerFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
-
-           { checks for applications that require deactivation (Include: UC18 : Check and deactivate applications).
-            InfrastructureOwnerFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void checkApplicationsForDectivationForInfrastructureOwner(int infrastructureOwnerID)
-
-        3a. If the primary actor wants to view status details for a specific gateway/mote/pluggable device:
-            1. The system composes a detailed overview of the status of the selected gateway/mote/pluggable device (e.g., indicating that the device was unavailable between 2 and 3 a.m.) and presents it.
-                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
-                InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
-                TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
-
-                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
-                InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
-                TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
-
-                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
-                InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
-                TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
-
-
-    UC16:
-        1. The primary actor indicates that he/she/they wants to consult a notification.
-
-            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: List<Notification> consultNotifications(int userID)
-
-        2. The system retrieves all notifications for the primary actor and presents them to the primary actor, e.g. as a table or list.
-
-            RegisteredUserFacade -> NotificationHandler: interface Notifications: List<Notification> getNotifications(int userID)
-            NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: List<Notification> getNotifications(int userID)
-
-        3. The primary actor selects a notification.
-
-            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: Notification consultNotification(int userID, int notificationID)
-
-        4. The system presents the details for the selected notification to the primary actor. This includes:
-            { A description of the event that occurred.
-            { Date and time the event occurred.
-            { What triggered the event (e.g., the cause of an application that became inactive)
-            { The status of the notification (e.g. 'sent', 'delivered', 'read')
-            { The communication channel by which the notification was sent
-
-            RegisteredUserFacade -> NotificationHandler: interface Notifications: Notification getDetailedNotification(int userID, int notificationID)
-            NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: Notification getDetailedNotification(int userID, int notificationID)
-
-        5. The system marks the notification as 'read'.
-            NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: void setNotificationRead(int notificationID)
-
-
-    UC20:
-        1. The primary actor indicates they want to unsubscribe from an application.
-            CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
-
-        2. The system looks up a list of applications the primary actor is subscribed to, and presents this overview to the primary actor, e.g. as a list or table.
-            CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
-            SubscriptionManager -> OtherDataDB: interface DBSubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
-
-        3. The primary actor indicates which application they want to unsubscribe from.
-            CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void unsubscribeFromApplication(int customerOrganisationID, int subscriptionID, int applicationInstanceID)
-
-        4. The system
-           (i) ends the subscription for the selected application,
-
-                CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: void softDeleteSubscription(int subscriptionID)
-                SubscriptionManager -> OtherDataDB: interface DBSubscriptionMgmt: void softDeleteSubscription(int subscriptionID)
-
-            (ii) deactivates the application, and
-
-                SubscriptionManager -> ApplicationManagementLogic: interface FrontEndAppRequests: void softDeleteApplicationInstance(int applicationInstanceID)
-                ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void softDeleteApplicationInstance(int applicationInstanceID)
-
-                CustomerOrganisationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void destroyApplicationInstance(int applicationInstanceID)
-                ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void destroyApplicationInstance(int applicationInstanceID)
-
-            (iii) constructs an invoice for outstanding payments for that application (cf. UC21: Send invoice).
-
-                SubscriptionManager -> InvoiceManager: interface InvoiceMgmt: void constructInvoiceForApplicationInstance(int applicationInstanceID, int customerOrganisationID)
-                InvoiceManager -> OtherDataDB: interface InvoiceMgmt: void createInvoice(Invoice invoice)
-                InvoiceManager -> ThirdPartyInvoicingService: interface InvoiceMgmt: void sendInvoice(Map<string, string> invoiceData)
-
-        5. The system informs the primary actor that the unsubscription was successful.
-            => return value of unsubscribeFromApplication
+    % UC1:
+    %     1. The primary actor requests the (infrastructure owner-specific) registration form.
+    %         UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean canCustomerOrganisationRegister(int infrastructureOwnerID, string hash)
+    %         UnregisteredUserFacade -> UserManager: interface UserMgmt: boolean canCustomerOrganisationRegister(int infrastructureOwnerID, string hash)
+    %         UserManager -> OtherDataDB: interface UserMgmt: boolean canCustomerOrganisationRegister(int infrastructureOwnerID, string hash)
+    %
+    %     2. The system asks the primary actor for an e-mail address.
+    %
+    %     3. The primary actor enters a company e-mail address.
+    %
+    %         UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID)
+    %
+    %     4. The system verifies the provided e-mail address, and if the e-mail address is valid, the system
+    %        informs the primary actor that a confirmation e-mail was sent to the entered e-mail address
+    %        with further instructions.
+    %
+    %         UnregisteredUserFacade -> UserManager: interface UserMgmt: boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID)
+    %         UserManager -> OtherDataDB: interface UserMgmt: boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID)
+    %
+    %     5. The primary actor confirms his or her e-mail address by following the link in the received e-mail.
+    %
+    %         UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean confirmEmail(string emailAddress, string randomString)
+    %         UnregisteredUserFacade -> UserManager: interface UserMgmt: boolean confirmEmail(string emailAddress, string randomString)
+    %         UserManager -> OtherDataDB: interface UserMgmt: boolean confirmEmail(string emailAddress, string randomString)
+    %
+    %     6. The system asks the primary actor for the remaining information:
+    %        (a) Credentials (e.g., unique username and password)
+    %        (b) Full name of the company and primary address
+    %        (c) Billing and payment information (e.g. credit card information or bank account number,
+    %            and, optionally, invoicing address)
+    %        (d) Contact phone number
+    %        (e) Notification preferences: SMS and/or e-mail.
+    %
+    %     7. The primary actor provides the requested information.
+    %         UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: int createCustomerOrganisation(Map<string, string> data)
+    %
+    %     8. The system verifies the provided information, and, if the provided information is correct, the
+    %        system creates a new customer organisation profile.
+    %
+    %         UnregisteredUserFacade -> UserManager: interface UserMgmt: int createCustomerOrganisation(Map<string, string> data)
+    %         UserManager -> OtherDataDB: interface UserMgmt: int createCustomerOrganisation(Map<string, string> data)
+    %
+    %     9. The system notifies the primary actor that the registration is successful.
+    %         => return value of step 7
+
+
+    % UC2:
+    %     1. The primary actor indicates to the system that he or she wants to register an end-user.
+    %         IN CustomerOrganisationClient
+    %
+    %     2. The system asks the primary actor for details about the end-user to be registered:
+    %        Name, Phone number (for SMS) and/or e-mail address
+    %        IN CustomerOrganisationClient
+    %
+    %     3. The primary actor supplies the requested information.
+    %         CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: boolean registerEndUser(int customerOrganisationID, Map<string, string> data)
+    %
+    %     4. The system verifies the provided e-mail address or phone number, and checks that the end-user
+    %         does not exist in the system already. If the provided information is valid, the system stores
+    %         the end-user information and associates it with the primary actor.
+    %
+    %         CustomerOrganisationFacade -> UserManager: interface UserMgmt: boolean createEndUser(int customerOrganisationID, Map<string, string> data)
+    %         UserManager -> OtherDataDB: interface UserMgmt: boolean createEndUser(int customerOrganisationID, Map<string, string> data)
+    %
+    %     5. The system informs the primary actor that the end-user was registered successfully.
+    %         => return value of createEndUser
+
+
+    % UC3:
+    %     1. The primary actor indicates to the system that they want to unregister an end-user.
+    %         CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID)
+    %
+    %     2. The system retrieves all end-users associated with the primary actor and presents this list to the primary actor.
+    %
+    %         CustomerOrganisationFacade -> UserManager: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID) ALREADY HAVE THIS?
+    %         UserManager -> OtherDataDB: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID) ALREADY HAVE THIS?
+    %
+    %     3. The primary actor indicates which end-user she wants to unregister.
+    %         CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: void unregisterEndUser(int customerOrganisationID, int userID)
+    %
+    %     4. The system marks the profile of the end-user as 'inactive'
+    %
+    %         CustomerOrganisationFacade -> UserManager: interface UserMgmt: void softDeleteEndUser(int customerOrganisationID, int userID)
+    %         UserManager -> OtherDataDb: interface UserUserMgmt: void softDeleteEndUser(int customerOrganisationID, int userID)
+    %
+    %     5. The system checks if any applications should be deactivated because of end-user assignment to mandatory roles (Include: UC18: Check and deactivate applications).
+    %         CustomerOrganisationFacade -> ApplicationManagementLogic: interface FrontEndAppReuqestss: checkApplicationsForDeactivationForCustomerOrganisations(List<int> IDs)
+    %
+    %     6. The system informs the primary actor that the end-user is now unregistered from SIoTIP.
+    %         => return value of unregisterEndUser
+
+
+    % UC5:
+    %     1. The primary actor physically stops the mote (by unplugging, powering off, or taking it out of the vicinity of the network).
+    %
+    %     2. When the system no longer receives heartbeat messages,
+    %         Already done: Mote -> DeviceManager: interface Heartbeat
+    %         Use case starts with DeviceManager noticing that a mote is not sending heatbeats anymore.
+    %
+    %         -it marks the mote as 'inactive' in the topology.
+    %             DeviceManager -> TopologyManager: interface TopologyMgmt: void deactivateMote(int moteID)
+    %             TopologyManager -> DeviceDB: interface DBTopologyMgmt: void deactivateMote(int moteID)
+    %             DeviceManager -> DeviceDB: interface DBDeviceMgmt: void deactivateMote(int moteID)
+    %
+    %         -it looks up the pluggable devices that were attached to the affected mote and marks these as 'inactive' in the topology.
+    %             DeviceManager -> TopologyManager: interface TopologyMgmt: void deactivatePluggableDevices(List<PluggableDeviceID> pIDs)
+    %             TopologyManager -> DeviceDB: interface DBTopologyMgmt: void deactivatePluggableDevices(List<PluggableDeviceID> pIDs)
+    %             DeviceManager -> DeviceDB: interface DBDeviceMgmt: void deactivatePluggableDevices(List<PluggableDeviceID> pIDs)
+    %
+    %         -it checks for and deactivates applications that are affected by the unavailability of the pluggable devices (Include: UC18: Check and deactivate applications).
+    %             DeviceManager -> ApplicationManagementLogic: interface GWAppInstanceMgmt: void checkApplicationsForDeactivationForPluggableDevices(List<PluggableDeviceID> pIDs)
+    %
+    %         -It sends a notification to the primary actor (Include: UC15: Send notification).
+    %             DeviceManager -> NotificationHandler: interface Notify: notifyMoteUninstalled()
+
+
+    % UC7:
+    %     1. The primary actor unplugs the pluggable device from its mote.
+    %
+    %     2. A message is sent from the mote from which the pluggable device was removed to the system, containing the identifier of the removed pluggable device.
+    %         Mote -> DeviceManager: interface DeviceManagement: void pluggableDeviceRemoved(PluggableDeviceID pID)
+    %         (SAME FOR UC6: pluggableDevicePluggedIn(moteInfo, pID))
+    %
+    %     3. The system
+    %        { marks the pluggable device as 'inactive',
+    %         DeviceManager -> DeviceDB: interface DBDeviceMgmt: void deactivatePluggableDevice(PluggableDeviceID pID)
+    %
+    %        { updates the topology,
+    %         DeviceManager -> TopologyManager: interface TopologyMgmt: void deactivatePluggableDevice(PluggableDeviceID pID)
+    %         TopologyManager -> DeviceDB: interface DBTopologyMgmt: void deactivatePluggableDevice(PluggableDeviceID pID)
+    %
+    %        { it checks and deactivates applications for which the pluggable device was essential (Include: UC18: Check and deactivate applications).
+    %         DeviceManager -> ApplicationManagementLogic: interface GWAppInstanceMgmt: void checkApplicationsForDeactivationForPluggableDevice(PluggableDeviceID pID)
+
+
+    % UC8:
+    %     1. The primary actor indicates that they want to initialise the newly attached pluggable for use.
+    %         Client goes to UC10
+    %
+    %     2. The system allows the primary actor to configure the pluggable device in the topology (Include: UC10), e.g. to set its physical location.
+    %
+    %         See and create UC10
+    %
+    %     3. The system marks the pluggable device as 'active', and informs the primary actor that the pluggable is ready for use.
+    %
+    %         InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt: void initialisePluggableDevice(PluggableDeviceID pID)
+    %         InfrastructureOwnerManager -> DeviceDB: interface DBIODeviceMgmt: void initialisePluggableDevice(PluggableDeviceID pID)
+    %         InfrastructureOwnerManager -> DeviceManager: interface DBIODeviceMgmt: void initialisePluggableDevice(PluggableDeviceID pID)
+    %         DeviceManager -> DeviceManager: interface GWAppInstanceMgmt: void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+    %
+    %     4. The system allows the primary actor to configure the access rights for the pluggable device (Include: UC9: Configure pluggable device access rights).
+    %
+    %         See UC9
+    %         InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights
+
+
+    % UC10: Consult and configure the topology
+    %     1. The primary actor indicates that they want to manage the topology.
+    %
+    %         InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<RoomTopology> getTopologyOfInfrastructureOwner(int infrastructureOwnerID)
+    %
+    %     2. The system presents the topology for the primary actor.
+    %        { The topology shows a representation of the gateways, and the motes and pluggable devices associated with each gateway,
+    %        and specifies key relationships between these devices, for example physical location information,
+    %        or whether pluggable device X and pluggable device Y are interchangeable.
+    %
+    %         InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<RoomTopology> getTopologyOfInfrastructureOwner(int infrastructureOwnerID)
+    %         TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<RoomTopology> getTopologyOfInfrastructureOwner(int infrastructureOwnerID)
+    %
+    %        { New motes and pluggable devices that are not yet included are presented on the side.
+    %
+    %         InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
+    %         TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
+    %
+    %         InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
+    %         TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
+    %
+    %     3. The primary actor updates the topology.
+    %        { This could involve changing the location of or relations between motes and pluggable devices,
+    %        or extending the topology with motes and pluggable devices that were not yet included.
+    %
+    %         FOR INSIDE CLIENT
+    %
+    %     4. The primary actor indicates that they are done updating the topology.
+    %
+    %         InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+    %
+    %     5. The system
+    %        { stores the reconfigured topology and informs the primary actor that the reconfigured topology is now being used.
+    %
+    %         InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+    %         TopologyManager -> DeviceDB: interface DBTopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+    %
+    %        { activates 'inactive' applications (Include: UC17 : Activate an application).
+    %         InfrastructureOwnerFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+    %
+    %        { checks for applications that require deactivation (Include: UC18 : Check and deactivate applications).
+    %         InfrastructureOwnerFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void checkApplicationsForDectivationForInfrastructureOwner(int infrastructureOwnerID)
+    %
+    %     3a. If the primary actor wants to view status details for a specific gateway/mote/pluggable device:
+    %         1. The system composes a detailed overview of the status of the selected gateway/mote/pluggable device (e.g., indicating that the device was unavailable between 2 and 3 a.m.) and presents it.
+    %             InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+    %             InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+    %             TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+    %
+    %             InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+    %             InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+    %             TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+    %
+    %             InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+    %             InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+    %             TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+
+
+    % UC16:
+    %     1. The primary actor indicates that he/she/they wants to consult a notification.
+    %
+    %         ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: List<Notification> consultNotifications(int userID)
+    %
+    %     2. The system retrieves all notifications for the primary actor and presents them to the primary actor, e.g. as a table or list.
+    %
+    %         RegisteredUserFacade -> NotificationHandler: interface Notifications: List<Notification> getNotifications(int userID)
+    %         NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: List<Notification> getNotifications(int userID)
+    %
+    %     3. The primary actor selects a notification.
+    %
+    %         ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: Notification consultNotification(int userID, int notificationID)
+    %
+    %     4. The system presents the details for the selected notification to the primary actor. This includes:
+    %         { A description of the event that occurred.
+    %         { Date and time the event occurred.
+    %         { What triggered the event (e.g., the cause of an application that became inactive)
+    %         { The status of the notification (e.g. 'sent', 'delivered', 'read')
+    %         { The communication channel by which the notification was sent
+    %
+    %         RegisteredUserFacade -> NotificationHandler: interface Notifications: Notification getDetailedNotification(int userID, int notificationID)
+    %         NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: Notification getDetailedNotification(int userID, int notificationID)
+    %
+    %     5. The system marks the notification as 'read'.
+    %         NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: void setNotificationRead(int notificationID)
+
+
+    % UC20:
+    %     1. The primary actor indicates they want to unsubscribe from an application.
+    %         CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
+    %
+    %     2. The system looks up a list of applications the primary actor is subscribed to, and presents this overview to the primary actor, e.g. as a list or table.
+    %         CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
+    %         SubscriptionManager -> OtherDataDB: interface DBSubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
+    %
+    %     3. The primary actor indicates which application they want to unsubscribe from.
+    %         CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void unsubscribeFromApplication(int customerOrganisationID, int subscriptionID, int applicationInstanceID)
+    %
+    %     4. The system
+    %        (i) ends the subscription for the selected application,
+    %
+    %             CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: void softDeleteSubscription(int subscriptionID)
+    %             SubscriptionManager -> OtherDataDB: interface DBSubscriptionMgmt: void softDeleteSubscription(int subscriptionID)
+    %
+    %         (ii) deactivates the application, and
+    %
+    %             SubscriptionManager -> ApplicationManagementLogic: interface FrontEndAppRequests: void softDeleteApplicationInstance(int applicationInstanceID)
+    %             ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void softDeleteApplicationInstance(int applicationInstanceID)
+    %
+    %             CustomerOrganisationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void destroyApplicationInstance(int applicationInstanceID)
+    %             ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void destroyApplicationInstance(int applicationInstanceID)
+    %
+    %         (iii) constructs an invoice for outstanding payments for that application (cf. UC21: Send invoice).
+    %
+    %             SubscriptionManager -> InvoiceManager: interface InvoiceMgmt: void constructInvoiceForApplicationInstance(int applicationInstanceID, int customerOrganisationID)
+    %             InvoiceManager -> OtherDataDB: interface InvoiceMgmt: void createInvoice(Invoice invoice)
+    %             InvoiceManager -> ThirdPartyInvoicingService: interface InvoiceMgmt: void sendInvoice(Map<string, string> invoiceData)
+    %
+    %     5. The system informs the primary actor that the unsubscription was successful.
+    %         => return value of unsubscribeFromApplication
 
 
 \subsection{Instantiation and allocation of functionality}
@@ -353,38 +351,72 @@
     the components can be found under chapter \ref{ch:elements-datatypes}. \\
 
     \begin{itemize}
-        \item UnregisteredUserClient: UC X
-              Effect: Represents the client for an unregistered user.
-        \item UnregisteredUserFacade: UC X
-        \item UserManager: UC X
+        \item ApplicationProviderClient: UC16
+        \item ApplicationProviderFacade: UC16
+        \item RegisteredUserFacade: UC16
+        \item SystemAdministratorFacade: UC16
+        \item ThirdPartyInvoicingService: UC20
+        \item UnregisteredUserClient: UC1
+        \item UnregisteredUserFacade: UC1
     \end{itemize}
 
 
 \subsection{Interfaces for child modules}
     This section lists new interfaces assigned to the components defined
     in the section above. Detailed information about each interface and
-    its methods can be found under chapter \ref{ch:elements-datatypes}. \\
+    its methods can be found under chapter \ref{ch:elements-datatypes}.
 
-    \subsubsection{OtherDataDB}
+    \subsubsection{ApplicationProviderFacade}
         \begin{itemize}
-            \item Registration
+            \item Notifications
         \end{itemize}
-    \subsubsection{UnregisteredUserClient}
+
+    \subsubsection{CustomerOrganisationFacade}
         \begin{itemize}
-            \item Registration
+            \item Notifications
+            \item UserMgmt
         \end{itemize}
+
+    \subsubsection{InfrastructureOwnerFacade}
+        \begin{itemize}
+            \item Notifications
+            \item TopologyMgmt
+        \end{itemize}
+
+    \subsubsection{NotificationHandler}
+        \begin{itemize}
+            \item Notifications
+        \end{itemize}
+
+    \subsubsection{RegisteredUserFacade}
+        \begin{itemize}
+            \item Notifications
+        \end{itemize}
+
+    \subsubsection{SystemAdministratorFacade}
+        \begin{itemize}
+            \item Notifications
+        \end{itemize}
+
     \subsubsection{UnregisteredUserFacade}
         \begin{itemize}
             \item Registration
         \end{itemize}
-    \subsubsection{CustomerOrganisationFacade}
+
+    \subsubsection{UserManager}
         \begin{itemize}
             \item UserMgmt
         \end{itemize}
 
-\subsection{Data type definitions}
+\subsection{New data types}
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}
-        \item Address: Represents an address of customer organisation.
+        \item Invoice
+        \item EmailAddressAlreadyExistsException
+        \item EmailAddressInvalidException
+        \item EndUserAlreadyExistsException
+        \item PaymentInformationInvalidException
+        \item PhoneNumberInvalidException
+        \item UserNameAlreadyExistsException
     \end{itemize}

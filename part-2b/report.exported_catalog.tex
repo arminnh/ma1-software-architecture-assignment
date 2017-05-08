@@ -1,4 +1,4 @@
-%%% element catalog, generated on Mon May 08 22:56:41 CEST 2017
+%%% element catalog, generated on Mon May 08 22:16:14 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -169,7 +169,7 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
+		\item[Provided interfaces:]~None
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}		
 	\end{description}
 \subsection{ContainerLogic}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerContainerLogic}
@@ -193,7 +193,7 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~Acts as an access point for CustomerOrganisationClients and handles all functionality that can be done by customer organisations.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeSubscriptionMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeUserMgmt}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeSubscriptionMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeUserMgmt}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppRequests}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceSubscriptionManagerSubscriptionMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserManagerUserMgmt}}		
 	\end{description}
 \subsection{DeviceCommandConstructor}\label{comp:OnlineServiceOnlineServiceApplicationManagerDeviceCommandConstructor}
@@ -295,7 +295,7 @@ Quick math to check we are not doing something very dumb here:
 		\item[Responsibility:]~Acts as an access point for InfrastructureOwnerClients and handles all functionality that can be done by infrastructure owners.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeAccessRights}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeTopologyMgmt}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeAccessRights}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeTopologyMgmt}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAccessRightsManagerAccessRightsMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppRequests}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerManagerIOMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{InfrastructureOwnerManager}\label{comp:OnlineServiceOnlineServiceInfrastructureOwnerManager}
@@ -401,7 +401,7 @@ can "turn on" and "turn off".
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeAuthentication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotifications}}		
 	\end{description}
 \subsection{RequestStore}\label{comp:GatewayGatewayOnlineServiceBrokerRequestStore}
@@ -425,7 +425,7 @@ can "turn on" and "turn off".
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
+		\item[Provided interfaces:]~None
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}		
 	\end{description}
 \subsection{ThirdPartyInvoicingService}\label{comp:ThirdPartyInvoicingService}
@@ -711,7 +711,7 @@ can "turn on" and "turn off".
   %%%%%%%% Authentication
   \subsection{Authentication}\label{int:OnlineServiceOnlineServiceRegisteredUserFacadeAuthentication}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] None
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceRegisteredUserFacade}}
       \item[Required by:] None
       \item[Operations:] ~
 % no operations
@@ -1250,10 +1250,10 @@ Returns false if user did not click the link in the received e-mail within 30 mi
         \end{itemize}
       \item \textsf{int createCustomerOrganisation(Map\textless{}string, string\textgreater{} data) throws \ref{ex:DataTypesAddressInvalidException}, \ref{ex:DataTypesUserNameAlreadyExistsException}, \ref{ex:DataTypesPaymentInformationInvalidException}}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Creates a customer organisation and returns its id. Links the customer organisation to an infrastructure owner by using the information stored in 'createEmailAddressForRegistration'.
+           \item Effect: Creates a customer organisation and returns its id.
 \item Created for: UC1.8
         \end{itemize}
-      \item \textsf{boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID) throws \ref{ex:DataTypesEmailAddressInvalidException}, \ref{ex:DataTypesEmailAddressAlreadyExistsException}}
+      \item \textsf{boolean createEmailAddressForRegistration() throws \ref{ex:DataTypesEmailAddressInvalidException}, \ref{ex:DataTypesEmailAddressAlreadyExistsException}}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: If the given e-mail address is valid and not yet in the database, saves the e-mail address
 in the database, links it to the infrastructure owner and a unique random string for the confirmation e-mail,
@@ -1665,7 +1665,7 @@ to the mote.
            \item Effect: Returns a list of PluggableDeviceInfo of devices owned by an infrastructure owner.
 \item Created for: UC9.2
         \end{itemize}
-      \item \textsf{void initialisePluggableDevice(\ref{data:DataTypesPluggableDeviceID} pID, int gatewayID)}
+      \item \textsf{void initialisePluggableDevice(\ref{data:DataTypesPluggableDeviceID} pID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Updates a pluggable device's status to 'active'.
 \item Created for: UC8.3
@@ -1726,7 +1726,7 @@ to the mote.
   %%%%%%%% Notifications
   \subsection{Notifications}\label{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationProviderFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceInfrastructureOwnerFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceRegisteredUserFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceSystemAdministratorFacade}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceRegisteredUserFacade}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationProviderFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceInfrastructureOwnerFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceSystemAdministratorFacade}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -1860,7 +1860,7 @@ Returns false if user did not click the link in the received e-mail within 30 mi
         \end{itemize}
       \item \textsf{int createCustomerOrganisation(Map\textless{}string, string\textgreater{} data) throws \ref{ex:DataTypesAddressInvalidException}, \ref{ex:DataTypesUserNameAlreadyExistsException}, \ref{ex:DataTypesPaymentInformationInvalidException}}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Creates a customer organisation and returns its id. Links the customer organisation to an infrastructure owner by using the information stored in 'createEmailAddressForRegistration'.
+           \item Effect: Creates a customer organisation and returns its id.
 \item Created for: UC1.7
         \end{itemize}
       \item \textsf{boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID) throws \ref{ex:DataTypesEmailAddressAlreadyExistsException}, \ref{ex:DataTypesEmailAddressInvalidException}}
@@ -2205,10 +2205,10 @@ Returns false if user did not click the link in the received e-mail within 30 mi
         \end{itemize}
       \item \textsf{int createCustomerOrganisation(Map\textless{}string, string\textgreater{} data) throws \ref{ex:DataTypesAddressInvalidException}, \ref{ex:DataTypesUserNameAlreadyExistsException}, \ref{ex:DataTypesPaymentInformationInvalidException}}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Creates a customer organisation and returns its id. Links the customer organisation to an infrastructure owner by using the information stored in 'createEmailAddressForRegistration'.
+           \item Effect: Creates a customer organisation and returns its id.
 \item Created for: UC1.8
         \end{itemize}
-      \item \textsf{boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID) throws \ref{ex:DataTypesEmailAddressAlreadyExistsException}, \ref{ex:DataTypesEmailAddressInvalidException}}
+      \item \textsf{boolean createEmailAddressForRegistration() throws \ref{ex:DataTypesEmailAddressAlreadyExistsException}, \ref{ex:DataTypesEmailAddressInvalidException}}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: If the given e-mail address is valid and not yet in the database, saves the e-mail address
 in the database, links it to the infrastructure owner and a unique random string for the confirmation e-mail,

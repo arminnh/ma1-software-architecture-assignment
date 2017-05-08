@@ -155,210 +155,210 @@
     %     There is also needed component for load balancing.
 
 
-        UC12:
-            DEVELOPERS WRITE THIS: command = "on"
-            actuators = getActuatorsOfType("lightswitch")
-            foreach (actuator) {
-                actuator.command("on")
-            }
-
-            WE NEED TO CONVERT "on" TO A COMMAND THAT THE ACTUATOR UNDERSTANDS
-            "on" => "turnOn"
-            "on" => "lightOn"
-            "on" => "switch"
-
-            1. An application indicates that it wants one or more pluggable devices to perform an actuation command
-                from client application:
-                    ApplicationClient -> ApplicationFacade:           interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
-                    ApplicationFacade -> ApplicationManagementLogic: interface DeviceCommands:  void sendActuationCommand(List<PluggableDeviceID> devices, string command)
-
-                from applicationContainer:
-                    ApplicationContainer -> ApplicationContainerManager: interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
-                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
-
-                from application on gateway: SKIP STEP 2
-                    GW/ApplicationContainer -> GW/DeviceCommandConstructor: interface Commands: void sendActuationCommand(List<PluggableDeviceID> device, string commandName)
-                    GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
-                    GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void sendActuationCommand(Map<PluggableDeviceID, string> commandsForDevices)
-
-
-            2. The system
-                -constructs the actuation command message according to the specific formatting syntax for the involved pluggable device(s)
-                    ApplicationManagementLogic -> DeviceCommandConstructor:  interface Commands:  void sendActuationCommand(List<PluggableDeviceID> device, string commandName)
-                    DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
-
-                -sends the command message to the intended pluggable device(s).
-                    DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, GatewayInfo> getGatewaysForDevices(List<PluggableDeviceID> devices)
-                    DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void sendActuationCommand(Map<PluggableDeviceID, string> commandsForDevices)
-
-            3. The pluggable device(s) receive(s) the actuation command message and perform(s) the contained actuation command.
-                    DeviceManager -> Mote: interface DeviceMgmt: void sendActuationCommand(PluggableDeviceID device, string commandName)
-                    Mote -> PluggableDevice: interface Actuate:    void sendActuationCommand(string commandName)
-
-
-        UC13:
-            1. The primary actor specifies that it wants to set a configuration parameter of a pluggable device.
-                from client application:
-                    ApplicationClient -> ApplicationFacade:           interface DeviceCommands:       void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
-                    ApplicationFacade -> ApplicationManagementLogic: interface DeviceCommands:  void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
-
-                from applicationContainer:
-                    ApplicationContainer -> ApplicationContainerManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
-                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
-
-                from application on gateway: SKIP STEPS 2 AND 3
-                    GW/ApplicationContainer -> GW/DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDeviceID pID, Map<string, string> config)
-                    GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: string getPossibleConfigurationParametersForDevice(PluggableDeviceID pID)
-                    GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
-                    GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
-
-            2. The system verifies that the value of the configuration parameter is valid for the device (for example, a sensor which provides temperature information may have hardware limits on the sampling frequency).
-                    ApplicationManagementLogic -> DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDeviceID pID, Map<string, string> config)
-                    DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: string getPossibleConfigurationParametersForDevice(PluggableDeviceID pID)
-                    DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
-
-            3. The system determines whether the pluggable device needs to be reconfigured, and if so,
-               constructs a reconfiguration command according to the specific formatting syntax for the pluggable device and sends it to the pluggable device.
-
-                    DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
-
-            4. The system updates the internal configuration of the pluggable device.
-                    DeviceManager -> Mote: interface DeviceMgmt: void setConfig(...)
-
-        UC24:
-            1. The primary actor indicates that it wants to consult a specified collection of historical data in a specified timeframe.
-                from client application:
-                    ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                    ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
-
-                    ApplicationFacade -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                    ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
-
-                from ApplicationContainer:
-                    ApplicationContainer -> ApplicationContainerManager: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                    ApplicationContainer -> ApplicationContainerManager: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
-                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+    % UC12:
+    %     DEVELOPERS WRITE THIS: command = "on"
+    %     actuators = getActuatorsOfType("lightswitch")
+    %     foreach (actuator) {
+    %         actuator.command("on")
+    %     }
+    %
+    %     WE NEED TO CONVERT "on" TO A COMMAND THAT THE ACTUATOR UNDERSTANDS
+    %     "on" => "turnOn"
+    %     "on" => "lightOn"
+    %     "on" => "switch"
+    %
+    %     1. An application indicates that it wants one or more pluggable devices to perform an actuation command
+    %         from client application:
+    %             ApplicationClient -> ApplicationFacade:           interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+    %             ApplicationFacade -> ApplicationManagementLogic: interface DeviceCommands:  void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+    %
+    %         from applicationContainer:
+    %             ApplicationContainer -> ApplicationContainerManager: interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+    %             ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+    %
+    %         from application on gateway: SKIP STEP 2
+    %             GW/ApplicationContainer -> GW/DeviceCommandConstructor: interface Commands: void sendActuationCommand(List<PluggableDeviceID> device, string commandName)
+    %             GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
+    %             GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void sendActuationCommand(Map<PluggableDeviceID, string> commandsForDevices)
+    %
+    %
+    %     2. The system
+    %         -constructs the actuation command message according to the specific formatting syntax for the involved pluggable device(s)
+    %             ApplicationManagementLogic -> DeviceCommandConstructor:  interface Commands:  void sendActuationCommand(List<PluggableDeviceID> device, string commandName)
+    %             DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
+    %
+    %         -sends the command message to the intended pluggable device(s).
+    %             DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, GatewayInfo> getGatewaysForDevices(List<PluggableDeviceID> devices)
+    %             DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void sendActuationCommand(Map<PluggableDeviceID, string> commandsForDevices)
+    %
+    %     3. The pluggable device(s) receive(s) the actuation command message and perform(s) the contained actuation command.
+    %             DeviceManager -> Mote: interface DeviceMgmt: void sendActuationCommand(PluggableDeviceID device, string commandName)
+    %             Mote -> PluggableDevice: interface Actuate:    void sendActuationCommand(string commandName)
 
 
-            2. The system determines from which pluggable devices the data is required and looks up the data.
-                ApplicationManagementLogic parses the RoomTopology object and uses the PluggableDeviceIDs in the RoomTopology
+    % UC13:
+    %     1. The primary actor specifies that it wants to set a configuration parameter of a pluggable device.
+    %         from client application:
+    %             ApplicationClient -> ApplicationFacade:           interface DeviceCommands:       void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+    %             ApplicationFacade -> ApplicationManagementLogic: interface DeviceCommands:  void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+    %
+    %         from applicationContainer:
+    %             ApplicationContainer -> ApplicationContainerManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+    %             ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+    %
+    %         from application on gateway: SKIP STEPS 2 AND 3
+    %             GW/ApplicationContainer -> GW/DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDeviceID pID, Map<string, string> config)
+    %             GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: string getPossibleConfigurationParametersForDevice(PluggableDeviceID pID)
+    %             GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
+    %             GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+    %
+    %     2. The system verifies that the value of the configuration parameter is valid for the device (for example, a sensor which provides temperature information may have hardware limits on the sampling frequency).
+    %             ApplicationManagementLogic -> DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDeviceID pID, Map<string, string> config)
+    %             DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: string getPossibleConfigurationParametersForDevice(PluggableDeviceID pID)
+    %             DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
+    %
+    %     3. The system determines whether the pluggable device needs to be reconfigured, and if so,
+    %        constructs a reconfiguration command according to the specific formatting syntax for the pluggable device and sends it to the pluggable device.
+    %
+    %             DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+    %
+    %     4. The system updates the internal configuration of the pluggable device.
+    %             DeviceManager -> Mote: interface DeviceMgmt: void setConfig(...)
 
-                    ApplicationManagementLogic -> DeviceDataScheduler: interface RequestData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
-                    DeviceDataScheduler -> PluggableDeviceDB: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+    % UC24:
+    %     1. The primary actor indicates that it wants to consult a specified collection of historical data in a specified timeframe.
+    %         from client application:
+    %             ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+    %             ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+    %
+    %             ApplicationFacade -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+    %             ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+    %
+    %         from ApplicationContainer:
+    %             ApplicationContainer -> ApplicationContainerManager: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+    %             ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+    %             ApplicationContainer -> ApplicationContainerManager: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+    %             ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+    %
+    %
+    %     2. The system determines from which pluggable devices the data is required and looks up the data.
+    %         ApplicationManagementLogic parses the RoomTopology object and uses the PluggableDeviceIDs in the RoomTopology
+    %
+    %             ApplicationManagementLogic -> DeviceDataScheduler: interface RequestData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+    %             DeviceDataScheduler -> PluggableDeviceDB: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+    %
+    %     3. The system presents the primary actor with the requested historical overview, e.g. as a table.
+    %         Return value of first call.
 
-            3. The system presents the primary actor with the requested historical overview, e.g. as a table.
-                Return value of first call.
 
+    % UC25:
+    %     1. The primary actor indicates that it wants an overview of the topology.
+    %         applicationClient wants overview:
+    %             ApplicationClient -> ApplicationFacade: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+    %             ApplicationFacade -> ApplicationManagementLogic: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+    %
+    %         applicationContainer wants overview:
+    %             ApplicationContainer -> ApplicationContainerManager: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+    %             ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+    %
+    %     2. The system looks up the pluggable devices that are available to the customer organisation that owns the primary actor,
+    %        and composes a view on the topology including these pluggable devices.
+    %             ApplicationManagementLogic -> TopologyManager: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+    %             TopologyManager -> DeviceDB: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+    %
+    %             ApplicationManagementLogic -> OtherDataDB: interface AppMgmt: List<PluggableDeviceID> getDevicesForApplication(int applicationInstanceID)
+    %
+    %     3. The system presents the topology view to the primary actor.
+    %             = return value of getTopologyOverview
 
-        UC25:
-            1. The primary actor indicates that it wants an overview of the topology.
-                applicationClient wants overview:
-                    ApplicationClient -> ApplicationFacade: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
-                    ApplicationFacade -> ApplicationManagementLogic: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+    % UC26:
+    %     AppDevelopers want to send a message to:
+    %         Gateway:   sendMessageToGateway(string message)
+    %         OS:        sendMessageToOnlineService(string message)
+    %         AppClient: sendMessageToExternalClient(string message, IPAddress host, int port)
+    %
+    %    Some deployment rationale: ApplicationManagementLogic <--- HTTP ---> ApplicationClient
+    %                               ApplicationManagementLogic <---      ---> GW/ApplicationContainer
+    %
+    %     we need to store on which gateways ApplicationContainers are running.
+    %         ApplicationManagementLogic -> OtherDataDB: void updateApplicationInstanceGateway(int applicationInstance, int gatewayID)
+    %
+    %    Alternative 3b. NotAllowedException
+    %
+    %     1. The primary actor indicates it wants to send an application command or message to an external
+    %        front-end and specifies the destination (e.g., as an application identifier for SIoTIP applications,
+    %        or a hostname and port for external systems).
+    %
+    %         FROM APP INSTANCE TO FRONT END:
+    %              ApplicationContainer -> ApplicationContainerManager: interface AppMessages: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
+    %              ApplicationContainerManager -> ApplicationManagementLogic: interface AppMessages: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
+    %
+    %         FROM APP INSTANCE TO APP INSTANCE:
+    %              ApplicationContainer -> ApplicationContainerManager: interface AppMessages: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+    %              ApplicationContainerManager -> ApplicationManagementLogic: interface AppMessages: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+    %
+    %         FROM FRONT END TO APP INSTANCE:
+    %             ApplicationClient -> ApplicationFacade: interface AppMgmt: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+    %             ApplicationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+    %
+    %     2. The system checks that the primary actor is allowed to send to the specified destination.
+    %             THE MESSAGE HAS ARRIVED IN ApplicationManagementLogic
+    %
+    %             Don't need to check, since an application can only send commands to another part of the same application.
+    %             If the command comes from a gateway -> send it to the online service instance
+    %             If the command comes from the online service -> send it to the gateway instance
+    %             If the command is for an external front end -> just send the message to the hostname and port
+    %
+    %             Maybe a check can be done here to do some kind of rate limiting, if developers want to send
+    %             more requests, they pay more MOOONNEEYYYYY
+    %
+    %     3. If the primary actor is allowed to send to the destination, and if the destination is another application,
+    %        the system delivers the application command to that destination
+    %             (Include: UC27: Receive application command or message from external front-end).
 
-                applicationContainer wants overview:
-                    ApplicationContainer -> ApplicationContainerManager: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
-                    ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
-
-            2. The system looks up the pluggable devices that are available to the customer organisation that owns the primary actor,
-               and composes a view on the topology including these pluggable devices.
-                    ApplicationManagementLogic -> TopologyManager: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
-                    TopologyManager -> DeviceDB: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
-
-                    ApplicationManagementLogic -> OtherDataDB: interface AppMgmt: List<PluggableDeviceID> getDevicesForApplication(int applicationInstanceID)
-
-            3. The system presents the topology view to the primary actor.
-                    = return value of getTopologyOverview
-
-        UC26:
-            AppDevelopers want to send a message to:
-                Gateway:   sendMessageToGateway(string message)
-                OS:        sendMessageToOnlineService(string message)
-                AppClient: sendMessageToExternalClient(string message, IPAddress host, int port)
-
-           Some deployment rationale: ApplicationManagementLogic <--- HTTP ---> ApplicationClient
-                                      ApplicationManagementLogic <---      ---> GW/ApplicationContainer
-
-            we need to store on which gateways ApplicationContainers are running.
-                ApplicationManagementLogic -> OtherDataDB: void updateApplicationInstanceGateway(int applicationInstance, int gatewayID)
-
-           Alternative 3b. NotAllowedException
-
-            1. The primary actor indicates it wants to send an application command or message to an external
-               front-end and specifies the destination (e.g., as an application identifier for SIoTIP applications,
-               or a hostname and port for external systems).
-
-                FROM APP INSTANCE TO FRONT END:
-                     ApplicationContainer -> ApplicationContainerManager: interface AppMessages: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
-                     ApplicationContainerManager -> ApplicationManagementLogic: interface AppMessages: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
-
-                FROM APP INSTANCE TO APP INSTANCE:
-                     ApplicationContainer -> ApplicationContainerManager: interface AppMessages: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
-                     ApplicationContainerManager -> ApplicationManagementLogic: interface AppMessages: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
-
-                FROM FRONT END TO APP INSTANCE:
-                    ApplicationClient -> ApplicationFacade: interface AppMgmt: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
-                    ApplicationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
-
-            2. The system checks that the primary actor is allowed to send to the specified destination.
-                    THE MESSAGE HAS ARRIVED IN ApplicationManagementLogic
-
-                    Don't need to check, since an application can only send commands to another part of the same application.
-                    If the command comes from a gateway -> send it to the online service instance
-                    If the command comes from the online service -> send it to the gateway instance
-                    If the command is for an external front end -> just send the message to the hostname and port
-
-                    Maybe a check can be done here to do some kind of rate limiting, if developers want to send
-                    more requests, they pay more MOOONNEEYYYYY
-
-            3. If the primary actor is allowed to send to the destination, and if the destination is another application,
-               the system delivers the application command to that destination
-                    (Include: UC27: Receive application command or message from external front-end).
-
-        UC27:
-            Comment from professor:
-               UC27 (just as UC26) deals with communication between different parts of the same application (including messages coming from front-ends).
-
-            1. The system receives an application command or message for a SIoTIP application.
-                ApplicationManagementLogic has received an application command (SEE UC26)
-
-            2. The system checks that the destination is available.
-                message is for Gateway/ApplicationContainer:
-                    Destination = GW/ApplicationContainer
-                    find where the application container is, -> OtherDataDB: gatewayOfApplicationContainer
-                    then send it to the correct GW/ApplicationContainerManager
-                    the applicationContainerMAnager will send the message to the correct ApplicationContainer
-                    ApplicationContainerManagers keep track of ApplicationContainer IDs
-
-                    ApplicationManagementLogic -> OtherDataDB: interface AppMgmt: Gateway getGatewayForApplicationInstance(int applicationInstanceID)
-                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
-                    GW/ApplicationContainerManager -> GW/ApplicationContainerMonitor: interface AppStatus: boolean isApplicationInstanceAvailable(int applicationInstanceID)
-
-                message is for ApplicationContainer:
-                    The same, but on Online Service, so you don't need to search for the gateway
-                    just send the message to the OS ApplicationContainerManager, it will do the rest
-
-                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
-                    ApplicationContainerManager -> ApplicationContainerMonitor: interface AppStatus: boolean isApplicationInstanceAvailable(int applicationInstanceID)
-
-                message is for ApplicationClient:
-                    just PING the hostname and port, if the ping succeeds, send the message
-                        ApplicationManagementLogic: ping the (host, port) and check reply
-
-            3. If the destination is available, the system delivers the message to the destination application.
-                message = string
-
-                message is for Gateway/ApplicationContainer:
-                    ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
-                    GW/ApplicationContainerManager -> GW/ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
-
-                message is for ApplicationContainer:
-                    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
-                    ApplicationContainerManager -> ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
-
-                message is for ApplicationClient:
-                    ApplicationManagementLogic: Open socket (host and port are given) -> send message -> close socket
+    % UC27:
+    %     Comment from professor:
+    %        UC27 (just as UC26) deals with communication between different parts of the same application (including messages coming from front-ends).
+    %
+    %     1. The system receives an application command or message for a SIoTIP application.
+    %         ApplicationManagementLogic has received an application command (SEE UC26)
+    %
+    %     2. The system checks that the destination is available.
+    %         message is for Gateway/ApplicationContainer:
+    %             Destination = GW/ApplicationContainer
+    %             find where the application container is, -> OtherDataDB: gatewayOfApplicationContainer
+    %             then send it to the correct GW/ApplicationContainerManager
+    %             the applicationContainerMAnager will send the message to the correct ApplicationContainer
+    %             ApplicationContainerManagers keep track of ApplicationContainer IDs
+    %
+    %             ApplicationManagementLogic -> OtherDataDB: interface AppMgmt: Gateway getGatewayForApplicationInstance(int applicationInstanceID)
+    %             ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+    %             GW/ApplicationContainerManager -> GW/ApplicationContainerMonitor: interface AppStatus: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+    %
+    %         message is for ApplicationContainer:
+    %             The same, but on Online Service, so you don't need to search for the gateway
+    %             just send the message to the OS ApplicationContainerManager, it will do the rest
+    %
+    %             ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+    %             ApplicationContainerManager -> ApplicationContainerMonitor: interface AppStatus: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+    %
+    %         message is for ApplicationClient:
+    %             just PING the hostname and port, if the ping succeeds, send the message
+    %                 ApplicationManagementLogic: ping the (host, port) and check reply
+    %
+    %     3. If the destination is available, the system delivers the message to the destination application.
+    %         message = string
+    %
+    %         message is for Gateway/ApplicationContainer:
+    %             ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+    %             GW/ApplicationContainerManager -> GW/ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+    %
+    %         message is for ApplicationContainer:
+    %             ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+    %             ApplicationContainerManager -> ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+    %
+    %         message is for ApplicationClient:
+    %             ApplicationManagementLogic: Open socket (host and port are given) -> send message -> close socket
 
 \subsection{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions
@@ -380,7 +380,7 @@
 \subsection{Interfaces for child modules}
     This section lists new interfaces assigned to the components defined
     in the section above. Detailed information about each interface and
-    its methods can be found under chapter \ref{ch:elements-datatypes}. \\
+    its methods can be found under chapter \ref{ch:elements-datatypes}.
 
     \subsubsection{ApplicationContainer}
         \begin{itemize}
@@ -434,7 +434,7 @@
         \end{itemize}
 
 
-\subsection{Data type definitions}
+\subsection{New data types}
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}

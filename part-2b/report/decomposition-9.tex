@@ -4,18 +4,10 @@
 \subsection{Selected architectural drivers}
     The functional drivers are:
     \begin{itemize}
-        \item \emph{UC21}: Send invoice \\
+        \item \emph{UC21}: Send invoice
     \end{itemize}
 
-
-\subsection{Architectural design}
-    This section describes what needs to be done to satisfy the requirements for
-    this decomposition and how involved problems/obstacles are solved.
-
-    \paragraph{UC21: Send invoice}
-        Short description of the problem.\\
-        Solution for the problem.
-
+    UC21: Send invoice
         1. The system constructs an invoice containing:
             { the provided service or product (e.g. monthly subscription fee for applications or purchased hardware),
             { the amount to be paid,
@@ -44,14 +36,19 @@
 \subsection{Interfaces for child modules}
     This section lists new interfaces assigned to the components defined
     in the section above. Detailed information about each interface and
-    its methods can be found under chapter \ref{ch:elements-datatypes}. \\
+    its methods can be found under chapter \ref{ch:elements-datatypes}.
 
-    \subsubsection{Component}
+    \subsubsection{ThirdPartyInvoicingService}
         \begin{itemize}
-            \item Interface
+            \item InvoiceDeliveryMgmt
         \end{itemize}
 
-\subsection{Data type definitions}
+    \subsubsection{InvoiceManager}
+        \begin{itemize}
+            \item DeliveryMgmt
+        \end{itemize}
+
+\subsection{New data types}
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}

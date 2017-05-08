@@ -6,7 +6,7 @@ AFTER DEADLINE, BEFORE PROJECT DEFENSE:
 
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
-Different notify methods to know the trigger and put in other data maybe. => If no time, put in discussion
+Find methods that change state but have missing parameters
 
 Broker -> CommunicationHandler: handles communication by remote method invocation
                                 still not message queue or pulish subscribe
@@ -14,6 +14,8 @@ Broker -> CommunicationHandler: handles communication by remote method invocatio
 Av2: up-time => passive replication
 
 P1: ??? => active replication + load balancing? how many new components to handle all of this?
+
+Different notify methods to know the trigger and put in other data maybe. => If no time, put in discussion
 
 In rationale somehwere:
     How is hardware linked to Infrastructure owners?
