@@ -15,19 +15,6 @@ Av2: up-time => passive replication
 
 P1: ??? => active replication + load balancing? how many new components to handle all of this?
 
-New/updated components:
-    ThirdPartyInvoicingService
-    ThirdPartyNotificationDeliveryService
-
-    ApplicationProviderClient
-    ApplicationProviderFacade
-
-    RegisteredUserClient
-    RegisteredUserFacade
-
-    UnregisteredUserClient
-    UnregisteredUserFacade
-
 In rationale somehwere:
     How is hardware linked to Infrastructure owners?
         => 1 device <-> 1 infrastructure owner
