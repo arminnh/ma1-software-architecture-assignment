@@ -323,6 +323,7 @@
             See UC9
             InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights
 
+
     UC10: Consult and configure the topology
         1. The primary actor indicates that they want to manage the topology.
 
@@ -436,35 +437,49 @@
     UC16:
         1. The primary actor indicates that he/she/they wants to consult a notification.
 
-            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> UserFacade: interface Notifications: void consultNotifications()
+            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: List<Notification> consultNotifications(int userID)
+                Effect: Returns a list of Notification for a certain registered user.
+                \item Created for: UC16.1
 
         2. The system retrieves all notifications for the primary actor and presents them to the primary actor, e.g. as a table or list.
 
-            UserFacade -> NotificationHandler: interface NotificationsMgmt: List<Notification> getNotifications(int userID)
+            RegisteredUserFacade -> NotificationHandler: interface Notifications: List<Notification> getNotifications(int userID)
+                Effect: Returns a list of Notification for a certain registered user. Not all details in the Notification objects are filled in.
+                \item Created for: UC16.2
+
+            NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: List<Notification> getNotifications(int userID)
+                Effect: Returns a list of Notification for a certain registered user. Not all details in the Notification objects are filled in.
+                \item Created for: UC16.2
 
         3. The primary actor selects a notification.
 
-            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> UserFacade: Notification consultNotifications(int notificationID)
-                Effect: Returns information about the notification.
+            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: Notification consultNotification(int notificationID)
+                Effect: Returns detailed information about a notification for a certain registered user.
                 \item Created for: UC16.3
 
         4. The system presents the details for the selected notification to the primary actor. This includes:
             { A description of the event that occurred.
-
             { Date and time the event occurred.
-
             { What triggered the event (e.g., the cause of an application that became inactive)
-
             { The status of the notification (e.g. 'sent', 'delivered', 'read')
-
             { The communication channel by which the notification was sent
+
+            RegisteredUserFacade -> NotificationHandler: interface Notifications: Notification getDetailedNotification(int notificationID)
+                Effect: Returns detailed information about a notification for a certain registered user.
+                \item Created for: UC16.4
+
+            NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: Notification getDetailedNotification(int notificationID)
+                Effect: Returns detailed information about a notification for a certain registered user.
+                \item Created for: UC16.4
 
 
         5. The system marks the notification as 'read'.
-            UserFacade -> NotificationHandler: interface NotificationsMgmt: List<Notification> setNotificationRead(int notificationID)
+            NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: void setNotificationRead(int notificationID)
+                Effect: Marks a notification as 'read'.
+                \item Created for: UC16.5
 
-    UC20:
-        1. The primary actor indicates they want to unsubscribe from an application.
+        UC20:
+            1. The primary actor indicates they want to unsubscribe from an application.
             CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt:void  unsubscribeFromApplications()
 
 
