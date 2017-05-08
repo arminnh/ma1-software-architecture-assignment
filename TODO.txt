@@ -6,28 +6,24 @@ AFTER DEADLINE, BEFORE PROJECT DEFENSE:
 
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
-Need to do this somehwere, UC7 ??
-    If a pluggable device is 'inactive' (because disconnected), then it is automatically 'unplaced' in the topology, so no need to also explicitly check device status
+Different notify methods to know the trigger and put in other data maybe. => If no time, put in discussion
 
-Different notify methods?
+New/updated components:
+    ThirdPartyInvoicingService
+    ThirdPartyNotificationDeliveryService
 
+    ApplicationProviderClient
+    ApplicationProviderFacade
 
-ThirdPartyInvoicingService
-ThirdPartyNotificationDeliveryService
+    RegisteredUserClient
+    RegisteredUserFacade
 
-ApplicationProviderClient
-ApplicationProviderFacade
-
-RegisteredUserClient
-RegisteredUserFacade
-
-UnregisteredUserClient
-UnregisteredUserFacade
-
+    UnregisteredUserClient
+    UnregisteredUserFacade
 
 In rationale somehwere:
     How is hardware linked to Infrastructure owners?
-        => 1 gateway <-> 1 infrastructure owner
+        => 1 device <-> 1 infrastructure owner
         => when an IO buys/orders hardware, then that hardware is linked to the IO after the order is completed.
 
 ==========================================================================
@@ -84,5 +80,6 @@ Av1: Interfaces between brokers?
      send/receive?
      p274
 
-How to rotate page for image in latex.
-How to make interface names transparent?
+For report:
+    How to rotate page for image in latex?
+    How to make interface names transparent?
