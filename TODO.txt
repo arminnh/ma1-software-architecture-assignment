@@ -6,6 +6,9 @@ AFTER DEADLINE, BEFORE PROJECT DEFENSE:
 
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
+Move methods from decomposition 7 to vpp model
+Finish decomposition 8
+
 Find methods that change state but have missing parameters
 
 Broker -> CommunicationHandler: handles communication by remote method invocation

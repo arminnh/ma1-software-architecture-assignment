@@ -1,4 +1,4 @@
-%%% element catalog, generated on Tue May 09 00:48:21 CEST 2017
+%%% element catalog, generated on Tue May 09 01:14:11 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -169,8 +169,16 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}		
+	\end{description}
+\subsection{AuthenticationManager}\label{comp:OnlineServiceOnlineServiceAuthenticationManager}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:SessionDBAuthentication}}		
 	\end{description}
 \subsection{ContainerLogic}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerContainerLogic}
 	\begin{description}[noitemsep,nolistsep]
@@ -193,8 +201,8 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~Acts as an access point for CustomerOrganisationClients and handles all functionality that can be done by customer organisations.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeSubscriptionMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeUserMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppRequests}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceSubscriptionManagerSubscriptionMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserManagerUserMgmt}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeSubscriptionMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceCustomerOrganisationFacadeUserMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppRequests}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserManagerRoleMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceSubscriptionManagerSubscriptionMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUserManagerUserMgmt}}		
 	\end{description}
 \subsection{DeviceCommandConstructor}\label{comp:OnlineServiceOnlineServiceApplicationManagerDeviceCommandConstructor}
 	\begin{description}[noitemsep,nolistsep]
@@ -295,8 +303,8 @@ Quick math to check we are not doing something very dumb here:
 		\item[Responsibility:]~Acts as an access point for InfrastructureOwnerClients and handles all functionality that can be done by infrastructure owners.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeAccessRights}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeTopologyMgmt}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAccessRightsManagerAccessRightsMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppRequests}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerManagerIOMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeAccessRights}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerFacadeTopologyMgmt}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAccessRightsManagerAccessRightsMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogicFrontEndAppRequests}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceInfrastructureOwnerManagerIOMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceTopologyManagerTopologyMgmt}}		
 	\end{description}
 \subsection{InfrastructureOwnerManager}\label{comp:OnlineServiceOnlineServiceInfrastructureOwnerManager}
 	\begin{description}[noitemsep,nolistsep]
@@ -401,8 +409,8 @@ can "turn on" and "turn off".
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotifications}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotifications}}		
 	\end{description}
 \subsection{RequestStore}\label{comp:GatewayGatewayOnlineServiceBrokerRequestStore}
 	\begin{description}[noitemsep,nolistsep]
@@ -411,6 +419,14 @@ can "turn on" and "turn off".
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerMonitorOSBrokerMonitoring}}, \iconprovided{}~\vpett{\nameref{int:GatewayGatewayOnlineServiceBrokerRequestStoreRequests}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceDeviceDataSchedulerDeviceData}}		
+	\end{description}
+\subsection{SessionDB}\label{comp:SessionDB}
+	\begin{description}[noitemsep,nolistsep]
+		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Super-components:]~None
+		\item[Sub-components:]~None
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:SessionDBAuthentication}}
+		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{SubscriptionManager}\label{comp:OnlineServiceOnlineServiceSubscriptionManager}
 	\begin{description}[noitemsep,nolistsep]
@@ -425,8 +441,8 @@ can "turn on" and "turn off".
 		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}		
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}		
 	\end{description}
 \subsection{ThirdPartyInvoicingService}\label{comp:ThirdPartyInvoicingService}
 	\begin{description}[noitemsep,nolistsep]
@@ -709,10 +725,28 @@ can "turn on" and "turn off".
     \end{description}
 
   %%%%%%%% Authentication
+  \subsection{Authentication}\label{int:SessionDBAuthentication}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:SessionDB}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceAuthenticationManager}}
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% Authentication
   \subsection{Authentication}\label{int:OnlineServiceOnlineServiceRegisteredUserFacadeAuthentication}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] None
       \item[Required by:] None
+      \item[Operations:] ~
+% no operations
+    \end{description}
+
+  %%%%%%%% Authentication
+  \subsection{Authentication}\label{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}
+    \begin{description}[noitemsep,nolistsep]
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationProviderFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceAuthenticationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceInfrastructureOwnerFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceRegisteredUserFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceSystemAdministratorFacade}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationProviderFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceCustomerOrganisationFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceInfrastructureOwnerFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceRegisteredUserFacade}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceSystemAdministratorFacade}}
       \item[Operations:] ~
 % no operations
     \end{description}
