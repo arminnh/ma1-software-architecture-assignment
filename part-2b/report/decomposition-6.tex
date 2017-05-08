@@ -193,8 +193,8 @@
 
     UC3:
         1. The primary actor indicates to the system that they want to unregister an end-user.
-            CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: List<User> unregisterEndUser(int customerOrganisationID)
-                Effect: Returns a list of all end-users associated with a customer organisation so that the customer organistation can choose to unregister one of them.
+            CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID)
+                Effect: Returns a list of all end-users associated with a customer organisation.
                 \item Created for: UC3.1
 
         2. The system retrieves all end-users associated with the primary actor and presents this list to the primary actor.
@@ -223,7 +223,7 @@
                 \item Created for UC3.4
 
         5. The system checks if any applications should be deactivated because of end-user assignment to mandatory roles (Include: UC18: Check and deactivate applications).
-            CustomerOrganisationFacade -> ApplicationManager: interface FrontEndAppReuqestss: checkApplicationsForDeactivationForCustomerOrganisations(List<int> IDs)
+            CustomerOrganisationFacade -> ApplicationManagementLogic: interface FrontEndAppReuqestss: checkApplicationsForDeactivationForCustomerOrganisations(List<int> IDs)
                 TODO??
 
         6. The system informs the primary actor that the end-user is now unregistered from SIoTIP.
@@ -260,7 +260,7 @@
                     \item Created for: UC5.2b
 
             -it checks for and deactivates applications that are affected by the unavailability of the pluggable devices (Include: UC18: Check and deactivate applications).
-                DeviceManager -> ApplicationManager: interface GWAppInstanceMgmt: checkApplicationsForDeactivationForPluggableDevices(List<PluggableDeviceID> pIDs)
+                DeviceManager -> ApplicationManagementLogic: interface GWAppInstanceMgmt: checkApplicationsForDeactivationForPluggableDevices(List<PluggableDeviceID> pIDs)
                     Effect: Checks and possibly deactivates ApplicationInstances which are affected by the unavailability of a list of pluggable devices (Include: UC18: Check and deactivate applications).
                     \item Created for: UC5.2c
 
@@ -291,7 +291,7 @@
                 \item Created for: UC7.3b
 
            { it checks and deactivates applications for which the pluggable device was essential (Include: UC18: Check and deactivate applications).
-            DeviceManager -> ApplicationManager: interface GWAppInstanceMgmt: checkApplicationsForDeactivationForPluggableDevice(PluggableDeviceID pID)
+            DeviceManager -> ApplicationManagementLogic: interface GWAppInstanceMgmt: checkApplicationsForDeactivationForPluggableDevice(PluggableDeviceID pID)
                Effect: Checks and possibly deactivates ApplicationInstances which are affected by the unavailability of a pluggable device (Include: UC18: Check and deactivate applications).
                \item Created for: UC7.3c
 
@@ -314,7 +314,7 @@
                 Effect: Updates a pluggable device's status to 'active'.
                 \item Created for: UC8.3
 
-            InfrastructureOwnerFacade -> ApplicationManager: interface FrontEndAppRequests: void checkApplicationsForActivationForPluggableDevice(PluggableDeviceID pID)
+            InfrastructureOwnerFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void checkApplicationsForActivationForPluggableDevice(PluggableDeviceID pID)
                 Effect: Checks and activates 'inactive' ApplicationInstances which are able to activate because of the initialisation of a new pluggable device.
                 \item Created for: UC8 - remark
 
@@ -323,113 +323,222 @@
             See UC9
             InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights
 
+
     UC10: Consult and configure the topology
         1. The primary actor indicates that they want to manage the topology.
 
-            TODO
+            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<RoomTopology> getTopology(int infrastructureOwnerID)
+                Effect: Returns the topology owned by an infrastructure owner.
+                \item Created for: UC10.1
 
         2. The system presents the topology for the primary actor.
            { The topology shows a representation of the gateways, and the motes and pluggable devices associated with each gateway,
            and specifies key relationships between these devices, for example physical location information,
            or whether pluggable device X and pluggable device Y are interchangeable.
 
-            TODO
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<RoomTopology> getTopology(int infrastructureOwnerID)
+               Effect: Returns the topology owned by an infrastructure owner.
+               \item Created for: UC10.2
+
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<RoomTopology> getTopology(int infrastructureOwnerID)
+               Effect: Returns the topology owned by an infrastructure owner.
+               \item Created for: UC10.2
 
            { New motes and pluggable devices that are not yet included are presented on the side.
 
-            TODO
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
+               Effect: Returns info about unplaced motes that are owned by an infrastructure owner
+               \item Created for: UC10.2
+
+           TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
+               Effect: Returns info about unplaced motes that are owned by an infrastructure owner
+               \item Created for: UC10.2
+
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
+               Effect: Returns info about unplaced motes that are owned by an infrastructure owner
+               \item Created for: UC10.2
+
+           TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
+               Effect: Returns info about unplaced motes that are owned by an infrastructure owner
+               \item Created for: UC10.2
 
         3. The primary actor updates the topology.
            { This could involve changing the location of or relations between motes and pluggable devices,
            or extending the topology with motes and pluggable devices that were not yet included.
 
-            TODO
+           FOR INSIDE CLIENT
 
         4. The primary actor indicates that they are done updating the topology.
 
-            TODO
+            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+                Effect: Updates the topology of an infrastructure owner. The 'updatedTopology' is the new one submitted by the infrastructure owner.
+                \item Created for: UC10.4
 
         5. The system
            { stores the reconfigured topology and informs the primary actor that the reconfigured topology is now being used.
-            TODO
 
-           { activates ‘inactive’ applications (Include: UC17 : Activate an application).
-            TODO
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+               Effect: Updates the topology of an infrastructure owner. The 'updatedTopology' is the new one submitted by the infrastructure owner.
+               \item Created for: UC10.5a
+
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+               Effect: Updates the topology of an infrastructure owner. The 'updatedTopology' is the new one submitted by the infrastructure owner.
+               \item Created for: UC10.5a
+
+           { activates 'inactive' applications (Include: UC17 : Activate an application).
+            InfrastructureOwnerFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+                Effect: Checks and activates ApplicationInstances which can now execute (again). The applications checked are those that are subscribed to by customers organisations associated to the given infrastructure owner.
+                \item Created for: UC10.5b
 
            { checks for applications that require deactivation (Include: UC18 : Check and deactivate applications).
-            TODO
+            InfrastructureOwnerFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: checkApplicationsForDectivationForInfrastructureOwner(int infrastructureOwnerID)
+                Effect: Checks and deactivates ApplicationInstances which require deactivation. The applications checked are those that are subscribed to by customers organisations associated to the given infrastructure owner.
+                \item Created for: UC10.5c
+
+        3a. If the primary actor wants to view status details for a specific gateway/mote/pluggable device:
+            1. The system composes a detailed overview of the status of the selected gateway/mote/pluggable device (e.g., indicating that the device was unavailable between 2 and 3 a.m.) and presents it.
+                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+                    Effect: Returns details about the status of a certain gateway. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+                    Effect: Returns details about the status of a certain mote. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+                    Effect: Returns details about the status of a certain pluggable device. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+                    Effect: Returns details about the status of a certain gateway. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+                    Effect: Returns details about the status of a certain mote. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+                    Effect: Returns details about the status of a certain pluggable device. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+                    Effect: Returns details about the status of a certain gateway. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+                    Effect: Returns details about the status of a certain mote. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+                    Effect: Returns details about the status of a certain pluggable device. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
 
 
     UC16:
         1. The primary actor indicates that he/she/they wants to consult a notification.
 
-            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> UserFacade: interface Notifications: void consultNotifications()
+            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: List<Notification> consultNotifications(int userID)
+                Effect: Returns a list of Notification for a certain registered user.
+                \item Created for: UC16.1
 
         2. The system retrieves all notifications for the primary actor and presents them to the primary actor, e.g. as a table or list.
 
-            UserFacade -> NotificationHandler: interface NotificationsMgmt: List<Notification> getNotifications(int userID)
+            RegisteredUserFacade -> NotificationHandler: interface Notifications: List<Notification> getNotifications(int userID)
+                Effect: Returns a list of Notification for a certain registered user. Not all details in the Notification objects are filled in.
+                \item Created for: UC16.2
+
+            NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: List<Notification> getNotifications(int userID)
+                Effect: Returns a list of Notification for a certain registered user. Not all details in the Notification objects are filled in.
+                \item Created for: UC16.2
 
         3. The primary actor selects a notification.
 
-            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> UserFacade: Notification consultNotifications(int notificationID)
-                Effect: Returns information about the notification.
+            ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: Notification consultNotification(int notificationID)
+                Effect: Returns detailed information about a notification for a certain registered user.
                 \item Created for: UC16.3
 
         4. The system presents the details for the selected notification to the primary actor. This includes:
             { A description of the event that occurred.
-
             { Date and time the event occurred.
-
             { What triggered the event (e.g., the cause of an application that became inactive)
-
             { The status of the notification (e.g. 'sent', 'delivered', 'read')
-
             { The communication channel by which the notification was sent
+
+            RegisteredUserFacade -> NotificationHandler: interface Notifications: Notification getDetailedNotification(int notificationID)
+                Effect: Returns detailed information about a notification for a certain registered user.
+                \item Created for: UC16.4
+
+            NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: Notification getDetailedNotification(int notificationID)
+                Effect: Returns detailed information about a notification for a certain registered user.
+                \item Created for: UC16.4
 
 
         5. The system marks the notification as 'read'.
-            UserFacade -> NotificationHandler: interface NotificationsMgmt: List<Notification> setNotificationRead(int notificationID)
+            NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: void setNotificationRead(int notificationID)
+                Effect: Marks a notification as 'read'.
+                \item Created for: UC16.5
+
 
     UC20:
         1. The primary actor indicates they want to unsubscribe from an application.
-            CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt:void  unsubscribeFromApplications()
+            CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
+                Effect: Returns a list of the subscriptions of a customer orgnisation.
+                \item Created for: UC20.1
 
-
-        2. The system looks up a list of applications the primary actor is subscribed to, and presents this
-            overview to the primary actor, e.g. as a list or table.
-            CustomerOrganisationFacade -> ApplicationManager: interface FrontEndAppRequests: List<int> getApplications(int customerOrganisationID)
+        2. The system looks up a list of applications the primary actor is subscribed to, and presents this overview to the primary actor, e.g. as a list or table.
+            CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
+                Effect: Returns a list of the subscriptions of a customer orgnisation.
+                \item Created for: UC20.2
+            SubscriptionManager -> OtherDataDB: interface DBSubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
+                Effect: Returns a list of the subscriptions of a customer orgnisation.
+                \item Created for: UC20.2
 
         3. The primary actor indicates which application they want to unsubscribe from.
-             CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void  unsubscribeFromApplication(int applicationInstanceID)
-                 Effect: Unsubscribes a customer organisation from an application.
-                 \item Created for: UC20.3
+            CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void unsubscribeFromApplication(int customerOrganisationID, int subscriptionID, int applicationInstanceID)
+                Effect: Unsubscribes a customer organisation from an application.
+                \item Created for: UC20.3
 
-             CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: void  deleteSubscription(int applicationInstanceID, int customerOrganisationID)
-                 Effect: Unsubscribes a customer organisation from an application.
-                 \item Created for: UC20.3
+        4. The system
+           (i) ends the subscription for the selected application,
 
-        4. The system (i) ends the subscription for the selected application,
-           (ii) deactivates the application, and
-           (iii) constructs an invoice for outstanding payments for that application (cf. UC21: Send invoice).
+                CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: void softDeleteSubscription(int subscriptionID)
+                   Effect: Ends a subsription.
+                   \item Created for: UC20.4i
 
-            SubscriptionManager -> OtherDataDB: interface DBSubscriptionMgmt: void deleteSubscription(int customerOrganisationID, int customerOrganisationID)
-                Effect: ends the subscription for the selected application
-                \item Created for: UC20.4i
+                SubscriptionManager -> OtherDataDB: interface DBSubscriptionMgmt: void softDeleteSubscription(int subscriptionID)
+                   Effect: Ends a subsription.
+                    \item Created for: UC20.4i
 
-            SubscriptionManager -> ApplicationManager: interface FrontEndAppRequests: deactivateApplication(int applicationInstanceID, int custOrg)
-                Effect: deactivates the application
-                \item Created for: UC20.4ii
+            (ii) deactivates the application, and
 
-            ApplicationManager -> OtherDataDB: interface DBAppMgmt: deactivateApplication(int applicationInstanceID)
-                Effect: deactivates the application
-                \item Created for: UC20.4ii
+                ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void softDeleteApplicationInstance(int applicationInstanceID)
+                    Effect: Updates an ApplicationInstance's status in the database to reflect that the customer organisation has unsubscribed from it.
+                    \item Created for: UC20.4ii
 
-            ApplicationManager -> InvoiceManager: interface InvoiceMgmt: constructInvoice(int applicationInstanceID, int custOrg)
-                Effect: deactivates the application
-                \item Created for: UC20.4ii
+                CustomerOrganisationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void destroyApplicationInstance(int applicationInstanceID)
+                    Effect: Destroys an ApplicationInstance
+                    \item Created for: UC20.4ii
+
+                ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void destroyApplicationInstance(int applicationInstanceID)
+                    Effect: Destroys an ApplicationInstance
+                    \item Created for: UC20.4ii
+
+            (iii) constructs an invoice for outstanding payments for that application (cf. UC21: Send invoice).
+
+                SubscriptionManager -> InvoiceManager: interface InvoiceMgmt: void constructInvoiceForApplicationInstance(int applicationInstanceID, int customerOrganisationID)
+                    Effect: Constructs an invoice for outstanding payments for an ApplicationIntance
+                    \item Created for: UC20.4iii
+
+                InvoiceManager -> OtherDataDB: interface InvoiceMgmt: void createInvoice(Invoice invoice)
+                    Effect: Stores a new invoice in the database.
+                    \item Created for: UC20.4iii
+
+                InvoiceManager -> ThirdPartyInvoicingService: interface InvoiceMgmt: void sendInvoice(Map<string, string> invoiceData)
+                    Effect: Sends an invoice using a third party invoicing service.
+                    \item Created for: UC20.4iii
 
         5. The system informs the primary actor that the unsubscription was successful.
-            Notify()
+            => return value of unsubscribeFromApplication
 
 
 \subsection{Instantiation and allocation of functionality}

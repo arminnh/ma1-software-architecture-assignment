@@ -1402,7 +1402,7 @@ to the mote.
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceNotificationHandler}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{void notify(Map\textless{}string, string\textgreater{} data)}
+      \item \textsf{void Notify(Map\textless{}string, string\textgreater{} data)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Delivers a notification to an end user using a specific delivery service.
 \item Created for: UC15
@@ -1417,7 +1417,7 @@ to the mote.
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerGWBrokerLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBroker}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayBrokerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayBrokerGatewayMonitor}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{void notify(int userID, string message)}
+      \item \textsf{void Notify(int userID, string message)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Stores a new notification in the system and causes it to be sent to a user.
 \item Created for: UC14, Av3: notifications
