@@ -326,38 +326,111 @@
     UC10: Consult and configure the topology
         1. The primary actor indicates that they want to manage the topology.
 
-            TODO
+            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<RoomTopology> getTopology(int infrastructureOwnerID)
+                Effect: Returns the topology owned by an infrastructure owner.
+                \item Created for: UC10.1
 
         2. The system presents the topology for the primary actor.
            { The topology shows a representation of the gateways, and the motes and pluggable devices associated with each gateway,
            and specifies key relationships between these devices, for example physical location information,
            or whether pluggable device X and pluggable device Y are interchangeable.
 
-            TODO
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<RoomTopology> getTopology(int infrastructureOwnerID)
+               Effect: Returns the topology owned by an infrastructure owner.
+               \item Created for: UC10.2
+
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<RoomTopology> getTopology(int infrastructureOwnerID)
+               Effect: Returns the topology owned by an infrastructure owner.
+               \item Created for: UC10.2
 
            { New motes and pluggable devices that are not yet included are presented on the side.
 
-            TODO
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
+               Effect: Returns info about unplaced motes that are owned by an infrastructure owner
+               \item Created for: UC10.2
+
+           TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
+               Effect: Returns info about unplaced motes that are owned by an infrastructure owner
+               \item Created for: UC10.2
+
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
+               Effect: Returns info about unplaced motes that are owned by an infrastructure owner
+               \item Created for: UC10.2
+
+           TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
+               Effect: Returns info about unplaced motes that are owned by an infrastructure owner
+               \item Created for: UC10.2
 
         3. The primary actor updates the topology.
            { This could involve changing the location of or relations between motes and pluggable devices,
            or extending the topology with motes and pluggable devices that were not yet included.
 
-            TODO
+           FOR INSIDE CLIENT
 
         4. The primary actor indicates that they are done updating the topology.
 
-            TODO
+            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+                Effect: Updates the topology of an infrastructure owner. The 'updatedTopology' is the new one submitted by the infrastructure owner.
+                \item Created for: UC10.4
 
         5. The system
            { stores the reconfigured topology and informs the primary actor that the reconfigured topology is now being used.
-            TODO
 
-           { activates ‘inactive’ applications (Include: UC17 : Activate an application).
-            TODO
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+               Effect: Updates the topology of an infrastructure owner. The 'updatedTopology' is the new one submitted by the infrastructure owner.
+               \item Created for: UC10.5a
+
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+               Effect: Updates the topology of an infrastructure owner. The 'updatedTopology' is the new one submitted by the infrastructure owner.
+               \item Created for: UC10.5a
+
+           { activates 'inactive' applications (Include: UC17 : Activate an application).
+            InfrastructureOwnerFacade -> ApplicationManager: interface FrontEndAppRequests: checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+                Effect: Checks and activates ApplicationInstances which can now execute (again). The applications checked are those that are subscribed to by customers organisations associated to the given infrastructure owner.
+                \item Created for: UC10.5b
 
            { checks for applications that require deactivation (Include: UC18 : Check and deactivate applications).
-            TODO
+            InfrastructureOwnerFacade -> ApplicationManager: interface FrontEndAppRequests: checkApplicationsForDectivationForInfrastructureOwner(int infrastructureOwnerID)
+                Effect: Checks and deactivates ApplicationInstances which require deactivation. The applications checked are those that are subscribed to by customers organisations associated to the given infrastructure owner.
+                \item Created for: UC10.5c
+
+        3a. If the primary actor wants to view status details for a specific gateway/mote/pluggable device:
+            1. The system composes a detailed overview of the status of the selected gateway/mote/pluggable device (e.g., indicating that the device was unavailable between 2 and 3 a.m.) and presents it.
+                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+                    Effect: Returns details about the status of a certain gateway. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+                    Effect: Returns details about the status of a certain mote. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+                    Effect: Returns details about the status of a certain pluggable device. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+                    Effect: Returns details about the status of a certain gateway. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+                    Effect: Returns details about the status of a certain mote. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+                    Effect: Returns details about the status of a certain pluggable device. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+                    Effect: Returns details about the status of a certain gateway. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+                    Effect: Returns details about the status of a certain mote. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
+
+                TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+                    Effect: Returns details about the status of a certain pluggable device. e.g. indicating that the device was unavailable between 2 and 3 a.m.
+                    \item Created for: UC10.3a
 
 
     UC16:
