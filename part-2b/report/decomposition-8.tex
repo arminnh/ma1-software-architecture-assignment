@@ -15,7 +15,7 @@
 
         2. The system asks the primary actor if he/she wants to update an existing application.
 
-            TODO
+            
 
         3. The primary actor provides his/her choice.
 
@@ -23,11 +23,22 @@
 
         4. If the primary actor indicated that he/she wants to update an existing application, the system composes an overview of applications uploaded by the primary actor (e.g., as a list or table), presents this, and requests the primary actor to indicate which application to update.
 
-            TODO
+            ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests:
+                                                List<Application> getApplicationsForAppProvider(int appProviderID)
+                Effect: Returns list of applications uploaded by the application provider.
+                \item Created for: UC22.4
+            
+            ApplicationManager -> OtherDataDB: interface DBAppMgmt:
+                                                List<Application> getApplicationsForAppProvider(int appProviderID)
+                Effect: Returns list of applications uploaded by the application provider.
+                \item Created for: UC22.4
+                
 
         5. The primary actor chooses the application to be updated.
 
-            TODO
+            ApplicationProviderClient -> ApplicationProviderFacade: interface Apps:
+                                                void updateApplication(int applicationID)
+                                
 
         6. The system asks the primary actor if this is an update that should be automatically activated for existing subscriptions.
 
@@ -65,27 +76,79 @@
 
             TODO
 
-        15. In case of an updated application that should automatically be activated for existing subscrip- tions (cf. step 6), the system updates the existing subscriptions of the application to the new version (Include: UC17 : Activate an application).
+        15. In case of an updated application that should automatically be activated for existing subscriptions (cf. step 6), the system updates the existing subscriptions of the application to the new version (Include: UC17 : Activate an application).
 
             TODO
+            
+        Alternative     
+            4a. If the primary actor has indicated that he/she wants to upload a new application, the use case
+                continues from step 10.
+            8a. If the primary actor has indicated that existing subscriptions should not be automatically
+                updated, the use case continues from step 10.
+            13a.If the checks were not successful, the system notifies the primary actor and a SysAdmin
+                (Include: UC15: Send notification). The use case ends.
+        
+        Remarks:
+            { For updated applications, application providers have the choice between automatically updating
+              all application subscriptions of the previous version, or requiring customer organisations
+              to subscribe to the new version individually (cf. UC19: Subscribe to application). The latter
+              could be used if the application provider requires the customer organisations to pay for the
+              new version. They may, however, also use the former model for some updates, such as minor
+              improvements and bugfixes. Requiring the customer organisations to explicitly subscribe to
+              the new version can also be useful in case the new version requires new hardware.
+            { Explicitly indicating the versions from which to automatically update (in step 8) is necessary
+              to prevent the automatic (and free) update from v2.0 to v2.1 to also be installed for v1.x
+              subscriptions, thereby bypassing the paid upgrade from v1.x to v2.0.
+            { For simplicity, the workflow of a sysadmin that manually reviews and approves/rejects an
+              application that has failed automatic testing (as mentioned in Part 1 of the assignment) is not
+              part of this assignment.
     
 
     UC23:
         1. The primary actor indicates that he/she wants to an overview of uploaded applications.
 
-            TODO
+            ApplicationProviderClient -> ApplicationProviderFacade: interface Apps: 
+                                                    void getApplicationDetailsForAppProvider(int appProviderID)
+                Effect: Returns list of applications uploaded by the application provider and information about the amount of subscribers    
+                        for that application.
+                \item Created for: UC23.2
 
-        2. The system retrieves all applications uploaded by the primary actor, and information about the amount of subscribers for that application. It presents this overview to the primary actor.
+        2. The system retrieves all applications uploaded by the primary actor, and information about the amount of subscribers for that 
+           application. It presents this overview to the primary actor.
 
-            TODO
+            ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests:
+                                                List<Application,int> getApplicationDetailsForAppProvider(int appProviderID)
+                Effect: Returns list of applications uploaded by the application provider and information about the amount of subscribers    
+                        for that application.
+                \item Created for: UC23.2
+            
+            ApplicationManager -> OtherDataDB: interface DBAppMgmt:
+                                                List<Map<Application,int> getApplicationDetailsForAppProvider(int appProviderID)
+                Effect: Returns list of applications uploaded by the application provider and information about the amount of subscribers    
+                        for that application.
+                \item Created for: UC23.2
 
         3. The primary actor selects an application.
 
-            TODO
+            ApplicationProviderClient -> ApplicationProviderFacade: interface Apps: 
+                                                    ApplicationStatistics presentApplicationStatistics(int applicationID)
+                Effect: Returns statistics about application if the selected application is approved.
+                \item Created for: UC23.3
 
-        4. If the selected application is an approved application, the system presents detailed statistics including the amount of subscribers.
+        4. If the selected application is an approved application, the system presents detailed statistics including the amount of 
+        subscribers.
+        
+        ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: 
+                                                    ApplicationStatistics presentApplicationStatistics(int applicationID)
+                Effect: Returns statistics about application if the selected application is approved.
+                \item Created for: UC23.4
+                
+        ApplicationManager -> OtherDataDB: interface DBAppMgmt: 
+                                                    ApplicationStatistics presentApplicationStatistics(int applicationID)
+                Effect: Returns statistics about application if the selected application is approved.
+                \item Created for: UC23.4
 
-            TODO
+            
 
 
 \subsection{Architectural design}

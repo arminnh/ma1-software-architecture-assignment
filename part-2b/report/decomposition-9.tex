@@ -22,12 +22,20 @@
             { the date the payment is due and
             { the contact details of the primary actor (e.g. Zoomit identifier or credit card data)
 
-                SubscriptionManager -> InvoiceManager: constructInvoice(Map<string,string>)
+                SubscriptionManager -> InvoiceManager: interface InvoiceMgmt: void constructInvoiceForApplicationInstance(int applicationInstanceID, int customerOrganisationID)
+                    Effect: Constructs an invoice for outstanding payments for an ApplicationIntance
+                    \item Created for: UC20.4iii
 
         2. The system sends the invoice to the third-party invoicing service.
 
-            InvoiceManager -> InvoicingService: interface Invoices: boolean sendInvoice(Map<string,string>)
-                Effect: Returns true if the ivoice was sent successfully.
+            InvoiceManager -> OtherDataDB: interface InvoiceMgmt: void createInvoice(Invoice invoice)
+                    Effect: Stores a new invoice in the database.
+                    \item Created for: UC20.4iii
+
+            InvoiceManager -> ThirdPartyInvoicingService: interface InvoiceMgmt: void sendInvoice(Map<string, string> invoiceData)
+                    Effect: Sends an invoice using a third party invoicing service.
+                    \item Created for: UC20.4iii
+               
 
 
 \subsection{Instantiation and allocation of functionality}
