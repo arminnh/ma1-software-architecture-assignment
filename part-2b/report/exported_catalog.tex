@@ -1,4 +1,4 @@
-%%% element catalog, generated on Mon May 08 22:56:41 CEST 2017
+%%% element catalog, generated on Tue May 09 00:48:21 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -1017,10 +1017,15 @@ can "turn on" and "turn off".
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceInvoiceManager}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{void createInvoice({\colorbox{red!30}{\underline{Invoice}}} invoice)}
+      \item \textsf{void createInvoice(\ref{data:DataTypesInvoice} invoice)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Stores a new invoice in the database.
 \item Created for: UC20.4iii
+        \end{itemize}
+      \item \textsf{\ref{data:DataTypesInvoice} getInvoicesForCustomerOrganisation(int customerOrganisationID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns outstanding invoices for a customer organisation.
+\item Created for: UC21.1
         \end{itemize}
       \item \textsf{void markActivatedApplication(int applicationInstanceID, int custOrgID, \ref{data:DataTypesDateTime} date)}
         \begin{itemize}[noitemsep,nolistsep]
@@ -1074,7 +1079,7 @@ can "turn on" and "turn off".
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{int createNotification(\ref{data:DataTypesNotification} notification)}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Stores a new notification entry in the database. Returns the id of the new notification. \\
+           \item Effect: Stores a new notification entry in the database. Returns the id of the new notification.
 \item Created for: UC15, Av3: notifications
         \end{itemize}
       \item \textsf{\ref{data:DataTypesNotification} getDetailedNotification(int userID, int notificationID)}
@@ -1320,7 +1325,12 @@ Otherwise, returns false.
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceInvoiceManager}}
       \item[Required by:] None
       \item[Operations:] ~
-% no operations
+    \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
+      \item \textsf{void acknowledgement(int invoiceID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Sends an acknowledgement to the system for a certain invoice to denote that the invoice has been received.
+        \end{itemize}
+    \end{itemize}
     \end{description}
 
   %%%%%%%% DeviceCommands
@@ -1434,12 +1444,12 @@ to the mote.
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{List\textless{}int\textgreater{} getApplicationsForDevice(\ref{data:DataTypesPluggableDeviceID} pID)}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Returns a list of application instances that can use the device with id "pID". \\
+           \item Effect: Returns a list of application instances that can use the device with id "pID".
 \item Created for: UC11: the system looks up the list of applications that use the pluggable device
         \end{itemize}
       \item \textsf{void rcvData(\ref{data:DataTypesPluggableDeviceID} pID, \ref{data:DataTypesDeviceData} data)}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Sends pluggable device data to an application that wants to use it \\
+           \item Effect: Sends pluggable device data to an application that wants to use it.
 \item Created for: UC11: system relays data to applications
         \end{itemize}
     \end{itemize}
@@ -1623,7 +1633,7 @@ to the mote.
       \item \textsf{void sendInvoice(Map\textless{}string, string\textgreater{} invoiceData)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Sends an invoice using a third party invoicing service.
-\item Created for: UC20.4iii
+\item Created for: UC21.2
         \end{itemize}
     \end{itemize}
     \end{description}
@@ -2325,6 +2335,11 @@ When an ApplicationInstance is running on the Online Service and on a Gateway, t
 \begin{itemize}[noitemsep,nolistsep]
 \item[] Attributes: int gatewayID, \ref{data:DataTypesIPAddress} IPAddress, int infrastructureOwnerID
 \item[] An object containing information on a Gateway.
+\end{itemize}
+\item \vpedatatype{data:DataTypesInvoice}{Invoice}: 
+\begin{itemize}[noitemsep,nolistsep]
+
+\item[] Contains information about an invoice, such as true provided service or product, the amount to be paid, the date the payment is due, the contact details of the receiver of the bill, etc.
 \end{itemize}
 \item \vpedatatype{data:DataTypesIPAddress}{IPAddress}: 
 \begin{itemize}[noitemsep,nolistsep]

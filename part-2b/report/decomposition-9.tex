@@ -27,7 +27,6 @@
             InvoiceManager -> ThirdPartyInvoicingService: interface InvoiceMgmt: void sendInvoice(Map<string, string> invoiceData)
                     Effect: Sends an invoice using a third party invoicing service.
                     \item Created for: UC20.4iii
-               
 
 
 \subsection{Instantiation and allocation of functionality}
@@ -37,7 +36,7 @@
     the components can be found under chapter \ref{ch:elements-datatypes}. \\
 
     \begin{itemize}
-        \item Component: (Relevant UC)
+        \item ThirdPartyInvoicingService: UC21
     \end{itemize}
 
 
@@ -55,10 +54,3 @@
         \begin{itemize}
             \item DeliveryMgmt
         \end{itemize}
-
-\subsection{New data types}
-    This section lists the new data types introduced during this decomposition.
-
-    \begin{itemize}
-        \item DateTime: Represents an instant in time, typically expressed as a date and time of day.
-    \end{itemize}
