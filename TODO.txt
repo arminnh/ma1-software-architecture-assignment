@@ -8,6 +8,13 @@ In decompositions 1, 2, and 3, check decisions important for deployment and add 
 
 Different notify methods to know the trigger and put in other data maybe. => If no time, put in discussion
 
+Broker -> CommunicationHandler: handles communication by remote method invocation
+                                still not message queue or pulish subscribe
+
+Av2: up-time => passive replication
+
+P1: ??? => active replication + load balancing? how many new components to handle all of this?
+
 New/updated components:
     ThirdPartyInvoicingService
     ThirdPartyNotificationDeliveryService
@@ -73,13 +80,15 @@ Where to create the actual db queries?
        will probably be formed before it reached the DB.
 
 Av2: up time?
-
 P1: for replication of components, do we need to add routing or can we just add this in the rationale?
+    => complicated
 
 Av1: Interfaces between brokers?
-     send/receive?
-     p274
+     => Broker is something else, fuck the book
 
 For report:
     How to rotate page for image in latex?
+        => pdflscape => begin{landscape} end{landscape}
+        => sideways
     How to make interface names transparent?
+        => nobody knows?????????
