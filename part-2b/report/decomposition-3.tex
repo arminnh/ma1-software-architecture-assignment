@@ -74,8 +74,6 @@
             % GatewayFacade -> DeviceDB: interface DeviceMgmt: registerGateway(int gatewayID, IPAddress address)
             %     Effect: Sets a gateway's status to 'active' and updates its IP address
             %     \item Created for: U2 - gateway installation
-            TODO: gateway is added in the infrastructure owners topology as 'unplaced'.
-                  it will be visible to the infrastructure owner after the gateway connects and registers with the online service
 
             We cannot link the gateway to an exact location for the infrastructure owner, because he might be managing multiple buildings
             an IP addresses can be dynamic. If we let the IO choose for which building the gateway is, then this is bad for usability and

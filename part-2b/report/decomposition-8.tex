@@ -112,7 +112,7 @@
                 Effect: Updates the version of a list of application instances that need to be updated because of a certain application update. The application instances to update is found in the data provided when the application was uploaded.
                 \item Created for: UC22.15
 
-        ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void createApplicationInstance(int applicationInstanceID, int customerOrganisationID, ApplicationCode code)
+        ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void createApplicationInstance(ApplicationInstance instance, ApplicationCode code)
             Effect: Creates a new ApplicationContainer to run an instance of an application.
 
         Check other createApplicationInstance text
