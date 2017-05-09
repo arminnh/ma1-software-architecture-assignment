@@ -395,12 +395,20 @@
         %     5. The system checks which topology configuration and selection of pluggable devices for the application are necessary
         %        (e.g., to indicate in which rooms a heating control application should run)
         %        and presents a topology allowing the primary actor to indicate their configuration.
+                      CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
+                          Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
+                          \item Created for: UC19.5, U2 - easy applications
+                          TODO
         %             CustomerOrganisationFacade -> ApplicationManager: interface FrontEndAppMgmt:         List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
         %                 Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
         %                 \item Created for: UC19.5, U2 - easy applications
         %             ApplicationManager -> OtherDataDB:                interface AppMgmt:      List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
         %                 Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
         %                 \item Created for: UC19.5, U2 - easy applications
+                      CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: List<RoomTopology> getTopology(int custOrgID)
+                          Effect: Returns a list of RoomTopology associated to a customer organisation.
+                          \item Created for: UC19.5, U2 - easy applications
+                          TODO
         %             CustomerOrganisationFacade -> TopologyManager:    interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
         %                 Effect: Returns a list of RoomTopology associated to a customer organisation.
         %                 \item Created for: UC19.5, U2 - easy applications

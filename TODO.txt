@@ -6,9 +6,8 @@ AFTER DEADLINE, BEFORE PROJECT DEFENSE:
 
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
-Finish decomposition 8
-
 Find methods that change state but have missing parameters
+Check methods with applicationID
 
 Broker -> CommunicationHandler: handles communication by remote method invocation
                                 still not message queue or pulish subscribe
