@@ -8,6 +8,8 @@ In decompositions 1, 2, and 3, check decisions important for deployment and add 
 
 Find methods that change state but have missing parameters
 Check methods with applicationID
+move new methods from decomposition 3
+move new methods from decomposition 8
 
 Broker -> CommunicationHandler: handles communication by remote method invocation
                                 still not message queue or pulish subscribe

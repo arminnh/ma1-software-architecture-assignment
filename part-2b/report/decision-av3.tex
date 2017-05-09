@@ -1,9 +1,14 @@
 \section{Av3: Pluggable device or mote failure}
+
     \todoinline{Use this section structure for each requirement}
+
     \subsection*{Key Decisions}
+
     \todoinline{
     	Briefly list your key architectural decisions.
-    	Pay attention to the solutions that you employed (in your own terms or using tactics and/or patterns).}
+    	Pay attention to the solutions that you employed (in your own terms or using tactics and/or patterns).
+    }
+
     \begin{itemize}
     	\item \texttt{DeviceManager} monitors connected/operational devices on a gateway.
     	\item \texttt{DeviceManager} stores the requirements for pluggable devices set by applications
@@ -28,7 +33,7 @@
             A pluggable device has failed when it does not occur in a heartbeat of the
             mote in which it is expected to be in. This is is detected within 2
             seconds after the arrival of the heartbeat.
-            
+
         \paragraph{Automatic application deactivation and redundancy settings}
             Applications should be automatically suspended when they can no longer
             operate due to failure of a pluggable device or mote and reactivated
@@ -62,7 +67,7 @@
             status, date and time, source, ...), and use an external delivery
             service to deliver the notification to users. The used delivery medium
             is based on the user's preferences. The \texttt{DeviceManager} sends request
-            to the external delivery service to notifies the 
+            to the external delivery service to notifies the
             infrastructure owner, once mote or pluggable device failure occurs.
             Since they are stored in the database, users can always view
             their notifications via their dashboard. However, this funcionality is not
@@ -74,7 +79,6 @@
             a pluggable device for 30 seconds. \\
             Applications are notified of the failure of relevant pluggable devices within 10 seconds.
 
-        
 
     \subsection*{Considered Alternatives}
         \paragraph{Alternative for failure detection}
@@ -112,7 +116,6 @@
 
     \subsection*{Deployment Decisions}
         For Av3 is important that the \texttt{DeviceManager} is deployed on another node as the
-        \texttt{Mote} and the \texttt{PluggableDevice}. The \texttt{DeviceManager} 
+        \texttt{Mote} and the \texttt{PluggableDevice}. The \texttt{DeviceManager}
         checks the \texttt{Mote} and the \texttt{PluggableDevice} availability and in case of failure, the \texttt{DeviceManager}
-        can notify the infrastructure owner of any persistent pluggable device or mote failures.\\        
-
+        can notify the infrastructure owner of any persistent pluggable device or mote failures.\\

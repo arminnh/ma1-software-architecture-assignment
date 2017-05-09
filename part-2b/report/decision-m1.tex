@@ -1,9 +1,14 @@
 \section{M1: Integrate new sensor or actuator manufacturer}
+
     \todoinline{Use this section structure for each requirement}
+
     \subsection*{Key Decisions}
+
     \todoinline{
     	Briefly list your key architectural decisions.
-    	Pay attention to the solutions that you employed (in your own terms or using tactics and/or patterns).}
+    	Pay attention to the solutions that you employed (in your own terms or using tactics and/or patterns).
+    }
+
     \begin{itemize}
     	\item decision 1
     	\item \ldots
@@ -11,87 +16,86 @@
     \emph{Employed tactics and patterns:} \ldots
 
     \subsection*{Rationale}
-    \paragraph{M1: Data conversion}
-        With new types of devices, the pluggable data processing subsystem
-        should be extended with relevant data conversions,
-        e.g. converting temperature in degrees Fahrenheit to degrees Celsius. \\
-        The \texttt{DeviceDataConverter} is put in place to handle the
-        task of converting pluggable device data to data of a different type in the system.
-        This component can easily be modified for new types of data simply by
-        adding a new conversion method for the new.
+        \paragraph{M1: Data conversion}
+            With new types of devices, the pluggable data processing subsystem
+            should be extended with relevant data conversions,
+            e.g. converting temperature in degrees Fahrenheit to degrees Celsius. \\
+            The \texttt{DeviceDataConverter} is put in place to handle the
+            task of converting pluggable device data to data of a different type in the system.
+            This component can easily be modified for new types of data simply by
+            adding a new conversion method for the new.
 
-    \paragraph{M1: Usage of new data by applications}
-        The available applications in the system can be updated to use any
-        new pluggable devices. \\
-        This is made possible by the RequestData
-        interface provided by \texttt{DeviceDataScheduler}.
-        Data of the new type of device can be requested in the same way
-        as for older devices: by using the device's unique id.
-        The application manager can get pluggable device data from the
-        \texttt{PluggableDeviceDataDB} and return this data to applications in
-        the DeviceData datatype. This datatype can easily be
-        updated for new types of pluggable devices.
+        \paragraph{M1: Usage of new data by applications}
+            The available applications in the system can be updated to use any
+            new pluggable devices. \\
+            This is made possible by the RequestData
+            interface provided by \texttt{DeviceDataScheduler}.
+            Data of the new type of device can be requested in the same way
+            as for older devices: by using the device's unique id.
+            The application manager can get pluggable device data from the
+            \texttt{PluggableDeviceDataDB} and return this data to applications in
+            the DeviceData datatype. This datatype can easily be
+            updated for new types of pluggable devices.
 
-    \paragraph{P2: Scheduling}
-        The pluggable data processing subsystem needs to be able to run in normal
-        or overload mode, depending on whether or not the system can process
-        requests within the deadlines given in the quality requirement. Also,
-        a mechanism should be in place to avoid starvation of any type of request. \\
-        The \texttt{DeviceDataScheduler} is used to deal with this problem.
-        It is responsible for scheduling requests that wish to interact with
-        the \texttt{PluggableDeviceDataDB}. In normal mode, the system processes
-        incoming requests in a FIFO order. In overload mode, the requests are
-        given a priority based on what the request is for and what the source
-        of the request is. The requests are then not simply processed in an
-        order based on their priorities, but an aging technique is to be used
-        such that starvation will be avoided. Thus, in overload mode,
-        requests are processed in an order based on a combination of the
-        priorities of the requests and the age of the requests.
+        \paragraph{P2: Scheduling}
+            The pluggable data processing subsystem needs to be able to run in normal
+            or overload mode, depending on whether or not the system can process
+            requests within the deadlines given in the quality requirement. Also,
+            a mechanism should be in place to avoid starvation of any type of request. \\
+            The \texttt{DeviceDataScheduler} is used to deal with this problem.
+            It is responsible for scheduling requests that wish to interact with
+            the \texttt{PluggableDeviceDataDB}. In normal mode, the system processes
+            incoming requests in a FIFO order. In overload mode, the requests are
+            given a priority based on what the request is for and what the source
+            of the request is. The requests are then not simply processed in an
+            order based on their priorities, but an aging technique is to be used
+            such that starvation will be avoided. Thus, in overload mode,
+            requests are processed in an order based on a combination of the
+            priorities of the requests and the age of the requests.
 
-    \paragraph{P2: Pluggable data separation}
-        The processing of (large amounts of) requests concerning pluggable
-        data has no impact on requests concerning other data, e.g. available applications. \\
-        In order to statisfy this constraint, all data directly related to
-        pluggable data has been separated into the \texttt{PluggableDeviceDataDB}.
-        All requests concerning pluggable data will be handled by this new
-        component. \texttt{PluggableDeviceDataDB} will run on a node different
-        from the node that the \texttt{Datbase} component runs on. This way
-        requests concerning pluggable will have no impact on
-        requests concerning other data.
+        \paragraph{P2: Pluggable data separation}
+            The processing of (large amounts of) requests concerning pluggable
+            data has no impact on requests concerning other data, e.g. available applications. \\
+            In order to statisfy this constraint, all data directly related to
+            pluggable data has been separated into the \texttt{PluggableDeviceDataDB}.
+            All requests concerning pluggable data will be handled by this new
+            component. \texttt{PluggableDeviceDataDB} will run on a node different
+            from the node that the \texttt{Datbase} component runs on. This way
+            requests concerning pluggable will have no impact on
+            requests concerning other data.
 
-    \paragraph{M1: Handling new types of pluggable devices}
-        The new types of sensor or actuator data should be transmitted,
-        processed and stored, and should be made available to applications.
-        The infrastructure managers must be able to initialize the new type
-        of pluggable device, configure access rights for these devices, and
-        view detailed information about the new type of pluggable device. \\
-        The components created thus far have been created with high cohesion in
-        mind so that updating them for new devices would be relatively straightforward.
-        In order for this constraint to be satisfied, changes have to be made to
-        the following elements:
-        \begin{itemize}
-            \item \emph{PluggableDevice}: This component needs to be updated
-                  so that the new type of device can be initialised and configured,
-                  and thus so that the device's data can be sent to the system.
-            \item \emph{DeviceData}: Depending on how this data type
-                  is implemented, it might need an update in order for it
-                  to represent possible new data types (for example
-                  Temperature Filipcikova) and for the new data types to be
-                  serialized.
-            \item \emph{PluggableDeviceDataDB}: The database needs to be updated
-                  so that information can be retrieved about the new types
-                  of sensors and the new types of data. Data related to the
-                  displaying of sensor data will also need to be updated.
-            \item \emph{PluggableDeviceConverter}: see above.
-        \end{itemize}
+        \paragraph{M1: Handling new types of pluggable devices}
+            The new types of sensor or actuator data should be transmitted,
+            processed and stored, and should be made available to applications.
+            The infrastructure managers must be able to initialize the new type
+            of pluggable device, configure access rights for these devices, and
+            view detailed information about the new type of pluggable device. \\
+            The components created thus far have been created with high cohesion in
+            mind so that updating them for new devices would be relatively straightforward.
+            In order for this constraint to be satisfied, changes have to be made to
+            the following elements:
+            \begin{itemize}
+                \item \emph{PluggableDevice}: This component needs to be updated
+                      so that the new type of device can be initialised and configured,
+                      and thus so that the device's data can be sent to the system.
+                \item \emph{DeviceData}: Depending on how this data type
+                      is implemented, it might need an update in order for it
+                      to represent possible new data types (for example
+                      Temperature Filipcikova) and for the new data types to be
+                      serialized.
+                \item \emph{PluggableDeviceDataDB}: The database needs to be updated
+                      so that information can be retrieved about the new types
+                      of sensors and the new types of data. Data related to the
+                      displaying of sensor data will also need to be updated.
+                \item \emph{PluggableDeviceConverter}: see above.
+            \end{itemize}
 
     \subsection*{Considered Alternatives}
-    \paragraph{Alternative(s) for choice 1} Explain what alternative(s) you
-    considered for this design choice and why they where not selected.
+        \paragraph{Alternative(s) for choice 1} Explain what alternative(s) you
+        considered for this design choice and why they where not selected.
 
     \subsection*{Deployment Decisions}
-    \ldots
+        \ldots
 
     \subsection*{Considered Deployment Alternatives}
-    \ldots
-
+        \ldots
