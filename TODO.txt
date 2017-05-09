@@ -10,12 +10,27 @@ Find methods that change state but have missing parameters
 Check methods with applicationID
 move new methods from decomposition 3
 move new methods from decomposition 8
+activateApplication ?
+"need this check? is 'initialized' status stored in DB or on gateways? or both?"
 
+gateway registers with online service:
+    % GatewayFacade -> DeviceDB: interface DeviceMgmt: registerGateway(int gatewayID, IPAddress address)
+    %     Effect: Sets a gateway's status to 'active' and updates its IP address
+    %     \item Created for: U2 - gateway installation
+    
+    TODO: gateway is added in the infrastructure owners topology as 'unplaced'.
+          it will be visible to the infrastructure owner after the gateway connects and registers with the online service
+
+Av1: Interfaces between brokers?
+     => Broker is something else, fuck the book
 Broker -> CommunicationHandler: handles communication by remote method invocation
                                 still not message queue or pulish subscribe
 
+Av2: up time?
 Av2: up-time => passive replication
 
+P1: for replication of components, do we need to add routing or can we just add this in the rationale?
+    => complicated
 P1: ??? => active replication + load balancing? how many new components to handle all of this?
 
 Different notify methods to know the trigger and put in other data maybe. => If no time, put in discussion
@@ -54,33 +69,3 @@ In rationale somehwere:
         *) UC22, U1: Upgrading an application
         *) UC26, UC27, UC12: Sending actuation commands via a mobile app
     6. Element catalog and datatypes:
-
-==========================================================================
-================================ QUESTIONS ===============================
-==========================================================================
-
-Interfaces: What's the point of exceptions? Do we use them for alternative scenario's? Like "not found exception"
-    -> not mandatory, but data flow should be clear for the alternative scenarios in use cases
-
-Package or component in diagram for Gateway, Online Service, ...?
-    -> both are ok, both make it clear that we separate the components in groups
-    -> components could be used for decomposition diagram
-
-Where to create the actual db queries?
-    -> not necessary at this level of abstraction, send the parameters along and make
-       it clear what you want from the query. In the actual implementation, the query
-       will probably be formed before it reached the DB.
-
-Av2: up time?
-P1: for replication of components, do we need to add routing or can we just add this in the rationale?
-    => complicated
-
-Av1: Interfaces between brokers?
-     => Broker is something else, fuck the book
-
-For report:
-    How to rotate page for image in latex?
-        => pdflscape => begin{landscape} end{landscape}
-        => sideways
-    How to make interface names transparent?
-        => nobody knows?????????
