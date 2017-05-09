@@ -8,148 +8,92 @@
         \item \emph{UC23}: Consult application statistics
     \end{itemize}
 
-    UC22:
-        1. The primary actor indicates that he/she wants to upload an application.
-            IN CLIENT
+    % UC22:
+    %     1. The primary actor indicates that he/she wants to upload an application.
+    %         IN CLIENT
+    %
+    %     2. The system asks the primary actor if he/she wants to update an existing application.
+    %         IN CLIENT
+    %
+    %     3. The primary actor provides his/her choice.
+    %
+    %         IN CLIENT
+    %
+    %     4. If the primary actor indicated that he/she wants to update an existing application,
+    %        the system composes an overview of applications uploaded by the primary actor
+    %        (e.g., as a list or table), presents this, and requests the primary actor to indicate which application to update.
+    %
+    %         ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: List<Application> getApplicationsOfApplicationProvider(int applicationProviderID)
+    %         ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: List<Application> getApplicationsOfApplicationProvider(int applicationProviderID)
+    %         ApplicationManager -> OtherDataDB: interface DBAppMgmt: List<Application> getApplicationsOfApplicationProvider(int applicationProviderID)
+    %
+    %     5. The primary actor chooses the application to be updated.
+    %         IN CLIENT
+    %
+    %     6. The system asks the primary actor if this is an update that should be automatically activated for existing subscriptions.
+    %         IN CLIENT
+    %
+    %     7. The primary actor provides his/her choice.
+    %         IN CLIENT
+    %
+    %     8. If the primary actor has indicated that existing subscriptions should be automatically updated, the system requests the versions (or range of versions) that should be automatically updated.
+    %         IN CLIENT
+    %
+    %     9. The primary actor provides the requested information.
+    %         IN CLIENT
+    %
+    %     10. The system asks the primary actor to upload the application code, a description for display to customer organisations, and meta-data (such as the version number and subscription price).
+    %         IN CLIENT
+    %
+    %     11. The primary actor uploads the requested information.
+    %         ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: void uploadApplication(int applicationProviderID, ApplicationCode code, string description, Map<string, string> metaData, List<Version> versionsToUpdate)
+    %         ApplicationProviderFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void uploadApplication(int applicationProviderID, ApplicationCode code, string description, Map<string, string> metaData, List<Version> versionsToUpdate)
+    %         ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: int createNewApplication(int applicationProviderID, ApplicationCode code, string description, Map<string, string> metaData, List<Version> versionsToUpdate)
+    %
+    %     12. The system performs automated application checks.
+    %
+    %         ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void testApplication(int applicationID, ApplicationCode code)
+    %
+    %     13. If the checks were successful, the system sends a notification to the primary actor (Include: UC15 : Send notification).
+    %
+    %         ApplicationContainerManager -> ApplicationManagementLogic: interface ApplicationTesting: void applicationTestsSuccessful(int applicationID)
+    %         ApplicationContainerManager-> ApplicationManagementLogic: interface ApplicationTesting: void applicationTestsUnsuccessful(int applicationID)
+    %
+    %         ApplicationManageMentLogic -> NotificationHandler: interface Notify: notify(int userID) app provider
+    %         ApplicationManageMentLogic -> NotificationHandler: interface Notify: notify(int userID) sys admin
+    %
+    %     14. The system makes the application available in the application store. In case of an updated application, it replaces the previous versions of the application.
+    %
+    %         ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void updateApplicationAvailable(int applicationID)
+    %
+    %     15. In case of an updated application that should automatically be activated for existing subscriptions (cf. step 6),
+    %         the system updates the existing subscriptions of the application to the new version (Include: UC17 : Activate an application).
+    %
+    %         ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: List<int> getApplicationInstancesToUpdate(int applicationID)
+    %         ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: ApplicationCode getApplicationCode(int applicationID)
+    %         ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void updateApplicationInstances(List<int> applicationInstanceIDs, ApplicationCode code)
+    %         ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void updateApplicationInstancesOfApplication(int applicationID)
+    %
+    %     ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void createApplicationInstance(ApplicationInstance instance, ApplicationCode code)
 
-        2. The system asks the primary actor if he/she wants to update an existing application.
-            IN CLIENT
-
-        3. The primary actor provides his/her choice.
-
-            IN CLIENT
-
-        4. If the primary actor indicated that he/she wants to update an existing application,
-           the system composes an overview of applications uploaded by the primary actor
-           (e.g., as a list or table), presents this, and requests the primary actor to indicate which application to update.
-
-            ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: List<Appliction> getApplicationsOfApplicationProvider(int applicationProviderID)
-                Effect: Returns a list of applications uploaded by an application provider.
-                \item Created for: UC22.4
-
-            ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: List<Application> getApplicationsOfApplicationProvider(int applicationProviderID)
-                Effect: Returns a list of applications uploaded by an application provider.
-                \item Created for: UC22.4
-
-            ApplicationManager -> OtherDataDB: interface DBAppMgmt: List<Application> getApplicationsOfApplicationProvider(int applicationProviderID)
-                Effect: Returns a list of applications uploaded by an application provider.
-                \item Created for: UC22.4
-
-
-        5. The primary actor chooses the application to be updated.
-            IN CLIENT
-
-        6. The system asks the primary actor if this is an update that should be automatically activated for existing subscriptions.
-            IN CLIENT
-
-        7. The primary actor provides his/her choice.
-            IN CLIENT
-
-        8. If the primary actor has indicated that existing subscriptions should be automatically updated, the system requests the versions (or range of versions) that should be automatically updated.
-            IN CLIENT
-
-        9. The primary actor provides the requested information.
-            IN CLIENT
-
-        10. The system asks the primary actor to upload the application code, a description for display to customer organisations, and meta-data (such as the version number and subscription price).
-            IN CLIENT
-
-        11. The primary actor uploads the requested information.
-            ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: void uploadApplication(int applicationProviderID, ApplicationCode code, string description, Map<string, string> metaData, List<Version> versionsToUpdate)
-                Effect: Uploads an application to the system. 'versionsToUpdate' denotes which versions of the application should be automatically updated. If the application is new, this list is empty.
-                \item Created for: UC22
-
-            ApplicationProviderFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void uploadApplication(int applicationProviderID, ApplicationCode code, string description, Map<string, string> metaData, List<Version> versionsToUpdate)
-                Effect: Uploads an application to the system. 'versionsToUpdate' denotes which versions of the application should be automatically updated. If the application is new, this list is empty.
-                \item Created for: UC22
-
-            ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: int createNewApplication(int applicationProviderID, ApplicationCode code, string description, Map<string, string> metaData, List<Version> versionsToUpdate)
-                Effect: Uploads an Application to the system. 'versionsToUpdate' denotes which versions of the application should be automatically updated. If the application is new, this list is empty. \\
-                        This does not make the application available or update the other versions yet. That is done only after testing of the Application is successful. \\
-                        Returns the Application's ID.
-                \item Created for: UC22
-
-        12. The system performs automated application checks.
-
-            ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void testApplication(int applicationID, ApplicationCode code)
-                Effect: Starts the automated application checks for an application.
-                \item Created for: UC22.12
-
-        13. If the checks were successful, the system sends a notification to the primary actor (Include: UC15 : Send notification).
-
-            ApplicationContainerManager -> ApplicationManagementLogic: interface ApplicationTesting: void applicationTestsSuccessful(int applicationID)
-                Effect: Lets the ApplicationManagementLogic know the automatic application checks were successful.
-                \item Created for: UC22.13
-
-            ApplicationContainerManager-> ApplicationManagementLogic: interface ApplicationTesting: void applicationTestsUnsuccessful(int applicationID)
-                Effect: Lets the ApplicationManagementLogic know the automatic application checks were not successful.
-                \item Created for: UC22.13
-
-            ApplicationManageMentLogic -> NotificationHandler: interface Notify: notify(int userID) app provider
-            ApplicationManageMentLogic -> NotificationHandler: interface Notify: notify(int userID) sys admin
-
-        14. The system makes the application available in the application store. In case of an updated application, it replaces the previous versions of the application.
-
-            ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void updateApplicationAvailable(int applicationID)
-                Effect: Makes an application in the system available in the application store.
-                \item Created for: UC22.14
-
-        15. In case of an updated application that should automatically be activated for existing subscriptions (cf. step 6),
-            the system updates the existing subscriptions of the application to the new version (Include: UC17 : Activate an application).
-
-            ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: List<int> getApplicationInstancesToUpdate(int applicationID)
-                Effect: Returns a list of application instances that would need to be updated because of a certain updated application.
-                \item Created for: UC22.15
-
-            ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: ApplicationCode getApplicationCode(int applicationID)
-                Effect: Returns an application's code.
-
-            ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void updateApplicationInstances(List<int> applicationInstanceIDs, ApplicationCode code)
-                Effect: Updates ApplicationInstance's to a new version.
-                \item Created for: UC22.15
-
-            ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void updateApplicationInstancesOfApplication(int applicationID)
-                Effect: Updates the version of a list of application instances that need to be updated because of a certain application update. The application instances to update is found in the data provided when the application was uploaded.
-                \item Created for: UC22.15
-
-        ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void createApplicationInstance(ApplicationInstance instance, ApplicationCode code)
-            Effect: Creates a new ApplicationContainer to run an instance of an application.
-
-        Check other createApplicationInstance text
-
-
-    UC23:
-        1. The primary actor indicates that he/she wants to an overview of uploaded applications.
-
-            ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: Map<Applications, Map<string, string>> getApplicationsWithStatsForApplicationProvider(int applicationProviderID)
-                Effect: Returns a list of applications uploaded by the application provider and some information about those applications. e.g. the amount of subscribers
-                \item Created for: UC23.1
-
-        2. The system retrieves all applications uploaded by the primary actor, and information about the amount of subscribers for that application. It presents this overview to the primary actor.
-
-            ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: Map<Applications, Map<string, string>> getApplicationsWithStatsForApplicationProvider(int applicationProviderID)
-                Effect: Returns a list of applications uploaded by the application provider and some information about those applications. e.g. the amount of subscribers
-                \item Created for: UC23.2
-
-            ApplicationManager -> OtherDataDB: interface DBAppMgmt: Map<Applications, Map<string, string>> getApplicationsWithStatsForApplicationProvider(int applicationProviderID)
-                Effect: Returns a list of applications uploaded by the application provider and some information about those applications. e.g. the amount of subscribers
-                \item Created for: UC23.2
-
-        3. The primary actor selects an application.
-
-            ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: Map<string, string> getApplicationDetailedStats(int applicationProvicedID, int applicationID)
-                Effect: Returns detailed statistics about an application provider's application. If the application is unapproved, the details include the reason.
-                \item Created for: UC23.3
-
-        4. If the selected application is an approved application, the system presents detailed statistics including the amount of subscribers.
-
-            ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: Map<string, string> getApplicationDetailedStats(int applicationID)
-                Effect: Returns detailed statistics about an application provider's application. If the application is unapproved, the details include the reason.
-                \item Created for: UC23.4
-
-            ApplicationManager -> OtherDataDB: interface DBAppMgmt: Map<string, string> getApplicationDetailedStats(int applicationID)
-                Effect: Returns detailed statistics about an application provider's application. If the application is unapproved, the details include the reason.
-                \item Created for: UC23.4
+    % UC23:
+    %     1. The primary actor indicates that he/she wants to an overview of uploaded applications.
+    %
+    %         ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: Map<Applications, Map<string, string>> getApplicationsWithStatsForApplicationProvider(int applicationProviderID)
+    %
+    %     2. The system retrieves all applications uploaded by the primary actor, and information about the amount of subscribers for that application. It presents this overview to the primary actor.
+    %
+    %         ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: Map<Applications, Map<string, string>> getApplicationsWithStatsForApplicationProvider(int applicationProviderID)
+    %         ApplicationManager -> OtherDataDB: interface DBAppMgmt: Map<Applications, Map<string, string>> getApplicationsWithStatsForApplicationProvider(int applicationProviderID)
+    %
+    %     3. The primary actor selects an application.
+    %
+    %         ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: Map<string, string> getApplicationDetailedStats(int applicationProviderID, int applicationID)
+    %
+    %     4. If the selected application is an approved application, the system presents detailed statistics including the amount of subscribers.
+    %
+    %         ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: Map<string, string> getApplicationDetailedStats(int applicationID)
+    %         ApplicationManager -> OtherDataDB: interface DBAppMgmt: Map<string, string> getApplicationDetailedStats(int applicationID)
 
 
 \subsection*{Interfaces for child modules}
