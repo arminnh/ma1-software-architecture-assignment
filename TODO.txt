@@ -8,10 +8,7 @@ In decompositions 1, 2, and 3, check decisions important for deployment and add 
 
 Find methods that change state but have missing parameters
 
-Av1: Interfaces between brokers?
-     => Broker is something else, fuck the book
-Broker -> CommunicationHandler: handles communication by remote method invocation
-                                still not message queue or pulish subscribe
+Broker -> CommunicationHandler in texts
 
 Av2: up time?
 Av2: up-time => passive replication
