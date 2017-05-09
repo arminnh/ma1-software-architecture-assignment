@@ -25,24 +25,12 @@
     %     1. The primary actor indicates he or she want to log in to the system and provides authentication credentials, for example a user name and password.
     %
     %         ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Authentication: string login(Map<string, string> credentials)
-    %             Effect: Verifies the provided authentication credentials. If everything is correct, logs the user in, creates a unique session, and returns the session's ID. \\
-    %                     Returns an empty string if the provided credentials are incorrect.
-    %             \item Created for: UC28.1
     %
     %     2. The system veries the provided authentication credentials.
     %
     %         RegisteredUserFacade -> AuthenticationManager: interface Authentication: string login(Map<string, string> credentials)
-    %             Effect: Verifies the provided authentication credentials. If everything is correct, logs the user in, creates a unique session, and returns the session's ID. \\
-    %                     Returns an empty string if the provided credentials are incorrect.
-    %             \item Created for: UC28.2
-    %
     %         AuthenticationManager -> OtherDataDB: interface Authentication: boolean verifyAuthenticationCredentials(Map<string, string> credentials)
-    %             Effect: Returns true if the provided authentication credentials are correct.
-    %             \item Created for: UC28.2
-    %
-    %         AuthenticationManager -> SessionDB: interface Authentication: string createNewSession(int useID)
-    %             Effect: Returns the ID of a new login session for a certain user.
-    %             \item Created for: UC28.2
+    %         AuthenticationManager -> SessionDB: interface Sessions: string createNewSession(int useID)
     %
     %     3. If the provided credentials are correct, the system confirms successful login to the primary actor and logs him or her in.
     %         => return value of login
@@ -54,30 +42,15 @@
     %     1. The primary actor indicates he or she wants to log out of the system.
     %
     %         ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Authentication: boolean logout(string sessionID)
-    %             Effect: If a session with the given sessionID exists, logs the user out and returns true.
-    %             \item Created for: UC29.1
     %
     %     2. The system logs the primary actor out and indicates success to the primary actor.
     %
     %         RegisteredUserFacade -> AuthenticationManager: interface Authentication: boolean logout(string sessionID)
-    %             Effect: If a session with the given sessionID exists, logs the user out and returns true.
-    %             \item Created for: UC29.1
-    %
-    %         AuthenticationManager -> SessionDB: interface Authentication: boolean deleteSession(string sessionID)
-    %             Effect: If a session with the given sessionID exists, deletes the session and returns true.
-    %             \item Created for: UC29.1
+    %         AuthenticationManager -> SessionDB: interface Sessions: boolean deleteSession(string sessionID)
 
     % ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Authentication: boolean doesSessionExist(string sessionID)
-    %     Effect: Returns true if a session with the given sessionID exists.
-    %     \item Created for: UC28
-    %
     % RegisteredUserFacade -> AuthenticationManager: interface Authentication: boolean doesSessionExist(string sessionID)
-    %     Effect: Returns true if a session with the given sessionID exists.
-    %     \item Created for: UC28
-    %
-    % AuthenticationManager -> SessionDB: interface Authentication: boolean doesSessionExist(string sessionID)
-    %     Effect: Returns true if a session with the given sessionID exists.
-    %     \item Created for: UC28
+    % AuthenticationManager -> SessionDB: interface Sessions: boolean doesSessionExist(string sessionID)
 
 \subsection{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions
@@ -133,7 +106,7 @@
 
     \subsubsection{SessionDB}
         \begin{itemize}
-            \item Authentication
+            \item Sessions
         \end{itemize}
 
     \subsubsection{SystemAdministratorFacade}

@@ -10,18 +10,18 @@
 
     UC22:
         1. The primary actor indicates that he/she wants to upload an application.
-
-            TODO
+            IN CLIENT
 
         2. The system asks the primary actor if he/she wants to update an existing application.
-
-
+            IN CLIENT
 
         3. The primary actor provides his/her choice.
 
             TODO
 
-        4. If the primary actor indicated that he/she wants to update an existing application, the system composes an overview of applications uploaded by the primary actor (e.g., as a list or table), presents this, and requests the primary actor to indicate which application to update.
+        4. If the primary actor indicated that he/she wants to update an existing application,
+           the system composes an overview of applications uploaded by the primary actor
+           (e.g., as a list or table), presents this, and requests the primary actor to indicate which application to update.
 
             ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests:
                                                 List<Application> getApplicationsForAppProvider(int appProviderID)
