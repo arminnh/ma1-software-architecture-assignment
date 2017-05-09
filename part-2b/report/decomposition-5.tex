@@ -129,47 +129,47 @@
                     void getPercentageOfUnreachableGateways()
 
 
-    In BROKER, many clients can make remote method invocations on
-    specific remote component objects hosted by a server. Clients thus
-    communicate with the server objects in a many-to-one fashion, and
-    their functional interfaces are often statically typed. The remote
-    method invocation style of communication provided by B ROKER is
-    best suited for systems that try to hide the presence of the network.
+    % In BROKER, many clients can make remote method invocations on
+    % specific remote component objects hosted by a server. Clients thus
+    % communicate with the server objects in a many-to-one fashion, and
+    % their functional interfaces are often statically typed. The remote
+    % method invocation style of communication provided by B ROKER is
+    % best suited for systems that try to hide the presence of the network.
+    %
+    % MESSAGING relaxes this coupling and typing: clients send dynamically
+    % typed messages to specific remote services that reside at commu-
+    % nication endpoints, not (necessarily) to specific methods. M ESSAGING
+    % thus enables many-to-one communication without statically pre-
+    % defining the interface dependencies of clients to services.Distribution Infrastructure
+    %
+    % PUBLISHER-SUBSCRIBER decouples an application’s components even
+    % more: they can exchange events in a one-to-many manner with-
+    % out knowing one another’s identity explicitly, and without having
+    % to make a request each time new events are available. P UBLISHER -
+    % S UBSCRIBER middleware is therefore responsible for tracking which
+    % subscribers receive specific events sent asynchronously by pub-
+    % lishers. Subscribers react when receiving an event by performing
+    % some action, but publishers do not directly initiate the execution of
+    % a specific method on the subscribers.
+    %
+    % BROKER makes invocations
+    % on remote component objects look and act as much as possible
+    % like invocations on component objects in the same address space
+    % as their clients. MESSAGING and PUBLISHER-SUBSCRIBER are most appropriate
+    % for integration scenarios in which multiple, independently
+    % developed and self-contained services or applications must collaborate
+    % and form a coherent software system.
+    %
+    % A message channel does not come without cost, however, since it
+    % needs memory, networking resources, and persistent storage to support
+    % GUARANTEED DELIVERY [HoWo03]. Developers must therefore plan
+    % and configure the number and types of message channels explicitly
+    % and thoughtfully to ensure the desired quality of service in a given
+    % system deployment. A well-designed set of message channels forms a
+    % MESSAGE BUS [HoWo03] that acts like a messaging API for the clients
+    % and services in the distributed system.
 
-    MESSAGING relaxes this coupling and typing: clients send dynamically
-    typed messages to specific remote services that reside at commu-
-    nication endpoints, not (necessarily) to specific methods. M ESSAGING
-    thus enables many-to-one communication without statically pre-
-    defining the interface dependencies of clients to services.Distribution Infrastructure
-
-    PUBLISHER-SUBSCRIBER decouples an application’s components even
-    more: they can exchange events in a one-to-many manner with-
-    out knowing one another’s identity explicitly, and without having
-    to make a request each time new events are available. P UBLISHER -
-    S UBSCRIBER middleware is therefore responsible for tracking which
-    subscribers receive specific events sent asynchronously by pub-
-    lishers. Subscribers react when receiving an event by performing
-    some action, but publishers do not directly initiate the execution of
-    a specific method on the subscribers.
-
-    BROKER makes invocations
-    on remote component objects look and act as much as possible
-    like invocations on component objects in the same address space
-    as their clients. MESSAGING and PUBLISHER-SUBSCRIBER are most appropriate
-    for integration scenarios in which multiple, independently
-    developed and self-contained services or applications must collaborate
-    and form a coherent software system.
-
-    A message channel does not come without cost, however, since it
-    needs memory, networking resources, and persistent storage to support
-    GUARANTEED DELIVERY [HoWo03]. Developers must therefore plan
-    and configure the number and types of message channels explicitly
-    and thoughtfully to ensure the desired quality of service in a given
-    system deployment. A well-designed set of message channels forms a
-    MESSAGE BUS [HoWo03] that acts like a messaging API for the clients
-    and services in the distributed system.
-
-    Employed tactics and patterns: broker, heartbeat, ping/echo
+    % Employed tactics and patterns: broker, heartbeat, ping/echo
 
     DEPLOYMENT RATIONALE:
         OnlineServiceBroker

@@ -1,19 +1,15 @@
 \section{M1: Integrate new sensor or actuator manufacturer}
 
-    \todoinline{Use this section structure for each requirement}
-
     \subsection*{Key Decisions}
 
-    \todoinline{
-    	Briefly list your key architectural decisions.
-    	Pay attention to the solutions that you employed (in your own terms or using tactics and/or patterns).
-    }
-
     \begin{itemize}
-    	\item decision 1
-    	\item \ldots
+    	\item Modifiability is maintained by splitting up functionality that would need to be updated
+              when new pluggable devices are introduced to the system into different components.
+        \item In interfaces, pluggable devices are only referred to by their unique PluggableDeviceID,
+              types and other device info is left out of parameter lists.
+              
     \end{itemize}
-    \emph{Employed tactics and patterns:} \ldots
+    \emph{Employed tactics and patterns:} None
 
     \subsection*{Rationale}
         \paragraph{M1: Data conversion}

@@ -13,19 +13,27 @@
 \newpage
 \input{decision-p1}
 \newpage
+\input{decision-p2}
+\newpage
 \input{decision-u2}
 
 \section{Other decisions}
-    \todoinline{
-        \emph{Optional} If you have made any other important architectural decisions that do not directly fit in the sections of the other qualities you can mention them here.
-        Follow the same structure as above.
-    }
+
     \subsection{Decision 1}
         \subsubsection*{KeyDecisions}
             \ldots
 
         \subsubsection*{Rationale}
-            \ldots
+            Sessions are used to check whether or not a user is currently logged in.
+            On successful login, a new session is created and stored in the SessionDB with a unqiue sessionID which is
+            returned to the front end. The client then sends this sessionID in future requests to represent that the user
+            is logged in.
+            A database is used for checking the sessions, so that replication can be done on components that handle front
+            end requests. If the session was stored in files, this would add extra overhead to keep all replica’s that store
+            session files consistent.
+            It is easier to do this using a database.
+            Also, a separate database is used to not
+            add a lot of extra requests for sessions to another database.
 
         \subsubsection*{Considered Alternatives}
             \ldots
@@ -47,4 +55,5 @@
     Nothing about application state -> maybe could force app developers to add a procedure to save application state so that we could save this and reload that state later.\\
     Very high coupling for ApplicationManager\\
     Something about Modifiability problems we didn't think about.\\
-    Too much communication between gateways and online service
+    Too much communication between gateways and online service\\
+    DeviceManager should maybe be decomposed to show how device connectivity is being tracked and how application usage/requirement data is stored.
