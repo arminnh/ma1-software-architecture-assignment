@@ -1,4 +1,4 @@
-%%% element catalog, generated on Tue May 09 20:44:56 CEST 2017
+%%% element catalog, generated on Tue May 09 20:56:28 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -2334,6 +2334,11 @@ Otherwise, returns false.
            \item Effect: Adds a new pluggable device to the topology of the infrastructure owner and links it to a mote. The device gets the mote's location by default. If the device is already linked to another mote, overwrites that link.
 \item Created for: UC6.3, U2 - easy pluggable device installation
         \end{itemize}
+      \item \textsf{void addGateway(int gatewayID, int infrastructureOwnerID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Adds a gateway to a topology of an infrastructure owner. The gateway status 'unplaced' by default.
+\item Created for: U2 - gateway installation
+        \end{itemize}
       \item \textsf{void addMote(int moteID, int gatewayID, int infrastructureOwnerID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Adds a new mote to a topology of an infrastructure owner. The mote is linked to a gateway and gets status 'unplaced' by default.
@@ -2343,6 +2348,11 @@ Otherwise, returns false.
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns true if all pluggable devices in the given list have status 'placed' in the topology.
 \item Created for: UC17.2, U2 - easy applications
+        \end{itemize}
+      \item \textsf{void deactivateGateway(int gatewayID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Changes the status of a gateway in the topology to 'inactive'.
+\item Created for: U2 - gateway installation
         \end{itemize}
       \item \textsf{void deactivateMote(int moteID)}
         \begin{itemize}[noitemsep,nolistsep]
