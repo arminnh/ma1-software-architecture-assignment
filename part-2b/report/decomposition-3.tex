@@ -462,13 +462,13 @@
         %     10. The system asks the primary actor if this application should be considered a critical application (cf. P2 : Requests to the pluggable data database).
         %             CustomerOrganisationClient moves to the next page = form asking for criticality of app
         %
-        %     11. The primary actor indicates the criticality of the application.
-        %             CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateCriticality(int applicationInstanceID, bool isCritical)
+        %     11. The primary actor indicates the criticality of the application. TODO update descriptions
+        %             CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID, bool isCritical)
         %                 Effect: Updates the criticality of an ApplicationInstance.
         %                 \item Created for: UC19.11, U2 - easy applications
         %
         %     12. The system registers the subscription and criticality of the application.
-        %             CustomerOrganisationFacade -> SubscriptionManager:        interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID)
+        %             CustomerOrganisationFacade -> SubscriptionManager:        interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID,bool isCritical)
         %                 Effect: Creates a subscription for a customer organisation to an ApplicationInstance. If the customer organisation is already subscribed to an older version of the the application, then the organisation is unsubscribed from that earlier version.
         %                 \item Created for: UC19.12-13, U2 - easy applications
         %             SubscriptionManager -> OtherDataDB:                       interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID)
