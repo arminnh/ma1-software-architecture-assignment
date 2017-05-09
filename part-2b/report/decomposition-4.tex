@@ -1,7 +1,7 @@
 \section{Decomposition 4: Av2, UC12, UC25, UC26, UC27 (application execution subsystem)}
 
 
-\subsection{Selected architectural drivers}
+\subsection*{Selected architectural drivers}
     The non-functional drivers for this decomposition are:
     \begin{itemize}
     	\item \emph{Av2}: Application failure
@@ -25,7 +25,7 @@
         that are going to be changed in the decomposition.
 
 
-\subsection{Architectural design}
+\subsection*{Architectural design}
     This section describes what needs to be done to satisfy the requirements for
     this decomposition and how involved problems/obstacles are solved. \\
     If you read this, you are cool!
@@ -360,24 +360,24 @@
     %         message is for ApplicationClient:
     %             ApplicationManagementLogic: Open socket (host and port are given) -> send message -> close socket
 
-\subsection{Instantiation and allocation of functionality}
+\subsection*{Instantiation and allocation of functionality}
     This section lists the new components which instantiate our solutions
     described in the section above. For each component we note the quality
     attribute or use case that prompted us to create it. Descriptions about
     the components can be found under chapter \ref{ch:elements-datatypes}. \\
 
     \begin{itemize}
-        \item Component: ApplicationClient
-        \item Component: ApplicationContainer
-        \item Component: ApplicationContainerManager
-        \item Component: ApplicationContainerMonitor
-        \item Component: ApplicationExecutionSubsystemMonitor
-        \item Component: ApplicationFacade
-        \item Component: ApplicationManagementLogic
-        \item Component: DeviceCommandConstructor
+        \item ApplicationClient, Av2, UC12, UC13, UC24, UC25, UC26
+        \item ApplicationContainer, Av2, UC12, UC13, UC24, UC25, UC26, UC27
+        \item ApplicationContainerManager, Av2, UC12, UC13, UC24, UC25, UC26, UC27
+        \item ApplicationContainerMonitor, Av2, UC27
+        \item ApplicationExecutionSubsystemMonitor, Av2
+        \item ApplicationFacade, Av2, UC12, UC13, UC24, UC25, UC26
+        \item ApplicationManagementLogic, Av2, UC12, UC13, UC24, UC25, UC26
+        \item DeviceCommandConstructor, Av2, UC12, UC13
     \end{itemize}
 
-\subsection{Interfaces for child modules}
+\subsection*{Interfaces for child modules}
     This section lists new interfaces assigned to the components defined
     in the section above. Detailed information about each interface and
     its methods can be found under chapter \ref{ch:elements-datatypes}.
@@ -434,7 +434,7 @@
         \end{itemize}
 
 
-\subsection{New data types}
+\subsection*{New data types}
     This section lists the new data types introduced during this decomposition.
 
     \begin{itemize}
