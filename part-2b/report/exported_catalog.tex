@@ -1,4 +1,4 @@
-%%% element catalog, generated on Tue May 09 11:49:53 CEST 2017
+%%% element catalog, generated on Tue May 09 19:34:11 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -865,9 +865,9 @@ Returns an empty string if the provided credentials are incorrect.
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerDeviceCommandConstructor}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
-      \item \textsf{Map\textless{}\ref{data:DataTypesPluggableDeviceID}, string\textgreater{} getFormattingSyntaxForDevices(List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices)}
+      \item \textsf{Map\textless{}{\colorbox{red!30}{\underline{DataTypesPluggableDeviceID}}}, string\textgreater{} getFormattingSyntaxForDevices(List\textless{}{\colorbox{red!30}{\underline{DataTypesPluggableDeviceID}}}\textgreater{} devices)}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Retrieves the specific formatting syntax for a list of pluggable devices.
+           \item Effect: Effect: Retrieves the specific formatting syntax for a list of pluggable devices.
 \item Created for: UC12.2-3
         \end{itemize}
       \item \textsf{Map\textless{}\ref{data:DataTypesPluggableDeviceID}, \ref{data:DataTypesGatewayInfo}\textgreater{} getGatewaysForDevices(List\textless{}\ref{data:DataTypesPluggableDeviceID}\textgreater{} devices)}
@@ -895,9 +895,9 @@ Returns an empty string if the provided credentials are incorrect.
            \item Effect: Sets an \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}}'s status in the \vpett{\nameref{comp:OtherDataDatabaseOtherDataDB}} to 'active'.
 \item Created for: UC17.4, U2 - easy applications
         \end{itemize}
-      \item \textsf{int createNewApplicationInstance(int custOrgID, int applicationID)}
+      \item \textsf{int createApplicationInstance(int custOrgID, int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Creates a new \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}} for an application for a customer organisation and returns its id.
+           \item Effect: Creates a new \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}} for an application for a customer organisation and returns its id. The \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}} gets status 'inactive', since it will be activated after a subscription is completed.
 \item Created for: UC19.4, U2 - easy applications
         \end{itemize}
       \item \textsf{\ref{data:DataTypesGatewayInfo} getApplicationIstanceGateway()}
@@ -1535,9 +1535,9 @@ to the mote.
            \item Effect: Checks and deactivates ApplicationInstances which require deactivation. The applications checked are those that are subscribed to by customers organisations associated to the given infrastructure owner.
 \item Created for: UC10.5c
         \end{itemize}
-      \item \textsf{int createNewApplicationInstance(int custOrgID, int applicationID)}
+      \item \textsf{int createApplicationInstance(int custOrgID, int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Creates a new \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}} for an application for a customer organisation and returns its id.
+           \item Effect: Creates a new \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}} for an application for a customer organisation and returns its id. The \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}} gets status 'inactive', since it will be activated after a subscription is completed.
 \item Created for: UC19.4, U2 - easy applications
         \end{itemize}
       \item \textsf{void destroyApplicationInstance(int applicationInstanceID)}
@@ -2080,10 +2080,33 @@ Otherwise, returns false.
            \item Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
 \item Created for: UC19.1, U2 - easy applications
         \end{itemize}
+      \item \textsf{List\textless{}\ref{data:DataTypesUser}\textgreater{} getEndUsers(int  custOrgID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: {\colorbox{red!30}{\underline{Undefined}}}
+        \end{itemize}
+      \item \textsf{List\textless{}\ref{data:DataTypesUserRole}\textgreater{} getMandatoryUserRoles(int applicationID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: {\colorbox{red!30}{\underline{Undefined}}}
+        \end{itemize}
+      \item \textsf{List\textless{}\ref{data:DataTypesRoomTopology}\textgreater{} getNecessaryDevicesAndTopologyConfigurations(int applicationID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
+\item Created for: UC19.5, U2 - easy applications
+        \end{itemize}
       \item \textsf{List\textless{}\ref{data:DataTypesSubscription}\textgreater{} getSubscriptions(int customerOrganisationID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of the subscriptions of a customer organisation.
 \item Created for: UC20.1
+        \end{itemize}
+      \item \textsf{List\textless{}\ref{data:DataTypesRoomTopology}\textgreater{} getTopologyOfCustomerOrganisation(int custOrgID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns a list of RoomTopology associated to a customer organisation.
+\item Created for: UC19.5, U2 - easy applications
+        \end{itemize}
+      \item \textsf{void registerSubscriptionAndUpdateCriticality(int applicationInstanceID, boolean isCritical, int custOrgID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Registers a new subscription and updates the criticality of an \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}}.
+\item Created for: UC19.11-12, U2 - easy applications
         \end{itemize}
       \item \textsf{int subscribeToApplication(int custOrgID, int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
@@ -2099,11 +2122,6 @@ Otherwise, returns false.
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Updates an \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}}'s device settings. This includes which devices the instance can use and which relationships exist between those devices.
 \item Created for: UC19.6, U2 - easy applications
-        \end{itemize}
-      \item \textsf{void updateCriticality(int applicationInstanceID, boolean isCritical)}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Updates the criticality of an \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}}.
-\item Created for: UC19.11, U2 - easy applications
         \end{itemize}
       \item \textsf{void updateUserRoles(int applicationInstanceID, Map\textless{}int, int\textgreater{} usersAndRoles)}
         \begin{itemize}[noitemsep,nolistsep]
@@ -2129,6 +2147,10 @@ Otherwise, returns false.
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
 \item Created for: UC19.2, U2 - easy applications
+        \end{itemize}
+      \item \textsf{Map\textless{}\ref{data:DataTypesApplication}, \ref{data:DataTypesSubscription}\textgreater{} getApplicationsToSubscribe(int custOrgID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: {\colorbox{red!30}{\underline{Undefined}}}
         \end{itemize}
       \item \textsf{List\textless{}\ref{data:DataTypesSubscription}\textgreater{} getSubscriptions(int customerOrganisationID)}
         \begin{itemize}[noitemsep,nolistsep]
