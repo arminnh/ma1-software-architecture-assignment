@@ -10,85 +10,47 @@
                   checks or makes the \texttt{ApplicationManagementLogic} check and activate\\deactivate
                   specific applications.
         \end{itemize}
-        \emph{Employed tactics and patterns:} \ldots
 
     \subsection*{Rationale}
-        \paragraph{U2: Gateway installation}
-            The gateway should not require any configuration, other than being connected
-            to the local wired or WiFi network, after it is plugged into an electrical
-            socket. An infrastructure owner should be able get the SIoTIP gateway
-            up-and-running (connected) within 10 minutes given that the information
-            (e.g. WiFi SSID and passphrase) is available to the person responsible for
-            the installation. \\
+        One of U2's constraints is that Gateway installation should be straightforward.
+        It is a given that the SIoTIP Gateways will automatically connect to the internet
+        after an infrastructure owner quickly set it up. After that, when a Gateway
+        is not registered with the Online Service, if will automatically register.
+        Then, this will be reflected in the SIoTIP system, the Gateway will show up
+        as 'unplaced' in the infrastructure owner's Gateway, and the infrastructure
+        owner will receive a notification of this. \\
+        When Gateways disconnect from the Online Service (due to e.g. communication channel failure),
+        the \texttt{GatewayMonitor} on the Online Service notices this and updates the Gateway's
+        status in the system. When a Gateway notices it can connect to the Online Service again
+        (\texttt{OnlineServiceMonitor}), it will automatically connect again and be reactivated
+        in the system (no topology update by infrastructure owner required).\\
 
-            A connection to the internet is a constraint of the GatewayFacade.
-            After the gateway is connected to the internet (we don't model this),
-            it connects to the gateway (we don't model this?) and registers itself (we model this). \\
-            When an infrastructure owner orders a gateway, that gateway is linked to the IO.
-            Gateway was already in the DeviceDB, but it was not linked to anyone. It has a gatewayID => unique identifier gatewayID same like motes.
+        Next, U2 says that mote installation, should not require more configuration than
+        adding it in the topology. When the \texttt{DeviceManager} notices a new mote
+        (heartbeat coming from a new device),
+        it registers it in the system, links it to the gateway, and adds it as 'unplaced' in the topology of
+        its infrastructure owner. If the mote disconnects and reconnects on the same
+        gateway, it will be automatically reactivated and take it's last status/position in the topology.\\
 
-            Important info related to gateways: GatewayID (new class), infrastructureOwnerID, IPAddress, status (active/inactive), location (in topology table)
-                GatewayInfo(int gatewayID, int manufacturerID, int productID, int infrastructureOwnerID, IPAddress ip, int status)
+        For pluggable devices, the same holds as for motes, except that the new pluggable device is then
+        linked to it's mote in the system. Also, pluggable devices get the location of their
+        motes in the topology by default, but still start with status 'unplaced'.\\
 
-            gateway registers with online service:
-                % GatewayFacade -> DeviceDB: interface DeviceMgmt: registerGateway(int gatewayID, IPAddress address)
-                %     Effect: Sets a gateway's status to 'active' and updates its IP address
-                %     \item Created for: U2 - gateway installation
+        For both motes and pluggable devices, if they are connected to a new device (gateway or mote)
+        then the data concerning their last location and status is deleted.\\
 
-                We cannot link the gateway to an exact location for the infrastructure owner, because he might be managing multiple buildings
-                an IP addresses can be dynamic. If we let the IO choose for which building the gateway is, then this is bad for usability and
-                he has to configure anyways. Also in that case he cannot buy spare gateways, unless he buys spare gateways for every gateway in the building
-
-        \paragraph{U2: Mote installation}
-            Installing a new mote should not require more configuration than adding it
-            to the topology. Adding new motes, sensors or actuators should not involve
-            more than just starting motes, and plugging devices into motes – plug-and-play!
-            Reintroducing a previously known mote, with the same pluggable devices attached to it,
-            should not require any configuration. It is automatically re-added on
-            its last known location on the topology. The attached pluggable devices
-            are automatically initialised and configured with their last known
-            configuration and access rights. \\
-            Thing that need to happen automatically:
-            *) mote should find the gateway (mote sends a broadcast message->ReceiveBroadcast) => this is done automatically? see remarks of the use case
-            *) gateway should register the mote (DeviceManager update, store entry in DB)
-            *) on reintroduction of motes: DeviceManager notices this, makes the gateway send a message to online service to reuse some old topology
-
-        \paragraph{U2: Pluggable device installation}
-            Adding new sensors or actuators should require no further customer
-            actions besides plugging it into the mote. Configurable sensors and
-            actuators should have a working default configuration.
-            Pluggable devices added to an already known mote are automatically
-            added in the right location on the topology.
-            Making (initialised) sensors and actuators available to customer
-            organisations and applications should not require more effort than
-            configuring access rights (cf. UC9). \\
-            *) After devices are plugged in: connect to mote, set up default configurations
-            *) if the mote is already known, the device is added to the right location on the topology
-            *) need something for configuration of access rights, can only happen for initialised devices
-
-            *) for reactivating last configurations: just set status to active and don't change configuration field, it will still be the same as in the past
-                alternative: current\_configuration and last\_configuration in DB
-                alternative: store all configurations on Gateway -> but it has bad resources
-                alternative: store all versions on DeviceDB -> but lots of useless data then = extra work for db
-
-            *) Pluggable devices added to an already known mote are automatically added in "the right location" on the topology.
-                what exactly is a location?
-                => when a pluggable device is connected to a new mote, the pluggable device gets the location of the mote by default
-
-        \paragraph{U2: Easy applications}
-            Applications should work out of the box if the required sensors and
-            actuators are available. Only when mandatory end-user roles must be
-            assigned, additional explicit configuration actions are required
-            from a customer organisation (cf. UC17, UC19). \\
-            *) if there is a subsription and new hardware is plugged in: need something to check
-               if some application can be activated now => see UC6: checkApplicationsForActivationForInfrastructureOwner
+        Lastly, U2 states that applications should work out of the box if the required sensors and
+        actuators are available. For this, each time the \texttt{DeviceManager} recognizes a new
+        pluggable device, it starts a check for application instances
+        (related to customer organisations associated with the gateway's infrastructure owner)
+        that can be activated.
 
     \subsection*{Considered Alternatives}
-        \paragraph{Alternative(s) for choice 1} Explain what alternative(s) you
-        considered for this design choice and why they where not selected.
-
-    \subsection*{Deployment Decisions}
-        \ldots
-
-    \subsection*{Considered Deployment Alternatives}
-        \ldots
+        \paragraph{Alternative for choice easy Gateway installation}
+            To avoid having the infrastructure owner to place a new Gateway in the topology (to be more in line with U2),
+            we could let the Gateway be linked to a location in the topology at the moment infrastructure owner buys the
+            Gateway. Then, after installing the Gateway, it will automatically register and show up as 'placed' in the topology.
+            However, this would just move the problem of placing the Gateway in the topology instead of solving the problem.
+            It is then better to make the infrastructure owner place the Gateway after physically installing it. This way
+            the infrastructure owner kan keep some spare Gateways that are not linked to a location and install them when
+            one of the Gateways break.

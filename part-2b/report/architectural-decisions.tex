@@ -42,6 +42,37 @@
             We expect the SessionDB to receive many more requests than e.g. the \texttt{OtherDataDB}, since users need to send a sessionID
             with every request so that it can be checked whether or not the user is (still) logged in.
 
+    \subsection{Notifications}
+        \subsubsection*{KeyDecisions}
+            The NotificationHandler stores and sends notifications.
+
+        \subsubsection*{Rationale}
+            The \texttt{NotificationHandler} was put in place to deal with
+            notifications. Other components can use it to generate notifications for
+            certain users in the system. The \texttt{NotificationHandler} will then
+            insert information relevant to the notification in the database (message,
+            status, date and time, source, ...), and use an external delivery
+            service to deliver the notification to users. The used delivery medium
+            is based on the user's preferences. The \texttt{DeviceManager} sends request
+            to the external delivery service to notifies the
+            infrastructure owner, once mote or pluggable device failure occurs.
+            Since they are stored in the database, users can always view
+            their notifications via their dashboard. \\
+
+        \subsubsection*{Considered Alternatives}
+            \paragraph{Custom delivery solution}
+                Reliable and quick delivery of notifications is crucial to the
+                system in order to solve problems should things go wrong. Currently,
+                the solution is to use a third party service for delivery of
+                notifications. In the case that no external services are found
+                satisfactory, or if this dependency on an external service is
+                unwanted, it is possible to build an internal solution for this.
+                For example, a \texttt{NotificationSender} component could make use
+                of the \texttt{Factory pattern} for different message channels for
+                different delivery methods (each with their own sendNotification method).
+                This solution allows us to easily add new message channels in the
+                future with little effort. The disadvantage of this is that an
+                internal solution takes a lot more time to implement.
 
     \subsection{Application execution subsystem}
         The application execution subsystem is composed of the following components:
@@ -70,15 +101,24 @@
             These things could also be done by using some specific configurations when deploying the components.
 
 \section{Discussion}
-    \todoinline{
-    	Use this section to discuss your architecture in retrospect.
-    	For example, what are the strong points of your architecture?
-    	What are the weak points? Is there anything you would have done otherwise with your current experience?
-    	Are there any remarks about the architecture that you would give to your customers?
-    	Etc.
-    }
-    Nothing about application state -> maybe could force app developers to add a procedure to save application state so that we could save this and reload that state later.\\
-    Very high coupling for ApplicationManager\\
-    Something about Modifiability problems we didn't think about.\\
-    Too much communication between gateways and online service\\
-    DeviceManager should maybe be decomposed to show how device connectivity is being tracked and how application usage/requirement data is stored.
+    Overall, the architectural decisions lack alternative solutions and alternative deployments decisions.
+    More research should be done about different ways to handle the
+    non-functional requirements, in order to better judge and compare our solutions.\\
+
+    In retrospect, we should have handled the DeviceDataConverter (and all components which rely on specific pluggable device information) differently.
+    If we let data conversion methods be stored on the \texttt{DeviceDB}, we could let the DeviceDataConverter fetch those methods when necessary and maybe
+    keep them in some kind of local cache. That way, the new methods can just be added in the database and the component would not need to be re-deployed.
+    This is already done with pluggable device information on the \texttt{DeviceManager}; when it detects a new device, it loads information about the device
+    and keeps it on the gateway while the device is connected to it.\\
+
+    We should have decomposed the \texttt{DeviceManager} some more to show how device connectivity is being tracked with a \texttt{DeviceMonitor} and how
+    applications' device usage/requirements data is stored in a \texttt{ApplicationDataStore}.\\
+
+    Too much communication happens between Gateways and the Online Service, we should have let fewer requests happen between Gateways and the Online Service,
+    and do more of the work on a \texttt{GatewayFacade} on the Online Service by doing different method calls from the \texttt{GatewayFacade} instead of \texttt{Gateway}s.
+
+    In the rationale of P1, it is noticeable that the quality attribute has not been completely handled. \\
+
+    In our design, we have not worked with states of application instances. Thus, if an application were to crash at some point, or if it would need to be shut down temporarily, etc.
+    it would not be possible to save the state of an application and restore it at a later point. Maybe a simple solution for this would be to force application providers to
+    implement a certain method so that the state of an application could be retrieved and stored.
