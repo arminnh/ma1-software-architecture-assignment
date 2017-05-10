@@ -12,91 +12,70 @@
         	\item \texttt{GatewayMonitor} monitors the connectivity of the Online Service to gateways.
         	\item \texttt{GatewayCommunicationMonitor} monitors the internal communication components of Gateways.
         \end{itemize}
-        \emph{Employed tactics and patterns:} heartbeats, ping/echo
+        \emph{Employed tactics and patterns:} heartbeats, ping/echo, buffering
 
 
     \subsection*{Rationale}
-        \paragraph{Av1: New Gateway responsibilities}
-            The SIoTIP gateway is able to autonomously detect failures of its individual internal communication components.\\
-            The Online Service should acknowledge each message sent by the SIoTIP gateway so that the gateway can detect failures.\\
-            If an internal SIoTIP gateway component fails, the gateway first tries to restart the affected component.
-            If the failure persists, the SIoTIP gateway reboots itself entirely. Note that the SIoTIP gateway,
-            due to the occurred failure, cannot contact a system administrator itself.\\
-            If (an internal communication component of) the Online Service or the communication
-            channel has failed, the SIoTIP gateway will temporarily store all incoming pluggable data
-            and any issued application commands internally.\\
-            If the Online Service becomes unreachable, application parts running locally on the SIoTIP
-            gateway continue to operate normally.\\
-            The SIoTIP gateway will start synchronising with the Online service within 1 minute after the
-            communication channel becomes available.\\
+        To handle all communication going from Gateways to the Online Service, the \texttt{OnlineServiceCommunicationHandler}
+        was introduced. It isolates all communication-related concerns along with \texttt{GatewayCommunicationHandler} on
+        the Online Service. It forwards requests from one party to the other in a Remote Procedure Call-like manner and transmits results and
+        possible exceptions. \\
+        Av1 requres autonomous detection of failures of individual internal communication components in Gateways. This is why we added the
+        \texttt{OnlineServiceCommunicationMonitor} which monitors the communication handler. If the component is to fail, the monitor will
+        detect it using a ping/echo mechanism and try to restart the component. If the failure persists, the monitor makes the gateway
+        reboot itself entirely. \\
+        To handle more of Av1's constrains, the communication handler is decomposed into:
+        \begin{itemize}
+            \item \texttt{OSCommunicationLogic}
+            \item \texttt{OnlineServiceMonitor}
+            \item \texttt{RequestStore}
+        \end{itemize}
+        The \texttt{OnlineServiceMonitor} monitors the Gateway's connectivity to the Online Service. Messages sent by the Online Service
+        are used as heartbeats. An update is sent to the monitor for each message. If no message has been received by the Online Service
+        in somewhat less a minute, the monitor makes the gateway ping the Online Service in order to check if it is reachable. \\
+        The \texttt{RequestStore} is used to satisfy the constraint that all incoming pluggable data and issued application commands
+        are stored internally when the Online Service is unreachable. This is done by sending those kinds of requests through the \texttt{RequestStore}
+        to store them there. Then a unique requestID is added to the request before it is passed to the \texttt{OSCommunicationLogic}.
+        When the Online Service receives a request, it sends an acknowledgement for the requestID back to the gateway it came from.
+        Then, the request is deleted from the \texttt{RequestStore}. This way, if the Online Service becomes unreachable at any moment,
+        all data that should be stored in this situration already is stored in the \texttt{RequestStore}.\\
+        After the monitor detects that a connection to the Online Service is possible again, it makes the Gateway start synchronising again.
+        In this case, the \texttt{OSCommunicationLogic} requests the data from the \texttt{RequestStore} as new requests and tries again. \\
+        When the Online Service is unreachable, application parts running locally on the SIoTIP Gateway continue to operate normally. Nothing is done
+        to influence the way the application parts work in that situation.\\
 
-            The \texttt{OnlineServiceBroker} isolates communication-related concerns between Gateways and the Online Service
-            along with GatewayBroker on the Online Service.Forwards requests from one party to the other and transmits results and
-            possible exceptions.
-            The SIoTIP gateway is able to autonomously detect failures of its individual internal communication components.
-            The  \texttt{OnlineServiceBrokerMonitor} monitors the communication component on Gateways.
-            If the communication component fails, the monitor tries to restart it. If the failure persists,
-            the gateway reboots itself entirely.\\
-            The \texttt{BrokerLogic} handles all functionality related to communication. In the \texttt{OnlineServiceBroker}
-            are \texttt{RequestStore} and \texttt{OnlineServiceMonitor}.
+        On the Online Service, a very similar approach is taken. There, the \texttt{GatewayCommunicationHandler} exists out of:
+        \begin{itemize}
+            \item \texttt{GWCommunicationLogic}
+            \item \texttt{GatewayMonitor}
+        \end{itemize}
+        which have responsibilities analogue to the Gateway's version. Also, the \texttt{GatewayCommunicationMonitor}
+        here monitors the Online Service's internal communication components, but does not restart them, as this was not necessary for the quality attribute.
 
-            The \texttt{OnlineServiceMonitor} monitors the Gateway's connectivity to the Online Service. It checks acknowledgement of each
-            message sent by the SIoTIP gateway. If (an internal communication component of) the Online Service or the communication
-            channel has failed, all requests to the Online Service will be stopped and stored in the \texttt{RequestStore}. An explicit command for this is not necessary,
-            because the requests in the \texttt{RequestStore} will not be deleted, since no acknowledgements are received
-            anymore from the Online Service. It can store at least 3 days of pluggable data before old data has to be overwritten.
-            After the monitor detects that a connection to the Online Service is possible
-            again, it makes the gateway start synchronising again. When the Online Service is unreachable, application
-            parts running locally on the SIoTIP gateway continue to operate normally.
-
-
-        \paragraph{Av1: New Online Service responsibilities}
-            The Online Service is able to autonomously detect failures of its individual internal communication components.\\
-            The Online Service is able to detect that a SIoTIP gateway is not sending data anymore based on the expected synchronisation interval.\\
-            The Online Service notifies the infrastructure manager and a SIoTIP system administrator when the outage of a SIoTIP gateway is detected.\\
-            The failure of an internal SIoTIP Online Service component is detected within 30 seconds.\\
-            The detection time for a failed SIoTIP gateway or channel depends on the transmission rate
-            of the gateway. An outage is defined as 3 consecutive expected synchronisations that do not
-            arrive within 1 minute of their expected arrival time.\\
-            The infrastructure owner is notified within 5 minutes after the detection of an outage of their gateway.\\
-            A SIoTIP system administrator should be notified within 1 minute after the detection
-            of a simultaneous outage of more than 1\% of the registered gateways.\\
-
-            GatewayBroker: Isolates communication-related concerns between the Online Service Gateways and along with OnlineServiceBroker on Gateways.
-                       Forwards requests from one party to the other and transmits results and possible exceptions. \\
-                       Sends acknowledgements for all messages sent by Gateways so that they can detect failures.
-            GatewayBrokerMonitor: Monitor the communication component for communication with gateways on the Online Service.
-
-            In GatewayBroker:
-                BrokerLogic: Handles all functionality related to communication.
-                GatewayMonitor: Monitors the connectivity status all gateways. Can detect that a gateway is not sending data anymore based on the expected synchronisation interval. If 3 consecutive expected synchronisations do not arrive within 1 minute of their expected arrival time,
-                            this is detected as a gateway outage. When outages of gateways are detected, the infrastructure owners that own the gateways and a SIoTIP system administrator are notified.
-                            When the connectivity status change of a Gateway is detected, this is saved in the DeviceDB.
-
-
+        A difference between the \texttt{GatewayMonitor} and \texttt{OnlineServiceMonitor} is that the \texttt{GatewayMonitor}
+        has to keep track of the connectivity of \emph{all} SIoTIP Gateways. The \texttt{GatewayMonitor} detects failures of
+        gateways when 3 consecutive expected synchronisations do not arrive within 1 minute of their expected arrival time,
+        as Av1 states. When a status change of a Gateway is detected, this is reflected in the \texttt{DeviceDB}. This is
+        done to be able to notify a SIoTIP system administrator after the detection
+        of a simultaneous outage of more than 1\% of the registered gateways.
 
     \subsection*{Considered Alternatives}
-        Alternative for monitoring of gateways:
-            Gateway updated come to GatewayMonitor
-            We could make GatewayMonitor ping all the gateways
-            However, this would increase traffic on the network
+        \paragraph{Alternative for monitoring of Gateways}
+            Instead of making the GatewayMonitor check how many synchronization periods Gateways have missed,
+            we could make it ping all of them and detect outages faster. However, this would massively increase
+            the amount of messages sent by the \texttt{GatewayCommunicationHandler}, and thus is not a good option.
 
-        Alternative for communication:
-            Messaging, Publishher Subscriber
+        \paragraph{Alternative for communication}
+            We have chosen that communication between Gateways and the Online Service is to be done in a "Remote Procedure Call-like manner".
+            Another option would have been to use some pattern like Message Channel or Publisher-Subscriber. We believe these other ways
+            to be too slow because of the way the messages would need to be stored somewhere and then some time later consumed by the Gateways. This would thus
+            also take more resources than Remote Procedure Calls. Also, it might be more intuitive to develop this system using Remote Method
+            Invocation, where for example a part of the \texttt{ApplicationManager} could just invoke the "sendActuationCommand" method on a Gateway object,
+            rather than send a message through some channel, and parse that message when developing the Gateway communication component.
 
     \subsection*{Deployment Decisions}
-        OnlineServiceBroker
-        OnlineServiceBrokerMonitor
-
-        GatewayBroker
-        GatewayBrokerMonitor
-
         For both the Online Service and Gateways, the components used for communication
-        (\texttt{OnlineServiceBroker}, \texttt{GatewayBroker}) are to be deployed on different nodes than
-        their monitoring components (\texttt{OnlineServiceBrokerMonitor}, \texttt{GatewayBrokerMonitor}).
-        Otherwise, if the node of a communication
-        component fails, its monitoring component would also fail and thus
-        nothing would be detected.
-
-    \subsection*{Considered Deployment Alternatives}
-        \ldots
+        (\texttt{OnlineServiceCommunicationHandler}, \texttt{GatewayCommunicationHandler}) are to be deployed on different nodes than
+        their monitoring components (\texttt{OnlineServiceCommunicationMonitor}, \texttt{GatewayCommunicationMonitor}). \\
+        This is done so that if the node of a communication component fails,
+        its monitoring component would not also fail and thus detect nothing because it was running on the same node.

@@ -19,30 +19,66 @@
 
 \section{Other decisions}
 
-    \subsection{Decision 1}
+            These components will be deployed on the Online Service and on gateways.
+            Since gateways are weaker machines than the ones on the Online Service,
+            the ApplicationContainer can be confgured differently for gateways.
+            The ApplicationContainers will then have stricter limits on
+            resources used of the node they are working on.
+            DeviceCommandConstructor and ApplicationContainerManager interfaces need to begin
+            re-routed depening on whether they are in a Gateway or on the Online Service.
+
+    \subsection{Authentication}
         \subsubsection*{KeyDecisions}
-            \ldots
+            A database is used to store login sessions.
 
         \subsubsection*{Rationale}
-            Sessions are used to check whether or not a user is currently logged in.
-            On successful login, a new session is created and stored in the SessionDB with a unqiue sessionID which is
-            returned to the front end. The client then sends this sessionID in future requests to represent that the user
-            is logged in.
-            A database is used for checking the sessions, so that replication can be done on components that handle front
-            end requests. If the session was stored in files, this would add extra overhead to keep all replica’s that store
-            session files consistent.
-            It is easier to do this using a database.
-            Also, a separate database is used to not
-            add a lot of extra requests for sessions to another database.
+            Authentication is done by verifying user credentials when a user wants to log in. Then a unique session
+            is created and the sessionID of this session is returned to the client used by the user. In all subsequent requests,
+            the user's client adds this sessionID with the request. If the sessionID exists in the database, then this means
+            that the user is still logged in and the request can be handled. Every time the sessionID is checked in the database,
+            a timestamp is reset. After a certain time without any requests for this sessionID, the session is deleted from the system. \\
+
+            The \texttt{SessionDB} is used to store all sessions.
 
         \subsubsection*{Considered Alternatives}
-            \ldots
+            \paragraph{Files for sessions}
+                The sessions could be stored as files on the UserFacade that handlers requests for a user. The facade could then check
+                whether or not a certain file exists to check if a user is logged in. However, this would make the facades stateful and
+                would add extra overhead in keeping the session files on different nodes consistent with each other in case that the
+                user is redirected to another node for load balancing. Keeping different nodes for facades consistent is much easier
+                if they are all stateless.
 
         \subsubsection*{Deployment Decisions}
-            \ldots
+            The \texttt{SessionDB} is to be deployed on a separate node in order to avoid puttting extra strain on the other databases.
+            We expect the SessionDB to receive many more requests than e.g. the \texttt{OtherDataDB}, since users need to send a sessionID
+            with every request so that it can be checked whether or not the user is (still) logged in.
 
-        \subsubsection*{Considered Deployment Alternatives}
-            \ldots
+
+    \subsection{Application execution subsystem}
+        The application execution subsystem is composed of the following components:
+        \begin{itemize}
+            \item \texttt{ApplicationContainer}
+            \item \texttt{ApplicationContainerMonitor}
+            \item \texttt{ApplicationContainerManager}
+            \item \texttt{ApplicationExecutionSubsystemMonitor}
+            \item \texttt{DeviceDataConverter}
+            \item \texttt{DeviceCommandConstructor}
+        \end{itemize}
+
+        \subsubsection*{Rationale}
+            We have designed the application execution subsystem to use the same components on the Online Service and on Gateways,
+            because we wanted reuse a lot of functionality in order to make everyones' lives a little easier. This seemed possible to us
+            as it seemed to us that in the requirements there was not much different between the application instances running on Gateways
+            and on the Online Service. \\
+            The biggest difference is that because Gateways are weaker machines than the ones on the Online Service, the applications
+            running on the gateways should be of smaller scales. This is perfectly possible by changing some configurations in the
+            \texttt{ApplicationContainer}s so that they have stricter limits on the resources used of the node they are running on.
+            If an application were to be too large or resource intensive, the \texttt{ApplicationContainerManager}'s 'testApplication' method
+            could then generate error messages for the Gateway version of the application.\\
+            Furthermore, to make this work smoothly, some interfaces used by the application execution subsystem would need to be
+            re-routed to use (the same methods on) different interfaces of different components. For example, the \texttt{DeviceCommandConstructor}
+            on the gateway should use the \texttt{DeviceManager} to fetch the correct formatting syntax of a pluggable device, instead of the \texttt{DeviceDB}.
+            These things could also be done by using some specific configurations when deploying the components.
 
 \section{Discussion}
     \todoinline{

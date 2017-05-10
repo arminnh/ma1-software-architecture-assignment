@@ -6,8 +6,9 @@ AFTER DEADLINE, BEFORE PROJECT DEFENSE:
 
 In decompositions 1, 2, and 3, check decisions important for deployment and add them in rationale
 
+Add monitoring to other parts of application execution subsystem
+add restart methods / make monitor use appInstanceMgmt
 Find methods that change state but have missing parameters
-Broker -> CommunicationHandler in texts
 
 Av2: up time?
 Av2: up-time => passive replication
