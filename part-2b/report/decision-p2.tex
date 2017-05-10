@@ -9,42 +9,32 @@
                   recognizes when the data processing subsystem needs to run in normal or overload mode,
                   and prevents starvation of requests.
         \end{itemize}
-        \emph{Employed tactics and patterns:} \ldots
+    \emph{Employed tactics and patterns:} scheduling, dynamic priority scheduling, logical separation, physical separation
 
     \subsection*{Rationale}
-        \paragraph{P2: Scheduling}
-            The pluggable data processing subsystem needs to be able to run in normal
-            or overload mode, depending on whether or not the system can process
-            requests within the deadlines given in the quality requirement. Also,
-            a mechanism should be in place to avoid starvation of any type of request. \\
-            The \texttt{PluggableDeviceDataScheduler} is used to deal with this problem.
-            It is responsible for scheduling requests that wish to interact with
-            the \texttt{PluggableDeviceDB}. In normal mode, the system processes
-            incoming requests in a FIFO order. In overload mode, the requests are
-            given a priority based on what the request is for and what the source
-            of the request is. The requests are then not simply processed in an
-            order based on their priorities, but an aging technique is to be used
-            such that starvation will be avoided. Thus, in overload mode,
-            requests are processed in an order based on a combination of the
-            priorities of the requests and the age of the requests.
+        P2 required the pluggable data processing subsystem to be able to run in different
+        modes, depending on whether or not certain request deadlines at met. Also,
+        a mechanism should be in place to avoid starvation of any type of request.
+        To handle this problem, the \texttt{PluggableDeviceDataScheduler} is
+        introduced to the system.
+        It is responsible for scheduling requests that wish to interact with
+        the \texttt{PluggableDeviceDB}. In normal mode, the system processes
+        incoming requests in a FIFO order. In overload mode, the requests are
+        given a priority based on what the request is for and what the source
+        of the request is. The requests are then not simply processed in an
+        order based on their priorities, but an aging technique is to be used
+        such that starvation will be avoided. Thus, in overload mode,
+        requests are processed in an order based on a combination of the
+        priorities of the requests and the age of the requests. \\
 
-        \paragraph{P2: Pluggable data separation}
-            The processing of (large amounts of) requests concerning pluggable
-            data has no impact on requests concerning other data, e.g. available applications. \\
-            In order to statisfy this constraint, all data directly related to
-            pluggable data has been separated into the \texttt{PluggableDeviceDB}.
-            All requests concerning pluggable data will be handled by this new
-            component. \texttt{PluggableDeviceDB} will run on a node different
-            from the node that the \texttt{Datbase} component runs on. This way
-            requests concerning pluggable will have no impact on
-            requests concerning other data.
-
-    \subsection*{Considered Alternatives}
-        \paragraph{Alternative(s) for choice 1} Explain what alternative(s) you
-        considered for this design choice and why they where not selected.
+        Furthermore, P2 requires that the processing of (large amounts of) requests concerning pluggable
+        data has no impact on requests concerning other data.
+        In order to statisfy this constraint, all data directly related to
+        pluggable device data has been separated into the \texttt{PluggableDeviceDB}.
+        All requests concerning pluggable data will be handled by this new
+        component. By doing this, requests concerning pluggable data will have no impact on
+        requests concerning other data.
 
     \subsection*{Deployment Decisions}
-        \ldots
-
-    \subsection*{Considered Deployment Alternatives}
-        \ldots
+        It is important that the \texttt{PluggableDeviceDB} is deployed on a separate node
+        so that it does not impact any other database.
