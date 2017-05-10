@@ -1,8 +1,5 @@
 % \chapter{Architectural Decisions}\label{ch:overview}
 
-% Delete the command below to remove the hints and instructions
-\showdecisionsnotes{}
-
 \input{decision-av1}
 \newpage
 \input{decision-av2}
@@ -18,14 +15,6 @@
 \input{decision-u2}
 
 \section{Other decisions}
-
-            These components will be deployed on the Online Service and on gateways.
-            Since gateways are weaker machines than the ones on the Online Service,
-            the ApplicationContainer can be confgured differently for gateways.
-            The ApplicationContainers will then have stricter limits on
-            resources used of the node they are working on.
-            DeviceCommandConstructor and ApplicationContainerManager interfaces need to begin
-            re-routed depening on whether they are in a Gateway or on the Online Service.
 
     \subsection{Authentication}
         \subsubsection*{KeyDecisions}
