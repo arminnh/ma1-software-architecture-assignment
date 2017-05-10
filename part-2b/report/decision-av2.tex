@@ -1,17 +1,19 @@
 \section{Av2: Application failure}
 
-    \todoinline{Use this section structure for each requirement}
-
     \subsection*{Key Decisions}
 
-
-
         \begin{itemize}
-        	\item The \texttt{ApplicationContainerMonitor} monitors the \texttt{ApplicationInstance} and the \texttt{ApplicationContainer}.\\
+        	\item \texttt{ApplicationInstance}s are executed within \texttt{ApplicationContainer}s.
+            \item \texttt{ApplicationContainerManager} creates/destroys/handles communication for \texttt{ApplicationContainer}s.
+            \item \texttt{ApplicationContainerMonitor} monitors \texttt{ApplicationContainer}s and \texttt{ApplicationInstance}s.
+            \item \texttt{ApplicationExecutionSubsystemMonitor} monitors the application execution subsystem.
         \end{itemize}
-        \emph{Employed tactics and patterns:} \ldots
+        \emph{Employed tactics and patterns:} container
 
     \subsection*{Rationale}
+        RATIONALE: ApplicationContainerManager and DeviceCommandConstructor need to be
+        reconfigured ivm some used interfaces
+
         \paragraph{Av2: Detection of failures}
             The system is able to autonomously detect failures of its individual
             application execution components, failing applications, and failing application containers. \\
@@ -19,7 +21,7 @@
             The failure of an internal application execution component is detected within 30 seconds.
             Detection of failed hardware or crashed software happens within 5 seconds.
             SIoTIP system administrators are notified within 1 minute.\\
-            
+
             The \texttt{ApplicationContainer} is a container/sandbox that has one running application instance.
             Failures of individual application execution components means that one of \texttt{ApplicationContainer}, \texttt{ApplicationContainerMonitor}, \texttt{ApplicationContainerManager} crashed.
             The \texttt{ApplicationContainerMonitor} monitors the \texttt{ApplicationContainer} instances
@@ -32,7 +34,34 @@
             resources used of the node they are working on.
             DeviceCommandConstructor and ApplicationContainerManager interfaces need to begin
             re-routed depening on whether they are in a Gateway or on the Online Service.
-        
+
+            To detect failures, we made use of the \texttt{Container} pattern.
+            The application execution subsystem is composed of:
+            \begin{itemize}
+                \item \texttt{ApplicationContainer}
+                \item \texttt{ApplicationContainerMonitor}
+                \item \texttt{ApplicationContainerManager}
+                \item \texttt{ApplicationExecutionSubsystemMonitor}
+            \end{itemize}
+
+            The \texttt{ApplicationContainer}s are deployed in groups on different nodes.
+
+            \texttt{ApplicationContainer}: is a container/sandbox that has 1 running application instance
+            \texttt{ApplicationContainerMonitor}: monitors the \texttt{ApplicationContainer} instances
+
+            To detect failing applications, \texttt{ApplicationContainer} and \texttt{ApplicationContainerMonitor}
+                ApplicationContainer -> ApplicationContainerMonitor: void applicationCrashed(id applicationInstanceID)
+
+            To detect failling application containers, \texttt{ApplicationContainerMonitor}
+                ApplicationContainerMonitor -> ApplicationContainer: Echo ping()
+                -> we say container has crashed/failed when the following has no response:
+
+            To detect failures of individual application execution components,
+            This means that one of \texttt{ApplicationContainer}, \texttt{ApplicationContainerMonitor}, \texttt{ApplicationContainerManager} crashed.
+            If the \texttt{ApplicationContainer} failed, then the \texttt{ApplicationContainerMonitor} would detect this.
+            If one of the other two components failed, the \texttt{ApplicationExecutionSubsystemMonitor} is put in place to detect this.
+
+
         \paragraph{Av2: Resolution of application failures and application execution component failures}
             In case of application crash, the system autonomously restarts failed applications.
             If part of an application fails, the remaining parts remain operational,
@@ -56,7 +85,7 @@
 
             If one of the components of the application execution subsystem fails,
             a SIoTIP system administrator is notified.
-            
+
         \paragraph{Av2: Failures do not impact other applications or other functionality of the system}
             This does not affect other applications that are executing on the Online
             service or SIoTIP gateway. This does not affect the availability of
@@ -78,6 +107,15 @@
         For Av2 is important that the \texttt{ApplicationInstance} is deployed on another node the \texttt{ApplicationContainerMonitor} that is responsible for
         monitoring. Once the \texttt{ApplicationInstance} fails, the \texttt{ApplicationContainerMonitor} won't fail with the the \texttt{ApplicationInstance}
         and interested parties can be informed.
-        
+
+        These components will be deployed on the Online Service and on gateways.
+        Since gateways are weaker machines than the ones on the Online Service,
+        the ApplicationContainer can be confgured differently for gateways.
+        The ApplicationContainers will then have stricter limits on
+        resources used of the node they are working on.
+        DeviceCommandConstructor and ApplicationContainerManager interfaces need to begin
+        re-routed depening on whether they are in a Gateway or on the Online Service.
+
+
     \subsection*{Considered Deployment Alternatives}
         \ldots

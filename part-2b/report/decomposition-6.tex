@@ -1,4 +1,4 @@
-\section{Decomposition 6: P1, UC1, UC2, UC3, UC5, UC7, UC8, UC16, UC20 (Elements/Subsystem to decompose/expand)}
+\section{Decomposition 6: P1, UC1, UC2, UC3, UC5, UC7, UC8, UC16, UC20}
 
 
 \subsection*{Selected architectural drivers}
@@ -23,41 +23,20 @@
 
 \subsection*{Architectural design}
     This section describes what needs to be done to satisfy the requirements for
-    this decomposition and how involved problems/obstacles are solved.
+    this decomposition and how involved problems/obstacles are solved.\\
 
-    https://www.alertra.com/blog/2010/improve-availability-performance-using-database-replication
-    https://serverfault.com/questions/10781/what-are-the-performance-implications-for-using-sql-server-replication
-    "
-    Ik dacht aan misschien de meeste van de componenten gewoon duplicaten maar dan is de DB wel u bottleneck en dan moet ge zo'n systeem van distributed systems gebruiken om ook de databases juist te kunnen replicaten.
-    Maar daarnaast echt geen idee ivm performance. Ge kunt wel bullshit van de "tactics" in u rationale zetten zoals the developers have to "increase computation efficiency" and "reduce computational overhead".
-    Manage event rate en scheduling policy kunt ge misschien wel gebruiken om er voor te zorgen dat bepaalde taken gebeuren op een moment dat de load op de online service wat lager is maar ik weet Ni echt welke taken
-    "
-
-    *) Most components can be duplicated for load balancing
-    *) Related DB's should use a DBMS that can be scaled horizontally.
+    *) Most components can be duplicated for load balancing\\
+    *) Related DB's should use a DBMS that can be scaled horizontally.\\
     *) DB calls caused by IO vs CO have been mostly split up in DeviceDB and OtherDataDB, so those 2 groups of
-       users don't influence each other too much
+       users don't influence each other too much\\
 
-
-    \paragraph{P1: Problem title}
-        The SIoTIP Online Service replies to the service requests of the
-        infrastructure owner and customer organisations.
-
-    \paragraph{P1: Problem title}
-        The Online Service processes the data received from the gateways.
-
-    \paragraph{P1: Problem title}
-        The application execution subsystem should be able to execute an increasing
-        number of active applications.
-
-    \paragraph{P1: Problem title}
-        The initial deployment of SIoTIP should be able to deal with at least 5000
-        gateways in total, and should be provisioned to service at least 3000
-        registered users simultaneously connected to SIoTIP.
-        -> 5000 gateways * 4 motes per gateway * 3 devices per mote = 60000 devices
-        -> Keep communication with gateways at a minimum
-           e.g. gateway messages are of type "send data", "new device connected", ...
-        -> LOAD BALANCING
+    The initial deployment of SIoTIP should be able to deal with at least 5000
+    gateways in total, and should be provisioned to service at least 3000
+    registered users simultaneously connected to SIoTIP.\\
+    -> 5000 gateways * 4 motes per gateway * 3 devices per mote = 60000 devices\\
+    -> Keep communication with gateways at a minimum\\
+       e.g. gateway messages are of type "send data", "new device connected", ...\\
+    -> LOAD BALANCING
 
     \paragraph{P1: Problem title}
         Scaling up to service an increasing amount of infrastructure owners,

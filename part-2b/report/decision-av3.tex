@@ -1,19 +1,12 @@
 \section{Av3: Pluggable device or mote failure}
 
-    \todoinline{Use this section structure for each requirement}
-
     \subsection*{Key Decisions}
 
-    \todoinline{
-    	Briefly list your key architectural decisions.
-    	Pay attention to the solutions that you employed (in your own terms or using tactics and/or patterns).
-    }
-
     \begin{itemize}
-    	\item \texttt{DeviceManager} monitors connected/operational devices on a gateway.
-    	\item \texttt{DeviceManager} stores the requirements for pluggable devices set by applications
+    	\item \texttt{DeviceManager} monitors connected/operational devices for a gateway.
+    	\item \texttt{DeviceManager} stores which application instances use which devices and stores the application instances' requirements.
     \end{itemize}
-    \emph{Employed tactics and patterns:} heartbeat, ping/echo
+    \emph{Employed tactics and patterns:} heartbeat
 
     \subsection*{Rationale}
         \paragraph{Failure detection}
@@ -115,7 +108,4 @@
 
 
     \subsection*{Deployment Decisions}
-        For Av3 is important that the \texttt{DeviceManager} is deployed on another node as the
-        \texttt{Mote} and the \texttt{PluggableDevice}. The \texttt{DeviceManager}
-        checks the \texttt{Mote} and the \texttt{PluggableDevice} availability and in case of failure, the \texttt{DeviceManager}
-        can notify the infrastructure owner of any persistent pluggable device or mote failures.\\
+        None

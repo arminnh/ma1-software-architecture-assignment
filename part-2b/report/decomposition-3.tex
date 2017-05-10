@@ -105,7 +105,6 @@
         %         the DeviceManager in the gateway notices that this is from a new mote and starts
         %         the registerMote procedure
         %         FOR RATIONALE: The IPAddress of the mote can be parsed out of the 6lowpan header in the heartbeat messages
-        %         ALTERNATIVE IS GatewayFacade: registerMote, but this is more work (battery power and implementation)
         %
         %         FOR RATIONALE: be careful with int moteID. when we register, we send MoteInfo to the DB, DB returns a DIFFERENT int moteID we use the other moteID in the rest of the system
         %         3. DeviceManager -> GatewayFacade:       interface DeviceMgmt:   int moteID addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)

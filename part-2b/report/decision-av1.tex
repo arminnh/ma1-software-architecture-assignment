@@ -1,12 +1,16 @@
 \section{Av1: Communication between SIoTIP gateway and Online Service}
 
-    \todoinline{Use this section structure for each requirement}
-
     \subsection*{Key Decisions}
 
         \begin{itemize}
-        	\item The \texttt{OnlineServiceMonitor} monitors the Gateway's connectivity to the Online Service.
-        	\item The \texttt{OnlineServiceBrokerMonitor} monitors the communication component on Gateways.
+            \item \texttt{OSCommunicationLogic} handles communication from Gateways to the Online Service by remote method invocation.
+        	\item \texttt{OnlineServiceMonitor} monitors the Gateway's connectivity to the Online Service.
+            \item \texttt{RequestStore} stores all pluggable device data and application commands on Gateways.
+        	\item \texttt{OnlineServiceCommunicationMonitor} monitors the internal communication components of Gateways.
+
+            \item \texttt{GWCommunicationLogic} handles communication from the Online Service to Gateways by remote method invocation.
+        	\item \texttt{GatewayMonitor} monitors the connectivity of the Online Service to gateways.
+        	\item \texttt{GatewayCommunicationMonitor} monitors the internal communication components of Gateways.
         \end{itemize}
         \emph{Employed tactics and patterns:} heartbeats, ping/echo
 
@@ -25,27 +29,27 @@
             gateway continue to operate normally.\\
             The SIoTIP gateway will start synchronising with the Online service within 1 minute after the
             communication channel becomes available.\\
-        
+
             The \texttt{OnlineServiceBroker} isolates communication-related concerns between Gateways and the Online Service
-            along with GatewayBroker on the Online Service.Forwards requests from one party to the other and transmits results and 
+            along with GatewayBroker on the Online Service.Forwards requests from one party to the other and transmits results and
             possible exceptions.
             The SIoTIP gateway is able to autonomously detect failures of its individual internal communication components.
-            The  \texttt{OnlineServiceBrokerMonitor} monitors the communication component on Gateways. 
-            If the communication component fails, the monitor tries to restart it. If the failure persists, 
+            The  \texttt{OnlineServiceBrokerMonitor} monitors the communication component on Gateways.
+            If the communication component fails, the monitor tries to restart it. If the failure persists,
             the gateway reboots itself entirely.\\
-            The \texttt{BrokerLogic} handles all functionality related to communication. In the \texttt{OnlineServiceBroker} 
-            are \texttt{RequestStore} and \texttt{OnlineServiceMonitor}. 
+            The \texttt{BrokerLogic} handles all functionality related to communication. In the \texttt{OnlineServiceBroker}
+            are \texttt{RequestStore} and \texttt{OnlineServiceMonitor}.
 
             The \texttt{OnlineServiceMonitor} monitors the Gateway's connectivity to the Online Service. It checks acknowledgement of each
             message sent by the SIoTIP gateway. If (an internal communication component of) the Online Service or the communication
             channel has failed, all requests to the Online Service will be stopped and stored in the \texttt{RequestStore}. An explicit command for this is not necessary,
             because the requests in the \texttt{RequestStore} will not be deleted, since no acknowledgements are received
-            anymore from the Online Service. It can store at least 3 days of pluggable data before old data has to be overwritten. 
+            anymore from the Online Service. It can store at least 3 days of pluggable data before old data has to be overwritten.
             After the monitor detects that a connection to the Online Service is possible
-            again, it makes the gateway start synchronising again. When the Online Service is unreachable, application 
+            again, it makes the gateway start synchronising again. When the Online Service is unreachable, application
             parts running locally on the SIoTIP gateway continue to operate normally.
-            
-            
+
+
         \paragraph{Av1: New Online Service responsibilities}
             The Online Service is able to autonomously detect failures of its individual internal communication components.\\
             The Online Service is able to detect that a SIoTIP gateway is not sending data anymore based on the expected synchronisation interval.\\
@@ -72,10 +76,13 @@
 
 
     \subsection*{Considered Alternatives}
-         Alternative for monitoring of gateways:
-        Gateway updated come to GatewayMonitor
-        We could make GatewayMonitor ping all the gateways
-        However, this would increase traffic on the network
+        Alternative for monitoring of gateways:
+            Gateway updated come to GatewayMonitor
+            We could make GatewayMonitor ping all the gateways
+            However, this would increase traffic on the network
+
+        Alternative for communication:
+            Messaging, Publishher Subscriber
 
     \subsection*{Deployment Decisions}
         OnlineServiceBroker

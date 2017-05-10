@@ -1,13 +1,6 @@
 \section{P1: Large number of users}
 
-    \todoinline{Use this section structure for each requirement}
-
     \subsection*{Key Decisions}
-
-        \todoinline{
-        	Briefly list your key architectural decisions.
-        	Pay attention to the solutions that you employed (in your own terms or using tactics and/or patterns).
-        }
 
         \begin{itemize}
         	\item decision 1
@@ -16,10 +9,19 @@
         \emph{Employed tactics and patterns:} \ldots
 
     \subsection*{Rationale}
-        \todoinline{
-            Describe the design choices related to \emph{ReqX} together with the rationale
-        	of why these choices where made.
-        }
+
+        *) Most components can be duplicated for load balancing\\
+        *) Related DB's should use a DBMS that can be scaled horizontally.\\
+        *) DB calls caused by IO vs CO have been mostly split up in DeviceDB and OtherDataDB, so those 2 groups of
+           users don't influence each other too much\\
+
+        https://www.alertra.com/blog/2010/improve-availability-performance-using-database-replication
+        https://serverfault.com/questions/10781/what-are-the-performance-implications-for-using-sql-server-replication
+        "
+        Ik dacht aan misschien de meeste van de componenten gewoon duplicaten maar dan is de DB wel u bottleneck en dan moet ge zo'n systeem van distributed systems gebruiken om ook de databases juist te kunnen replicaten.
+        Maar daarnaast echt geen idee ivm performance. Ge kunt wel bullshit van de "tactics" in u rationale zetten zoals the developers have to "increase computation efficiency" and "reduce computational overhead".
+        Manage event rate en scheduling policy kunt ge misschien wel gebruiken om er voor te zorgen dat bepaalde taken gebeuren op een moment dat de load op de online service wat lager is maar ik weet Ni echt welke taken
+        "
 
     \subsection*{Considered Alternatives}
         \paragraph{Alternative(s) for choice 1} Explain what alternative(s) you
