@@ -1,34 +1,24 @@
 \section{P1: Large number of users}
 
-    \subsection*{Key Decisions}
-
-        \begin{itemize}
-        	\item decision 1
-        	\item \ldots
-        \end{itemize}
-        \emph{Employed tactics and patterns:} \ldots
-
     \subsection*{Rationale}
+        The use cases mentioned in P1 are mostly related to Infrastructure Owner requests and Customer Organisation requests.
+        Our split of the databases into \texttt{PluggableDeviceDB}, \texttt{DeviceDB}, \texttt{OtherDataDB}, goes well with this statment,
+        as most of the requests of Infrastructure Owners lead to requests in the \texttt{DeviceDB} and most of the requests of Customer Organisation
+        lead to requests in the \texttt{OtherDataDB}. This means that as both of these groups of users grow, the growth of one group will not
+        influence the performance noticed by the other group. \\
 
-        *) Most components can be duplicated for load balancing\\
-        *) Related DB's should use a DBMS that can be scaled horizontally.\\
-        *) DB calls caused by IO vs CO have been mostly split up in DeviceDB and OtherDataDB, so those 2 groups of
-           users don't influence each other too much\\
+        P1 also states that scaling up to service an increasing amount of infrastructure owners, customers organisations
+        and applications should (in worst case) be linear.
+        This is certainly possible to an extent, as all the components related to requests from infrastructure
+        owners and customers organisations are stateless. They could be replicated and load balancing could be applied. \\
+        The story for applications is slightly more complex, as at a certain point more \texttt{ApplicationContainerManager} nodes
+        would be necessary to keep track of all \texttt{ApplicationContainer}s. This would then also create a need for some
+        kind of coordinator so that all \texttt{ApplicationContainerManager}s can work together correctly to keep track of and maintain
+        all \texttt{ApplicationContainer}s. \\
 
-        https://www.alertra.com/blog/2010/improve-availability-performance-using-database-replication
-        https://serverfault.com/questions/10781/what-are-the-performance-implications-for-using-sql-server-replication
-        "
-        Ik dacht aan misschien de meeste van de componenten gewoon duplicaten maar dan is de DB wel u bottleneck en dan moet ge zo'n systeem van distributed systems gebruiken om ook de databases juist te kunnen replicaten.
-        Maar daarnaast echt geen idee ivm performance. Ge kunt wel bullshit van de "tactics" in u rationale zetten zoals the developers have to "increase computation efficiency" and "reduce computational overhead".
-        Manage event rate en scheduling policy kunt ge misschien wel gebruiken om er voor te zorgen dat bepaalde taken gebeuren op een moment dat de load op de online service wat lager is maar ik weet Ni echt welke taken
-        "
+        A problem for linear scaling we did not handle is the performance of the databases. In case replication and load
+        balancing is applied on other components to handle a growing number of users,
+        the databases will become the bottleneck of the system. To handle this, replication for performance should be used on the databases. \\
 
-    \subsection*{Considered Alternatives}
-        \paragraph{Alternative(s) for choice 1} Explain what alternative(s) you
-        considered for this design choice and why they where not selected.
-
-    \subsection*{Deployment Decisions}
-        \ldots
-
-    \subsection*{Considered Deployment Alternatives}
-        \ldots
+        Another problem that we didn't handle is the scalability of the databases themselves. Ideally, a database management system
+        that supports linear scalability should be used.
