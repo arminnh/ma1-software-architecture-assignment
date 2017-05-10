@@ -1,15 +1,8 @@
 % \chapter{Scenarios}\label{ch:scenarios}
 
 % Delete the command below to remove the hints and instructions
-\showscenariosnotes{}
 
 \section{Scenarios}
-    \todoinline{
-	Illustrate how your architecture fulfills the most important data flows. As a rule of thumb, focus on the scenario of the assignment. Describe the scenario in terms of architectural components using UML Sequence diagrams and further explain the most important interactions in text. Illustrating the scenarios serves as a quick validation of the completeness of
-	your architecture. If you notice at this point that for some reason, certain functionality or qualities are not addressed sufficiently in your architecture, it suffices to
-	document this, together with a rationale of why this is the case according to you. You do not have to further refine you architecture at this point.
-    }
-
     This section lists which sequence diagrams belong to which scenarios:
     \begin{itemize}
         \item UC11: Sensor data being processed by the system \\
@@ -19,24 +12,21 @@
               Figure \ref{fig:seq_scenario2}
 
         \item UC12: Applications issuing actuation commands \\
-              Figure \ref{fig:seq_scenario3}
+              Figure \ref{fig:seq_scenario31}
+              Figure \ref{fig:seq_scenario32}
+              Figure \ref{fig:seq_scenario33}
 
         \item UC14, Av3, UC18: Sensors/actuators failing \\
               Figure \ref{fig:seq_scenario4} \\
-              This scenario displays the data flow when sensors/actuators fail, causing
-              \begin{itemize}
-                  \item deactivation of specific applications
-                  \item a redundant sensor/actuator to take over in the context of a single application
-              \end{itemize}
 
         \item Av2: Application crash \\
               Figure \ref{fig:seq_scenario5}
 
-        \item U2, UC4: Plugging in a new pluggable device (sensor or actuator) \\
+        \item U2, UC6: Plugging in a new pluggable device (sensor or actuator) \\
               Figure \ref{fig:seq_scenario6}
 
-        \item Av1, UC15: Detection and handling of communication channel failure \\
-              Figure \ref{fig:seq_scenario7}
+        \item UC4: Install mote \\
+              Figure \ref{fig:seq_scenario666}
 
         \item UC22, U1: Upgrading an application \\
               Figure \ref{fig:seq_scenario8}
@@ -55,15 +45,29 @@
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-UC19}
-    	\caption[ Subscribing to an application]{A customer organisation actor wants to subcsribe to an application. The system provides him applications to subscription
+    	\caption[ Subscribing to an application]{A customer organisation actor wants to subscribe to an application. The system provides him applications to subscription
     	                        The customer organisation chooses application, sets application devices settings and user roles }\label{fig:seq_scenario2}
     \end{figure}
 
     \begin{figure}[!htp]
     	\centering
-    	\includegraphics[width=\textwidth]{images/sequence-UC12}
-    	\caption[Applications issuing actuation commands]{An application sends an actuation command to the one or more pluggable devices. The acctuation command is
-    	 created according to the specific formatting syntax for the each device. }\label{fig:seq_scenario3}
+    	\includegraphics[width=\textwidth]{images/sequence-UC12-commandFromFrontEnd}
+    	\caption[Applications issuing actuation commands]{An application sends an actuation command to the one or more pluggable devices. The actuation command is
+    	 created according to the specific formatting syntax for the each device. }\label{fig:seq_scenario31}
+    \end{figure}
+
+    \begin{figure}[!htp]
+    	\centering
+    	\includegraphics[width=\textwidth]{images/sequence-UC12-commandFromGW}
+    	\caption[Applications issuing actuation commands]{An application sends an actuation command to the one or more pluggable devices. The actuation command is
+    	 created according to the specific formatting syntax for the each device. }\label{fig:seq_scenario32}
+    \end{figure}
+
+    \begin{figure}[!htp]
+    	\centering
+    	\includegraphics[width=\textwidth]{images/sequence-UC12-commandFromOS}
+    	\caption[Applications issuing actuation commands]{An application sends an actuation command to the one or more pluggable devices. The actuation command is
+    	 created according to the specific formatting syntax for the each device. }\label{fig:seq_scenario33}
     \end{figure}
 
     \begin{figure}[!htp]
@@ -81,14 +85,7 @@
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-U2-UC4}
-    	\caption[Plugging in a new pluggable device (sensor or actuator)]{ The new pluggable device is detected and save as 'inactive'. In case Pluggable device is known previously, the SloTIP reactivated the pluggable device automatically.}\label{fig:seq_scenario6}
-    \end{figure}
-
-    \begin{figure}[!htp]
-    	\centering
-    	\includegraphics[width=\textwidth]{images/sequence-Av1-UC15}
-    	\caption[Detection and handling of communication channel failure]{ The failure of the communicatio channel or communication component is detected with 
-    	monitoring components.}\label{fig:seq_scenario7}
+    	\caption[Plugging in a new pluggable device (sensor or actuator)]{ The new pluggable device is detected and saved as 'inactive'. In case Pluggable device is known previously, the SloTIP reactivated the pluggable device automatically.}\label{fig:seq_scenario6}
     \end{figure}
 
     \begin{figure}[h]
@@ -101,4 +98,10 @@
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-UC12-UC26-UC27}
     	\caption[Sending actuation commands via a mobile app]{ The application sends command from external frontend to the other parts of application. }\label{fig:seq_scenario9}
+    \end{figure}
+
+    \begin{figure}[!htp]
+    	\centering
+    	\includegraphics[width=\textwidth]{images/sequence-UC04}
+    	\caption[Install mote]{The scenario for installing a mote}\ref{fig:seq_scenario666}
     \end{figure}
