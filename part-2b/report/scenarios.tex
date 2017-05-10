@@ -48,53 +48,57 @@
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-UC11}
-    	\caption[Sensor data being processed by the system]{EXPLAIN WHAT HAPPENS IN THE SCENARIO. \\ ADD COMMENTS. \\ LINK TO OTHER RELEVANT SCENARIO'S. }\label{fig:seq_scenario1}
+    	\caption[Sensor data being processed by the system]{The pluggable device sends data to the system. The gateway receives the data and forwards it to the Online Service.
+    	 The Data are saved in the Online Service in the PluggableDeviceDataDB. }\label{fig:seq_scenario1}
     \end{figure}
 
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-UC19}
-    	\caption[ Subscribing to an application]{EXPLAIN WHAT HAPPENS IN THE SCENARIO. \\ ADD COMMENTS. \\ LINK TO OTHER RELEVANT SCENARIO'S. }\label{fig:seq_scenario2}
+    	\caption[ Subscribing to an application]{A customer organisation actor wants to subcsribe to an application. The system provides him applications to subscription
+    	                        The customer organisation chooses application, sets application devices settings and user roles }\label{fig:seq_scenario2}
     \end{figure}
 
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-UC12}
-    	\caption[Applications issuing actuation commands]{EXPLAIN WHAT HAPPENS IN THE SCENARIO. \\ ADD COMMENTS. \\ LINK TO OTHER RELEVANT SCENARIO'S. }\label{fig:seq_scenario3}
+    	\caption[Applications issuing actuation commands]{An application sends an actuation command to the one or more pluggable devices. The acctuation command is
+    	 created according to the specific formatting syntax for the each device. }\label{fig:seq_scenario3}
     \end{figure}
 
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-Av3-UC14-UC18}
-    	\caption[Scenario ]{EXPLAIN WHAT HAPPENS IN THE SCENARIO. \\ ADD COMMENTS. \\ LINK TO OTHER RELEVANT SCENARIO'S. }\label{fig:seq_scenario4}
+    	\caption[Scenario ]{This is the flow of pluggable device failure. If there is not redundant pluggable device, then the application is deactivated.}\label{fig:seq_scenario4}
     \end{figure}
 
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-Av2}
-    	\caption[Application crash]{EXPLAIN WHAT HAPPENS IN THE SCENARIO. \\ ADD COMMENTS. \\ LINK TO OTHER RELEVANT SCENARIO'S. }\label{fig:seq_scenario5}
+    	\caption[Application crash]{ In the flow is shown failure of an application. The important part of this diagram is monitoring system, that detect failure of the application. }\label{fig:seq_scenario5}
     \end{figure}
 
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-U2-UC4}
-    	\caption[Plugging in a new pluggable device (sensor or actuator)]{EXPLAIN WHAT HAPPENS IN THE SCENARIO. \\ ADD COMMENTS. \\ LINK TO OTHER RELEVANT SCENARIO'S. }\label{fig:seq_scenario6}
+    	\caption[Plugging in a new pluggable device (sensor or actuator)]{ The new pluggable device is detected and save as 'inactive'. In case Pluggable device is known previously, the SloTIP reactivated the pluggable device automatically.}\label{fig:seq_scenario6}
     \end{figure}
 
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-Av1-UC15}
-    	\caption[Detection and handling of communication channel failure]{EXPLAIN WHAT HAPPENS IN THE SCENARIO. \\ ADD COMMENTS. \\ LINK TO OTHER RELEVANT SCENARIO'S. }\label{fig:seq_scenario7}
+    	\caption[Detection and handling of communication channel failure]{ The failure of the communicatio channel or communication component is detected with 
+    	monitoring components.}\label{fig:seq_scenario7}
     \end{figure}
 
     \begin{figure}[h]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-U1-UC22}
-    	\caption[Upgrading an application]{EXPLAIN WHAT HAPPENS IN THE SCENARIO. \\ ADD COMMENTS. \\ LINK TO OTHER RELEVANT SCENARIO'S. }\label{fig:seq_scenario8}
+    	\caption[Upgrading an application]{ The application provider can upload new application or update existing.}\label{fig:seq_scenario8}
     \end{figure}
 
     \begin{figure}[!htp]
     	\centering
     	\includegraphics[width=\textwidth]{images/sequence-UC12-UC26-UC27}
-    	\caption[Sending actuation commands via a mobile app]{EXPLAIN WHAT HAPPENS IN THE SCENARIO. \\ ADD COMMENTS. \\ LINK TO OTHER RELEVANT SCENARIO'S. }\label{fig:seq_scenario9}
+    	\caption[Sending actuation commands via a mobile app]{ The application sends command from external frontend to the other parts of application. }\label{fig:seq_scenario9}
     \end{figure}
