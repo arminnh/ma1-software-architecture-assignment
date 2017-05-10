@@ -1,4 +1,4 @@
-%%% element catalog, generated on Tue May 09 21:55:33 CEST 2017
+%%% element catalog, generated on Wed May 10 09:19:07 CEST 2017
 
 %%%%
 %% The following is a minimal header that allows you to compile a 'standalone' version of the catalog.
@@ -86,7 +86,7 @@ updating access rights for customer organisations, etc.
 	\end{description}
 \subsection{ApplicationContainer}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~This component contains a sandbox environment for an application instance to execute in. The container itself can detect when applications crash. In that case, the container tries to restart the application up to 3 times. If the application continues to crash, it is suspended and the ContainerMonitor is notified.
+		\item[Responsibility:]~This component contains a sandbox environment for an application instance to execute in. The container itself can detect when applications crash. In that case, the container notifies the \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerContainerLogic}}
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppInstanceMgmt}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMessages}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMonitoring}}
@@ -106,7 +106,7 @@ updating access rights for customer organisations, etc.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitorAppStatus}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitorMonitoring}}
-		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMonitoring}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotifiy}}		
+		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppInstanceMgmt}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppMonitoring}}, \iconrequired{}~\vpett{\nameref{int:OnlineServiceOnlineServiceNotificationHandlerNotifiy}}		
 	\end{description}
 \subsection{ApplicationExecutionSubsystemMonitor}\label{comp:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitor}
 	\begin{description}[noitemsep,nolistsep]
@@ -158,7 +158,7 @@ updating access rights for customer organisations, etc.
 	\end{description}
 \subsection{ApplicationProviderClient}\label{comp:ApplicationProviderClient}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Represents the client used by a customer organisation. This is the user's dashboard.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~None
@@ -166,7 +166,7 @@ updating access rights for customer organisations, etc.
 	\end{description}
 \subsection{ApplicationProviderFacade}\label{comp:OnlineServiceOnlineServiceApplicationProviderFacade}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Acts as an access point for application provider's client and handles all functionality that can be done by application providers.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationProviderFacadeApplications}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
@@ -174,7 +174,7 @@ updating access rights for customer organisations, etc.
 	\end{description}
 \subsection{AuthenticationManager}\label{comp:OnlineServiceOnlineServiceAuthenticationManager}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Handles all functionality related to authentication of users.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}
@@ -209,7 +209,7 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~Is responsible for verifying, constructing, and sending commands from applications for pluggable devices. On the Online Service, It fetches data about pluggable devices from the \vpett{\nameref{comp:DeviceDatabaseDeviceDB}}. On a \vpett{\nameref{comp:GatewayGateway}}, it must be configured to fetch that data from the \vpett{\nameref{comp:GatewayGatewayDeviceManager}}.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerDeviceCommandConstructorCommands}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerDeviceCommandConstructorCommands}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitorMonitoring}}
 		\item[Required interfaces:]~\iconrequired{}~\vpett{\nameref{int:DeviceDatabaseDeviceDBDBAppDeviceMgmt}}, \iconrequired{}~\vpett{\nameref{int:GatewayGatewayDeviceManagerDeviceCommands}}		
 	\end{description}
 \subsection{DeviceDataConverter}\label{comp:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverter}
@@ -217,7 +217,7 @@ updating access rights for customer organisations, etc.
 		\item[Responsibility:]~The \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverter}} is responsible for conversions pluggable device data for applications. There is one in the Online Service for application instances running in the Online Service and one in Gateways for application instances running on gateways.
 		\item[Super-components:]~\iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}
 		\item[Sub-components:]~None
-		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverterDataConversion}}
+		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverterDataConversion}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitorMonitoring}}
 		\item[Required interfaces:]~None		
 	\end{description}
 \subsection{DeviceDataScheduler}\label{comp:OnlineServiceOnlineServiceDeviceDataScheduler}
@@ -406,7 +406,7 @@ can "turn on" and "turn off".
 	\end{description}
 \subsection{RegisteredUserFacade}\label{comp:OnlineServiceOnlineServiceRegisteredUserFacade}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Acts as an access point for common functionality between different types of users and handles all functionality that is shared between them.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
@@ -422,7 +422,7 @@ can "turn on" and "turn off".
 	\end{description}
 \subsection{SessionDB}\label{comp:SessionDB}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~This database stores sessions.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:SessionDBSessions}}
@@ -438,7 +438,7 @@ can "turn on" and "turn off".
 	\end{description}
 \subsection{SystemAdministratorFacade}\label{comp:OnlineServiceOnlineServiceSystemAdministratorFacade}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Acts as an access point for SystemAdministratorClient and handles all functionality that can be done by application providers.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceAuthenticationManagerAuthentication}}, \iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceRegisteredUserFacadeNotifications}}
@@ -446,7 +446,7 @@ can "turn on" and "turn off".
 	\end{description}
 \subsection{ThirdPartyInvoicingService}\label{comp:ThirdPartyInvoicingService}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Represents a third party invoicing service.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~None
@@ -470,7 +470,7 @@ can "turn on" and "turn off".
 	\end{description}
 \subsection{UnregisteredUserClient}\label{comp:UnregisteredUserClient}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Represents the client used by an unregistered user.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~None
@@ -478,7 +478,7 @@ can "turn on" and "turn off".
 	\end{description}
 \subsection{UnregisteredUserFacade}\label{comp:OnlineServiceOnlineServiceUnregisteredUserFacade}
 	\begin{description}[noitemsep,nolistsep]
-		\item[Responsibility:]~{\colorbox{red!30}{\underline{Undefined}}}
+		\item[Responsibility:]~Acts as an access point for unregistered users client and handles all functionality that can be done by unregistered users.
 		\item[Super-components:]~None
 		\item[Sub-components:]~None
 		\item[Provided interfaces:]~\iconprovided{}~\vpett{\nameref{int:OnlineServiceOnlineServiceUnregisteredUserFacadeRegistration}}
@@ -514,7 +514,7 @@ can "turn on" and "turn off".
            \item Effect: Returns a list of PluggableDeviceInfo to display so an infrastructure owner can select a device to configure access rights.
 \item Created for: UC9.1
         \end{itemize}
-      \item \textsf{void updateAccessRights()}
+      \item \textsf{void updateAccessRights(\ref{data:DataTypesPluggableDeviceID} pID, Map\textless{}int, \ref{data:DataTypesAccessRights}\textgreater{} accessRights)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
 \item Created for: UC9.6
@@ -534,7 +534,7 @@ can "turn on" and "turn off".
            \item Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights on a certain pluggable device.
 \item Created for: UC9.4
         \end{itemize}
-      \item \textsf{void updateAccessRights()}
+      \item \textsf{void updateAccessRights(\ref{data:DataTypesPluggableDeviceID} pID, Map\textless{}int, \ref{data:DataTypesAccessRights}\textgreater{} accessRights)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
 \item Created for: UC9.7
@@ -629,7 +629,7 @@ can "turn on" and "turn off".
   \subsection{AppInstanceMgmt}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationContainerAppInstanceMgmt}
     \begin{description}[noitemsep,nolistsep]
       \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainer}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayCommunicationHandlerGWCommunicationLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGateway}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayCommunicationHandler}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceCommunicationHandlerOSCommunicationLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceCommunicationHandler}}
-      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayCommunicationHandlerGWCommunicationLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayCommunicationHandler}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceCommunicationHandlerOSCommunicationLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceCommunicationHandler}}
+      \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationManagementLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManager}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayDeviceManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayCommunicationHandlerGWCommunicationLogic}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceGatewayCommunicationHandler}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceCommunicationHandlerOSCommunicationLogic}}, \iconcomponent{}~\vpett{\nameref{comp:GatewayGatewayOnlineServiceCommunicationHandler}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
       \item \textsf{void activateApplicationInstance(int applicationInstanceID)}
@@ -655,6 +655,11 @@ can "turn on" and "turn off".
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns true if a certain \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}} is available.
 \item Created for: UC27.2
+        \end{itemize}
+      \item \textsf{void restartApplicationInstance(int applicationInstanceID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Restarts an \vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerApplicationInstance}}
+\item Created for: Av2
         \end{itemize}
       \item \textsf{void testApplication(int applicationID, \ref{data:DataTypesApplicationCode} code)}
         \begin{itemize}[noitemsep,nolistsep]
@@ -915,7 +920,7 @@ Returns an empty string if the provided credentials are incorrect.
            \item Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights on a certain pluggable device.
 \item Created for: UC9.4
         \end{itemize}
-      \item \textsf{void updateAccessRights()}
+      \item \textsf{void updateAccessRights(\ref{data:DataTypesPluggableDeviceID} id, Map\textless{}int, \ref{data:DataTypesAccessRights}\textgreater{} accessRights)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
 \item Created for: UC9.7
@@ -987,15 +992,15 @@ Returns the Application's ID.
            \item Effect: Returns detailed statistics about an application provider's application. If the application is unapproved, the details include the reason.
 \item Created for: UC23.4
         \end{itemize}
+      \item \textsf{\ref{data:DataTypesGatewayInfo} getApplicationInstanceGateway(int applicationInstanceID)}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Returns information about a gateway that an application instance is running on.
+\item  Created for: Av2 - Need to know which gateways to send messages to for e.g. application commands.
+        \end{itemize}
       \item \textsf{List\textless{}int\textgreater{} getApplicationInstancesToUpdate(int applicationID)}
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Returns a list of application instances that would need to be updated because of a certain updated application.
 \item Created for: UC22.15
-        \end{itemize}
-      \item \textsf{\ref{data:DataTypesGatewayInfo} getApplicationIstanceGateway()}
-        \begin{itemize}[noitemsep,nolistsep]
-           \item Effect: Returns information about a gateway that an application instance is running on.
-\item  Created for: Av2 - Need to know which gateways to send messages to for e.g. application commands.
         \end{itemize}
       \item \textsf{List\textless{}\ref{data:DataTypesApplication}\textgreater{} getApplications()}
         \begin{itemize}[noitemsep,nolistsep]
@@ -1850,7 +1855,7 @@ Returns the Application's ID.
   %%%%%%%% Monitoring
   \subsection{Monitoring}\label{int:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitorMonitoring}
     \begin{description}[noitemsep,nolistsep]
-      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}
+      \item[Provided by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerManager}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationContainerMonitor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerDeviceCommandConstructor}}, \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerDeviceDataConverter}}
       \item[Required by:] \iconcomponent{}~\vpett{\nameref{comp:OnlineServiceOnlineServiceApplicationManagerApplicationExecutionSubsystemMonitor}}
       \item[Operations:] ~
     \begin{itemize}[noitemsep,nolistsep,leftmargin=-.25cm]
@@ -1858,6 +1863,11 @@ Returns the Application's ID.
         \begin{itemize}[noitemsep,nolistsep]
            \item Effect: Sends a ping request to a component. The component should respond with an Echo reply. The monitor uses this to check whether or not the component is still available.
 \item Created for: The system is able to autonomously detect failures of its individual application execution components
+        \end{itemize}
+      \item \textsf{void restart()}
+        \begin{itemize}[noitemsep,nolistsep]
+           \item Effect: Restarts the monitored component
+\item Created for: Av2
         \end{itemize}
     \end{itemize}
     \end{description}
@@ -2492,6 +2502,11 @@ Thrown if a given username already exists in the system.
 % DATA TYPES
 \section{Data types}\label{sec:datatypes}
 \begin{itemize}[nolistsep,noitemsep]
+\item \vpedatatype{data:DataTypesAccessRights}{AccessRights}: 
+\begin{itemize}[noitemsep,nolistsep]
+
+\item[] Contains information about access rights to a pluggable device.
+\end{itemize}
 \item \vpedatatype{data:DataTypesApplication}{Application}: 
 \begin{itemize}[noitemsep,nolistsep]
 

@@ -121,4 +121,6 @@
 
     In our design, we have not worked with states of application instances. Thus, if an application were to crash at some point, or if it would need to be shut down temporarily, etc.
     it would not be possible to save the state of an application and restore it at a later point. Maybe a simple solution for this would be to force application providers to
-    implement a certain method so that the state of an application could be retrieved and stored.
+    implement a certain method so that the state of an application could be retrieved and stored. \\
+
+    The \texttt{NotificationHandler} should have different notify methods for different situations, so that more details can be saved such as the cause of the notification.
