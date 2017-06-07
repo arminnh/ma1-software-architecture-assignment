@@ -1,0 +1,975 @@
+UC1: Register a customer organisation
+    DECOMP 6
+
+    1. The primary actor requests the (infrastructure owner-specific) registration form.
+        UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean canCustomerOrganisationRegister(int infrastructureOwnerID, string hash)
+        UnregisteredUserFacade -> UserManager: interface UserMgmt: boolean canCustomerOrganisationRegister(int infrastructureOwnerID, string hash)
+        UserManager -> OtherDataDB: interface UserMgmt: boolean canCustomerOrganisationRegister(int infrastructureOwnerID, string hash)
+
+    2. The system asks the primary actor for an e-mail address.
+
+    3. The primary actor enters a company e-mail address.
+        UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID)
+
+    4. The system verifies the provided e-mail address, and if the e-mail address is valid, the system informs the primary actor that a confirmation e-mail was sent to the entered e-mail address with further instructions.
+        UnregisteredUserFacade -> UserManager: interface UserMgmt: boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID)
+        UserManager -> OtherDataDB: interface UserMgmt: boolean createEmailAddressForRegistration(string emailAddress, int infrastructureOwnerID)
+
+    5. The primary actor confirms his or her e-mail address by following the link in the received e-mail.
+        UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: boolean confirmEmail(string emailAddress, string randomString)
+        UnregisteredUserFacade -> UserManager: interface UserMgmt: boolean confirmEmail(string emailAddress, string randomString)
+        UserManager -> OtherDataDB: interface UserMgmt: boolean confirmEmail(string emailAddress, string randomString)
+
+    6. The system asks the primary actor for the remaining information:
+       (a) Credentials (e.g., unique username and password)
+       (b) Full name of the company and primary address
+       (c) Billing and payment information (e.g. credit card information or bank account number,
+           and, optionally, invoicing address)
+       (d) Contact phone number
+       (e) Notification preferences: SMS and/or e-mail.
+
+    7. The primary actor provides the requested information.
+        UnregisteredUserClient -> UnregisteredUserFacade: interface Registration: int createCustomerOrganisation(Map<string, string> data)
+
+    8. The system verifies the provided information, and, if the provided information is correct, the system creates a new customer organisation profile.
+        UnregisteredUserFacade -> UserManager: interface UserMgmt: int createCustomerOrganisation(Map<string, string> data)
+        UserManager -> OtherDataDB: interface UserMgmt: int createCustomerOrganisation(Map<string, string> data)
+
+    9. The system notifies the primary actor that the registration is successful.
+        => return value of step 7
+
+
+UC2: Register an end-user
+    DECOMP 6
+
+    1. The primary actor indicates to the system that he or she wants to register an end-user.
+        IN CustomerOrganisationClient
+
+    2. The system asks the primary actor for details about the end-user to be registered:
+        Name, Phone number (for SMS) and/or e-mail address
+        IN CustomerOrganisationClient
+
+    3. The primary actor supplies the requested information.
+        CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: boolean registerEndUser(int customerOrganisationID, Map<string, string> data)
+
+    4. The system verifies the provided e-mail address or phone number, and checks that the end-user
+        does not exist in the system already. If the provided information is valid, the system stores
+        the end-user information and associates it with the primary actor.
+
+        CustomerOrganisationFacade -> UserManager: interface UserMgmt: boolean createEndUser(int customerOrganisationID, Map<string, string> data)
+        UserManager -> OtherDataDB: interface UserMgmt: boolean createEndUser(int customerOrganisationID, Map<string, string> data)
+
+    5. The system informs the primary actor that the end-user was registered successfully.
+        => return value of createEndUser
+
+
+UC3: Unregister an end-user
+    DECOMP 6
+
+    1. The primary actor indicates to the system that they want to unregister an end-user.
+        CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID)
+
+    2. The system retrieves all end-users associated with the primary actor and presents this list to the primary actor.
+
+        CustomerOrganisationFacade -> UserManager: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID) ALREADY HAVE THIS?
+        UserManager -> OtherDataDB: interface UserMgmt: List<User> getEndUsers(int customerOrganisationID) ALREADY HAVE THIS?
+
+    3. The primary actor indicates which end-user she wants to unregister.
+        CustomerOrganisationClient -> CustomerOrganisationFacade: interface UserMgmt: void unregisterEndUser(int customerOrganisationID, int userID)
+
+    4. The system marks the profile of the end-user as 'inactive'
+        CustomerOrganisationFacade -> UserManager: interface UserMgmt: void softDeleteEndUser(int customerOrganisationID, int userID)
+        UserManager -> OtherDataDb: interface UserUserMgmt: void softDeleteEndUser(int customerOrganisationID, int userID)
+
+    5. The system checks if any applications should be deactivated because of end-user assignment to mandatory roles (Include: UC18: Check and deactivate applications).
+        CustomerOrganisationFacade -> ApplicationManagementLogic: interface FrontEndAppReuqestss: checkApplicationsForDeactivationForCustomerOrganisations(List<int> IDs)
+
+    6. The system informs the primary actor that the end-user is now unregistered from SIoTIP.
+        => return value of unregisterEndUser
+
+
+UC4: Install mote
+    DECOMP 3
+    Remark : The mote is pre-congured to connect to a specic gateway by the hardware manufacturer. This linking process is out of scope for this assignment. Likewise, the automatic assignment of an IPv6 address to the mote is out of scope.
+
+    if new mote:
+        for step 2., we can use the heartbeat system. heartbeat is sent from mote to gateway,
+        the DeviceManager in the gateway notices that this is from a new mote and starts
+        the registerMote procedure
+        FOR RATIONALE: The IPAddress of the mote can be parsed out of the 6lowpan header in the heartbeat messages
+
+        FOR RATIONALE: be careful with int moteID. when we register, we send MoteInfo to the DB, DB returns a DIFFERENT int moteID we use the other moteID in the rest of the system
+        3. DeviceManager -> GatewayFacade:       interface DeviceMgmt:   int moteID addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)
+        3. GatewayFacade -> DeviceDB:            interface DeviceMgmt:   int moteID addMote(MoteInfo mote, int gatewayID, IPAddress moteIPAddress)
+        3. GatewayFacade -> TopologyManager:     interface TopologyMgmt: void addMote(int moteID, int infrastructureOwnerID, int gatewayID)
+        3. TopologyManager -> DeviceDB:          interface TopologyMgmt: void addMote(int moteID, int infrastructureOwnerID, int gatewayID)
+        4. GatewayFacade -> NotificationHandler: interface Notify:       notify(int userID, string message)
+
+    if reintroduced mote:
+        It is automatically re-added on its last known location on the topology.
+            3. DeviceManager -> GatewayFacade:   interface DeviceMgmt:    void reactivateMote(int moteID)
+            3. GatewayFacade -> DeviceDB:        interface DeviceMgmt:    void reactivateMote(int moteID)
+            3. GatewayFacade -> TopologyManager: interface TopologyMgmt:  void reactivateMote(int moteID)
+            3. TopologyManager -> DeviceDB:      interface TopologyMgmt:  void reactivateMote(int moteID)
+
+        The attached pluggable devices are automatically initialised and configured with their last known configurations and access rights.
+            See UC6 - reintroduced device
+
+
+UC5: Uninstall mote
+    DECOMP 6
+
+    1. The primary actor physically stops the mote (by unplugging, powering off, or taking it out of the vicinity of the network).
+
+    2. When the system no longer receives heartbeat messages,
+        Already done: Mote -> DeviceManager: interface Heartbeat
+        Use case starts with DeviceManager noticing that a mote is not sending heatbeats anymore.
+
+        -it marks the mote as 'inactive' in the topology.
+            DeviceManager -> TopologyManager: interface TopologyMgmt: void deactivateMote(int moteID)
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: void deactivateMote(int moteID)
+            DeviceManager -> DeviceDB: interface DBDeviceMgmt: void deactivateMote(int moteID)
+
+        -it looks up the pluggable devices that were attached to the affected mote and marks these as 'inactive' in the topology.
+            DeviceManager -> TopologyManager: interface TopologyMgmt: void deactivatePluggableDevices(List<PluggableDeviceID> pIDs)
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: void deactivatePluggableDevices(List<PluggableDeviceID> pIDs)
+            DeviceManager -> DeviceDB: interface DBDeviceMgmt: void deactivatePluggableDevices(List<PluggableDeviceID> pIDs)
+
+        -it checks for and deactivates applications that are affected by the unavailability of the pluggable devices (Include: UC18: Check and deactivate applications).
+            DeviceManager -> ApplicationManagementLogic: interface GWAppInstanceMgmt: void checkApplicationsForDeactivationForPluggableDevices(List<PluggableDeviceID> pIDs)
+
+        -It sends a notification to the primary actor (Include: UC15: Send notification).
+            DeviceManager -> NotificationHandler: interface Notify: notifyMoteUninstalled()
+
+
+UC6: Insert a pluggable device into a mote
+    DECOMP 3
+
+    mote is already installed
+
+    when device is plugged into a mote:
+        2. The system receives a message from the mote, informing it of the new pluggable device. This message species the identier and type of the new pluggable device.
+        => for registration, we can use the heartbeat system. heartbeat is sent from mote to gateway, the DeviceManager in the gateway notices that there is a new pluggable device
+
+        Status of new pluggable devices will be 'uninitialised' by default in the DB, and 'unplaced' in topology
+        New pluggable devices get the location of the mote in the topology, but have status unplaced
+
+        DeviceManager -> GatewayFacade:   interface DeviceMgmt:   void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<string, string> defaultConfigurations, int moteID)
+        GatewayFacade -> DeviceDB:        interface DeviceMgmt:   void addDevice(PluggableDeviceID id, PluggableDeviceType type, Map<string, string> defaultConfigurations, int moteID)
+        GatewayFacade -> TopologyManager: interface TopologyMgmt: void addDevice(PluggableDeviceID id, int moteID)
+        TopologyManager -> DeviceDB:      interface TopologyMgmt: void addDevice(PluggableDeviceID id, int moteID)
+
+        In these methods, if the device already exists and is plugged in in another mote, clear the data
+
+        For default configurations: when it is a new device, we assume that the defaults are turned on by default so we don't have to do anything here
+
+    if the device is a known previously active device (ON THE SAME MOTE):
+        ∗ marks the pluggable device as ‘active':
+            DeviceManager -> GatewayFacade: interface DeviceMgmt: void reactivateDevice(PluggableDeviceID id)
+            GatewayFacade -> DeviceDB:      interface DeviceMgmt: void reactivateDevice(PluggableDeviceID id)
+        ∗ updates the topology:
+            GatewayFacade -> TopologyManager: interface TopologyMgmt: void reactivateDevice(PluggableDeviceID id)
+            TopologyManager -> DeviceDB:      interface TopologyMgmt: void reactivateDevice(PluggableDeviceID id)
+        ∗ configures the pluggable device with the last known access rights:
+            RATIONALE: nothing needs to happen here, permission information will just not be used if the device is inactive if the device is reactivated, the permissions are already there
+        * configures the pluggable device with the last known configuration:
+            DeviceManager -> GatewayFacade:      interface DeviceMgmt: Map<string, string> getConfigDB(PluggableDeviceID id)
+            GatewayFacade -> DeviceDB:           interface DeviceMgmt: Map<string, string> getConfigDB(PluggableDeviceID id)
+            DeviceManager -> Mote:         interface DeviceMgmt: void setConfig(PluggableDeviceID device, Map<string, string> config)
+            Mote -> PluggableDevice: interface Config:     void setConfig(Map<string, string> config)
+        ∗ checks and activates applications which can now execute again:
+            RATIONALE: gateway sends id of IO instead of fetching customers of IO. the online service will do that extra work = less work for gateway.
+            DeviceManager -> GatewayFacade:      interface DeviceMgmt: checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+            GatewayFacade -> ApplicationManager: interface AppMgmt: checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+        * send notification
+            GatewayFacade -> NotificationHandler: interface Notify:       notify(int userID, string message)
+
+
+UC7: Remove a pluggable device from its mote
+    DECOMP 6
+
+    1. The primary actor unplugs the pluggable device from its mote.
+
+    2. A message is sent from the mote from which the pluggable device was removed to the system, containing the identifier of the removed pluggable device.
+        Mote -> DeviceManager: interface DeviceManagement: void pluggableDeviceRemoved(PluggableDeviceID pID)
+        (SAME FOR UC6: pluggableDevicePluggedIn(moteInfo, pID))
+
+    3. The system
+       { marks the pluggable device as 'inactive',
+        DeviceManager -> DeviceDB: interface DBDeviceMgmt: void deactivatePluggableDevice(PluggableDeviceID pID)
+
+       { updates the topology,
+        DeviceManager -> TopologyManager: interface TopologyMgmt: void deactivatePluggableDevice(PluggableDeviceID pID)
+        TopologyManager -> DeviceDB: interface DBTopologyMgmt: void deactivatePluggableDevice(PluggableDeviceID pID)
+
+       { it checks and deactivates applications for which the pluggable device was essential (Include: UC18: Check and deactivate applications).
+        DeviceManager -> ApplicationManagementLogic: interface GWAppInstanceMgmt: void checkApplicationsForDeactivationForPluggableDevice(PluggableDeviceID pID)
+
+
+UC8: Initialise a pluggable device
+    DECOMP 6
+
+    1. The primary actor indicates that they want to initialise the newly attached pluggable for use.
+        Client goes to UC10
+
+    2. The system allows the primary actor to configure the pluggable device in the topology (Include: UC10), e.g. to set its physical location.
+        See and create UC10
+
+    3. The system marks the pluggable device as 'active', and informs the primary actor that the pluggable is ready for use.
+        InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt: void initialisePluggableDevice(PluggableDeviceID pID)
+        InfrastructureOwnerManager -> DeviceDB: interface DBIODeviceMgmt: void initialisePluggableDevice(PluggableDeviceID pID)
+        InfrastructureOwnerManager -> DeviceManager: interface DBIODeviceMgmt: void initialisePluggableDevice(PluggableDeviceID pID)
+        DeviceManager -> DeviceManager: interface GWAppInstanceMgmt: void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+
+    4. The system allows the primary actor to configure the access rights for the pluggable device (Include: UC9: Configure pluggable device access rights).
+        See UC9
+        InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights
+
+
+UC9: Configure pluggable device access rights
+    DECOMP 3
+
+    Map<int, AccessRights> : maps customerOrganisationIDs to their AccessRights
+
+    1. The primary actor indicates that they want to configure the access rights to pluggable devices.
+        InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: List<PluggableDeviceInfo> getAccessRights(int infrastructureOwnerID)
+            Effect: Returns a list of PluggableDeviceInfo to display so an infrastructure owner can select a device to configure access rights.
+            \item Created for: UC9.1
+
+    2. The system retrieves the list of pluggable devices associated with the primary actor and presents these to the primary actor.
+        InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt:     List<PluggableDeviceInfo>  getDevices(int infrastructureOwnerID)
+            Effect: Returns a list of PluggableDeviceInfo of devices owned by an infrastructure owner.
+            \item Created for: UC9.2
+        InfrastructureOwnerManager -> DeviceDB:                  interface IODeviceMgmt: List<PluggableDeviceInfo>  getDevices(int infrastructureOwnerID)
+            Effect: Returns a list of PluggableDeviceInfo of devices owned by an infrastructure owner.
+            \item Created for: UC9.2
+        presents these to the primary actor = return of getAccessRights(int infrastructureOwnerID)
+
+    3. The primary actor indicates for which pluggable device they want to configure the access rights.
+        InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: Map<int, AccessRights> configureDevice(PluggableDeviceID id)
+            Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights.
+            \item Created for: UC9.3 - UC9.4
+
+    4. The system retrieves all customer organisations associated with the primary actor and presents these to the primary actor, thereby indicating which of these customer organizations already have access to the pluggable device.
+        InfrastructureOwnerFacade -> InfrastructureOwnerManager: interface IOMgmt:           List<int> getCustomerOrganisations(int infrastructureOwnerID)
+            Effect: Returns a list of IDs of all customer organisations associated with an infrastructure owner.
+            \item Created for: UC9.4
+        InfrastructureOwnerManager -> OtherDataDB:               interface IOMgmt:           List<int> getCustomerOrganisations(int infrastructureOwnerID)
+            Effect: Returns a list of IDs of all customer organisations associated with an infrastructure owner.
+            \item Created for: UC9.4
+        InfrastructureOwnerFacade -> AccessRightsManager:        interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
+            Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights on a certain pluggable device.
+            \item Created for: UC9.4
+        AccessRightsManager -> DeviceDB:                         interface AccessRightsMgmt: Map<int, AccessRights> getCustomerOrganisationsRights(PluggableDeviceID id, List<int> custOrgIDs)
+            Effect: Returns a map of AccessRights and the IDs of customer organisations that have those AccessRights on a certain pluggable device.
+            \item Created for: UC9.4
+
+    5. The system asks to indicate which of these should have access to the pluggable device.
+        = is return value of configureDevice(PluggableDeviceID id)
+
+    6. The primary actor selects the customer organisations that may use the pluggable device and submits the selection.
+        InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface AccessRights: void updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+            Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
+            \item Created for: UC9.6
+
+    7. The system
+        { updates the roles of the selected customer organisations, giving them access rights to the pluggable device.
+            InfrastructureOwnerFacade -> AccessRightsManager:  interface AccessRightsMgmt: void updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+                Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
+                \item Created for: UC9.7
+            AccessRightsManager -> DeviceDB:                   interface AccessRightsMgmt: void updateAccessRights(PluggableDeviceID id, Map<int, AccessRights> accessRights)
+                Effect: Updates the access rights on a certain pluggable device for a group of customer organisations.
+                \item Created for: UC9.7
+        { checks and activates 'inactive' applications for the customer organisations with updated access rights (Include: UC17: Activate an application).
+            InfrastructureOwnerFacade -> ApplicationManager:  interface IOAppMgmt: void checkApplicationsForActivationForCustomerOrganisations(List<int> custOrgIDs)
+                Effect: Checks and activates 'inactive' ApplicationInstances which can now execute again for a list of customer organisations.
+                \item Created for: UC9.7
+        { checks for applications that require deactivation because of the unavailability of pluggable devices
+            InfrastructureOwnerFacade -> ApplicationManager:  interface IOAppMgmt: void checkApplicationsForDeactivationForCustomerOrganisations(List<int> custOrgIDs)
+                Effect: Checks for ApplicationInstances that require deactivation for a list of customer organisations.
+                \item Created for: UC9.7
+
+
+UC10: Consult and configure the topology
+    DECOMP 6
+
+    1. The primary actor indicates that they want to manage the topology.
+        InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<RoomTopology> getTopologyOfInfrastructureOwner(int infrastructureOwnerID)
+
+    2. The system presents the topology for the primary actor.
+       { The topology shows a representation of the gateways, and the motes and pluggable devices associated with each gateway, and specifies key relationships between these devices, for example physical location information, or whether pluggable device X and pluggable device Y are interchangeable.
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<RoomTopology> getTopologyOfInfrastructureOwner(int infrastructureOwnerID)
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<RoomTopology> getTopologyOfInfrastructureOwner(int infrastructureOwnerID)
+
+       { New motes and pluggable devices that are not yet included are presented on the side.
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<MoteInfo> getUnplacedMotes(int infrastructureOwnerID)
+
+        InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
+        TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<PluggableDeviceInfo> getUnplacedPluggableDevices(int infrastructureOwnerID)
+
+    3. The primary actor updates the topology.
+       { This could involve changing the location of or relations between motes and pluggable devices, or extending the topology with motes and pluggable devices that were not yet included.
+        FOR INSIDE CLIENT
+
+    4. The primary actor indicates that they are done updating the topology.
+        InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+
+    5. The system
+       { stores the reconfigured topology and informs the primary actor that the reconfigured topology is now being used.
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: void updateTopology(int infrastructureOwnerID, List<RoomTopology> updatedTopology)
+
+       { activates 'inactive' applications (Include: UC17 : Activate an application).
+            InfrastructureOwnerFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void checkApplicationsForActivationForInfrastructureOwner(int infrastructureOwnerID)
+
+       { checks for applications that require deactivation (Include: UC18 : Check and deactivate applications).
+            InfrastructureOwnerFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void checkApplicationsForDectivationForInfrastructureOwner(int infrastructureOwnerID)
+
+    3a. If the primary actor wants to view status details for a specific gateway/mote/pluggable device:
+        1. The system composes a detailed overview of the status of the selected gateway/mote/pluggable device (e.g., indicating that the device was unavailable between 2 and 3 a.m.) and presents it.
+            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForGateway(int gatewayID)
+
+            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForMote(int moteID)
+
+            InfrastructureOwnerClient -> InfrastructureOwnerFacade: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+            InfrastructureOwnerFacade -> TopologyManager: interface TopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+            TopologyManager -> DeviceDB: interface DBTopologyMgmt: List<DeviceStatus> getStatusDetailsForPluggableDevice(PluggableDeviceID pID)
+
+
+UC11: Send pluggable device data (P2)
+    DECOMP 2
+
+
+UC12: Perform actuation command
+    DECOMP 4
+
+    DEVELOPERS WRITE THIS: command = "on"
+    actuators = getActuatorsOfType("lightswitch")
+    foreach (actuator) {
+        actuator.command("on")
+    }
+
+    WE NEED TO CONVERT "on" TO A COMMAND THAT THE ACTUATOR UNDERSTANDS
+    "on" => "turnOn"
+    "on" => "lightOn"
+    "on" => "switch"
+
+    1. An application indicates that it wants one or more pluggable devices to perform an actuation command
+        from client application:
+            ApplicationClient -> ApplicationFacade:           interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+            ApplicationFacade -> ApplicationManagementLogic: interface DeviceCommands:  void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+
+        from applicationContainer:
+            ApplicationContainer -> ApplicationContainerManager: interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+            ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceCommands: void sendActuationCommand(List<PluggableDeviceID> devices, string command)
+
+        from application on gateway: SKIP STEP 2
+            GW/ApplicationContainer -> GW/DeviceCommandConstructor: interface Commands: void sendActuationCommand(List<PluggableDeviceID> device, string commandName)
+            GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
+            GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void sendActuationCommand(Map<PluggableDeviceID, string> commandsForDevices)
+
+
+    2. The system
+        -constructs the actuation command message according to the specific formatting syntax for the involved pluggable device(s)
+            ApplicationManagementLogic -> DeviceCommandConstructor:  interface Commands:  void sendActuationCommand(List<PluggableDeviceID> device, string commandName)
+            DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
+
+        -sends the command message to the intended pluggable device(s).
+            DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, GatewayInfo> getGatewaysForDevices(List<PluggableDeviceID> devices)
+            DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void sendActuationCommand(Map<PluggableDeviceID, string> commandsForDevices)
+
+    3. The pluggable device(s) receive(s) the actuation command message and perform(s) the contained actuation command.
+            DeviceManager -> Mote: interface DeviceMgmt: void sendActuationCommand(PluggableDeviceID device, string commandName)
+            Mote -> PluggableDevice: interface Actuate:    void sendActuationCommand(string commandName)
+
+
+UC13: Configure pluggable device
+    DECOMP 4
+
+    1. The primary actor specifies that it wants to set a configuration parameter of a pluggable device.
+        from client application:
+            ApplicationClient -> ApplicationFacade:           interface DeviceCommands:       void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+            ApplicationFacade -> ApplicationManagementLogic: interface DeviceCommands:  void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+
+        from applicationContainer:
+            ApplicationContainer -> ApplicationContainerManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+            ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+
+        from application on gateway: SKIP STEPS 2 AND 3
+            GW/ApplicationContainer -> GW/DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDeviceID pID, Map<string, string> config)
+            GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: string getPossibleConfigurationParametersForDevice(PluggableDeviceID pID)
+            GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
+            GW/DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+
+    2. The system verifies that the value of the configuration parameter is valid for the device (for example, a sensor which provides temperature information may have hardware limits on the sampling frequency).
+            ApplicationManagementLogic -> DeviceCommandConstructor: interface Commands: void verifyAndConstructConfigurationsForDevice(PluggableDeviceID pID, Map<string, string> config)
+            DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: string getPossibleConfigurationParametersForDevice(PluggableDeviceID pID)
+            DeviceCommandConstructor -> DeviceDB: interface DBAppDeviceMgmt: Map<PluggableDeviceID, string> getFormattingSyntaxForDevices(List<PluggableDeviceID> devices)
+
+    3. The system determines whether the pluggable device needs to be reconfigured, and if so,
+       constructs a reconfiguration command according to the specific formatting syntax for the pluggable device and sends it to the pluggable device.
+
+            DeviceCommandConstructor -> DeviceManager: interface DeviceCommands: void setConfiguration(PluggableDeviceID pID, Map<string, string> config)
+
+    4. The system updates the internal configuration of the pluggable device.
+            DeviceManager -> Mote: interface DeviceMgmt: void setConfig(...)
+
+
+UC14: Send heartbeat (Av3) \\
+    DECOMP 1
+
+
+UC15: Send notification (Av3) \\
+    DECOMP 1
+
+
+UC16: Consult notification message
+    DECOMP 6
+
+    1. The primary actor indicates that he/she/they wants to consult a notification.
+        ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: List<Notification> consultNotifications(int userID)
+
+    2. The system retrieves all notifications for the primary actor and presents them to the primary actor, e.g. as a table or list.
+        RegisteredUserFacade -> NotificationHandler: interface Notifications: List<Notification> getNotifications(int userID)
+        NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: List<Notification> getNotifications(int userID)
+
+    3. The primary actor selects a notification.
+        ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Notifications: Notification consultNotification(int userID, int notificationID)
+
+    4. The system presents the details for the selected notification to the primary actor. This includes:
+        { A description of the event that occurred.
+        { Date and time the event occurred.
+        { What triggered the event (e.g., the cause of an application that became inactive)
+        { The status of the notification (e.g. 'sent', 'delivered', 'read')
+        { The communication channel by which the notification was sent
+        RegisteredUserFacade -> NotificationHandler: interface Notifications: Notification getDetailedNotification(int userID, int notificationID)
+        NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: Notification getDetailedNotification(int userID, int notificationID)
+
+    5. The system marks the notification as 'read'.
+        NotificationHandler -> OtherDataDB: interface DBNotificationMgmt: void setNotificationRead(int notificationID)
+
+
+UC17: Activate an application
+    DECOMP 3
+    ApplicationManager is triggered by something else do to the following: activateApplication(int applicationInstanceID)
+    could be triggered because of: new pluggable device detected, new subscription, changed topology, new version of application
+
+     1. The system checks that all mandatory roles have been assigned to end-users.
+         ApplicationManager -> UserManager: interface RoleMgmt:     boolean areMandatoryUserRolesAssigned(int applicationInstanceID)
+             Effect: Returns true if all mandatory UserRoles for the application have been assigned to users. Finds the relevant customer organisations through the ApplicationInstance.
+             \item Created for: UC17.1, U2 - easy applications
+         UserManager -> OtherDataDB:        interface UserRoleMgmt: boolean areMandatoryUserRolesAssigned(int applicationInstanceID)
+             Effect: Returns true if all mandatory UserRoles for the application have been assigned to users. Finds the relevant customer organisations through the ApplicationInstance.
+             \item Created for: UC17.1, U2 - easy applications
+
+     2. If all mandatory roles have been assigned, the system checks that all necessary pluggable devices are available in the topology.
+         // pluggable device status has to be 'active' in the DB, and status has to be 'placed/available' in the topology
+
+         ApplicationManager -> OtherDataDB:     interface AppMgmt:       List<PluggableDeviceID> getDevicesForApplication(int applicationInstanceID)
+             Effect: Returns a list of PluggableDeviceID of pluggable devices that an ApplicationInstance can use.
+             \item Created for: UC17.2, U2 - easy applications
+         ApplicationManager -> TopologyManager: interface TopologyMgmt:  boolean arePluggableDevicesPlaced(List<PluggableDeviceID> devices)
+             Effect: Returns true if all pluggable devices in the given list have status 'placed' in the topology.
+             \item Created for: UC17.2, U2 - easy applications
+         TopologyManager -> DeviceDB:           interface TopologyMgmt:  boolean arePluggableDevicesPlaced(List<PluggableDeviceID> devices)
+             Effect: Returns true if all pluggable devices in the given list have status 'placed' in the topology.
+             \item Created for: UC17.2, U2 - easy applications
+
+     3. If all necessary pluggable devices are available, the system activates all necessary parts of the application on gateways and in the Online Service.
+         FOR RATIONALE: we add ApplicationContainerManager component that will contain ApplicationInstanceS in some kind of sandbox environment. The container can run/pause/stop these instances
+
+         ApplicationManager -> GatewayFacade:               interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
+             Effect: Activates an ApplicationInstance that is running on the gateway.
+             \item Created for: UC17.3, U2 - easy applications
+         GatewayFacade -> GW/ApplicationContainerManager:     interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
+             Effect: Activates an ApplicationInstance that is running on the gateway.
+             \item Created for: UC17.3, U2 - easy applications
+         ApplicationManagementLogic -> ApplicationContainerManager: interface AppMgmt: void activateApplicationInstance(int applicationInstanceID)
+             Effect: Activates an ApplicationInstance that is running on the online service.
+             \item Created for: UC17.3, U2 - easy applications
+
+     4. The system marks the application as 'active' and updates the billing information.
+         ApplicationManager -> OtherDataDB:    interface AppMgmt:     void activateApplication(int applicationInstanceID, string status)
+             Effect: Sets an ApplicationInstance's status in the OtherDataDB to 'active'.
+             \item Created for: UC17.4, U2 - easy applications
+         ApplicationManager -> InvoiceManager: interface InvoiceMgmt: void markActivatedApplication(int applicationInstanceID, int custOrgID, DateTime date)
+             Effect: Updates an ApplicationInstance's billing information: marks the start of a billing period.
+             \item Created for: UC17.4, U2 - easy applications
+         InvoiceManager -> OtherDataDB:        interface InvoiceMgmt: void markActivatedApplication(int applicationInstanceID, int custOrgID, DateTime date)
+             Effect: Updates an ApplicationInstance's billing information: marks the start of a billing period.
+             \item Created for: UC17.4, U2 - easy applications
+
+     5. The system sends a notication to the customer organisation subscribed to the application, to inform them that the application is running (Include: UC15: Send notication).
+         ApplicationManager -> NotificationHandler: interface Notify: notify(int userID, string message)
+
+     6. The system sends an SMS or e-mail to the end-users that were assigned roles. Possibly, this contains instructions for the end-user on how to install a mobile app linked to the application.
+         ApplicationManager -> UserManager:    interface RoleMgmt:     List<User> getUsersWithRoles(int applicationInstanceID)
+             Effect: Returns a list of Users associated to an ApplicationInstance that were assigned UserRoles.
+             \item Created for: UC17.6, U2 - easy applications
+         UserManager -> OtherDataDB:           interface UserRoleMgmt: List<User> getUsersWithRoles(int applicationInstanceID)
+             Effect: Returns a list of Users associated to an ApplicationInstance that were assigned UserRoles.
+             \item Created for: UC17.6, U2 - easy applications
+         ApplicationManager -> OtherDataDB:         interface AppMgmt:      string getInstallationInstructions(int applicationID)
+             Effect: Returns the installation instructions of a certain application. If there are no installation instructions set, returns an empty string.
+             \item Created for: UC17.6, U2 - easy applications
+         ApplicationManager -> NotificationHandler: interface Notify:       notify(int userID, string message)
+
+     ALTERNATIVE SCENARIOS:
+         2a. If end-users are not assigned to each mandatory role, the application is added as an 'inactive'
+         application and the subscription info is set accordingly. The system notifies the customer
+         organisation subscribed to the application (Include: UC15: Send notication). The use case ends.
+             This happens if areMandatoryUserRolesAssigned returned false.
+             FOR RATIONALE: the UC is called "activate application", thus we assume the system already contains the
+                            ApplicationInstance and subscription information, but the instance is 'inactive' at the start of the UC
+             => OK
+
+         3a. If not all pluggable devices necessary for the application are available, the application is added
+         as an 'inactive' application and the subscription info is set accordingly. The system notifies
+         the customer organisation subscribed to the application (Include: UC15: Send notication). The use case ends.
+             This happens if arePluggableDevicesPlaced returned false.
+             Same as 2a. => OK
+
+
+UC18: Check and deactivate applications (Av3) \\
+    DECOMP 1
+
+
+UC19: Subscribe to application
+    DECOMP 3
+    A customer organisation subscribes to an application via the dashboard.
+
+    REMARKS:
+        *) This use case concerns both subscribing to a new application, as well as upgrading an existing application to a newer version (if this is not an automatic update, as indicated in UC22 : Upload an application).
+        *) Roles in an application can be used to indicate which end-user(s) should be notified in case of specific events.
+        *) It is possible to reassign end-users to roles later on. For simplicity, no separate use case is provided for this.
+
+    1. The primary actor indicates they want to subscribe to an application.
+        CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
+            Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
+            \item Created for: UC19.1, U2 - easy applications
+
+    2. The system looks up the available applications (i.e., those to which the primary actor is not yet subscribed, or applications for which a newer version is available that requires a new subscription).
+        CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: Map<Application, Subscription> getApplicationsToSubscribe(int custOrgID)
+            Effect: Returns a map of Applications and Subscriptions a given customer organisation has to those applications
+            \item Created for: UC19.2, U2 - easy applications
+        SubscriptionManager -> ApplicationManager:            interface FrontEndAppMgmt:             List<Application> getApplications()
+            Effect: Returns a list of applications in the system.
+            \item Created for: UC19.2, U2 - easy applications
+        ApplicationManager -> OtherDataDB:                    interface AppMgmt:          List<Application> getApplications()
+            Effect: Returns a list of applications in the system.
+            \item Created for: UC19.2, U2 - easy applications
+        SubscriptionManager -> OtherDataDB:                   interface SubscriptionMgmt: List<Subscription> getSubscriptions(int custOrgID)
+            Effect: Returns a list of subscriptions a customer organisation has.
+            \item Created for: UC19.2, U2 - easy applications
+
+    3. The system presents the available applications to the primary actor, e.g. as a list or table, thereby indicating whether it is a new application or an update.
+        = return value of getApplicationsToSubscribe
+
+    4. The primary actor selects the desired application.
+        CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: int subscribeToApplication(int custOrgID, int applicationID)
+            Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
+            \item Created for: UC19.4, U2 - easy applications
+        CustomerOrganisationFacade -> ApplicationManager:         interface FrontEndAppMgmt:             int createNewApplicationInstance(int custOrgID, int applicationID)
+            Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
+            \item Created for: UC19.4, U2 - easy applications
+        ApplicationManager -> OtherDataDB:                        interface AppMgmt:          int createNewApplicationInstance(int custOrgID, int applicationID)
+            Effect: Creates a new ApplicationInstance for an application for a customer organisation and returns its id.
+            \item Created for: UC19.4, U2 - easy applications
+
+    5. The system checks which topology configuration and selection of pluggable devices for the application are necessary (e.g., to indicate in which rooms a heating control application should run) and presents a topology allowing the primary actor to indicate their configuration
+        CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
+        CustomerOrganisationFacade -> ApplicationManager: interface FrontEndAppMgmt:         List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
+            Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
+            \item Created for: UC19.5, U2 - easy applications
+        ApplicationManager -> OtherDataDB:                interface AppMgmt:      List<RoomTopology> getNecessaryDevicesAndTopologyConfigurations(int applicationID)
+            Effect: Returns a list of RoomTopology which is a minimal requirement for a certain application to run. This can used to display the requirements to a user or to check if requirements are fulfilled.
+        \item Created for: UC19.5, U2 - easy             %   CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: List<RoomTopology> getTopology(int custOrgID)
+        CustomerOrganisationFacade -> TopologyManager:    interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+            Effect: Returns a list of RoomTopology associated to a customer organisation.
+            \item Created for: UC19.5, U2 - easy applications
+        TopologyManager -> DeviceDB:                      interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+            Effect: Returns a list of RoomTopology associated to a customer organisation.
+            \item Created for: UC19.5, U2 - easy applications
+
+    6. The primary actor carries out the topology configuration.
+        // update the topology settings for the ApplicationInstance = which devices the application will use for different things + relationships between the devices
+        CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+            Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
+            \item Created for: UC19.6, U2 - easy applications
+        CustomerOrganisationFacade -> ApplicationManager:         interface FrontEndAppMgmt:             void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+            Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
+            \item Created for: UC19.6, U2 - easy applications
+        ApplicationManager -> OtherDataDB:                        interface AppMgmt:          void updateApplicationDevicesSettings(int applicationInstanceID, List<PluggableDeviceID> devices, List<Relationships> relationships)
+            Effect: Updates an ApplicationInstance's device settings. This includes which devices the instance can use and which relationships exist between those devices.
+            \item Created for: UC19.6, U2 - easy applications
+
+    7. The system loads the (mandatory and optional) roles to which end-users have to be (or can be) assigned for that application.
+        CustomerOrganisationFacade -> UserManager: interface RoleMgmt:     List<UserRole> getMandatoryUserRoles(int applicationID)
+            Effect: Returns a list of UserRoles that which need to be assigned in order for an ApplicationInstance to run.
+            \item Created for: UC19.7, U2 - easy applications
+        UserManager -> OtherDataDB:                interface UserRoleMgmt: List<UserRole> getMandatoryUserRoles(int applicationID)
+            Effect: Returns a list of UserRoles that which need to be assigned in order for an ApplicationInstance to run.
+            \item Created for: UC19.7, U2 - easy applications
+        CustomerOrganisationFacade -> UserManager: interface RoleMgmt:     List<UserRole> getOptionalUserRoles(int applicationID)
+            Effect: Returns a list of UserRoles which can optionally be assigned for an ApplicationInstance.
+            \item Created for: UC19.7, U2 - easy applications
+        UserManager -> OtherDataDB:                interface UserRoleMgmt: List<UserRole> getOptionalUserRoles(int applicationID)
+            Effect: Returns a list of UserRoles which can optionally be assigned for an ApplicationInstance.
+            \item Created for: UC19.7, U2 - easy applications
+
+    8. The system loads the end-users associated with the primary actor, presents them to the primary actor, and requests to assign end-users to the roles in the application.
+        CustomerOrganisationFacade -> UserManager: interface RoleMgmt:     List<User> getEndUsers(int custOrgID)
+            Effect: Returns a list of Users which are associated to a customer organisation.
+            \item Created for: UC19.8, U2 - easy applications
+        UserManager -> OtherDataDB:                interface UserRoleMgmt: List<User> getEndUsers(int custOrgID)
+            Effect: Returns a list of Users which are associated to a customer organisation.
+            \item Created for: UC19.8, U2 - easy applications
+
+    9. The primary actor provides end-users for the roles.
+        CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void updateUserRoles(int applicationInstanceID, Map<int, int> usersAndRoles)
+            Effect: Updates the UserRoles assigned to Users for a certain ApplicationInstance. 'usersAndRoles' maps User IDs to UserRole IDs.
+            \item Created for: UC19.9, U2 - easy applications
+        CustomerOrganisationFacade -> UserManager:           interface RoleMgmt:         void updateUserRoles(int applicationInstanceID, Map<int, int> usersAndRoles)
+            Effect: Updates the UserRoles assigned to Users for a certain ApplicationInstance. 'usersAndRoles' maps User IDs to UserRole IDs.
+            \item Created for: UC19.9, U2 - easy applications
+        UserManager -> OtherDataDB:                          interface UserRoleMgmt:     void updateUserRoles(int applicationInstanceID, Map<int, int> usersAndRoles)
+            Effect: Updates the UserRoles assigned to Users for a certain ApplicationInstance. 'usersAndRoles' maps User IDs to UserRole IDs.
+            \item Created for: UC19.9, U2 - easy applications
+
+    10. The system asks the primary actor if this application should be considered a critical application (cf. P2 : Requests to the pluggable data database).
+        CustomerOrganisationClient moves to the next page = form asking for criticality of app
+
+    11. The primary actor indicates the criticality of the application.
+        CustomerOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID, bool isCritical)
+            Effect: Updates the criticality of an ApplicationInstance.
+            \item Created for: UC19.11, U2 - easy applications
+
+    12. The system registers the subscription and criticality of the application.
+        CustomerOrganisationFacade -> SubscriptionManager:        interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID,bool isCritical)
+            Effect: Creates a subscription for a customer organisation to an ApplicationInstance. If the customer organisation is already subscribed to an older version of the the application, then the organisation is unsubscribed from that earlier version.
+            \item Created for: UC19.12-13, U2 - easy applications
+        SubscriptionManager -> OtherDataDB:                       interface SubscriptionMgmt: void createSubscription(int custOrgID, int applicationInstanceID)
+            Effect: Creates a subscription for a customer organisation to an ApplicationInstance. If the customer organisation is already subscribed to an older version of the the application, then the organisation is unsubscribed from that earlier version.
+            \item Created for: UC19.12-13, U2 - easy applications
+        CustomerOrganisationFacade -> ApplicationManager:         interface FrontEndAppMgmt:             void updateCriticality(int applicationInstanceID, bool isCritical)
+            Effect: Updates the criticality of an ApplicationInstance.
+            \item Created for: UC19.11, U2 - easy applications
+        ApplicationManager -> OtherDataDB:                        interface AppMgmt:          void updateCriticality(int applicationInstanceID, bool isCritical)
+            Effect: Updates the criticality of an ApplicationInstance.
+            \item Created for: UC19.11, U2 - easy applications
+
+    13. If the selected application is a newer version of an application to which the primary actor was previously subscribed, the primary actor is automatically unsubscribed from that earlier version (cf. step 4 or UC20 : Unsubscribe from application).
+        See step 12 method createSubscription
+
+    14. The system activates the application (Include: UC17 : Activate an application).
+        CustomerOrganisationFacade -> ApplicationManager: interface FrontEndAppMgmt: void activateApplication(int applicationInstanceID)
+            Effect: Activates an ApplicationInstance.
+            \item Created for: UC19.14, U2 - easy applications
+
+
+UC20: Unsubscribe from application
+    DECOMP 6
+
+    1. The primary actor indicates they want to unsubscribe from an application.
+        CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
+
+    2. The system looks up a list of applications the primary actor is subscribed to, and presents this overview to the primary actor, e.g. as a list or table.
+        CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
+        SubscriptionManager -> OtherDataDB: interface DBSubscriptionMgmt: List<Subscription> getSubscriptions(int customerOrganisationID)
+
+    3. The primary actor indicates which application they want to unsubscribe from.
+        CustomOrganisationClient -> CustomerOrganisationFacade: interface SubscriptionMgmt: void unsubscribeFromApplication(int customerOrganisationID, int subscriptionID, int applicationInstanceID)
+
+    4. The system
+       (i) ends the subscription for the selected application,
+            CustomerOrganisationFacade -> SubscriptionManager: interface SubscriptionMgmt: void softDeleteSubscription(int subscriptionID)
+            SubscriptionManager -> OtherDataDB: interface DBSubscriptionMgmt: void softDeleteSubscription(int subscriptionID)
+
+        (ii) deactivates the application, and
+            SubscriptionManager -> ApplicationManagementLogic: interface FrontEndAppRequests: void softDeleteApplicationInstance(int applicationInstanceID)
+            ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void softDeleteApplicationInstance(int applicationInstanceID)
+
+            CustomerOrganisationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void destroyApplicationInstance(int applicationInstanceID)
+            ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void destroyApplicationInstance(int applicationInstanceID)
+
+        (iii) constructs an invoice for outstanding payments for that application (cf. UC21: Send invoice).
+            SubscriptionManager -> InvoiceManager: interface InvoiceMgmt: void constructInvoiceForApplicationInstance(int applicationInstanceID, int customerOrganisationID)
+            InvoiceManager -> OtherDataDB: interface InvoiceMgmt: void createInvoice(Invoice invoice)
+            InvoiceManager -> ThirdPartyInvoicingService: interface InvoiceMgmt: void sendInvoice(Map<string, string> invoiceData)
+
+    5. The system informs the primary actor that the unsubscription was successful.
+        => return value of unsubscribeFromApplication
+
+
+UC21: Send invoice
+    DECOMP 9
+
+    1. The system constructs an invoice containing:
+        { the provided service or product (e.g. monthly subscription fee for applications or purchased hardware),
+        { the amount to be paid,
+        { the date the payment is due and
+        { the contact details of the primary actor (e.g. Zoomit identifier or credit card data)
+        SubscriptionManager -> InvoiceManager: interface` InvoiceMgmt: void constructInvoiceForApplicationInstance(int applicationInstanceID, int customerOrganisationID)
+
+    2. The system sends the invoice to the third-party invoicing service.
+        InvoiceManager -> ThirdPartyInvoicingService: interface InvoiceMgmt: void sendInvoice(Map<string, string> invoiceData)
+
+
+UC22: Upload an application
+    DECOMP 8
+
+    1. The primary actor indicates that he/she wants to upload an application.
+        IN CLIENT
+
+    2. The system asks the primary actor if he/she wants to update an existing application.
+        IN CLIENT
+
+    3. The primary actor provides his/her choice.
+
+        IN CLIENT
+
+    4. If the primary actor indicated that he/she wants to update an existing application, the system composes an overview of applications uploaded by the primary actor (e.g., as a list or table), presents this, and requests the primary actor to indicate which application to update.
+
+        ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: List<Application> getApplicationsOfApplicationProvider(int applicationProviderID)
+        ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: List<Application> getApplicationsOfApplicationProvider(int applicationProviderID)
+        ApplicationManager -> OtherDataDB: interface DBAppMgmt: List<Application> getApplicationsOfApplicationProvider(int applicationProviderID)
+
+    5. The primary actor chooses the application to be updated.
+        IN CLIENT
+
+    6. The system asks the primary actor if this is an update that should be automatically activated for existing subscriptions.
+        IN CLIENT
+
+    7. The primary actor provides his/her choice.
+        IN CLIENT
+
+    8. If the primary actor has indicated that existing subscriptions should be automatically updated, the system requests the versions (or range of versions) that should be automatically updated.
+        IN CLIENT
+
+    9. The primary actor provides the requested information.
+        IN CLIENT
+
+    10. The system asks the primary actor to upload the application code, a description for display to customer organisations, and meta-data (such as the version number and subscription price).
+        IN CLIENT
+
+    11. The primary actor uploads the requested information.
+        ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: void uploadApplication(int applicationProviderID, ApplicationCode code, string description, Map<string, string> metaData, List<Version> versionsToUpdate)
+        ApplicationProviderFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void uploadApplication(int applicationProviderID, ApplicationCode code, string description, Map<string, string> metaData, List<Version> versionsToUpdate)
+        ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: int createNewApplication(int applicationProviderID, ApplicationCode code, string description, Map<string, string> metaData, List<Version> versionsToUpdate)
+
+    12. The system performs automated application checks.
+
+        ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void testApplication(int applicationID, ApplicationCode code)
+
+    13. If the checks were successful, the system sends a notification to the primary actor (Include: UC15 : Send notification).
+
+        ApplicationContainerManager -> ApplicationManagementLogic: interface ApplicationTesting: void applicationTestsSuccessful(int applicationID)
+        ApplicationContainerManager-> ApplicationManagementLogic: interface ApplicationTesting: void applicationTestsUnsuccessful(int applicationID)
+
+        ApplicationManageMentLogic -> NotificationHandler: interface Notify: notify(int userID) app provider
+        ApplicationManageMentLogic -> NotificationHandler: interface Notify: notify(int userID) sys admin
+
+    14. The system makes the application available in the application store. In case of an updated application, it replaces the previous versions of the application.
+
+        ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void updateApplicationAvailable(int applicationID)
+
+    15. In case of an updated application that should automatically be activated for existing subscriptions (cf. step 6),
+        the system updates the existing subscriptions of the application to the new version (Include: UC17 : Activate an application).
+
+        ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: List<int> getApplicationInstancesToUpdate(int applicationID)
+        ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: ApplicationCode getApplicationCode(int applicationID)
+        ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void updateApplicationInstances(List<int> applicationInstanceIDs, ApplicationCode code)
+        ApplicationManagementLogic -> OtherDataDB: interface DBAppMgmt: void updateApplicationInstancesOfApplication(int applicationID)
+
+    ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceMgmt: void createApplicationInstance(ApplicationInstance instance, ApplicationCode code)
+
+
+UC23: Consult application statistics
+    DECOMP 8
+
+    1. The primary actor indicates that he/she wants to an overview of uploaded applications.
+        ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: Map<Applications, Map<string, string>> getApplicationsWithStatsForApplicationProvider(int applicationProviderID)
+
+    2. The system retrieves all applications uploaded by the primary actor, and information about the amount of subscribers for that application. It presents this overview to the primary actor.
+        ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: Map<Applications, Map<string, string>> getApplicationsWithStatsForApplicationProvider(int applicationProviderID)
+        ApplicationManager -> OtherDataDB: interface DBAppMgmt: Map<Applications, Map<string, string>> getApplicationsWithStatsForApplicationProvider(int applicationProviderID)
+
+    3. The primary actor selects an application.
+        ApplicationProviderClient -> ApplicationProviderFacade: interface Applications: Map<string, string> getApplicationDetailedStats(int applicationProviderID, int applicationID)
+
+    4. If the selected application is an approved application, the system presents detailed statistics including the amount of subscribers.
+        ApplicationProviderFacade -> ApplicationManager: interface FrontEndAppRequests: Map<string, string> getApplicationDetailedStats(int applicationID)
+        ApplicationManager -> OtherDataDB: interface DBAppMgmt: Map<string, string> getApplicationDetailedStats(int applicationID)
+
+
+UC24: Consult historical data
+    DECOMP 4
+    1. The primary actor indicates that it wants to consult a specified collection of historical data in a specified timeframe.
+        from client application:
+            ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+            ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+
+            ApplicationFacade -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+            ApplicationClient -> ApplicationFacade: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+
+        from ApplicationContainer:
+            ApplicationContainer -> ApplicationContainerManager: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+            ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+            ApplicationContainer -> ApplicationContainerManager: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+            ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForRoom(RoomTopology room, DateTime from, DateTime to)
+
+
+        2. The system determines from which pluggable devices the data is required and looks up the data.
+            ApplicationManagementLogic parses the RoomTopology object and uses the PluggableDeviceIDs in the RoomTopology
+
+                ApplicationManagementLogic -> DeviceDataScheduler: interface RequestData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+                DeviceDataScheduler -> PluggableDeviceDB: interface DeviceData: Map<PluggableDeviceID, List<DeviceData>> getDataForDevices(List<PluggableDeviceID> devices, DateTime from, DateTime to)
+
+        3. The system presents the primary actor with the requested historical overview, e.g. as a table.
+            Return value of first call.
+
+
+UC25: Access topology and available devices
+    DECOMP 4
+
+    1. The primary actor indicates that it wants an overview of the topology.
+        applicationClient wants overview:
+            ApplicationClient -> ApplicationFacade: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+            ApplicationFacade -> ApplicationManagementLogic: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+
+        applicationContainer wants overview:
+            ApplicationContainer -> ApplicationContainerManager: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+            ApplicationContainerManager -> ApplicationManagementLogic: interface DeviceData: List<RoomTopology> getTopologyOverview(int applicationInstanceID, int customerOrganisationID)
+
+    2. The system looks up the pluggable devices that are available to the customer organisation that owns the primary actor, and composes a view on the topology including these pluggable devices.
+            ApplicationManagementLogic -> TopologyManager: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+            TopologyManager -> DeviceDB: interface TopologyMgmt: List<RoomTopology> getTopology(int custOrgID)
+
+            ApplicationManagementLogic -> OtherDataDB: interface AppMgmt: List<PluggableDeviceID> getDevicesForApplication(int applicationInstanceID)
+
+    3. The system presents the topology view to the primary actor.
+            = return value of getTopologyOverview
+
+
+UC26: Send application command or message to external front-end
+    DECOMP 4
+
+    AppDevelopers want to send a message to:
+        Gateway:   sendMessageToGateway(string message)
+        OS:        sendMessageToOnlineService(string message)
+        AppClient: sendMessageToExternalClient(string message, IPAddress host, int port)
+
+   Some deployment rationale: ApplicationManagementLogic <--- HTTP ---> ApplicationClient
+                              ApplicationManagementLogic <---      ---> GW/ApplicationContainer
+
+    we need to store on which gateways ApplicationContainers are running.
+        ApplicationManagementLogic -> OtherDataDB: void updateApplicationInstanceGateway(int applicationInstance, int gatewayID)
+
+   Alternative 3b. NotAllowedException
+
+    1. The primary actor indicates it wants to send an application command or message to an external front-end and specifies the destination (e.g., as an application identifier for SIoTIP applications, or a hostname and port for external systems).
+        FROM APP INSTANCE TO FRONT END:
+             ApplicationContainer -> ApplicationContainerManager: interface AppMessages: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
+             ApplicationContainerManager -> ApplicationManagementLogic: interface AppMessages: void sendMessageToExternalFrontEnd(string hostName, int port, string message)
+
+        FROM APP INSTANCE TO APP INSTANCE:
+             ApplicationContainer -> ApplicationContainerManager: interface AppMessages: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+             ApplicationContainerManager -> ApplicationManagementLogic: interface AppMessages: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+
+        FROM FRONT END TO APP INSTANCE:
+            ApplicationClient -> ApplicationFacade: interface AppMgmt: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+            ApplicationFacade -> ApplicationManagementLogic: interface FrontEndAppRequests: void sendCommandToApplicationInstance(int applicationInstanceID, string command)
+
+    2. The system checks that the primary actor is allowed to send to the specified destination.
+        THE MESSAGE HAS ARRIVED IN ApplicationManagementLogic
+
+        Don't need to check, since an application can only send commands to another part of the same application.
+        If the command comes from a gateway -> send it to the online service instance
+        If the command comes from the online service -> send it to the gateway instance
+        If the command is for an external front end -> just send the message to the hostname and port
+
+        Maybe a check can be done here to do some kind of rate limiting, if developers want to send more requests, they pay more MOOONNEEYYYYY
+
+    3. If the primary actor is allowed to send to the destination, and if the destination is another application, the system delivers the application command to that destination
+        (Include: UC27: Receive application command or message from external front-end).
+
+
+UC27: Receive application command or message from external front-end
+    DECOMP 4
+
+    Comment from professor:
+       UC27 (just as UC26) deals with communication between different parts of the same application (including messages coming from front-ends).
+
+    1. The system receives an application command or message for a SIoTIP application.
+        ApplicationManagementLogic has received an application command (SEE UC26)
+
+    2. The system checks that the destination is available.
+        message is for Gateway/ApplicationContainer:
+            Destination = GW/ApplicationContainer
+            find where the application container is, -> OtherDataDB: gatewayOfApplicationContainer
+            then send it to the correct GW/ApplicationContainerManager
+            the applicationContainerMAnager will send the message to the correct ApplicationContainer
+            ApplicationContainerManagers keep track of ApplicationContainer IDs
+
+            ApplicationManagementLogic -> OtherDataDB: interface AppMgmt: Gateway getGatewayForApplicationInstance(int applicationInstanceID)
+            ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+            GW/ApplicationContainerManager -> GW/ApplicationContainerMonitor: interface AppStatus: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+
+        message is for ApplicationContainer:
+            The same, but on Online Service, so you don't need to search for the gateway
+            just send the message to the OS ApplicationContainerManager, it will do the rest
+
+            ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+            ApplicationContainerManager -> ApplicationContainerMonitor: interface AppStatus: boolean isApplicationInstanceAvailable(int applicationInstanceID)
+
+        message is for ApplicationClient:
+            just PING the hostname and port, if the ping succeeds, send the message
+                ApplicationManagementLogic: ping the (host, port) and check reply
+
+    3. If the destination is available, the system delivers the message to the destination application.
+        message = string
+
+        message is for Gateway/ApplicationContainer:
+            ApplicationManagementLogic -> GW/ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+            GW/ApplicationContainerManager -> GW/ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+
+        message is for ApplicationContainer:
+            ApplicationManagementLogic -> ApplicationContainerManager: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+            ApplicationContainerManager -> ApplicationContainer: interface AppInstanceManagement: void sendMessageToApplicationInstance(int applicationInstanceID, string message)
+
+        message is for ApplicationClient:
+            ApplicationManagementLogic: Open socket (host and port are given) -> send message -> close socket
+
+
+UC28: Log in
+    DECOMP 7
+
+    1. The primary actor indicates he or she want to log in to the system and provides authentication credentials, for example a user name and password.
+        ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Authentication: string login(Map<string, string> credentials)
+
+    2. The system veries the provided authentication credentials.
+        RegisteredUserFacade -> AuthenticationManager: interface Authentication: string login(Map<string, string> credentials)
+        AuthenticationManager -> OtherDataDB: interface Authentication: boolean verifyAuthenticationCredentials(Map<string, string> credentials)
+        AuthenticationManager -> SessionDB: interface Sessions: string createNewSession(int useID)
+
+    3. If the provided credentials are correct, the system confirms successful login to the primary actor and logs him or her in.
+        => return value of login
+
+    3a. If the provided credentials are incorrect, the system noties the primary actor of this. Continue from step 1.
+        => return value of login
+
+
+UC29: Log out
+    DECOMP 7
+
+    1. The primary actor indicates he or she wants to log out of the system.
+        ApplicationProviderClient/CustomerOrganisationClient/InfrastructureOwnerClient/SysAdminClient -> RegisteredUserFacade: interface Authentication: boolean logout(string sessionID)
+
+    2. The system logs the primary actor out and indicates success to the primary actor.
+        RegisteredUserFacade -> AuthenticationManager: interface Authentication: boolean logout(string sessionID)
+        AuthenticationManager -> SessionDB: interface Sessions: boolean deleteSession(string sessionID)
